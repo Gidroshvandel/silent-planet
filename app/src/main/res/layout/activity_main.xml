@@ -5,11 +5,10 @@
     android:layout_height="fill_parent"
     android:background="@drawable/space_texture">
 
-    <com.silentgames.silent_planet.GameView
+    <com.silentgames.silent_planet.view.GameView
         android:fillViewport="true"
         android:id="@+id/game_view"
         android:layout_gravity="center"
-        android:background="#000"
         android:layout_width="350dp"
         android:layout_height="350dp" />
 

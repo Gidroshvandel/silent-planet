@@ -9,9 +9,8 @@ import android.util.DisplayMetrics;
  */
 public class Converter {
     //переводим dp в пиксели
-    public static float convertDpToPixel(float dp,Context context){
-        Resources resources = context.getResources();
-        DisplayMetrics metrics = resources.getDisplayMetrics();
+    public static float convertDpToPixel(float dp, Resources res){
+        DisplayMetrics metrics = res.getDisplayMetrics();
         return dp * (metrics.densityDpi/160f);
     }
 }
