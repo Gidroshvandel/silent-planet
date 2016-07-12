@@ -11,18 +11,13 @@ import com.silentgames.silent_planet.utils.BitmapEditor;
 import com.silentgames.silent_planet.utils.Converter;
 
 /**
- * Created by gidroshvandel on 07.07.16.
+ * Created by gidroshvandel on 13.07.16.
  */
-public class GroundClass extends DefaultClass {
-
-    public GroundClass(Resources res) {
-        setCanMove(true);
-        setCanFly(false);
-        Bitmap bitmap = BitmapFactory.decodeResource(res, R.drawable.planet_background);
+public class EmptyCell extends DefaultClass {
+    public EmptyCell(Resources res) {
+        setCanFly(true);
+        setCanMove(false);
+        Bitmap bitmap = BitmapFactory.decodeResource(res, R.drawable.empty_cell);
         setBitmap(BitmapEditor.resize(bitmap, Converter.convertDpToPixel(Constants.cellSize,res),Converter.convertDpToPixel(Constants.cellSize,res)));
-    }
-
-
-    public GroundClass() {
     }
 }

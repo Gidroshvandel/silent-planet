@@ -11,9 +11,6 @@ public class Cell {
     ClassType cellType;
     EntityType entityType;
 
-    public Cell() {
-    }
-
     public Cell(ClassType cellType, EntityType entityType) {
         this.cellType = cellType;
         this.entityType = entityType;

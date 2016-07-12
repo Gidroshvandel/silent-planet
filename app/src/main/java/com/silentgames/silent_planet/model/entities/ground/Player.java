@@ -13,10 +13,22 @@ import com.silentgames.silent_planet.utils.Converter;
  * Created by gidroshvandel on 10.07.16.
  */
 public class Player extends DefaultClass {
-    public Player(Resources res) {
+
+    private String playerName;
+
+    public Player(Resources res, String playerName) {
+        this.playerName = playerName;
         Bitmap bitmap = BitmapFactory.decodeResource(res, R.drawable.space_man);
         setBitmap(BitmapEditor.resize(bitmap, Converter.convertDpToPixel(20,res),Converter.convertDpToPixel(20,res)));
         setCanFly(false);
         setCanMove(true);
+    }
+
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
     }
 }

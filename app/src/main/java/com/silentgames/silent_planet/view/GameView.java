@@ -12,8 +12,7 @@ import android.view.View;
 
 import com.silentgames.silent_planet.logic.Constants;
 import com.silentgames.silent_planet.logic.GameLogic;
-import com.silentgames.silent_planet.model.cells.GroundClass;
-import com.silentgames.silent_planet.model.cells.SpaceClass;
+import com.silentgames.silent_planet.model.Cell;
 import com.silentgames.silent_planet.utils.Calculator;
 
 import java.util.Map;
@@ -23,7 +22,6 @@ import java.util.Map;
  */
 public class GameView extends View{
 
-    private Map<String,Integer> oldXY;
     private Bitmap mBitmap;
     private Canvas mCanvas;
     private Paint paint, mBitmapPaint;
@@ -46,7 +44,7 @@ public class GameView extends View{
         mCanvas = new Canvas(mBitmap);
         mBitmapPaint = new Paint(Paint.DITHER_FLAG);
 
-        paintSetiings();
+        paintSettings();
 
         scaleGestureDetector=new ScaleGestureDetector(context, new MyScaleGestureListener());
 
@@ -54,7 +52,7 @@ public class GameView extends View{
 
     }
 
-    public void paintSetiings(){
+    public void paintSettings(){
         //определяем параметры кисти, которой будем рисовать сетку и атомы
         paint =new Paint();
         paint.setAntiAlias(true);
@@ -79,16 +77,16 @@ public class GameView extends View{
         invalidate();
     }
 
-    public void drawBattleGround(){
+    public void drawBattleGround(Cell[][] gameMatrix) {
+        Constants constant = new Constants(this.getContext());
+
         int horizontalCountOfCells = Constants.getHorizontalCountOfCells();
         int verticalCountOfCells = Constants.getVerticalCountOfCells();
-        for(int x=0;x< horizontalCountOfCells +1;x++) {
-            for (int y = 0; y < verticalCountOfCells + 1; y++){
-                if(x==0 || x == horizontalCountOfCells - 1 || y == 0 || y == verticalCountOfCells - 1){
-                    mCanvas.drawBitmap(new SpaceClass(this.getResources()).getBitmap(),(float)x* canvasSize / verticalCountOfCells,(float)y* canvasSize / verticalCountOfCells,paint);
-                }
-                else
-                mCanvas.drawBitmap(new GroundClass(this.getResources()).getBitmap(),(float)x* canvasSize / verticalCountOfCells,(float)y* canvasSize / verticalCountOfCells,paint);
+        for (int x = 0; x < horizontalCountOfCells + 1; x++) {
+            for (int y = 0; y < verticalCountOfCells + 1; y++) {
+                mCanvas.drawBitmap(gameMatrix[x][y].getCellType().getBitmap(),(float)x* constant.getCanvasSize() / verticalCountOfCells,(float)y* constant.getCanvasSize() / verticalCountOfCells,paint);
+                if(gameMatrix[x][y].getEntityType() != null)
+                reDraw(x,y,gameMatrix[x][y].getEntityType().getBitmap());
             }
         }
         drawGrid();
@@ -99,7 +97,6 @@ public class GameView extends View{
         float x = Calculator.CellCenterNumeratorSquare(eventX, viewSize, entity);
         float y = Calculator.CellCenterNumeratorSquare(eventY, viewSize, entity);
         mCanvas.drawBitmap(entity, x, y, null);
-        drawGrid();
     }
 
     //в случае касания пальем передаем обработку Motion Event'а MyGestureListener'у и MyScaleGestureListener'у
@@ -184,8 +181,7 @@ public class GameView extends View{
             float eventY=(event.getY()+getScrollY())/mScaleFactor;
             int x = (int)(Constants.getHorizontalCountOfCells() *eventX/viewSize);
             int y = (int)(Constants.getVerticalCountOfCells() *eventY/viewSize);
-//            moveTo((int)(horizontalCountOfCells *eventX/viewSize),(int)(verticalCountOfCells *eventY/viewSize));
-            oldXY = gameLogic.selectFirst(x,y, oldXY);
+            Constants.oldXY = gameLogic.select(x,y, Constants.oldXY, null);
             return true;
         }
 

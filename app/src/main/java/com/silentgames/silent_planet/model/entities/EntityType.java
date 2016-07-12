@@ -4,18 +4,22 @@ import com.silentgames.silent_planet.model.DefaultClass;
 import com.silentgames.silent_planet.model.entities.ground.Player;
 import com.silentgames.silent_planet.model.entities.space.SpaceShip;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Created by gidroshvandel on 09.07.16.
  */
 public class EntityType extends DefaultClass {
-    SpaceShip spaceShip;
-    Player player;
+    private SpaceShip spaceShip;
+    private List<Player> playerList = new ArrayList<>();
 
-    public EntityType(Player player) {
-        this.player = player;
-        setBitmap(player.getBitmap());
-        setCanMove(player.isCanMove());
-        setCanFly(player.isCanFly());
+    public EntityType(List<Player> player) {
+            this.playerList = player;
+            setBitmap(player.get(0).getBitmap());
+            setCanMove(player.get(0).isCanMove());
+            setCanFly(player.get(0).isCanFly());
     }
 
     public EntityType(SpaceShip spaceShip) {
@@ -33,11 +37,11 @@ public class EntityType extends DefaultClass {
         this.spaceShip = spaceShip;
     }
 
-    public Player getPlayer() {
-        return player;
+    public List<Player> getPlayerList() {
+        return playerList;
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
+    public void setPlayerList(List<Player> playerList) {
+            this.playerList = playerList;
     }
 }

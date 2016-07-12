@@ -15,10 +15,6 @@ import com.silentgames.silent_planet.utils.Converter;
  */
 public class SpaceClass extends DefaultClass {
 
-//    public static boolean canMove = false;
-//
-//    public static boolean canFly = true;
-
     public SpaceClass(Resources res) {
         setCanFly(true);
         setCanMove(false);
