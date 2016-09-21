@@ -2,12 +2,9 @@ package com.silentgames.silent_planet;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.widget.ImageView;
 
 import com.silentgames.silent_planet.logic.GameLogic;
-import com.silentgames.silent_planet.model.entities.space.SpaceShip;
 import com.silentgames.silent_planet.view.GameView;
-import com.silentgames.silent_planet.view.MySurfaceView;
 
 public class MainActivity extends Activity {
 

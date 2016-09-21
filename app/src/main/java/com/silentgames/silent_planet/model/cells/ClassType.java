@@ -1,6 +1,9 @@
 package com.silentgames.silent_planet.model.cells;
 
 import com.silentgames.silent_planet.model.DefaultClass;
+import com.silentgames.silent_planet.model.cells.ground.GroundClass;
+import com.silentgames.silent_planet.model.cells.space.SpaceClass;
+import com.silentgames.silent_planet.model.cells.onVisible.OnVisible;
 
 /**
  * Created by gidroshvandel on 09.07.16.

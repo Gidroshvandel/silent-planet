@@ -8,8 +8,8 @@ import android.graphics.Bitmap;
 public class DefaultClass {
 
     private Bitmap bitmap;
-    private boolean canMove;
-    private boolean canFly;
+    private boolean canMove = false;
+    private boolean canFly = false;
 
     public DefaultClass() {
     }

@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class SpaceShip extends DefaultClass {
 
-    List<Player> playersOnBoard = new ArrayList<>();
+//    List<Player> playersOnBoard = new ArrayList<>();
 
     public SpaceShip(Resources res) {
         Bitmap bitmap = BitmapFactory.decodeResource(res, R.drawable.earth_space_ship);
@@ -27,21 +27,21 @@ public class SpaceShip extends DefaultClass {
         setCanMove(false);
     }
 
-    public List<Player> getPlayersOnBoard() {
-        return playersOnBoard;
-    }
-
-    public void setPlayersOnBoard(List<Player> playersOnBoard) {
-        this.playersOnBoard = playersOnBoard;
-    }
-
-    public Player getPlayerByName(String name) {
-        for (Player player: playersOnBoard
-             ) {
-            if(player.getPlayerName() == name){
-                return player;
-            }
-        }
-        return null;
-    }
+//    public List<Player> getPlayersOnBoard() {
+//        return playersOnBoard;
+//    }
+//
+//    public void setPlayersOnBoard(List<Player> playersOnBoard) {
+//        this.playersOnBoard = playersOnBoard;
+//    }
+//
+//    public Player getPlayerByName(String name) {
+//        for (Player player: playersOnBoard
+//             ) {
+//            if(player.getPlayerName() == name){
+//                return player;
+//            }
+//        }
+//        return null;
+//    }
 }

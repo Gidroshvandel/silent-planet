@@ -15,8 +15,6 @@ import com.silentgames.silent_planet.logic.GameLogic;
 import com.silentgames.silent_planet.model.Cell;
 import com.silentgames.silent_planet.utils.Calculator;
 
-import java.util.Map;
-
 /**
  * Created by gidroshvandel on 05.07.16.
  */
