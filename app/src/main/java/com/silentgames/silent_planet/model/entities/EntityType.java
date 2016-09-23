@@ -55,4 +55,18 @@ public class EntityType extends DefaultClass {
         }
         return null;
     }
+
+    public void removePlayerByName(String name) {
+        if(playerList.size() == 1){
+            playerList = null;
+        }else {
+            for (Player player : playerList
+                    ) {
+                if (player.getPlayerName() == name) {
+                    playerList.remove(player);
+                    break;
+                }
+            }
+        }
+    }
 }
