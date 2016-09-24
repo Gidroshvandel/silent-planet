@@ -10,14 +10,15 @@ import android.widget.Toast;
 import com.silentgames.silent_planet.MainActivity;
 import com.silentgames.silent_planet.R;
 import com.silentgames.silent_planet.model.Cell;
-import com.silentgames.silent_planet.model.cells.ClassType;
+import com.silentgames.silent_planet.model.cells.CellType;
+import com.silentgames.silent_planet.model.cells.defaultCell.GroundCellDef;
+import com.silentgames.silent_planet.model.cells.defaultCell.SpaceCellDef;
 import com.silentgames.silent_planet.model.cells.onVisible.DeadCell;
-import com.silentgames.silent_planet.model.cells.ground.GroundClass;
-import com.silentgames.silent_planet.model.cells.onVisible.OnVisible;
-import com.silentgames.silent_planet.model.cells.space.SpaceClass;
+import com.silentgames.silent_planet.model.cells.onVisible.SpaceCell;
 import com.silentgames.silent_planet.model.entities.EntityType;
 import com.silentgames.silent_planet.model.entities.ground.Player;
-import com.silentgames.silent_planet.model.entities.space.SpaceShip;
+import com.silentgames.silent_planet.model.entities.ground.fractions.Alien;
+import com.silentgames.silent_planet.model.entities.space.fractions.AlienShip;
 import com.silentgames.silent_planet.view.GameView;
 
 import java.util.ArrayList;
@@ -53,13 +54,13 @@ public class GameLogic {
         for(int x=0;x< CountOfCells +1;x++) {
             for (int y = 0; y < CountOfCells + 1; y++){
                 if(x==0 || x == CountOfCells - 1 || y == 0 || y == CountOfCells - 1){
-                    gameMatrix[x][y] = new Cell(new ClassType(new SpaceClass(view.getResources())), null);
-                    gameMatrix[x][y].getCellType().setOnVisible(new OnVisible(new SpaceClass(view.getResources())));
+                    gameMatrix[x][y] = new Cell(new CellType(new SpaceCellDef(view.getResources())), null);
+                    gameMatrix[x][y].getCellType().setOnVisible(new SpaceCell(view.getResources()));
 
                 }
                 else {
-                    gameMatrix[x][y] = new Cell(new ClassType(new GroundClass(view.getResources())), null);
-                    gameMatrix[x][y].getCellType().setOnVisible(new OnVisible(new DeadCell(view.getResources())));
+                    gameMatrix[x][y] = new Cell(new CellType(new GroundCellDef(view.getResources())), null);
+                    gameMatrix[x][y].getCellType().setOnVisible(new DeadCell(view.getResources()));
                 }
             }
         }
@@ -69,10 +70,10 @@ public class GameLogic {
 
     public void spawnShips(){
         List<Player> playerList = new ArrayList<>();
-        playerList.add(new Player(view.getResources(), "Maxim"));
-        playerList.add(new Player(view.getResources(), "Oxik"));
-        playerList.add(new Player(view.getResources(), "Andrea"));
-        gameMatrix[0][0].setEntityType(new EntityType(new SpaceShip(view.getResources())));
+        playerList.add(new Alien(view.getResources(), "Maxim"));
+        playerList.add(new Alien(view.getResources(), "Oxik"));
+        playerList.add(new Alien(view.getResources(), "Andrea"));
+        gameMatrix[0][0].setEntityType(new EntityType(new AlienShip(view.getResources())));
         gameMatrix[0][0].getEntityType().getSpaceShip().setPlayersOnBoard(playerList);
     }
 

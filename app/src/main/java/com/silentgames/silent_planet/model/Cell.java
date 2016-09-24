@@ -1,6 +1,6 @@
 package com.silentgames.silent_planet.model;
 
-import com.silentgames.silent_planet.model.cells.ClassType;
+import com.silentgames.silent_planet.model.cells.CellType;
 import com.silentgames.silent_planet.model.entities.EntityType;
 import com.silentgames.silent_planet.model.entities.ground.Player;
 
@@ -12,19 +12,19 @@ import java.util.List;
  */
 public class Cell {
 
-    ClassType cellType;
+    CellType cellType;
     EntityType entityType;
 
-    public Cell(ClassType cellType, EntityType entityType) {
+    public Cell(CellType cellType, EntityType entityType) {
         this.cellType = cellType;
         this.entityType = entityType;
     }
 
-    public ClassType getCellType() {
+    public CellType getCellType() {
         return cellType;
     }
 
-    public void setCellType(ClassType cellType) {
+    public void setCellType(CellType cellType) {
         this.cellType = cellType;
     }
 

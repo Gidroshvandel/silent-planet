@@ -16,12 +16,11 @@ public class Player extends DefaultClass {
 
     private String playerName;
 
-    public Player(Resources res, String playerName) {
+    public Player(Bitmap bitmap, String playerName) {
         this.playerName = playerName;
-        Bitmap bitmap = BitmapFactory.decodeResource(res, R.drawable.space_man);
-        setBitmap(BitmapEditor.resize(bitmap, Converter.convertDpToPixel(20,res),Converter.convertDpToPixel(20,res)));
-        setCanFly(false);
-        setCanMove(true);
+        setBitmap(bitmap);
+//        Bitmap bitmap = BitmapFactory.decodeResource(res, R.drawable.space_man);
+//        setBitmap(BitmapEditor.resize(bitmap, Converter.convertDpToPixel(20,res),Converter.convertDpToPixel(20,res)));
     }
 
     public String getPlayerName() {

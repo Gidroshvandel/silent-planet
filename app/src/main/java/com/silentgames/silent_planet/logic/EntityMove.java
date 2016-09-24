@@ -1,9 +1,10 @@
 package com.silentgames.silent_planet.logic;
 
 import com.silentgames.silent_planet.model.Cell;
-import com.silentgames.silent_planet.model.cells.ClassType;
+import com.silentgames.silent_planet.model.cells.CellType;
 import com.silentgames.silent_planet.model.entities.EntityType;
 import com.silentgames.silent_planet.model.entities.ground.Player;
+import com.silentgames.silent_planet.model.entities.ground.utils.DeadPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,25 +27,39 @@ public class EntityMove {
         int oldY = Integer.parseInt(oldXY.get("Y"));
 
         if(isMoveAtDistance(x, y, oldXY)) {
-            if(isSpaceShip(oldX, oldY)) {
+            if(isSpaceShip(oldX, oldY) && gameMatrix[oldX][oldY].getEntityType().isCanFly()) {
                 if(gameMatrix[oldX][oldY].getEntityType().isCanFly() == gameMatrix[x][y].getCellType().isCanFly()){
                     moveShip(x, y, oldXY);
                 }else
                 if(oldXY.get("name") != null){
                     moveFromBoard(x, y, oldXY);
+                    event(x,y);
                 }
             }
-            if(isPlayer(oldX, oldY)) {
-                if(gameMatrix[oldX][oldY].getEntityType().isCanMove() == gameMatrix[x][y].getCellType().isCanMove()){
-                    movePlayer(x, y, oldXY);
-                }else
-                if(isSpaceShip(x, y)){
-                    moveOnBoard(x, y, oldXY);
+            if (isPlayer(oldX, oldY)) {
+                Boolean s = gameMatrix[oldX][oldY].getEntityType().getPlayerByName(oldXY.get("name")).isCanMove();
+                if(s) {
+                    if (s == gameMatrix[x][y].getCellType().isCanMove()) {
+                        movePlayer(x, y, oldXY);
+                        event(x, y);
+                    } else if (isSpaceShip(x, y)) {
+                        moveOnBoard(x, y, oldXY);
+                    }
                 }
             }
             return gameMatrix;
         }
         return null;
+    }
+
+    private void event(int x, int y){
+        Boolean a = gameMatrix[x][y].getCellType().isDead();
+        Boolean b = gameMatrix[x][y].getEntityType().isDead();
+        if(a && !b){
+            List<Player> data = new ArrayList<>();
+            data.add(new DeadPlayer(gameMatrix[x][y].getEntityType().getPlayerList().get(0)));
+            gameMatrix[x][y].setEntityType(new EntityType(data));
+        }
     }
 
     public void moveOnBoard(int x, int y, Map<String,String> oldXY){
@@ -57,12 +72,12 @@ public class EntityMove {
         selectPlayer.add(gameMatrix[Integer.parseInt(oldXY.get("X"))][Integer.parseInt(oldXY.get("Y"))].getEntityType().getSpaceShip().getPlayerByName(oldXY.get("name")));
 
         gameMatrix[x][y].addEntityType(new EntityType(selectPlayer));
-        gameMatrix[x][y].setCellType(new ClassType(gameMatrix[x][y].getCellType().getOnVisible()));
+        gameMatrix[x][y].setCellType(new CellType(gameMatrix[x][y].getCellType().getOnVisible()));
         deletePlayerOnBoard(oldXY);
     }
 
-    private void deleteEntity(int x, int y, Map<String,String> oldXY){
-        gameMatrix[Integer.parseInt(oldXY.get("X"))][Integer.parseInt(oldXY.get("Y"))].setEntityType(null);
+    private void deleteEntity(int x, int y){
+        gameMatrix[x][y].setEntityType(null);
     }
 
     private void deletePlayer(Map<String,String> oldXY){
@@ -87,13 +102,13 @@ public class EntityMove {
         selectPlayer.add(gameMatrix[Integer.parseInt(oldXY.get("X"))][Integer.parseInt(oldXY.get("Y"))].getEntityType().getPlayerByName(oldXY.get("name")));
 
         gameMatrix[x][y].addEntityType(new EntityType(selectPlayer));
-        gameMatrix[x][y].setCellType(new ClassType(gameMatrix[x][y].getCellType().getOnVisible()));
+        gameMatrix[x][y].setCellType(new CellType(gameMatrix[x][y].getCellType().getOnVisible()));
         deletePlayer(oldXY);
     }
 
     public void moveShip(int x, int y, Map<String,String> oldXY) {
         gameMatrix[x][y].addEntityType(gameMatrix[Integer.parseInt(oldXY.get("X"))][Integer.parseInt(oldXY.get("Y"))].getEntityType());
-        gameMatrix[x][y].setCellType(new ClassType(gameMatrix[x][y].getCellType().getOnVisible()));
+        gameMatrix[x][y].setCellType(new CellType(gameMatrix[x][y].getCellType().getOnVisible()));
         gameMatrix[Integer.parseInt(oldXY.get("X"))][Integer.parseInt(oldXY.get("Y"))].setEntityType(null);
     }
 

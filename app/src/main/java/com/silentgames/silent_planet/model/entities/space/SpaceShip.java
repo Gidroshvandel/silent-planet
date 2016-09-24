@@ -20,11 +20,9 @@ public class SpaceShip extends DefaultClass {
 
     List<Player> playersOnBoard = new ArrayList<>();
 
-    public SpaceShip(Resources res) {
-        Bitmap bitmap = BitmapFactory.decodeResource(res, R.drawable.earth_space_ship);
-        setBitmap(BitmapEditor.resize(bitmap, Converter.convertDpToPixel(20,res),Converter.convertDpToPixel(20,res)));
+    public SpaceShip(Bitmap bitmap) {
+        setBitmap(bitmap);
         setCanFly(true);
-        setCanMove(false);
     }
 
     public List<Player> getPlayersOnBoard() {

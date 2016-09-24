@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class EntityType extends DefaultClass {
 
-    List<Player> playerList = new ArrayList<>();
+    private List<Player> playerList = new ArrayList<>();
 
     private SpaceShip spaceShip;
 
@@ -21,6 +21,7 @@ public class EntityType extends DefaultClass {
         setBitmap(player.get(0).getBitmap());
         setCanMove(player.get(0).isCanMove());
         setCanFly(player.get(0).isCanFly());
+        setDead(player.get(0).isDead());
     }
 
     public EntityType(SpaceShip spaceShip) {
