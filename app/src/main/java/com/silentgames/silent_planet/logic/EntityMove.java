@@ -49,17 +49,18 @@ public class EntityMove {
             }
             return gameMatrix;
         }
-        return null;
+        else {
+            return null;
+        }
     }
 
     private void event(int x, int y){
-        Boolean a = gameMatrix[x][y].getCellType().isDead();
-        Boolean b = gameMatrix[x][y].getEntityType().isDead();
-        if(a && !b){
+        if(gameMatrix[x][y].getCellType().isDead() && !gameMatrix[x][y].getEntityType().isDead()){
             List<Player> data = new ArrayList<>();
             data.add(new DeadPlayer(gameMatrix[x][y].getEntityType().getPlayerList().get(0)));
             gameMatrix[x][y].setEntityType(new EntityType(data));
         }
+
     }
 
     public void moveOnBoard(int x, int y, Map<String,String> oldXY){

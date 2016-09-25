@@ -18,6 +18,7 @@ public class Constants {
     public static Map<String,String> oldXY;
     private static int viewSize;
     private static float canvasSize;
+    private static int turnCount;
 
     public Constants(Context context){
         //в xml разметке позднее пропишем размер вьюхи равный 300dp
@@ -43,5 +44,13 @@ public class Constants {
 
     public float getCanvasSize() {
         return canvasSize;
+    }
+
+    public static int getTurnCount() {
+        return turnCount;
+    }
+
+    public static void setTurnCount(int turnCount) {
+        Constants.turnCount = turnCount;
     }
 }
