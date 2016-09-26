@@ -17,6 +17,7 @@ import com.silentgames.silent_planet.model.cells.onVisible.DeadCell;
 import com.silentgames.silent_planet.model.cells.onVisible.SpaceCell;
 import com.silentgames.silent_planet.model.entities.EntityType;
 import com.silentgames.silent_planet.model.entities.ground.Player;
+import com.silentgames.silent_planet.model.entities.ground.PlayersOnCell;
 import com.silentgames.silent_planet.model.entities.ground.fractions.Alien;
 import com.silentgames.silent_planet.model.entities.ground.fractions.Human;
 import com.silentgames.silent_planet.model.entities.ground.fractions.Pirate;
@@ -79,40 +80,41 @@ public class GameLogic {
         spawnPirates(0,1);
         spawnRobots(0,2);
         spawnAliens(0,3);
+        TurnHandler.start(Fractions.Humans);
     }
 
     public void spawnRobots(int x, int y){
-        List<Player> playerList = new ArrayList<>();
+        PlayersOnCell playerList = new PlayersOnCell();
         playerList.add(new Robot(view.getResources(), "Maxim"));
         playerList.add(new Robot(view.getResources(), "Oxik"));
         playerList.add(new Robot(view.getResources(), "Andrea"));
         gameMatrix[x][y].setEntityType(new EntityType(new RobotShip(view.getResources())));
-        gameMatrix[x][y].getEntityType().getSpaceShip().setPlayersOnBoard(playerList);
+        gameMatrix[x][y].getEntityType().setPlayersOnCell(playerList);
     }
 
     public void spawnAliens(int x, int y){
-        List<Player> playerList = new ArrayList<>();
+        PlayersOnCell playerList = new PlayersOnCell();
         playerList.add(new Alien(view.getResources(), "Maxim"));
         playerList.add(new Alien(view.getResources(), "Oxik"));
         playerList.add(new Alien(view.getResources(), "Andrea"));
         gameMatrix[x][y].setEntityType(new EntityType(new AlienShip(view.getResources())));
-        gameMatrix[x][y].getEntityType().getSpaceShip().setPlayersOnBoard(playerList);
+        gameMatrix[x][y].getEntityType().setPlayersOnCell(playerList);
     }
     public void spawnPirates(int x, int y){
-        List<Player> playerList = new ArrayList<>();
+        PlayersOnCell playerList = new PlayersOnCell();
         playerList.add(new Pirate(view.getResources(), "Maxim"));
         playerList.add(new Pirate(view.getResources(), "Oxik"));
         playerList.add(new Pirate(view.getResources(), "Andrea"));
         gameMatrix[x][y].setEntityType(new EntityType(new PirateShip(view.getResources())));
-        gameMatrix[x][y].getEntityType().getSpaceShip().setPlayersOnBoard(playerList);
+        gameMatrix[x][y].getEntityType().setPlayersOnCell(playerList);
     }
     public void spawnHumans(int x, int y){
-        List<Player> playerList = new ArrayList<>();
+        PlayersOnCell playerList = new PlayersOnCell();
         playerList.add(new Human(view.getResources(), "Maxim"));
         playerList.add(new Human(view.getResources(), "Oxik"));
         playerList.add(new Human(view.getResources(), "Andrea"));
         gameMatrix[x][y].setEntityType(new EntityType(new HumanShip(view.getResources())));
-        gameMatrix[x][y].getEntityType().getSpaceShip().setPlayersOnBoard(playerList);
+        gameMatrix[x][y].getEntityType().setPlayersOnCell(playerList);
     }
 
     private void onCellList(final int x, final int y){
@@ -143,16 +145,9 @@ public class GameLogic {
     private List<String> findPlayer(final int x, final int y){
         List<String> data = new ArrayList<>();
 
-        if(gameMatrix[x][y].getEntityType().getPlayerList() != null) {
-            for (Player player : gameMatrix[x][y].getEntityType().getPlayerList()) {
+        if(gameMatrix[x][y].getEntityType().getPlayersOnCell() != null) {
+            for (Player player : gameMatrix[x][y].getEntityType().getPlayersOnCell().getPlayerList()) {
                 data.add(player.getPlayerName());
-            }
-        }
-        if(gameMatrix[x][y].getEntityType().getSpaceShip() != null) {
-            if (gameMatrix[x][y].getEntityType().getSpaceShip().getPlayersOnBoard() != null) {
-                for (Player player : gameMatrix[x][y].getEntityType().getSpaceShip().getPlayersOnBoard()) {
-                    data.add(player.getPlayerName());
-                }
             }
         }
         return data;
@@ -184,17 +179,12 @@ public class GameLogic {
         else {
             Cell[][] newGameMatrix = new EntityMove(gameMatrix).canMove(x,y,oldXY);
             if(newGameMatrix != null){
-                turnCount();
+                TurnHandler.turnCount();
                 view.drawBattleGround(newGameMatrix);
             }
             return null;
         }
 
-    }
-
-    private void turnCount(){
-        int turnCount = Constants.getTurnCount();
-        Constants.setTurnCount(turnCount ++);
     }
 
 }

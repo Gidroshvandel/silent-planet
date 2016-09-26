@@ -3,6 +3,7 @@ package com.silentgames.silent_planet.model.entities.ground.fractions;
 import android.content.res.Resources;
 
 import com.silentgames.silent_planet.R;
+import com.silentgames.silent_planet.logic.Fractions;
 import com.silentgames.silent_planet.model.entities.ground.Player;
 import com.silentgames.silent_planet.utils.BitmapEditor;
 
@@ -11,7 +12,9 @@ import com.silentgames.silent_planet.utils.BitmapEditor;
  */
 public class Pirate extends Player {
     public Pirate(Resources res, String playerName) {
-        super(BitmapEditor.getEntityBitmap(R.drawable.pirate, res), playerName);
+        super.setBitmap(BitmapEditor.getEntityBitmap(R.drawable.pirate, res));
+        super.setPlayerName(playerName);
         super.setCanMove(true);
+        super.setFraction(Fractions.Pirates);
     }
 }

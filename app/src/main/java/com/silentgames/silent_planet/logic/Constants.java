@@ -2,6 +2,7 @@ package com.silentgames.silent_planet.logic;
 
 import android.content.Context;
 
+import com.silentgames.silent_planet.model.entities.ground.Player;
 import com.silentgames.silent_planet.utils.Converter;
 
 import java.util.Map;
@@ -19,6 +20,7 @@ public class Constants {
     private static int viewSize;
     private static float canvasSize;
     private static int turnCount;
+    private static Fractions fraction;
 
     public Constants(Context context){
         //в xml разметке позднее пропишем размер вьюхи равный 300dp
@@ -52,5 +54,13 @@ public class Constants {
 
     public static void setTurnCount(int turnCount) {
         Constants.turnCount = turnCount;
+    }
+
+    public static Fractions getFraction() {
+        return fraction;
+    }
+
+    public static void setFraction(Fractions fraction) {
+        Constants.fraction = fraction;
     }
 }

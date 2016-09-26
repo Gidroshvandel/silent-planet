@@ -44,17 +44,17 @@ public class Cell {
             if (entityType.getSpaceShip() != null) {
                 this.entityType.setSpaceShip(entityType.getSpaceShip());
             }
-            if (entityType.getPlayerList() != null) {
+            if (entityType.getPlayersOnCell().getPlayerList() != null) {
                 List<Player> playerList = new ArrayList<>();
-                for (Player newPlayer : entityType.getPlayerList()
+                for (Player newPlayer : entityType.getPlayersOnCell().getPlayerList()
                         ) {
                     playerList.add(newPlayer);
                 }
-                for (Player thisPlayer : this.entityType.getPlayerList()
+                for (Player thisPlayer : this.entityType.getPlayersOnCell().getPlayerList()
                         ) {
                     playerList.add(thisPlayer);
                 }
-                this.entityType.setPlayerList(playerList);
+                this.entityType.getPlayersOnCell().setPlayerList(playerList);
             }
         }
     }

@@ -4,6 +4,7 @@ import com.silentgames.silent_planet.model.Cell;
 import com.silentgames.silent_planet.model.cells.CellType;
 import com.silentgames.silent_planet.model.entities.EntityType;
 import com.silentgames.silent_planet.model.entities.ground.Player;
+import com.silentgames.silent_planet.model.entities.ground.PlayersOnCell;
 import com.silentgames.silent_planet.model.entities.ground.utils.DeadPlayer;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class EntityMove {
         int oldX = Integer.parseInt(oldXY.get("X"));
         int oldY = Integer.parseInt(oldXY.get("Y"));
 
-        if(isMoveAtDistance(x, y, oldXY)) {
+        if(isMoveAtDistance(x, y, oldXY) && isCurrentPlayer(oldX, oldY)) {
             if(isSpaceShip(oldX, oldY) && gameMatrix[oldX][oldY].getEntityType().isCanFly()) {
                 if(gameMatrix[oldX][oldY].getEntityType().isCanFly() == gameMatrix[x][y].getCellType().isCanFly()){
                     moveShip(x, y, oldXY);
@@ -35,9 +36,9 @@ public class EntityMove {
                     moveFromBoard(x, y, oldXY);
                     event(x,y);
                 }
-            }
-            if (isPlayer(oldX, oldY)) {
-                Boolean s = gameMatrix[oldX][oldY].getEntityType().getPlayerByName(oldXY.get("name")).isCanMove();
+            }else
+            if(isPlayer(oldX, oldY)) {
+                Boolean s = gameMatrix[oldX][oldY].getEntityType().getPlayersOnCell().getPlayerByName(oldXY.get("name")).isCanMove();
                 if(s) {
                     if (s == gameMatrix[x][y].getCellType().isCanMove()) {
                         movePlayer(x, y, oldXY);
@@ -54,23 +55,31 @@ public class EntityMove {
         }
     }
 
+    private Boolean isCurrentPlayer(int x, int y){
+       if(gameMatrix[x][y].getEntityType().getFraction() == Constants.getFraction()){
+           return true;
+       }
+       else {
+           return false;
+       }
+    }
+
     private void event(int x, int y){
         if(gameMatrix[x][y].getCellType().isDead() && !gameMatrix[x][y].getEntityType().isDead()){
-            List<Player> data = new ArrayList<>();
-            data.add(new DeadPlayer(gameMatrix[x][y].getEntityType().getPlayerList().get(0)));
-            gameMatrix[x][y].setEntityType(new EntityType(data));
+            PlayersOnCell playerList = new PlayersOnCell();
+            playerList.add(new DeadPlayer(gameMatrix[x][y].getEntityType().getPlayersOnCell().getPlayerList().get(0)));
+            gameMatrix[x][y].setEntityType(new EntityType(playerList));
         }
-
     }
 
     public void moveOnBoard(int x, int y, Map<String,String> oldXY){
-        gameMatrix[x][y].getEntityType().getSpaceShip().addPlayerOnBoard(gameMatrix[Integer.parseInt(oldXY.get("X"))][Integer.parseInt(oldXY.get("Y"))].getEntityType().getPlayerByName(oldXY.get("name")));
+        gameMatrix[x][y].getEntityType().getPlayersOnCell().add(gameMatrix[Integer.parseInt(oldXY.get("X"))][Integer.parseInt(oldXY.get("Y"))].getEntityType().getPlayersOnCell().getPlayerByName(oldXY.get("name")));
         deletePlayer(oldXY);
     }
 
     public void moveFromBoard(int x, int y, Map<String,String> oldXY){
-        List<Player> selectPlayer = new ArrayList<>();
-        selectPlayer.add(gameMatrix[Integer.parseInt(oldXY.get("X"))][Integer.parseInt(oldXY.get("Y"))].getEntityType().getSpaceShip().getPlayerByName(oldXY.get("name")));
+        PlayersOnCell selectPlayer = new PlayersOnCell();
+        selectPlayer.add(gameMatrix[Integer.parseInt(oldXY.get("X"))][Integer.parseInt(oldXY.get("Y"))].getEntityType().getPlayersOnCell().getPlayerByName(oldXY.get("name")));
 
         gameMatrix[x][y].addEntityType(new EntityType(selectPlayer));
         gameMatrix[x][y].setCellType(new CellType(gameMatrix[x][y].getCellType().getOnVisible()));
@@ -82,25 +91,25 @@ public class EntityMove {
     }
 
     private void deletePlayer(Map<String,String> oldXY){
-        if(gameMatrix[Integer.parseInt(oldXY.get("X"))][Integer.parseInt(oldXY.get("Y"))].getEntityType().getPlayerList().size() == 1){
+        if(gameMatrix[Integer.parseInt(oldXY.get("X"))][Integer.parseInt(oldXY.get("Y"))].getEntityType().getPlayersOnCell().getPlayerList().size() == 1){
             gameMatrix[Integer.parseInt(oldXY.get("X"))][Integer.parseInt(oldXY.get("Y"))].setEntityType(null);
         }else {
-            gameMatrix[Integer.parseInt(oldXY.get("X"))][Integer.parseInt(oldXY.get("Y"))].getEntityType().removePlayerByName(oldXY.get("name"));
+            gameMatrix[Integer.parseInt(oldXY.get("X"))][Integer.parseInt(oldXY.get("Y"))].getEntityType().getPlayersOnCell().removePlayerByName(oldXY.get("name"));
         }
     }
 
     private void deletePlayerOnBoard(Map<String,String> oldXY){
-        if(gameMatrix[Integer.parseInt(oldXY.get("X"))][Integer.parseInt(oldXY.get("Y"))].getEntityType().getSpaceShip().getPlayersOnBoard().size() == 1){
-            gameMatrix[Integer.parseInt(oldXY.get("X"))][Integer.parseInt(oldXY.get("Y"))].getEntityType().getSpaceShip().setPlayersOnBoard(null);
+        if(gameMatrix[Integer.parseInt(oldXY.get("X"))][Integer.parseInt(oldXY.get("Y"))].getEntityType().getPlayersOnCell().getPlayerList().size() == 1){
+            gameMatrix[Integer.parseInt(oldXY.get("X"))][Integer.parseInt(oldXY.get("Y"))].getEntityType().getPlayersOnCell().setPlayerList(null);
         }else {
-            gameMatrix[Integer.parseInt(oldXY.get("X"))][Integer.parseInt(oldXY.get("Y"))].getEntityType().getSpaceShip().removePlayerByName(oldXY.get("name"));
+            gameMatrix[Integer.parseInt(oldXY.get("X"))][Integer.parseInt(oldXY.get("Y"))].getEntityType().getPlayersOnCell().removePlayerByName(oldXY.get("name"));
         }
     }
 
     public void movePlayer(int x, int y, Map<String,String> oldXY){
 
-        List<Player> selectPlayer = new ArrayList<>();
-        selectPlayer.add(gameMatrix[Integer.parseInt(oldXY.get("X"))][Integer.parseInt(oldXY.get("Y"))].getEntityType().getPlayerByName(oldXY.get("name")));
+        PlayersOnCell selectPlayer = new PlayersOnCell();
+        selectPlayer.add(gameMatrix[Integer.parseInt(oldXY.get("X"))][Integer.parseInt(oldXY.get("Y"))].getEntityType().getPlayersOnCell().getPlayerByName(oldXY.get("name")));
 
         gameMatrix[x][y].addEntityType(new EntityType(selectPlayer));
         gameMatrix[x][y].setCellType(new CellType(gameMatrix[x][y].getCellType().getOnVisible()));
@@ -124,7 +133,7 @@ public class EntityMove {
 
     public boolean isPlayer(int x, int y){
         if(gameMatrix[x][y].getEntityType() != null){
-            if(gameMatrix[x][y].getEntityType().getPlayerList() != null && gameMatrix[x][y].getEntityType().getPlayerList().size() != 0){
+            if(gameMatrix[x][y].getEntityType().getPlayersOnCell() != null && gameMatrix[x][y].getEntityType().getPlayersOnCell().getPlayerList().size() != 0){
                 return true;
             }
         }

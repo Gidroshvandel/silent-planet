@@ -3,7 +3,7 @@ package com.silentgames.silent_planet.model.entities.space.fractions;
 import android.content.res.Resources;
 
 import com.silentgames.silent_planet.R;
-import com.silentgames.silent_planet.model.entities.ground.Player;
+import com.silentgames.silent_planet.logic.Fractions;
 import com.silentgames.silent_planet.model.entities.space.SpaceShip;
 import com.silentgames.silent_planet.utils.BitmapEditor;
 
@@ -12,7 +12,8 @@ import com.silentgames.silent_planet.utils.BitmapEditor;
  */
 public class RobotShip extends SpaceShip {
     public RobotShip(Resources res) {
-        super(BitmapEditor.getEntityBitmap(R.drawable.robot_space_ship, res));
-        setCanFly(true);
+        super.setBitmap(BitmapEditor.getEntityBitmap(R.drawable.robot_space_ship, res));
+        super.setCanFly(true);
+        super.setFraction(Fractions.Robots);
     }
 }

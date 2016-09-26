@@ -1,7 +1,10 @@
 package com.silentgames.silent_planet.model.entities.ground.utils;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 
+import com.silentgames.silent_planet.R;
 import com.silentgames.silent_planet.model.entities.ground.Player;
 
 /**
@@ -9,7 +12,8 @@ import com.silentgames.silent_planet.model.entities.ground.Player;
  */
 public class DeadPlayer extends Player {
     public DeadPlayer(Player player) {
-        super(player.getBitmap(), player.getPlayerName() + " Мёртв");
+        super.setBitmap(player.getBitmap());
+        super.setPlayerName(player.getPlayerName() + " " + "Мёртв");
         super.setDead(true);
         super.setCanMove(false);
     }

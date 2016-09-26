@@ -1,11 +1,14 @@
 package com.silentgames.silent_planet.model;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
+
+import com.silentgames.silent_planet.logic.Fractions;
 
 /**
  * Created by gidroshvandel on 09.07.16.
  */
-public class DefaultClass {
+public class DefaultClass{
 
     private Bitmap bitmap;
     private boolean canMove = false;
@@ -13,6 +16,13 @@ public class DefaultClass {
     private boolean isDead = false;
 
     public DefaultClass() {
+    }
+
+    public void setAll(DefaultClass defaultClass){
+        setBitmap(defaultClass.getBitmap());
+        setCanFly(defaultClass.isCanFly());
+        setCanMove(defaultClass.isCanMove());
+        setDead(defaultClass.isDead());
     }
 
     public boolean isCanMove() {
