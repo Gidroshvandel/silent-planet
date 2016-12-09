@@ -26,6 +26,11 @@ import com.silentgames.silent_planet.model.entities.space.fractions.AlienShip;
 import com.silentgames.silent_planet.model.entities.space.fractions.HumanShip;
 import com.silentgames.silent_planet.model.entities.space.fractions.PirateShip;
 import com.silentgames.silent_planet.model.entities.space.fractions.RobotShip;
+import com.silentgames.silent_planet.model.fractions.FractionsEnum;
+import com.silentgames.silent_planet.model.fractions.factionType.Aliens;
+import com.silentgames.silent_planet.model.fractions.factionType.Humans;
+import com.silentgames.silent_planet.model.fractions.factionType.Pirates;
+import com.silentgames.silent_planet.model.fractions.factionType.Robots;
 import com.silentgames.silent_planet.view.GameView;
 
 import java.util.ArrayList;
@@ -48,10 +53,6 @@ public class GameLogic {
         this.view = view;
         this.activity = activity;
         fillBattleGround();
-//        Player player = new Player(view.getResources(), "123");
-
-//        Constants.getHorizontalCountOfCells();
-//        Constants constants = new Constants(view.getContext());
     }
 
 
@@ -80,7 +81,11 @@ public class GameLogic {
         spawnPirates(0,1);
         spawnRobots(0,2);
         spawnAliens(0,3);
-        TurnHandler.start(Fractions.Humans);
+        TurnHandler.start(Humans.getInstance());
+        TurnHandler.setPlayable(Aliens.getInstance());
+        TurnHandler.setPlayable(Humans.getInstance());
+        TurnHandler.setPlayable(Pirates.getInstance());
+        TurnHandler.setPlayable(Robots.getInstance());
     }
 
     public void spawnRobots(int x, int y){
@@ -110,6 +115,7 @@ public class GameLogic {
     }
     public void spawnHumans(int x, int y){
         PlayersOnCell playerList = new PlayersOnCell();
+
         playerList.add(new Human(view.getResources(), "Maxim"));
         playerList.add(new Human(view.getResources(), "Oxik"));
         playerList.add(new Human(view.getResources(), "Andrea"));
@@ -133,7 +139,8 @@ public class GameLogic {
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
                 // показываем позиция нажатого элемента
-                Toast.makeText(activity.getBaseContext(), "Выбран: " + adapter.getItem(position), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(activity.getBaseContext(), "Выбран: " + adapter.getItem(position), Toast.LENGTH_SHORT).show();
+                showToast("Выбран: " + adapter.getItem(position));
                 Constants.oldXY = select(x,y, null, adapter.getItem(position));
             }
             @Override
@@ -145,7 +152,7 @@ public class GameLogic {
     private List<String> findPlayer(final int x, final int y){
         List<String> data = new ArrayList<>();
 
-        if(gameMatrix[x][y].getEntityType().getPlayersOnCell() != null) {
+        if(gameMatrix[x][y].getEntityType().getPlayersOnCell() != null && gameMatrix[x][y].getEntityType().getPlayersOnCell().getPlayerList() != null) {
             for (Player player : gameMatrix[x][y].getEntityType().getPlayersOnCell().getPlayerList()) {
                 data.add(player.getPlayerName());
             }
@@ -179,12 +186,18 @@ public class GameLogic {
         else {
             Cell[][] newGameMatrix = new EntityMove(gameMatrix).canMove(x,y,oldXY);
             if(newGameMatrix != null){
-                TurnHandler.turnCount();
                 view.drawBattleGround(newGameMatrix);
+                showToast("Now turn " + TurnHandler.getFraction().toString());
             }
             return null;
         }
 
     }
+
+    private void showToast(String text){
+
+        Toast.makeText(activity.getBaseContext(), text , Toast.LENGTH_SHORT).show();
+    }
+
 
 }

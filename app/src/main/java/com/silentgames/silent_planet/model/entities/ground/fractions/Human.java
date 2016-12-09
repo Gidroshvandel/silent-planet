@@ -3,8 +3,8 @@ package com.silentgames.silent_planet.model.entities.ground.fractions;
 import android.content.res.Resources;
 
 import com.silentgames.silent_planet.R;
-import com.silentgames.silent_planet.logic.Fractions;
 import com.silentgames.silent_planet.model.entities.ground.Player;
+import com.silentgames.silent_planet.model.fractions.factionType.Humans;
 import com.silentgames.silent_planet.utils.BitmapEditor;
 
 /**
@@ -15,6 +15,6 @@ public class Human extends Player {
         super.setBitmap(BitmapEditor.getEntityBitmap(R.drawable.human_spaceman,res));
         super.setPlayerName(playerName);
         super.setCanMove(true);
-        super.setFraction(Fractions.Humans);
+        super.setFraction(Humans.getInstance());
     }
 }

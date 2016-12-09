@@ -51,7 +51,7 @@ public class GameView extends View{
     }
 
     public void paintSettings(){
-        //определяем параметры кисти, которой будем рисовать сетку и атомы
+        //определяем параметры кисти
         paint =new Paint();
         paint.setAntiAlias(true);
         paint.setDither(true);

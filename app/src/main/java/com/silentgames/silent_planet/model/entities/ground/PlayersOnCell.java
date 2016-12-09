@@ -12,7 +12,7 @@ public class PlayersOnCell{
     List<Player> playerList = new ArrayList<>();
 
     public List<Player> getPlayerList() {
-        return new ArrayList<>(playerList);
+        return playerList;
     }
 
     public void setPlayerList(List<Player> playerList) {

@@ -1,28 +1,35 @@
 package com.silentgames.silent_planet.model;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
-
-import com.silentgames.silent_planet.logic.Fractions;
 
 /**
  * Created by gidroshvandel on 09.07.16.
  */
-public class DefaultClass{
+public class CellEx {
 
     private Bitmap bitmap;
     private boolean canMove = false;
     private boolean canFly = false;
     private boolean isDead = false;
+    private int crystals = 0;
 
-    public DefaultClass() {
+    public CellEx() {
     }
 
-    public void setAll(DefaultClass defaultClass){
-        setBitmap(defaultClass.getBitmap());
-        setCanFly(defaultClass.isCanFly());
-        setCanMove(defaultClass.isCanMove());
-        setDead(defaultClass.isDead());
+    public void setAll(CellEx cellEx){
+        setBitmap(cellEx.getBitmap());
+        setCanFly(cellEx.isCanFly());
+        setCanMove(cellEx.isCanMove());
+        setDead(cellEx.isDead());
+        setCrystals(cellEx.getCrystals());
+    }
+
+    public int getCrystals() {
+        return crystals;
+    }
+
+    public void setCrystals(int crystals) {
+        this.crystals = crystals;
     }
 
     public boolean isCanMove() {

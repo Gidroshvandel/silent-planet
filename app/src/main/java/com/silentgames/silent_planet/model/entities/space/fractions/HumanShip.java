@@ -3,8 +3,8 @@ package com.silentgames.silent_planet.model.entities.space.fractions;
 import android.content.res.Resources;
 
 import com.silentgames.silent_planet.R;
-import com.silentgames.silent_planet.logic.Fractions;
 import com.silentgames.silent_planet.model.entities.space.SpaceShip;
+import com.silentgames.silent_planet.model.fractions.factionType.Humans;
 import com.silentgames.silent_planet.utils.BitmapEditor;
 
 /**
@@ -14,6 +14,6 @@ public class HumanShip extends SpaceShip {
     public HumanShip(Resources res) {
         super.setBitmap(BitmapEditor.getEntityBitmap(R.drawable.human_space_ship,res));
         super.setCanFly(true);
-        super.setFraction(Fractions.Humans);
+        super.setFraction(Humans.getInstance());
     }
 }

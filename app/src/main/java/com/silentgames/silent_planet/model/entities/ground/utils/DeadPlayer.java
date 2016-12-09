@@ -16,5 +16,6 @@ public class DeadPlayer extends Player {
         super.setPlayerName(player.getPlayerName() + " " + "Мёртв");
         super.setDead(true);
         super.setCanMove(false);
+        super.setFraction(player.getFraction());
     }
 }

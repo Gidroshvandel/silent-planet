@@ -1,15 +1,7 @@
 package com.silentgames.silent_planet.model.entities;
 
-import android.graphics.Bitmap;
-
-import com.silentgames.silent_planet.logic.Fractions;
-import com.silentgames.silent_planet.model.DefaultClass;
-import com.silentgames.silent_planet.model.entities.ground.Player;
 import com.silentgames.silent_planet.model.entities.ground.PlayersOnCell;
 import com.silentgames.silent_planet.model.entities.space.SpaceShip;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by gidroshvandel on 09.07.16.

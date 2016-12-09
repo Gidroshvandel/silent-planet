@@ -27,23 +27,25 @@ public class EntityMove {
         int oldX = Integer.parseInt(oldXY.get("X"));
         int oldY = Integer.parseInt(oldXY.get("Y"));
 
-        if(isMoveAtDistance(x, y, oldXY) && isCurrentPlayer(oldX, oldY)) {
-            if(isSpaceShip(oldX, oldY) && gameMatrix[oldX][oldY].getEntityType().isCanFly()) {
-                if(gameMatrix[oldX][oldY].getEntityType().isCanFly() == gameMatrix[x][y].getCellType().isCanFly()){
-                    moveShip(x, y, oldXY);
+        if(isMoveAtDistance(x, y, oldX, oldY) && isPlayable(oldX, oldY) && isCurrentPlayer(oldX, oldY)) {
+            if(isSpaceShip(oldX, oldY) && gameMatrix[oldX][oldY].getEntityType().isCanFly() && !isSpaceShip(x,y)) {
+                if(isCanFlyToCell(x, y, oldX, oldY)){
+                    moveShip(x, y, oldX, oldY);
+                    TurnHandler.turnCount();
                 }else
                 if(oldXY.get("name") != null){
                     moveFromBoard(x, y, oldXY);
-                    event(x,y);
+                    gameMatrix = gameMatrix[x][y].getCellType().getOnVisible().doEvent(x,y, gameMatrix);
+                    TurnHandler.turnCount();
                 }
             }else
             if(isPlayer(oldX, oldY)) {
-                Boolean s = gameMatrix[oldX][oldY].getEntityType().getPlayersOnCell().getPlayerByName(oldXY.get("name")).isCanMove();
-                if(s) {
-                    if (s == gameMatrix[x][y].getCellType().isCanMove()) {
+                if(isCanMovePlayer(oldXY)) {
+                    if (isCanMovePlayer(oldXY) == gameMatrix[x][y].getCellType().isCanMove()) {
                         movePlayer(x, y, oldXY);
-                        event(x, y);
-                    } else if (isSpaceShip(x, y)) {
+                        gameMatrix =  gameMatrix[x][y].getCellType().getOnVisible().doEvent(x,y, gameMatrix);
+                        TurnHandler.turnCount();
+                    } else if (isSpaceShip(x, y) && isEntityBelongFraction(x,y,oldX,oldY)) {
                         moveOnBoard(x, y, oldXY);
                     }
                 }
@@ -55,8 +57,34 @@ public class EntityMove {
         }
     }
 
+    private Boolean isEntityBelongFraction(int x, int y, int oldX, int oldY){
+        if (gameMatrix[x][y].getEntityType().getFraction() == gameMatrix[oldX][oldY].getEntityType().getFraction()){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    private Boolean isCanMovePlayer(Map<String,String> oldXY){
+        int oldX = Integer.parseInt(oldXY.get("X"));
+        int oldY = Integer.parseInt(oldXY.get("Y"));
+        if(gameMatrix[oldX][oldY].getEntityType().getPlayersOnCell().getPlayerByName(oldXY.get("name")).isCanMove()){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    private Boolean isCanFlyToCell(int x, int y, int oldX, int oldY){
+       if(gameMatrix[oldX][oldY].getEntityType().isCanFly() == gameMatrix[x][y].getCellType().isCanFly()){
+           return true;
+       }else {
+           return false;
+       }
+    }
+
     private Boolean isCurrentPlayer(int x, int y){
-       if(gameMatrix[x][y].getEntityType().getFraction() == Constants.getFraction()){
+       if(getEntityType(x,y).getFraction().getFractionsEnum() == TurnHandler.getFraction()){
            return true;
        }
        else {
@@ -64,16 +92,25 @@ public class EntityMove {
        }
     }
 
+    private Boolean isPlayable(int x, int y){
+        if(getEntityType(x,y).getFraction().isPlayable()){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
     private void event(int x, int y){
-        if(gameMatrix[x][y].getCellType().isDead() && !gameMatrix[x][y].getEntityType().isDead()){
+        if(gameMatrix[x][y].getCellType().isDead() && !getEntityType(x,y).isDead()){
             PlayersOnCell playerList = new PlayersOnCell();
-            playerList.add(new DeadPlayer(gameMatrix[x][y].getEntityType().getPlayersOnCell().getPlayerList().get(0)));
+            playerList.add(new DeadPlayer(getEntityType(x,y).getPlayersOnCell().getPlayerList().get(0)));
             gameMatrix[x][y].setEntityType(new EntityType(playerList));
         }
     }
 
     public void moveOnBoard(int x, int y, Map<String,String> oldXY){
-        gameMatrix[x][y].getEntityType().getPlayersOnCell().add(gameMatrix[Integer.parseInt(oldXY.get("X"))][Integer.parseInt(oldXY.get("Y"))].getEntityType().getPlayersOnCell().getPlayerByName(oldXY.get("name")));
+        getEntityType(x,y).getPlayersOnCell().add(gameMatrix[Integer.parseInt(oldXY.get("X"))][Integer.parseInt(oldXY.get("Y"))].getEntityType().getPlayersOnCell().getPlayerByName(oldXY.get("name")));
         deletePlayer(oldXY);
     }
 
@@ -99,32 +136,32 @@ public class EntityMove {
     }
 
     private void deletePlayerOnBoard(Map<String,String> oldXY){
-        if(gameMatrix[Integer.parseInt(oldXY.get("X"))][Integer.parseInt(oldXY.get("Y"))].getEntityType().getPlayersOnCell().getPlayerList().size() == 1){
-            gameMatrix[Integer.parseInt(oldXY.get("X"))][Integer.parseInt(oldXY.get("Y"))].getEntityType().getPlayersOnCell().setPlayerList(null);
+        if(getEntityType(Integer.parseInt(oldXY.get("X")),Integer.parseInt(oldXY.get("Y"))).getPlayersOnCell().getPlayerList().size() == 1){
+            getEntityType(Integer.parseInt(oldXY.get("X")),Integer.parseInt(oldXY.get("Y"))).getPlayersOnCell().setPlayerList(null);
         }else {
-            gameMatrix[Integer.parseInt(oldXY.get("X"))][Integer.parseInt(oldXY.get("Y"))].getEntityType().getPlayersOnCell().removePlayerByName(oldXY.get("name"));
+            getEntityType(Integer.parseInt(oldXY.get("X")),Integer.parseInt(oldXY.get("Y"))).getPlayersOnCell().removePlayerByName(oldXY.get("name"));
         }
     }
 
     public void movePlayer(int x, int y, Map<String,String> oldXY){
 
         PlayersOnCell selectPlayer = new PlayersOnCell();
-        selectPlayer.add(gameMatrix[Integer.parseInt(oldXY.get("X"))][Integer.parseInt(oldXY.get("Y"))].getEntityType().getPlayersOnCell().getPlayerByName(oldXY.get("name")));
+        selectPlayer.add(getEntityType(Integer.parseInt(oldXY.get("X")),Integer.parseInt(oldXY.get("Y"))).getPlayersOnCell().getPlayerByName(oldXY.get("name")));
 
         gameMatrix[x][y].addEntityType(new EntityType(selectPlayer));
         gameMatrix[x][y].setCellType(new CellType(gameMatrix[x][y].getCellType().getOnVisible()));
         deletePlayer(oldXY);
     }
 
-    public void moveShip(int x, int y, Map<String,String> oldXY) {
-        gameMatrix[x][y].addEntityType(gameMatrix[Integer.parseInt(oldXY.get("X"))][Integer.parseInt(oldXY.get("Y"))].getEntityType());
+    public void moveShip(int x, int y, int oldX, int oldY) {
+        gameMatrix[x][y].addEntityType(gameMatrix[oldX][oldY].getEntityType());
         gameMatrix[x][y].setCellType(new CellType(gameMatrix[x][y].getCellType().getOnVisible()));
-        gameMatrix[Integer.parseInt(oldXY.get("X"))][Integer.parseInt(oldXY.get("Y"))].setEntityType(null);
+        gameMatrix[oldX][oldY].setEntityType(null);
     }
 
     public boolean isSpaceShip(int x, int y){
-        if(gameMatrix[x][y].getEntityType() != null){
-            if(gameMatrix[x][y].getEntityType().getSpaceShip() != null){
+        if(getEntityType(x,y) != null){
+            if(getEntityType(x,y).getSpaceShip() != null){
                 return true;
             }
         }
@@ -132,25 +169,27 @@ public class EntityMove {
     }
 
     public boolean isPlayer(int x, int y){
-        if(gameMatrix[x][y].getEntityType() != null){
-            if(gameMatrix[x][y].getEntityType().getPlayersOnCell() != null && gameMatrix[x][y].getEntityType().getPlayersOnCell().getPlayerList().size() != 0){
+        if(getEntityType(x, y) != null){
+            if(getEntityType(x,y).getPlayersOnCell() != null && getEntityType(x,y).getPlayersOnCell().getPlayerList().size() != 0){
                 return true;
             }
         }
         return false;
     }
 
+    private EntityType getEntityType(int x, int y){
+        return gameMatrix[x][y].getEntityType();
+    }
+
     //Проверки перемещения юнитов
-    public Boolean isMoveAtDistance(int x, int y, Map<String,String> oldXY){
+    public Boolean isMoveAtDistance(int x, int y, int oldX, int oldY){
 
         Boolean isMoveAtDistance = false;
 
-        int oldX = Integer.parseInt(oldXY.get("X"));
-        int oldY = Integer.parseInt(oldXY.get("Y"));
         if(!(oldX == x && oldY == y)) {
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
-                    if ((Integer.parseInt(oldXY.get("X")) + j - 1 == x) && (Integer.parseInt(oldXY.get("Y")) + i - 1 == y)) {
+                    if ((oldX + j - 1 == x) && (oldY + i - 1 == y)) {
                         isMoveAtDistance = true;
                     }
                 }

@@ -6,6 +6,9 @@ import android.os.Bundle;
 import com.silentgames.silent_planet.logic.GameLogic;
 import com.silentgames.silent_planet.view.GameView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends Activity {
 
     @Override

@@ -3,6 +3,7 @@ package com.silentgames.silent_planet.model.cells.onVisible;
 import android.content.res.Resources;
 
 import com.silentgames.silent_planet.R;
+import com.silentgames.silent_planet.model.Cell;
 import com.silentgames.silent_planet.utils.BitmapEditor;
 
 /**
@@ -10,8 +11,13 @@ import com.silentgames.silent_planet.utils.BitmapEditor;
  */
 public class SpaceCell extends OnVisible {
     public SpaceCell(Resources res) {
-        super(BitmapEditor.getCellBitmap(R.drawable.space_texture,res));
+        super.setBitmap(BitmapEditor.getCellBitmap(R.drawable.space_texture,res));
         super.setCanFly(true);
+    }
+
+    @Override
+    public Cell[][] doEvent(int x, int y, Cell[][] gameMatrix) {
+        return gameMatrix;
     }
 
 

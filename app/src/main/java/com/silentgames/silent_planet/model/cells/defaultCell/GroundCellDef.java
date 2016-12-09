@@ -11,11 +11,7 @@ import com.silentgames.silent_planet.utils.BitmapEditor;
 public class GroundCellDef extends DefaultCell {
 
     public GroundCellDef(Resources res) {
-        super(BitmapEditor.getCellBitmap(R.drawable.planet_background,res));
+        super.setBitmap(BitmapEditor.getCellBitmap(R.drawable.planet_background,res));
         super.setCanMove(true);
     }
-//    public GroundCellDef(Resources res) {
-//        Bitmap bitmap = BitmapFactory.decodeResource(res, R.drawable.planet_background);
-//        setBitmap(BitmapEditor.resize(bitmap, Converter.convertDpToPixel(Constants.cellSize,res),Converter.convertDpToPixel(Constants.cellSize,res)));
-//    }
 }

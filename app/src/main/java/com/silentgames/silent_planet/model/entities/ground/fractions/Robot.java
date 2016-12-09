@@ -3,8 +3,8 @@ package com.silentgames.silent_planet.model.entities.ground.fractions;
 import android.content.res.Resources;
 
 import com.silentgames.silent_planet.R;
-import com.silentgames.silent_planet.logic.Fractions;
 import com.silentgames.silent_planet.model.entities.ground.Player;
+import com.silentgames.silent_planet.model.fractions.factionType.Robots;
 import com.silentgames.silent_planet.utils.BitmapEditor;
 
 /**
@@ -15,6 +15,6 @@ public class Robot extends Player {
         super.setBitmap(BitmapEditor.getEntityBitmap(R.drawable.robot, res));
         super.setPlayerName(playerName);
         super.setCanMove(true);
-        super.setFraction(Fractions.Robots);
+        super.setFraction(Robots.getInstance());
     }
 }

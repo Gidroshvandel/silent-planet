@@ -3,7 +3,7 @@ package com.silentgames.silent_planet.model.entities.ground.fractions;
 import android.content.res.Resources;
 
 import com.silentgames.silent_planet.R;
-import com.silentgames.silent_planet.logic.Fractions;
+import com.silentgames.silent_planet.model.fractions.factionType.Aliens;
 import com.silentgames.silent_planet.model.entities.ground.Player;
 import com.silentgames.silent_planet.utils.BitmapEditor;
 
@@ -16,6 +16,6 @@ public class Alien extends Player {
         super.setBitmap(BitmapEditor.getEntityBitmap(R.drawable.alien, res));
         super.setPlayerName(playerName);
         super.setCanMove(true);
-        super.setFraction(Fractions.Aliens);
+        super.setFraction(Aliens.getInstance());
     }
 }

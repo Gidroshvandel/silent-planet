@@ -1,30 +1,26 @@
 package com.silentgames.silent_planet.model.cells;
 
-import com.silentgames.silent_planet.model.DefaultClass;
+import com.silentgames.silent_planet.model.Cell;
+import com.silentgames.silent_planet.model.CellEx;
 import com.silentgames.silent_planet.model.cells.defaultCell.DefaultCell;
 import com.silentgames.silent_planet.model.cells.onVisible.OnVisible;
 
 /**
  * Created by gidroshvandel on 09.07.16.
  */
-public class CellType extends DefaultClass {
+public class CellType extends CellTypeEx {
 
     private DefaultCell defaultCell;
     private OnVisible onVisible;
 
     public CellType(OnVisible onVisible) {
         this.onVisible = onVisible;
-        setBitmap(onVisible.getBitmap());
-        setCanFly(onVisible.isCanFly());
-        setCanMove(onVisible.isCanMove());
-        setDead(onVisible.isDead());
+        setAll(onVisible);
     }
 
     public CellType(DefaultCell defaultCell) {
         this.defaultCell = defaultCell;
-        setBitmap(defaultCell.getBitmap());
-        setCanFly(defaultCell.isCanFly());
-        setCanMove(defaultCell.isCanMove());
+        setAll(defaultCell);
     }
 
     public OnVisible getOnVisible() {

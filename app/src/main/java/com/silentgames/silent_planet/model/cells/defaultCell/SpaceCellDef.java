@@ -10,15 +10,7 @@ import com.silentgames.silent_planet.utils.BitmapEditor;
  */
 public class SpaceCellDef extends DefaultCell {
     public SpaceCellDef(Resources res) {
-        super(BitmapEditor.getCellBitmap(R.drawable.space_texture,res));
+        super.setBitmap(BitmapEditor.getCellBitmap(R.drawable.space_texture,res));
         super.setCanFly(true);
     }
-
-
-//    public SpaceCellDef(Resources res) {
-//        super();
-//        setCanFly(true);
-//        Bitmap bitmap = BitmapFactory.decodeResource(res, R.drawable.space_texture);
-//        setBitmap(BitmapEditor.resize(bitmap, Converter.convertDpToPixel(Constants.cellSize,res),Converter.convertDpToPixel(Constants.cellSize,res)));
-//    }
 }
