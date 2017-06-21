@@ -7,12 +7,20 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.silentgames.silent_planet.R;
 import com.silentgames.silent_planet.logic.Constants;
 import com.silentgames.silent_planet.model.Cell;
 import com.silentgames.silent_planet.utils.Calculator;
 import com.silentgames.silent_planet.view.GameView;
+
+import java.util.List;
 
 public class MainActivity extends Activity implements MainContract.View, GameView.Callback {
 
@@ -22,6 +30,10 @@ public class MainActivity extends Activity implements MainContract.View, GameVie
     private Bitmap mBitmap;
     private Canvas mCanvas;
     private Paint paint, mBitmapPaint;
+    private ImageView selectObjectIcon;
+    private Spinner objectListOnCell;
+    ArrayAdapter<String> adapter;
+
     private  float mScaleFactor;
     private  float canvasSize;
     private  int viewSize;
@@ -55,6 +67,10 @@ public class MainActivity extends Activity implements MainContract.View, GameVie
     }
 
     private void initUi(){
+
+        selectObjectIcon = (ImageView) findViewById(R.id.imageView);
+
+        objectListOnCell = (Spinner) findViewById(R.id.spinner);
 
         mScaleFactor = Constants.getmScaleFactor();
         canvasSize = Constants.getCanvasSize(this);
@@ -99,8 +115,32 @@ public class MainActivity extends Activity implements MainContract.View, GameVie
     }
 
     @Override
-    public Activity getActivity() {
-        return this;
+    public void showToast(String text) {
+        Toast.makeText(this, text , Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showObjectIcon(Cell gameCell) {
+        selectObjectIcon.setImageBitmap(gameCell.getEntityType().getBitmap());
+    }
+
+    @Override
+    public void showCellListItem(final int x, final int y, List<String> playerList) {
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, playerList );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        objectListOnCell.setAdapter(adapter);
+        objectListOnCell.setPrompt("Title");
+        objectListOnCell.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                presenter.onCellListItemSelectedClick(x, y, adapter.getItem(position));
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
     }
 
     @Override

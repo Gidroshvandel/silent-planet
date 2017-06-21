@@ -7,6 +7,8 @@ import android.graphics.Bitmap;
 import com.silentgames.silent_planet.model.Cell;
 import com.silentgames.silent_planet.mvp.BasePresenter;
 
+import java.util.List;
+
 public interface MainContract {
     interface View {
 
@@ -16,14 +18,22 @@ public interface MainContract {
 
         void reDraw(int eventX,int eventY, Bitmap entity);
 
-        Resources getResources();
+        void showToast(String text);
 
-        Activity getActivity();
+        void showObjectIcon(Cell gameCell);
+
+        void showCellListItem(int x, int y, List<String> playerList);
+
+        Resources getResources();
+//
+//        Activity getActivity();
 
     }
     interface Presenter extends BasePresenter {
 
         void onSingleTapConfirmed(int x, int y);
+
+        void onCellListItemSelectedClick(int x, int y, String text);
 
     }
 }

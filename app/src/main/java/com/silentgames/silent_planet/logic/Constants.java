@@ -16,7 +16,6 @@ public class Constants {
     public static final int verticalCountOfCells = 12;
     public static final float mScaleFactor = 1f;
     public static final float cellSize = 31;
-    public static Map<String,String> oldXY;
     public static boolean block = false;
 
     public static int getHorizontalCountOfCells() {

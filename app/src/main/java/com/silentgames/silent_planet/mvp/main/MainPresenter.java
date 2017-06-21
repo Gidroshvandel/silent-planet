@@ -56,7 +56,13 @@ public class MainPresenter implements MainContract.Presenter {
 
     @Override
     public void onSingleTapConfirmed(int x, int y) {
-        Constants.oldXY = select(x,y, Constants.oldXY, null);
+        viewModel.setOldXY(select(x,y, viewModel.getOldXY(), null));
+    }
+
+    @Override
+    public void onCellListItemSelectedClick(int x, int y, String text) {
+        view.showToast("Выбран: " + text);
+        viewModel.setOldXY(select(x,y, null, text));
     }
 
     @Override
@@ -131,32 +137,6 @@ public class MainPresenter implements MainContract.Presenter {
         gameMatrix[x][y].getEntityType().setPlayersOnCell(playerList);
     }
 
-    private void onCellList(final int x, final int y){
-
-
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(view.getActivity(), android.R.layout.simple_spinner_item, findPlayer(x,y) );
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        Spinner spinner = (Spinner) view.getActivity().findViewById(R.id.spinner);
-        spinner.setAdapter(adapter);
-
-        spinner.setPrompt("Title");
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int position, long id) {
-                // показываем позиция нажатого элемента
-//                Toast.makeText(activity.getBaseContext(), "Выбран: " + adapter.getItem(position), Toast.LENGTH_SHORT).show();
-                showToast("Выбран: " + adapter.getItem(position));
-                Constants.oldXY = select(x,y, null, adapter.getItem(position));
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
-            }
-        });
-    }
-
     private List<String> findPlayer(final int x, final int y){
         List<String> data = new ArrayList<>();
 
@@ -169,25 +149,24 @@ public class MainPresenter implements MainContract.Presenter {
     }
 
     public Map<String,String> select(int x, int y, Map<String,String> oldXY, String name){
-        ImageView viewIm=(ImageView)view.getActivity().findViewById(R.id.imageView);
         EntityType en = gameMatrix[x][y].getEntityType();
 
         if(oldXY == null && !Constants.block) {
             if (en != null) {
                 oldXY = new HashMap<>();
                 if(name == null){
-                    onCellList(x,y);
+                    view.showCellListItem(x, y, findPlayer(x,y));
                 }
                 if(name != null){
                     oldXY.put("name",name);
                 }
                 oldXY.put("X",String.valueOf(x));
                 oldXY.put("Y",String.valueOf(y));
-                viewIm.setImageBitmap(gameMatrix[x][y].getEntityType().getBitmap());
+                view.showObjectIcon(gameMatrix[x][y]);
                 return oldXY;
             }
             else {
-                viewIm.setImageBitmap(gameMatrix[x][y].getCellType().getBitmap());
+                view.showObjectIcon(gameMatrix[x][y]);
                 return null;
             }
         }
@@ -195,7 +174,7 @@ public class MainPresenter implements MainContract.Presenter {
             Cell[][] newGameMatrix = new EntityMove(gameMatrix).canMove(x,y,oldXY);
             if(newGameMatrix != null){
                 view.drawBattleGround(newGameMatrix);
-                showToast("Now turn " + TurnHandler.getFraction().toString());
+                view.showToast("Now turn " + TurnHandler.getFraction().toString());
             }
             if(Constants.block){
                 return oldXY;
@@ -204,10 +183,5 @@ public class MainPresenter implements MainContract.Presenter {
             }
         }
 
-    }
-
-    private void showToast(String text){
-
-        Toast.makeText(view.getActivity().getBaseContext(), text , Toast.LENGTH_SHORT).show();
     }
 }
