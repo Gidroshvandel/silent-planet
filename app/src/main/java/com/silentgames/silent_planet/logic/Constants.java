@@ -18,14 +18,6 @@ public class Constants {
     public static final float cellSize = 31;
     public static Map<String,String> oldXY;
     public static boolean block = false;
-    private static int viewSize;
-    private static float canvasSize;
-
-    public Constants(Context context){
-        //в xml разметке позднее пропишем размер вьюхи равный 300dp
-        viewSize=(int) Converter.convertDpToPixel(350, context.getResources());
-        canvasSize=(int)(viewSize*mScaleFactor);//определяем размер канваса
-    }
 
     public static int getHorizontalCountOfCells() {
         return horizontalCountOfCells;
@@ -39,12 +31,12 @@ public class Constants {
         return mScaleFactor;
     }
 
-    public int getViewSize() {
-        return viewSize;
+    public static int getViewSize(Context context) {
+        return (int) Converter.convertDpToPixel(350, context.getResources());
     }
 
-    public float getCanvasSize() {
-        return canvasSize;
+    public static float getCanvasSize(Context context) {
+        return (int)(getViewSize(context)*mScaleFactor);
     }
 
 }
