@@ -164,7 +164,7 @@ public class GameLogic {
         ImageView viewIm=(ImageView)activity.findViewById(R.id.imageView);
         EntityType en = gameMatrix[x][y].getEntityType();
 
-        if(oldXY == null) {
+        if(oldXY == null && !Constants.block) {
             if (en != null) {
                 oldXY = new HashMap<>();
                 if(name == null){
@@ -189,7 +189,11 @@ public class GameLogic {
                 view.drawBattleGround(newGameMatrix);
                 showToast("Now turn " + TurnHandler.getFraction().toString());
             }
-            return null;
+            if(Constants.block){
+                return oldXY;
+            }else {
+                return null;
+            }
         }
 
     }

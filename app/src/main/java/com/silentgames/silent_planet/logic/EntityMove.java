@@ -26,33 +26,39 @@ public class EntityMove {
     public Cell[][] canMove(int x, int y, Map<String,String> oldXY){
         int oldX = Integer.parseInt(oldXY.get("X"));
         int oldY = Integer.parseInt(oldXY.get("Y"));
+        if(Constants.block){
+            return gameMatrix[x][y].getCellType().getOnVisible().doEvent(oldX, oldY, gameMatrix);
+        }else {
+            return moveCheck(x,y, oldXY);
+        }
+    }
 
-        if(isMoveAtDistance(x, y, oldX, oldY) && isPlayable(oldX, oldY) && isCurrentPlayer(oldX, oldY)) {
-            if(isSpaceShip(oldX, oldY) && gameMatrix[oldX][oldY].getEntityType().isCanFly() && !isSpaceShip(x,y)) {
-                if(isCanFlyToCell(x, y, oldX, oldY)){
+    private Cell[][] moveCheck(int x, int y, Map<String,String> oldXY){
+        int oldX = Integer.parseInt(oldXY.get("X"));
+        int oldY = Integer.parseInt(oldXY.get("Y"));
+        if (isMoveAtDistance(x, y, oldX, oldY) && isPlayable(oldX, oldY) && isCurrentPlayer(oldX, oldY)) {
+            if (isSpaceShip(oldX, oldY) && gameMatrix[oldX][oldY].getEntityType().isCanFly() && !isSpaceShip(x, y)) {
+                if (isCanFlyToCell(x, y, oldX, oldY)) {
                     moveShip(x, y, oldX, oldY);
                     TurnHandler.turnCount();
-                }else
-                if(oldXY.get("name") != null){
+                } else if (oldXY.get("name") != null) {
                     moveFromBoard(x, y, oldXY);
-                    gameMatrix = gameMatrix[x][y].getCellType().getOnVisible().doEvent(x,y, gameMatrix);
-                    TurnHandler.turnCount();
+                    gameMatrix = gameMatrix[x][y].getCellType().getOnVisible().doEvent(x, y, gameMatrix);
+//                    TurnHandler.turnCount();
                 }
-            }else
-            if(isPlayer(oldX, oldY)) {
-                if(isCanMovePlayer(oldXY)) {
+            } else if (isPlayer(oldX, oldY)) {
+                if (isCanMovePlayer(oldXY)) {
                     if (isCanMovePlayer(oldXY) == gameMatrix[x][y].getCellType().isCanMove()) {
                         movePlayer(x, y, oldXY);
-                        gameMatrix =  gameMatrix[x][y].getCellType().getOnVisible().doEvent(x,y, gameMatrix);
-                        TurnHandler.turnCount();
-                    } else if (isSpaceShip(x, y) && isEntityBelongFraction(x,y,oldX,oldY)) {
+                        gameMatrix = gameMatrix[x][y].getCellType().getOnVisible().doEvent(x, y, gameMatrix);
+//                        TurnHandler.turnCount();
+                    } else if (isSpaceShip(x, y) && isEntityBelongFraction(x, y, oldX, oldY)) {
                         moveOnBoard(x, y, oldXY);
                     }
                 }
             }
             return gameMatrix;
-        }
-        else {
+        } else {
             return null;
         }
     }

@@ -17,6 +17,7 @@ public class Constants {
     public static final float mScaleFactor = 1f;
     public static final float cellSize = 31;
     public static Map<String,String> oldXY;
+    public static boolean block = false;
     private static int viewSize;
     private static float canvasSize;
 
