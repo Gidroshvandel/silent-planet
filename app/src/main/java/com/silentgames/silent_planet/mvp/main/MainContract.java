@@ -24,9 +24,9 @@ public interface MainContract {
 
         void showCellListItem(int x, int y, List<String> playerList);
 
+        void hideCellListItem();
+
         Resources getResources();
-//
-//        Activity getActivity();
 
     }
     interface Presenter extends BasePresenter {

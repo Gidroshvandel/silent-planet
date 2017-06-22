@@ -8,8 +8,8 @@ import com.silentgames.silent_planet.utils.BitmapEditor;
 /**
  * Created by gidroshvandel on 07.07.16.
  */
-public class SpaceCellDef extends DefaultCell {
-    public SpaceCellDef(Resources res) {
+public class SpaceDef extends Default {
+    public SpaceDef(Resources res) {
         super.setBitmap(BitmapEditor.getCellBitmap(R.drawable.space_texture,res));
         super.setCanFly(true);
     }

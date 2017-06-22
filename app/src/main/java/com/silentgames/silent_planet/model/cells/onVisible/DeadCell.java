@@ -21,14 +21,14 @@ public class DeadCell extends OnVisible {
 
 
     @Override
-    public Cell[][] doEvent(int x, int y, Cell[][] gameMatrix) {
+    public Cell doEvent(Cell gameMatrixCell) {
 
-        if(gameMatrix[x][y].getCellType().isDead() && ! gameMatrix[x][y].getEntityType().isDead()){
+        if(gameMatrixCell.getCellType().isDead() && ! gameMatrixCell.getEntityType().isDead()){
             PlayersOnCell playerList = new PlayersOnCell();
-            playerList.add(new DeadPlayer( gameMatrix[x][y].getEntityType().getPlayersOnCell().getPlayerList().get(0)));
-            gameMatrix[x][y].setEntityType(new EntityType(playerList));
+            playerList.add(new DeadPlayer( gameMatrixCell.getEntityType().getPlayersOnCell().getPlayerList().get(0)));
+            gameMatrixCell.setEntityType(new EntityType(playerList));
         }
-        return gameMatrix;
+        return gameMatrixCell;
     }
 
 }

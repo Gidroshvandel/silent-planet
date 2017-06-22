@@ -43,9 +43,7 @@ public class MainActivity extends Activity implements MainContract.View, GameVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        game_view=(GameView)findViewById(R.id.game_view);
-
-        presenter = new MainPresenter(this, new MainViewModel());
+        presenter = new MainPresenter(this, new MainViewModel(), new MainModel());
 
         initUi();
         paintSettings();
@@ -67,6 +65,8 @@ public class MainActivity extends Activity implements MainContract.View, GameVie
     }
 
     private void initUi(){
+
+        game_view=(GameView)findViewById(R.id.game_view);
 
         selectObjectIcon = (ImageView) findViewById(R.id.imageView);
 
@@ -121,7 +121,11 @@ public class MainActivity extends Activity implements MainContract.View, GameVie
 
     @Override
     public void showObjectIcon(Cell gameCell) {
-        selectObjectIcon.setImageBitmap(gameCell.getEntityType().getBitmap());
+        if (gameCell.getEntityType() != null ) {
+            selectObjectIcon.setImageBitmap(gameCell.getEntityType().getBitmap());
+        }else {
+            selectObjectIcon.setImageBitmap(gameCell.getCellType().getBitmap());
+        }
     }
 
     @Override
@@ -129,6 +133,7 @@ public class MainActivity extends Activity implements MainContract.View, GameVie
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, playerList );
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
+        objectListOnCell.setVisibility(View.VISIBLE);
         objectListOnCell.setAdapter(adapter);
         objectListOnCell.setPrompt("Title");
         objectListOnCell.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -141,6 +146,11 @@ public class MainActivity extends Activity implements MainContract.View, GameVie
             public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
+    }
+
+    @Override
+    public void hideCellListItem() {
+        objectListOnCell.setVisibility(View.INVISIBLE);
     }
 
     @Override

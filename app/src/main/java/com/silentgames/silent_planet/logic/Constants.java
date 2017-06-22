@@ -16,7 +16,7 @@ public class Constants {
     public static final int verticalCountOfCells = 12;
     public static final float mScaleFactor = 1f;
     public static final float cellSize = 31;
-    public static boolean block = false;
+    public static final float entitySize = 20;
 
     public static int getHorizontalCountOfCells() {
         return horizontalCountOfCells;

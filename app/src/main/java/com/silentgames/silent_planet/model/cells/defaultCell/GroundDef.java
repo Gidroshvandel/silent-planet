@@ -8,9 +8,9 @@ import com.silentgames.silent_planet.utils.BitmapEditor;
 /**
  * Created by gidroshvandel on 07.07.16.
  */
-public class GroundCellDef extends DefaultCell {
+public class GroundDef extends Default {
 
-    public GroundCellDef(Resources res) {
+    public GroundDef(Resources res) {
         super.setBitmap(BitmapEditor.getCellBitmap(R.drawable.planet_background,res));
         super.setCanMove(true);
     }

@@ -1,5 +1,7 @@
 package com.silentgames.silent_planet.logic;
 
+import android.graphics.Bitmap;
+
 import com.silentgames.silent_planet.model.Cell;
 import com.silentgames.silent_planet.model.cells.CellType;
 import com.silentgames.silent_planet.model.entities.EntityType;
@@ -18,16 +20,16 @@ public class EntityMove {
 
     private Cell[][] gameMatrix;
 
-
     public EntityMove(Cell[][] gameMatrix) {
         this.gameMatrix = gameMatrix;
     }
 
-    public Cell[][] canMove(int x, int y, Map<String,String> oldXY){
+    public Cell[][] canMove(Boolean block, int x, int y, Map<String,String> oldXY){
         int oldX = Integer.parseInt(oldXY.get("X"));
         int oldY = Integer.parseInt(oldXY.get("Y"));
-        if(Constants.block){
-            return gameMatrix[x][y].getCellType().getOnVisible().doEvent(oldX, oldY, gameMatrix);
+        if(block){
+            gameMatrix[oldX][oldY] = gameMatrix[x][y].getCellType().getOnVisible().doEvent(gameMatrix[oldX][oldY]);
+            return gameMatrix;
         }else {
             return moveCheck(x,y, oldXY);
         }
@@ -43,14 +45,14 @@ public class EntityMove {
                     TurnHandler.turnCount();
                 } else if (oldXY.get("name") != null) {
                     moveFromBoard(x, y, oldXY);
-                    gameMatrix = gameMatrix[x][y].getCellType().getOnVisible().doEvent(x, y, gameMatrix);
+                    gameMatrix[x][y] = gameMatrix[x][y].getCellType().getOnVisible().doEvent(gameMatrix[x][y]);
 //                    TurnHandler.turnCount();
                 }
             } else if (isPlayer(oldX, oldY)) {
                 if (isCanMovePlayer(oldXY)) {
                     if (isCanMovePlayer(oldXY) == gameMatrix[x][y].getCellType().isCanMove()) {
                         movePlayer(x, y, oldXY);
-                        gameMatrix = gameMatrix[x][y].getCellType().getOnVisible().doEvent(x, y, gameMatrix);
+                        gameMatrix[x][y] = gameMatrix[x][y].getCellType().getOnVisible().doEvent(gameMatrix[x][y]);
 //                        TurnHandler.turnCount();
                     } else if (isSpaceShip(x, y) && isEntityBelongFraction(x, y, oldX, oldY)) {
                         moveOnBoard(x, y, oldXY);

@@ -16,7 +16,7 @@ public class EmptyCell extends OnVisible {
     }
 
     @Override
-    public Cell[][] doEvent(int x, int y, Cell[][] gameMatrix) {
-        return gameMatrix;
+    public Cell doEvent(Cell gameMatrixCell) {
+        return null;
     }
 }

@@ -16,12 +16,12 @@ public class SpaceCell extends OnVisible {
     }
 
     @Override
-    public Cell[][] doEvent(int x, int y, Cell[][] gameMatrix) {
-        return gameMatrix;
+    public Cell doEvent(Cell gameMatrixCell) {
+        return gameMatrixCell;
     }
 
 
-//    public SpaceCellDef(Resources res) {
+//    public SpaceDef(Resources res) {
 //        super();
 //        setCanFly(true);
 //        Bitmap bitmap = BitmapFactory.decodeResource(res, R.drawable.space_texture);

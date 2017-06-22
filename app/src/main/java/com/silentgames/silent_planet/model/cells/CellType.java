@@ -1,8 +1,6 @@
 package com.silentgames.silent_planet.model.cells;
 
-import com.silentgames.silent_planet.model.Cell;
-import com.silentgames.silent_planet.model.CellEx;
-import com.silentgames.silent_planet.model.cells.defaultCell.DefaultCell;
+import com.silentgames.silent_planet.model.cells.defaultCell.Default;
 import com.silentgames.silent_planet.model.cells.onVisible.OnVisible;
 
 /**
@@ -10,7 +8,7 @@ import com.silentgames.silent_planet.model.cells.onVisible.OnVisible;
  */
 public class CellType extends CellTypeEx {
 
-    private DefaultCell defaultCell;
+    private Default aDefault;
     private OnVisible onVisible;
 
     public CellType(OnVisible onVisible) {
@@ -18,9 +16,9 @@ public class CellType extends CellTypeEx {
         setAll(onVisible);
     }
 
-    public CellType(DefaultCell defaultCell) {
-        this.defaultCell = defaultCell;
-        setAll(defaultCell);
+    public CellType(Default aDefault) {
+        this.aDefault = aDefault;
+        setAll(aDefault);
     }
 
     public OnVisible getOnVisible() {
@@ -31,11 +29,11 @@ public class CellType extends CellTypeEx {
         this.onVisible = onVisible;
     }
 
-    public DefaultCell getDefaultCell() {
-        return defaultCell;
+    public Default getaDefault() {
+        return aDefault;
     }
 
-    public void setDefaultCell(DefaultCell defaultCell) {
-        this.defaultCell = defaultCell;
+    public void setaDefault(Default aDefault) {
+        this.aDefault = aDefault;
     }
 }

@@ -2,4 +2,6 @@
 <resources>
     <string name="app_name">Silent_planet</string>
     <string name="action_settings">Settings</string>
+    <string name="turnMessage">Now turn</string>
+    <string name="selectPlayer">Выбран:</string>
 </resources>
