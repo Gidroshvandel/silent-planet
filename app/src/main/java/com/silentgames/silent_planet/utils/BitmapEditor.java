@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 
+import com.silentgames.silent_planet.App;
 import com.silentgames.silent_planet.logic.Constants;
 
 import java.util.Arrays;
@@ -20,7 +21,7 @@ public class BitmapEditor {
         DEGREES0,
         DEGREES90,
         DEGREES180,
-        DEGREES360;
+        DEGREES270;
 
         private static final List<RotateAngle> VALUES =
                 Collections.unmodifiableList(Arrays.asList(values()));
@@ -45,12 +46,14 @@ public class BitmapEditor {
         return resizedBitmap;
     }
 
-    public static Bitmap getEntityBitmap(int DefaultBitId, Resources res){
+    public static Bitmap getEntityBitmap(int DefaultBitId){
+        Resources res = App.getContext().getResources();
         Bitmap bitmap = BitmapFactory.decodeResource(res, DefaultBitId);
         return resize(bitmap, Converter.convertDpToPixel(Constants.entitySize,res),Converter.convertDpToPixel(Constants.entitySize,res));
     }
 
-    public static Bitmap getCellBitmap(int DefaultBitId, Resources res){
+    public static Bitmap getCellBitmap(int DefaultBitId){
+        Resources res = App.getContext().getResources();
         Bitmap bitmap = BitmapFactory.decodeResource(res, DefaultBitId);
         return resize(bitmap, Converter.convertDpToPixel(Constants.cellSize,res),Converter.convertDpToPixel(Constants.cellSize,res));
     }
@@ -66,8 +69,8 @@ public class BitmapEditor {
             case DEGREES180:
                 matrix.postRotate(180);
                 break;
-            case DEGREES360:
-                matrix.postRotate(360);
+            case DEGREES270:
+                matrix.postRotate(270);
                 break;
         }
         return Bitmap.createBitmap(bitmap , 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);

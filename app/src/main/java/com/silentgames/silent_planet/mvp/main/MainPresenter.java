@@ -40,7 +40,7 @@ public class MainPresenter implements MainContract.Presenter {
     @Override
     public void onCreate() {
         viewModel.setBlock(false);
-        viewModel.setGameMatrix(model.fillBattleGround(view.getResources()));
+        viewModel.setGameMatrix(model.fillBattleGround());
         view.drawBattleGround(viewModel.getGameMatrix());
     }
 

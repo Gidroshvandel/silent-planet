@@ -4,12 +4,15 @@ import android.graphics.Bitmap;
 
 import com.silentgames.silent_planet.model.Cell;
 import com.silentgames.silent_planet.model.cells.CellType;
+import com.silentgames.silent_planet.model.cells.defaultCell.SpaceDef;
+import com.silentgames.silent_planet.model.cells.onVisible.SpaceCell;
 import com.silentgames.silent_planet.model.entities.EntityType;
 import com.silentgames.silent_planet.model.entities.ground.Player;
 import com.silentgames.silent_planet.model.entities.ground.PlayersOnCell;
 import com.silentgames.silent_planet.model.entities.ground.utils.DeadPlayer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,8 +31,7 @@ public class EntityMove {
         int oldX = Integer.parseInt(oldXY.get("X"));
         int oldY = Integer.parseInt(oldXY.get("Y"));
         if(block){
-            gameMatrix[oldX][oldY] = gameMatrix[x][y].getCellType().getOnVisible().doEvent(gameMatrix[oldX][oldY]);
-            return gameMatrix;
+            return gameMatrix[x][y].getCellType().getOnVisible().doEvent(oldX, oldY, gameMatrix);
         }else {
             return moveCheck(x,y, oldXY);
         }
@@ -45,14 +47,14 @@ public class EntityMove {
                     TurnHandler.turnCount();
                 } else if (oldXY.get("name") != null) {
                     moveFromBoard(x, y, oldXY);
-                    gameMatrix[x][y] = gameMatrix[x][y].getCellType().getOnVisible().doEvent(gameMatrix[x][y]);
+                    gameMatrix = gameMatrix[x][y].getCellType().getOnVisible().doEvent(x, y, gameMatrix);
 //                    TurnHandler.turnCount();
                 }
             } else if (isPlayer(oldX, oldY)) {
                 if (isCanMovePlayer(oldXY)) {
                     if (isCanMovePlayer(oldXY) == gameMatrix[x][y].getCellType().isCanMove()) {
                         movePlayer(x, y, oldXY);
-                        gameMatrix[x][y] = gameMatrix[x][y].getCellType().getOnVisible().doEvent(gameMatrix[x][y]);
+                        gameMatrix = gameMatrix[x][y].getCellType().getOnVisible().doEvent(x, y, gameMatrix);
 //                        TurnHandler.turnCount();
                     } else if (isSpaceShip(x, y) && isEntityBelongFraction(x, y, oldX, oldY)) {
                         moveOnBoard(x, y, oldXY);
@@ -120,6 +122,38 @@ public class EntityMove {
     public void moveOnBoard(int x, int y, Map<String,String> oldXY){
         getEntityType(x,y).getPlayersOnCell().add(gameMatrix[Integer.parseInt(oldXY.get("X"))][Integer.parseInt(oldXY.get("Y"))].getEntityType().getPlayersOnCell().getPlayerByName(oldXY.get("name")));
         deletePlayer(oldXY);
+    }
+
+    public void moveOnBoardAllyShip(Map<String,String> oldXY){
+        Map<String, String> XY = findAllyShip();
+        int x = Integer.parseInt(XY.get("X"));
+        int y = Integer.parseInt(XY.get("Y"));
+        moveOnBoard(x, y, oldXY);
+    }
+
+    public Map<String, String> findAllyShip(){
+        for (int i = 0; i < Constants.getHorizontalCountOfCells(); i++) {
+            for (int j = 0; j < Constants.getVerticalCountOfCells(); j++) {
+                if(gameMatrix[i][j].getCellType().getOnVisible().getClass() == SpaceCell.class ||
+                        gameMatrix[i][j].getCellType().getaDefault().getClass() == SpaceDef.class ){
+
+                    if(gameMatrix[i][j].getEntityType() != null){
+                        if(gameMatrix[i][j].getEntityType().getSpaceShip() != null){
+                            if(gameMatrix[i][j].getEntityType().getSpaceShip().getFraction() != null){
+                                if(gameMatrix[i][j].getEntityType().getSpaceShip().getFraction().getFractionsEnum() == TurnHandler.getFraction()) {
+                                    Map<String, String> XY = new HashMap<>();
+                                    XY.put("X", String.valueOf(i));
+                                    XY.put("Y", String.valueOf(j));
+                                    return XY;
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+        return null;
     }
 
     public void moveFromBoard(int x, int y, Map<String,String> oldXY){

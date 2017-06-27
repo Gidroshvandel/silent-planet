@@ -11,8 +11,8 @@ import com.silentgames.silent_planet.utils.BitmapEditor;
  * Created by gidroshvandel on 24.09.16.
  */
 public class AlienShip extends SpaceShip {
-    public AlienShip(Resources res) {
-        super.setBitmap(BitmapEditor.getEntityBitmap(R.drawable.aliens_space_ship,res));
+    public AlienShip() {
+        super.setBitmap(BitmapEditor.getEntityBitmap(R.drawable.aliens_space_ship));
         super.setCanFly(true);
         super.setFraction(Aliens.getInstance());
     }

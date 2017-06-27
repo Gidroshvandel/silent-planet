@@ -1,51 +1,77 @@
 package com.silentgames.silent_planet.model.cells.onVisible.Arrows;
 
-import android.content.res.Resources;
-
 import com.silentgames.silent_planet.R;
+import com.silentgames.silent_planet.logic.EntityMove;
 import com.silentgames.silent_planet.model.Cell;
+import com.silentgames.silent_planet.model.cells.defaultCell.SpaceDef;
+import com.silentgames.silent_planet.model.cells.onVisible.SpaceCell;
+import com.silentgames.silent_planet.model.entities.EntityType;
 import com.silentgames.silent_planet.utils.BitmapEditor;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by gidroshvandel on 09.12.16.
  */
 public class ArrowGreen extends Arrow {
 
-    public ArrowGreen(Resources res) {
-        super.setBitmap(BitmapEditor.getCellBitmap(R.drawable.arrow_green_cell,res));
+
+    public ArrowGreen() {
+        super.setBitmap(BitmapEditor.getCellBitmap(R.drawable.arrow_green_cell));
         super.setCanMove(true);
+        super.setRotateAngle(BitmapEditor.RotateAngle.DEGREES0);
 //        super.setCrystals(1);
+
     }
 
     @Override
-    public Cell doEvent(Cell gameMatrixCell) {
+    public Cell[][] doEvent(int x, int y, Cell[][] gameMatrix) {
+        Cell gameMatrixCell = gameMatrix[x][y];
 
-        return gameMatrixCell;
+        EntityType entityType = gameMatrixCell.getEntityType();
+        if (gameMatrix[getDestinationX()][getDestinationY()].getCellType().getaDefault() == null){
+            return gameMatrix;
+        }else if (gameMatrix[getDestinationX()][getDestinationY()].getCellType().getaDefault().getClass() == SpaceDef.class ||
+                gameMatrix[getDestinationX()][getDestinationY()].getCellType().getOnVisible().getClass() == SpaceCell.class){
+            EntityMove entityMove = new EntityMove(gameMatrix);
+            Map<String,String> oldXY = new HashMap<>();
+            oldXY.put("X", String.valueOf(x));
+            oldXY.put("Y", String.valueOf(y));
+            oldXY.put("name", gameMatrixCell.getEntityType().getPlayersOnCell().getPlayerList().get(0).getPlayerName());
+            entityMove.moveOnBoardAllyShip(oldXY);
+        }else {
+            gameMatrix[getDestinationX()][getDestinationY()].setEntityType(entityType);
+            gameMatrixCell.setEntityType(null);
+            gameMatrix[x][y] = gameMatrixCell;
+        }
+        return gameMatrix;
     }
 
     @Override
     public ArrowGreen rotate(int x, int y, BitmapEditor.RotateAngle rotateAngle) {
         switch (rotateAngle){
             case DEGREES0:
-                x = x - 1;
-                y = y + 1;
+                setDestinationX(x + 1);
+                setDestinationY(y - 1);
                 break;
             case DEGREES90:
                 setBitmap(BitmapEditor.rotateBitmap(BitmapEditor.RotateAngle.DEGREES90,getBitmap()));
-                x = x + 1;
-                y = y + 1;
+                setDestinationX(x + 1);
+                setDestinationY(y + 1);
                 break;
             case DEGREES180:
                 setBitmap(BitmapEditor.rotateBitmap(BitmapEditor.RotateAngle.DEGREES180,getBitmap()));
-                x = x + 1;
-                y = y - 1;
+                setDestinationX(x - 1);
+                setDestinationY(y + 1);
                 break;
-            case DEGREES360:
-                setBitmap(BitmapEditor.rotateBitmap(BitmapEditor.RotateAngle.DEGREES360,getBitmap()));
-                x = x - 1;
-                y = y - 1;
+            case DEGREES270:
+                setBitmap(BitmapEditor.rotateBitmap(BitmapEditor.RotateAngle.DEGREES270,getBitmap()));
+                setDestinationX(x - 1);
+                setDestinationY(y - 1);
                 break;
         }
+        setRotateAngle(rotateAngle);
         return this;
     }
 }

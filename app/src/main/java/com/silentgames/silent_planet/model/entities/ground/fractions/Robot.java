@@ -11,8 +11,8 @@ import com.silentgames.silent_planet.utils.BitmapEditor;
  * Created by gidroshvandel on 24.09.16.
  */
 public class Robot extends Player {
-    public Robot(Resources res, String playerName) {
-        super.setBitmap(BitmapEditor.getEntityBitmap(R.drawable.robot, res));
+    public Robot(String playerName) {
+        super.setBitmap(BitmapEditor.getEntityBitmap(R.drawable.robot));
         super.setPlayerName(playerName);
         super.setCanMove(true);
         super.setFraction(Robots.getInstance());

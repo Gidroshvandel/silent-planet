@@ -1,7 +1,5 @@
 package com.silentgames.silent_planet.mvp.main;
 
-import android.content.res.Resources;
-
 import com.silentgames.silent_planet.logic.Constants;
 import com.silentgames.silent_planet.logic.TurnHandler;
 import com.silentgames.silent_planet.model.Cell;
@@ -35,23 +33,23 @@ import java.util.List;
  */
 public class MainModel {
 
-    public Cell[][] fillBattleGround(Resources resources){
+    public Cell[][] fillBattleGround(){
         int CountOfCells = Constants.getHorizontalCountOfCells();
         Cell[][] gameMatrix = new Cell[Constants.getVerticalCountOfCells()+1][Constants.getHorizontalCountOfCells()+1];
         for(int x=0;x< CountOfCells +1;x++) {
             for (int y = 0; y < CountOfCells + 1; y++){
                 if(x==0 || x == CountOfCells - 1 || y == 0 || y == CountOfCells - 1){
-                    gameMatrix[x][y] = new Cell(new CellType(new SpaceDef(resources)), null);
-                    gameMatrix[x][y].getCellType().setOnVisible(new SpaceCell(resources));
+                    gameMatrix[x][y] = new Cell(new CellType(new SpaceDef()), null);
+                    gameMatrix[x][y].getCellType().setOnVisible(new SpaceCell());
                 }
                 else {
-                    gameMatrix[x][y] = new Cell(new CellType(new GroundDef(resources)), null);
+                    gameMatrix[x][y] = new Cell(new CellType(new GroundDef()), null);
 
-                    gameMatrix[x][y].getCellType().setOnVisible(new ArrowGreen(resources).rotate(x, y, BitmapEditor.RotateAngle.randomAngle()));
+                    gameMatrix[x][y].getCellType().setOnVisible(new ArrowGreen().rotate(x, y, BitmapEditor.RotateAngle.randomAngle()));
                 }
             }
         }
-        spawnShips(gameMatrix, resources);
+        spawnShips(gameMatrix);
         return gameMatrix;
     }
 
@@ -66,11 +64,11 @@ public class MainModel {
         return data;
     }
 
-    private void spawnShips(Cell[][] gameMatrix, Resources resources){
-        spawnHumans(gameMatrix[0][0], resources);
-        spawnPirates(gameMatrix[0][1], resources);
-        spawnRobots(gameMatrix[0][2], resources);
-        spawnAliens(gameMatrix[0][3], resources);
+    private void spawnShips(Cell[][] gameMatrix){
+        spawnHumans(gameMatrix[0][0]);
+        spawnPirates(gameMatrix[0][1]);
+        spawnRobots(gameMatrix[0][2]);
+        spawnAliens(gameMatrix[0][3]);
         TurnHandler.start(Humans.getInstance());
         TurnHandler.setPlayable(Aliens.getInstance());
         TurnHandler.setPlayable(Humans.getInstance());
@@ -78,38 +76,38 @@ public class MainModel {
         TurnHandler.setPlayable(Robots.getInstance());
     }
 
-    private void spawnRobots(Cell gameMatrixCell, Resources resources){
+    private void spawnRobots(Cell gameMatrixCell){
         PlayersOnCell playerList = new PlayersOnCell();
-        playerList.add(new Robot(resources, "Maxim"));
-        playerList.add(new Robot(resources, "Oxik"));
-        playerList.add(new Robot(resources, "Andrea"));
-        gameMatrixCell.setEntityType(new EntityType(new RobotShip(resources)));
+        playerList.add(new Robot("Maxim"));
+        playerList.add(new Robot("Oxik"));
+        playerList.add(new Robot("Andrea"));
+        gameMatrixCell.setEntityType(new EntityType(new RobotShip()));
         gameMatrixCell.getEntityType().setPlayersOnCell(playerList);
     }
 
-    private void spawnAliens(Cell gameMatrixCell, Resources resources){
+    private void spawnAliens(Cell gameMatrixCell){
         PlayersOnCell playerList = new PlayersOnCell();
-        playerList.add(new Alien(resources, "Maxim"));
-        playerList.add(new Alien(resources, "Oxik"));
-        playerList.add(new Alien(resources, "Andrea"));
-        gameMatrixCell.setEntityType(new EntityType(new AlienShip(resources)));
+        playerList.add(new Alien("Maxim"));
+        playerList.add(new Alien("Oxik"));
+        playerList.add(new Alien("Andrea"));
+        gameMatrixCell.setEntityType(new EntityType(new AlienShip()));
         gameMatrixCell.getEntityType().setPlayersOnCell(playerList);
     }
-    private void spawnPirates(Cell gameMatrixCell, Resources resources){
+    private void spawnPirates(Cell gameMatrixCell){
         PlayersOnCell playerList = new PlayersOnCell();
-        playerList.add(new Pirate(resources, "Maxim"));
-        playerList.add(new Pirate(resources, "Oxik"));
-        playerList.add(new Pirate(resources, "Andrea"));
-        gameMatrixCell.setEntityType(new EntityType(new PirateShip(resources)));
+        playerList.add(new Pirate("Maxim"));
+        playerList.add(new Pirate("Oxik"));
+        playerList.add(new Pirate("Andrea"));
+        gameMatrixCell.setEntityType(new EntityType(new PirateShip()));
         gameMatrixCell.getEntityType().setPlayersOnCell(playerList);
     }
-    private void spawnHumans(Cell gameMatrixCell, Resources resources){
+    private void spawnHumans(Cell gameMatrixCell){
         PlayersOnCell playerList = new PlayersOnCell();
 
-        playerList.add(new Human(resources, "Maxim"));
-        playerList.add(new Human(resources, "Oxik"));
-        playerList.add(new Human(resources, "Andrea"));
-        gameMatrixCell.setEntityType(new EntityType(new HumanShip(resources)));
+        playerList.add(new Human("Maxim"));
+        playerList.add(new Human("Oxik"));
+        playerList.add(new Human("Andrea"));
+        gameMatrixCell.setEntityType(new EntityType(new HumanShip()));
         gameMatrixCell.getEntityType().setPlayersOnCell(playerList);
     }
 }

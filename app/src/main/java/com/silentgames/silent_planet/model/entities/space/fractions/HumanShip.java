@@ -11,8 +11,8 @@ import com.silentgames.silent_planet.utils.BitmapEditor;
  * Created by gidroshvandel on 24.09.16.
  */
 public class HumanShip extends SpaceShip {
-    public HumanShip(Resources res) {
-        super.setBitmap(BitmapEditor.getEntityBitmap(R.drawable.human_space_ship,res));
+    public HumanShip() {
+        super.setBitmap(BitmapEditor.getEntityBitmap(R.drawable.human_space_ship));
         super.setCanFly(true);
         super.setFraction(Humans.getInstance());
     }

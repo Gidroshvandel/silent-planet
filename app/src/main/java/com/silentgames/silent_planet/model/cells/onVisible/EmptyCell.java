@@ -10,13 +10,13 @@ import com.silentgames.silent_planet.utils.BitmapEditor;
  * Created by gidroshvandel on 13.07.16.
  */
 public class EmptyCell extends OnVisible {
-    public EmptyCell(Resources res) {
-        super.setBitmap(BitmapEditor.getCellBitmap(R.drawable.empty_cell,res));
+    public EmptyCell() {
+        super.setBitmap(BitmapEditor.getCellBitmap(R.drawable.empty_cell));
         super.setCanMove(true);
     }
 
     @Override
-    public Cell doEvent(Cell gameMatrixCell) {
-        return null;
+    public Cell[][] doEvent(int x, int y, Cell[][] gameMatrix) {
+        return gameMatrix;
     }
 }

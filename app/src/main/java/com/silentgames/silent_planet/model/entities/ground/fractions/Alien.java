@@ -12,8 +12,8 @@ import com.silentgames.silent_planet.utils.BitmapEditor;
  */
 public class Alien extends Player {
 
-    public Alien(Resources res, String playerName) {
-        super.setBitmap(BitmapEditor.getEntityBitmap(R.drawable.alien, res));
+    public Alien(String playerName) {
+        super.setBitmap(BitmapEditor.getEntityBitmap(R.drawable.alien));
         super.setPlayerName(playerName);
         super.setCanMove(true);
         super.setFraction(Aliens.getInstance());

@@ -10,18 +10,17 @@ import com.silentgames.silent_planet.utils.BitmapEditor;
  * Created by gidroshvandel on 07.07.16.
  */
 public class SpaceCell extends OnVisible {
-    public SpaceCell(Resources res) {
-        super.setBitmap(BitmapEditor.getCellBitmap(R.drawable.space_texture,res));
+    public SpaceCell() {
+        super.setBitmap(BitmapEditor.getCellBitmap(R.drawable.space_texture));
         super.setCanFly(true);
     }
 
     @Override
-    public Cell doEvent(Cell gameMatrixCell) {
-        return gameMatrixCell;
+    public Cell[][] doEvent(int x, int y, Cell[][] gameMatrix) {
+        return gameMatrix;
     }
 
-
-//    public SpaceDef(Resources res) {
+    //    public SpaceDef(Resources res) {
 //        super();
 //        setCanFly(true);
 //        Bitmap bitmap = BitmapFactory.decodeResource(res, R.drawable.space_texture);

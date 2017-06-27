@@ -10,8 +10,8 @@ import com.silentgames.silent_planet.utils.BitmapEditor;
  */
 public class GroundDef extends Default {
 
-    public GroundDef(Resources res) {
-        super.setBitmap(BitmapEditor.getCellBitmap(R.drawable.planet_background,res));
+    public GroundDef() {
+        super.setBitmap(BitmapEditor.getCellBitmap(R.drawable.planet_background));
         super.setCanMove(true);
     }
 }

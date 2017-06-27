@@ -11,8 +11,8 @@ import com.silentgames.silent_planet.utils.BitmapEditor;
  * Created by gidroshvandel on 24.09.16.
  */
 public class RobotShip extends SpaceShip {
-    public RobotShip(Resources res) {
-        super.setBitmap(BitmapEditor.getEntityBitmap(R.drawable.robot_space_ship, res));
+    public RobotShip() {
+        super.setBitmap(BitmapEditor.getEntityBitmap(R.drawable.robot_space_ship));
         super.setCanFly(true);
         super.setFraction(Robots.getInstance());
     }
