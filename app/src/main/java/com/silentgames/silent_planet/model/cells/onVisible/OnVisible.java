@@ -12,5 +12,4 @@ import com.silentgames.silent_planet.model.cells.CellTypeEx;
 public abstract class OnVisible extends CellTypeEx {
 
     public abstract Cell[][] doEvent(int x, int y, Cell[][] gameMatrix);
-
 }

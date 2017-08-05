@@ -1,6 +1,7 @@
 package com.silentgames.silent_planet.model.cells.onVisible.Arrows;
 
 import com.silentgames.silent_planet.R;
+import com.silentgames.silent_planet.logic.Constants;
 import com.silentgames.silent_planet.logic.EntityMove;
 import com.silentgames.silent_planet.model.Cell;
 import com.silentgames.silent_planet.model.cells.defaultCell.SpaceDef;
@@ -14,10 +15,9 @@ import java.util.Map;
 /**
  * Created by gidroshvandel on 09.12.16.
  */
-public class ArrowGreen extends Arrow {
+public class Green extends Arrow {
 
-
-    public ArrowGreen() {
+    public Green() {
         super.setBitmap(BitmapEditor.getCellBitmap(R.drawable.arrow_green_cell));
         super.setCanMove(true);
         super.setRotateAngle(BitmapEditor.RotateAngle.DEGREES0);
@@ -44,12 +44,19 @@ public class ArrowGreen extends Arrow {
             gameMatrix[getDestinationX()][getDestinationY()].setEntityType(entityType);
             gameMatrixCell.setEntityType(null);
             gameMatrix[x][y] = gameMatrixCell;
+            Map<String,String> oldXY = new HashMap<>();
+            oldXY.put("X", String.valueOf(x));
+            oldXY.put("Y", String.valueOf(y));
+            Constants.oldXY = oldXY;
+            Constants.x = getDestinationX();
+            Constants.y = getDestinationY();
+            Constants.eventMove = true;
         }
         return gameMatrix;
     }
 
     @Override
-    public ArrowGreen rotate(int x, int y, BitmapEditor.RotateAngle rotateAngle) {
+    public Green rotate(int x, int y, BitmapEditor.RotateAngle rotateAngle) {
         switch (rotateAngle){
             case DEGREES0:
                 setDestinationX(x + 1);

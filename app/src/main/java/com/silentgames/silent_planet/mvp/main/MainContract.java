@@ -26,8 +26,6 @@ public interface MainContract {
 
         void hideCellListItem();
 
-        Resources getResources();
-
     }
     interface Presenter extends BasePresenter {
 

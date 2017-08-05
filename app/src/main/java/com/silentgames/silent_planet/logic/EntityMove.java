@@ -27,14 +27,20 @@ public class EntityMove {
         this.gameMatrix = gameMatrix;
     }
 
-    public Cell[][] canMove(Boolean block, int x, int y, Map<String,String> oldXY){
+    public Cell[][] canMove(int x, int y, Map<String,String> oldXY){
+//        int oldX = Integer.parseInt(oldXY.get("X"));
+//        int oldY = Integer.parseInt(oldXY.get("Y"));
+//        if(block){
+//            return gameMatrix[x][y].getCellType().getOnVisible().doEvent(oldX, oldY, gameMatrix);
+//        }else {
+            return moveCheck(x,y, oldXY);
+//        }
+    }
+
+    public Cell[][] doEvent(int x, int y, Map<String,String> oldXY){
         int oldX = Integer.parseInt(oldXY.get("X"));
         int oldY = Integer.parseInt(oldXY.get("Y"));
-        if(block){
-            return gameMatrix[x][y].getCellType().getOnVisible().doEvent(oldX, oldY, gameMatrix);
-        }else {
-            return moveCheck(x,y, oldXY);
-        }
+        return gameMatrix[x][y].getCellType().getOnVisible().doEvent(oldX, oldY, gameMatrix);
     }
 
     private Cell[][] moveCheck(int x, int y, Map<String,String> oldXY){

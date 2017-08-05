@@ -6,7 +6,7 @@ import com.silentgames.silent_planet.model.Cell;
 import com.silentgames.silent_planet.model.cells.CellType;
 import com.silentgames.silent_planet.model.cells.defaultCell.GroundDef;
 import com.silentgames.silent_planet.model.cells.defaultCell.SpaceDef;
-import com.silentgames.silent_planet.model.cells.onVisible.Arrows.ArrowGreen;
+import com.silentgames.silent_planet.model.cells.onVisible.Arrows.Green;
 import com.silentgames.silent_planet.model.cells.onVisible.SpaceCell;
 import com.silentgames.silent_planet.model.entities.EntityType;
 import com.silentgames.silent_planet.model.entities.ground.Player;
@@ -44,8 +44,7 @@ public class MainModel {
                 }
                 else {
                     gameMatrix[x][y] = new Cell(new CellType(new GroundDef()), null);
-
-                    gameMatrix[x][y].getCellType().setOnVisible(new ArrowGreen().rotate(x, y, BitmapEditor.RotateAngle.randomAngle()));
+                    gameMatrix[x][y].getCellType().setOnVisible(new Green().rotate(x, y, BitmapEditor.RotateAngle.randomAngle()));
                 }
             }
         }

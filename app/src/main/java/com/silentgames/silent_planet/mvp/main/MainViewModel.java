@@ -9,19 +9,9 @@ import java.util.Map;
  */
 public class MainViewModel {
 
-    private boolean block;
-
     private Cell[][] gameMatrix;
 
     private Map<String,String> oldXY;
-
-    public boolean isBlock() {
-        return block;
-    }
-
-    public void setBlock(boolean block) {
-        this.block = block;
-    }
 
     public Map<String, String> getOldXY() {
         return oldXY;

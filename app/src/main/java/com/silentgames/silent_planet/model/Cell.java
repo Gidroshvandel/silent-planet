@@ -12,8 +12,8 @@ import java.util.List;
  */
 public class Cell {
 
-    CellType cellType;
-    EntityType entityType;
+    private CellType cellType;
+    private EntityType entityType;
 
     public Cell(CellType cellType, EntityType entityType) {
         this.cellType = cellType;

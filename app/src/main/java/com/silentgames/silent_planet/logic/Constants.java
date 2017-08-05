@@ -18,6 +18,11 @@ public class Constants {
     public static final float cellSize = 31;
     public static final float entitySize = 20;
 
+    public static boolean eventMove = false;
+    public static Map<String,String> oldXY;
+    public static int x;
+    public static int y;
+
     public static int getHorizontalCountOfCells() {
         return horizontalCountOfCells;
     }
