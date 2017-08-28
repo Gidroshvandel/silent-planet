@@ -7,23 +7,38 @@ import java.util.Map;
  */
 public class GameMatrixHelper {
 
-     Cell[][] gameMatrix;
+    private Cell[][] gameMatrix;
 
     private int x;
 
     private int y;
 
-    private Map<String,String> oldXY;
+    private Map<String,Integer> oldXY;
+
+    private String playerName;
+
+    private boolean eventMove;
+
+    public GameMatrixHelper() {
+    }
 
     public GameMatrixHelper(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    public GameMatrixHelper(int x, int y, Map<String, String> oldXY) {
+    public GameMatrixHelper(int x, int y, Map<String, Integer> oldXY) {
         this.x = x;
         this.y = y;
         this.oldXY = oldXY;
+    }
+
+    public boolean isEventMove() {
+        return eventMove;
+    }
+
+    public void setEventMove(boolean eventMove) {
+        this.eventMove = eventMove;
     }
 
     public int getX() {
@@ -42,11 +57,43 @@ public class GameMatrixHelper {
         this.y = y;
     }
 
-    public Map<String, String> getOldXY() {
+    public Map<String, Integer> getOldXY() {
         return oldXY;
     }
 
-    public void setOldXY(Map<String, String> oldXY) {
+    public void setOldXY(Map<String, Integer> oldXY) {
         this.oldXY = oldXY;
+    }
+
+    public Cell[][] getGameMatrix() {
+        return gameMatrix;
+    }
+
+    public void setGameMatrix(Cell[][] gameMatrix) {
+        this.gameMatrix = gameMatrix;
+    }
+
+    public void setGameMatrixCellByXY(Cell gameMatrixCell) {
+        this.gameMatrix[x][y] = gameMatrixCell;
+    }
+
+    public void setGameMatrixCellByOldXY(Cell gameMatrixCell) {
+        this.gameMatrix[oldXY.get("X")][oldXY.get("Y")] = gameMatrixCell;
+    }
+
+    public Cell getGameMatrixCellByXY() {
+        return gameMatrix[x][y];
+    }
+
+    public Cell getGameMatrixCellByOldXY() {
+        return gameMatrix[oldXY.get("X")][oldXY.get("Y")];
+    }
+
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
     }
 }

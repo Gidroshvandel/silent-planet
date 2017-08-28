@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 
 import com.silentgames.silent_planet.model.Cell;
 import com.silentgames.silent_planet.model.CellEx;
+import com.silentgames.silent_planet.model.GameMatrixHelper;
 import com.silentgames.silent_planet.model.cells.CellTypeEx;
 
 /**
@@ -11,5 +12,5 @@ import com.silentgames.silent_planet.model.cells.CellTypeEx;
  */
 public abstract class OnVisible extends CellTypeEx {
 
-    public abstract Cell[][] doEvent(int x, int y, Cell[][] gameMatrix);
+    public abstract GameMatrixHelper doEvent(GameMatrixHelper gameMatrixHelper);
 }

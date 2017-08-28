@@ -4,6 +4,7 @@ import android.content.res.Resources;
 
 import com.silentgames.silent_planet.R;
 import com.silentgames.silent_planet.model.Cell;
+import com.silentgames.silent_planet.model.GameMatrixHelper;
 import com.silentgames.silent_planet.utils.BitmapEditor;
 
 /**
@@ -16,7 +17,7 @@ public class EmptyCell extends OnVisible {
     }
 
     @Override
-    public Cell[][] doEvent(int x, int y, Cell[][] gameMatrix) {
-        return gameMatrix;
+    public GameMatrixHelper doEvent(GameMatrixHelper gameMatrixHelper) {
+        return gameMatrixHelper;
     }
 }

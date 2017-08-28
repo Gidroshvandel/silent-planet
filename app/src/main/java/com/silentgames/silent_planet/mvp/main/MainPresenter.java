@@ -31,62 +31,60 @@ public class MainPresenter implements MainContract.Presenter {
 
     @Override
     public void onSingleTapConfirmed(int x, int y) {
-        viewModel.setOldXY(select(x,y, viewModel.getOldXY(), null));
+        select(x,y, viewModel.getGameMatrixHelper().getOldXY(), null);
     }
 
     @Override
     public void onCellListItemSelectedClick(int x, int y, String text) {
         view.showToast(App.getContext().getResources().getString(R.string.selectPlayer) + " " + text);
-        viewModel.setOldXY(select(x,y, null, text));
+        select(x,y, null, text);
     }
 
     @Override
     public void onCreate() {
-        viewModel.setGameMatrix(model.fillBattleGround());
-        view.drawBattleGround(viewModel.getGameMatrix());
+        GameMatrixHelper gameMatrixHelper = new GameMatrixHelper();
+        gameMatrixHelper.setEventMove(true);
+        viewModel.setGameMatrixHelper(gameMatrixHelper);
+        viewModel.getGameMatrixHelper().setGameMatrix(model.fillBattleGround());
+        view.drawBattleGround(viewModel.getGameMatrixHelper().getGameMatrix());
     }
 
-    private Map<String,String> select(int x, int y, Map<String,String> oldXY, String name){
-        EntityType en = viewModel.getGameMatrix()[x][y].getEntityType();
+    private void select(int x, int y, Map<String,Integer> oldXY, String name){
+        viewModel.getGameMatrixHelper().setX(x);
+        viewModel.getGameMatrixHelper().setY(y);
+
+        EntityType en = viewModel.getGameMatrixHelper().getGameMatrixCellByXY().getEntityType();
 
         if(oldXY == null) {
             if (en != null) {
                 oldXY = new HashMap<>();
                 if(name == null){
-                    view.showCellListItem(x, y, model.findPlayerOnCell(viewModel.getGameMatrix()[x][y]));
+                    view.showCellListItem(x, y, model.findPlayerOnCell(viewModel.getGameMatrixHelper().getGameMatrixCellByXY()));
                 }
                 if(name != null){
-                    oldXY.put("name",name);
+                    viewModel.getGameMatrixHelper().setPlayerName(name);
                 }
-                oldXY.put("X",String.valueOf(x));
-                oldXY.put("Y",String.valueOf(y));
-                view.showObjectIcon(viewModel.getGameMatrix()[x][y]);
-                return oldXY;
+                oldXY.put("X",x);
+                oldXY.put("Y",y);
+                view.showObjectIcon(viewModel.getGameMatrixHelper().getGameMatrixCellByXY());
+                viewModel.getGameMatrixHelper().setOldXY(oldXY);
             }
             else {
-                view.showObjectIcon(viewModel.getGameMatrix()[x][y]);
+                view.showObjectIcon(viewModel.getGameMatrixHelper().getGameMatrixCellByXY());
                 view.hideCellListItem();
-                return null;
+                viewModel.getGameMatrixHelper().setOldXY(null);
+                viewModel.getGameMatrixHelper().setPlayerName(null);
             }
         }
         else {
-            Cell[][] newGameMatrix = new EntityMove(viewModel.getGameMatrix()).canMove(x,y,oldXY);
+            GameMatrixHelper newGameMatrix = new EntityMove(viewModel.getGameMatrixHelper()).canMove();
             if(newGameMatrix != null){
-                viewModel.setGameMatrix(newGameMatrix);
-                int count = 0;
-                while (Constants.eventMove){
-                    Constants.eventMove = false;
-                    view.drawBattleGround(viewModel.getGameMatrix());
-                    viewModel.setGameMatrix(new EntityMove(viewModel.getGameMatrix()).doEvent(Constants.x,Constants.y,oldXY));
-                    count ++;
-                    if(count > 20){
-                        break;
-                    }
-                }
-                view.drawBattleGround(viewModel.getGameMatrix());
+                viewModel.setGameMatrixHelper(newGameMatrix);
+                view.drawBattleGround(viewModel.getGameMatrixHelper().getGameMatrix());
                 view.showToast(App.getContext().getResources().getString(R.string.turnMessage) + " " + TurnHandler.getFraction().toString());
             }
-            return null;
+            viewModel.getGameMatrixHelper().setOldXY(null);
+            viewModel.getGameMatrixHelper().setPlayerName(null);
         }
     }
 }

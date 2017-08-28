@@ -1,9 +1,9 @@
 package com.silentgames.silent_planet.model.cells.onVisible.Arrows;
 
 import com.silentgames.silent_planet.R;
-import com.silentgames.silent_planet.logic.Constants;
 import com.silentgames.silent_planet.logic.EntityMove;
 import com.silentgames.silent_planet.model.Cell;
+import com.silentgames.silent_planet.model.GameMatrixHelper;
 import com.silentgames.silent_planet.model.cells.defaultCell.SpaceDef;
 import com.silentgames.silent_planet.model.cells.onVisible.SpaceCell;
 import com.silentgames.silent_planet.model.entities.EntityType;
@@ -26,34 +26,65 @@ public class Green extends Arrow {
     }
 
     @Override
-    public Cell[][] doEvent(int x, int y, Cell[][] gameMatrix) {
-        Cell gameMatrixCell = gameMatrix[x][y];
+    public GameMatrixHelper doEvent(GameMatrixHelper gameMatrixHelper) {
+        Cell gameMatrixCell = gameMatrixHelper.getGameMatrixCellByXY();
 
         EntityType entityType = gameMatrixCell.getEntityType();
-        if (gameMatrix[getDestinationX()][getDestinationY()].getCellType().getaDefault() == null){
-            return gameMatrix;
-        }else if (gameMatrix[getDestinationX()][getDestinationY()].getCellType().getaDefault().getClass() == SpaceDef.class ||
-                gameMatrix[getDestinationX()][getDestinationY()].getCellType().getOnVisible().getClass() == SpaceCell.class){
-            EntityMove entityMove = new EntityMove(gameMatrix);
-            Map<String,String> oldXY = new HashMap<>();
-            oldXY.put("X", String.valueOf(x));
-            oldXY.put("Y", String.valueOf(y));
-            oldXY.put("name", gameMatrixCell.getEntityType().getPlayersOnCell().getPlayerList().get(0).getPlayerName());
-            entityMove.moveOnBoardAllyShip(oldXY);
+        if (gameMatrixHelper.getGameMatrix()[getDestinationX()][getDestinationY()].getCellType().getaDefault() == null){
+            return gameMatrixHelper;
+        }else if (gameMatrixHelper.getGameMatrix()[getDestinationX()][getDestinationY()].getCellType().getaDefault().getClass() == SpaceDef.class ||
+                gameMatrixHelper.getGameMatrix()[getDestinationX()][getDestinationY()].getCellType().getOnVisible().getClass() == SpaceCell.class){
+            EntityMove entityMove = new EntityMove(gameMatrixHelper);
+            Map<String,Integer> oldXY = new HashMap<>();
+            oldXY.put("X", gameMatrixHelper.getX());
+            oldXY.put("Y", gameMatrixHelper.getY());
+            gameMatrixHelper.setPlayerName(gameMatrixCell.getEntityType().getPlayersOnCell().getPlayerList().get(0).getPlayerName());
+            entityMove.moveOnBoardAllyShip();
         }else {
-            gameMatrix[getDestinationX()][getDestinationY()].setEntityType(entityType);
+            gameMatrixHelper.getGameMatrix()[getDestinationX()][getDestinationY()].setEntityType(entityType);
             gameMatrixCell.setEntityType(null);
-            gameMatrix[x][y] = gameMatrixCell;
-            Map<String,String> oldXY = new HashMap<>();
-            oldXY.put("X", String.valueOf(x));
-            oldXY.put("Y", String.valueOf(y));
-            Constants.oldXY = oldXY;
-            Constants.x = getDestinationX();
-            Constants.y = getDestinationY();
-            Constants.eventMove = true;
+            gameMatrixHelper.setGameMatrixCellByXY(gameMatrixCell);
+            Map<String,Integer> oldXY = new HashMap<>();
+            oldXY.put("X", gameMatrixHelper.getX());
+            oldXY.put("Y", gameMatrixHelper.getY());
+            gameMatrixHelper.setOldXY(oldXY);
+            gameMatrixHelper.setX(getDestinationX());
+            gameMatrixHelper.setY(getDestinationY());
+            gameMatrixHelper.setEventMove(true);
+
         }
-        return gameMatrix;
+        return gameMatrixHelper;
     }
+
+//    @Override
+//    public Cell[][] doEvent(int x, int y, Cell[][] gameMatrix) {
+//        Cell gameMatrixCell = gameMatrix[x][y];
+//
+//        EntityType entityType = gameMatrixCell.getEntityType();
+//        if (gameMatrix[getDestinationX()][getDestinationY()].getCellType().getaDefault() == null){
+//            return gameMatrix;
+//        }else if (gameMatrix[getDestinationX()][getDestinationY()].getCellType().getaDefault().getClass() == SpaceDef.class ||
+//                gameMatrix[getDestinationX()][getDestinationY()].getCellType().getOnVisible().getClass() == SpaceCell.class){
+//            EntityMove entityMove = new EntityMove(gameMatrix);
+//            Map<String,String> oldXY = new HashMap<>();
+//            oldXY.put("X", String.valueOf(x));
+//            oldXY.put("Y", String.valueOf(y));
+//            oldXY.put("name", gameMatrixCell.getEntityType().getPlayersOnCell().getPlayerList().get(0).getPlayerName());
+//            entityMove.moveOnBoardAllyShip(oldXY);
+//        }else {
+//            gameMatrix[getDestinationX()][getDestinationY()].setEntityType(entityType);
+//            gameMatrixCell.setEntityType(null);
+//            gameMatrix[x][y] = gameMatrixCell;
+//            Map<String,String> oldXY = new HashMap<>();
+//            oldXY.put("X", String.valueOf(x));
+//            oldXY.put("Y", String.valueOf(y));
+//            Constants.oldXY = oldXY;
+//            Constants.x = getDestinationX();
+//            Constants.y = getDestinationY();
+//            Constants.eventMove = true;
+//        }
+//        return gameMatrix;
+//    }
 
     @Override
     public Green rotate(int x, int y, BitmapEditor.RotateAngle rotateAngle) {
@@ -81,4 +112,5 @@ public class Green extends Arrow {
         setRotateAngle(rotateAngle);
         return this;
     }
+
 }
