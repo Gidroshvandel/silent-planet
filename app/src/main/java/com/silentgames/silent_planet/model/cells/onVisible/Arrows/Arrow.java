@@ -12,7 +12,31 @@ public abstract class Arrow<T> extends OnVisible {
     private int destinationX;
     private int destinationY;
 
-    public abstract T rotate(int x, int y, BitmapEditor.RotateAngle rotateAngle);
+    public Arrow<T> rotate(int x, int y, BitmapEditor.RotateAngle rotateAngle){
+        switch (rotateAngle){
+            case DEGREES0:
+                setDestinationX(x + 1);
+                setDestinationY(y - 1);
+                break;
+            case DEGREES90:
+                setBitmap(BitmapEditor.rotateBitmap(BitmapEditor.RotateAngle.DEGREES90,getBitmap()));
+                setDestinationX(x + 1);
+                setDestinationY(y + 1);
+                break;
+            case DEGREES180:
+                setBitmap(BitmapEditor.rotateBitmap(BitmapEditor.RotateAngle.DEGREES180,getBitmap()));
+                setDestinationX(x - 1);
+                setDestinationY(y + 1);
+                break;
+            case DEGREES270:
+                setBitmap(BitmapEditor.rotateBitmap(BitmapEditor.RotateAngle.DEGREES270,getBitmap()));
+                setDestinationX(x - 1);
+                setDestinationY(y - 1);
+                break;
+        }
+        setRotateAngle(rotateAngle);
+        return this;
+    }
 
     public int getDestinationX() {
         return destinationX;

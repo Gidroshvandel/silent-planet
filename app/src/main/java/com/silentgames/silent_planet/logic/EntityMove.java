@@ -58,7 +58,7 @@ public class EntityMove {
                         gameMatrixHelper = gameMatrixHelper.getGameMatrixCellByXY().getCellType().getOnVisible().doEvent(gameMatrixHelper);
 //                        TurnHandler.turnCount();
                     } else if (isSpaceShip(x, y) && isEntityBelongFraction()) {
-                        moveOnBoard(x, y);
+                        moveOnBoard();
                     }
                 }
             }
@@ -118,21 +118,25 @@ public class EntityMove {
         }
     }
 
-    public void moveOnBoard(int x, int y){
-        getEntityType(x,y).getPlayersOnCell().add(gameMatrixHelper.getGameMatrixCellByOldXY().getEntityType().getPlayersOnCell().getPlayerByName(gameMatrixHelper.getPlayerName()));
+    public void moveOnBoard(){
+        getEntityTypeXY().getPlayersOnCell().add(gameMatrixHelper.getGameMatrixCellByOldXY().getEntityType().getPlayersOnCell().getPlayerByName(gameMatrixHelper.getPlayerName()));
         deletePlayer();
     }
 
     public void moveOnBoardAllyShip(){
         Map<String, Integer> XY = findAllyShip();
-        moveOnBoard(XY.get("X"), XY.get("Y"));
+        gameMatrixHelper.setX(XY.get("X"));
+        gameMatrixHelper.setY(XY.get("Y"));
+        moveOnBoard();
     }
 
     public Map<String, Integer> findAllyShip(){
         for (int i = 0; i < Constants.getHorizontalCountOfCells(); i++) {
             for (int j = 0; j < Constants.getVerticalCountOfCells(); j++) {
-                if(gameMatrixHelper.getGameMatrix()[i][j].getCellType().getOnVisible().getClass() == SpaceCell.class ||
-                        gameMatrixHelper.getGameMatrix()[i][j].getCellType().getaDefault().getClass() == SpaceDef.class ){
+                if((gameMatrixHelper.getGameMatrix()[i][j].getCellType().getOnVisible() != null &&
+                        gameMatrixHelper.getGameMatrix()[i][j].getCellType().getOnVisible().getClass() == SpaceCell.class) ||
+                        (gameMatrixHelper.getGameMatrix()[i][j].getCellType().getDefault() != null &&
+                                gameMatrixHelper.getGameMatrix()[i][j].getCellType().getDefault().getClass() == SpaceDef.class )){
 
                     if(gameMatrixHelper.getGameMatrix()[i][j].getEntityType() != null){
                         if(gameMatrixHelper.getGameMatrix()[i][j].getEntityType().getSpaceShip() != null){
@@ -208,8 +212,8 @@ public class EntityMove {
     }
 
     public boolean isPlayer(int x, int y){
-        if(getEntityTypeXY() != null){
-            if(getEntityTypeXY().getPlayersOnCell() != null && getEntityTypeXY().getPlayersOnCell().getPlayerList().size() != 0){
+        if(getEntityType(x, y) != null){
+            if(getEntityType(x, y).getPlayersOnCell() != null && getEntityType(x, y).getPlayersOnCell().getPlayerList().size() != 0){
                 return true;
             }
         }

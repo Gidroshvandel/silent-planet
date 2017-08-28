@@ -80,6 +80,16 @@ public class MainPresenter implements MainContract.Presenter {
             GameMatrixHelper newGameMatrix = new EntityMove(viewModel.getGameMatrixHelper()).canMove();
             if(newGameMatrix != null){
                 viewModel.setGameMatrixHelper(newGameMatrix);
+                int count = 0;
+                while (viewModel.getGameMatrixHelper().isEventMove()){
+                    viewModel.getGameMatrixHelper().setEventMove(false);
+                    view.drawBattleGround(viewModel.getGameMatrixHelper().getGameMatrix());
+                    viewModel.setGameMatrixHelper(new EntityMove(viewModel.getGameMatrixHelper()).doEvent());
+                    count ++;
+                    if(count > 20){
+                        break;
+                    }
+                }
                 view.drawBattleGround(viewModel.getGameMatrixHelper().getGameMatrix());
                 view.showToast(App.getContext().getResources().getString(R.string.turnMessage) + " " + TurnHandler.getFraction().toString());
             }

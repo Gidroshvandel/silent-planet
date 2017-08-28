@@ -77,6 +77,10 @@ public class GameMatrixHelper {
         this.gameMatrix[x][y] = gameMatrixCell;
     }
 
+    public Cell getGameMatrixCellByOldXY() {
+        return gameMatrix[oldXY.get("X")][oldXY.get("Y")];
+    }
+
     public void setGameMatrixCellByOldXY(Cell gameMatrixCell) {
         this.gameMatrix[oldXY.get("X")][oldXY.get("Y")] = gameMatrixCell;
     }
@@ -85,8 +89,13 @@ public class GameMatrixHelper {
         return gameMatrix[x][y];
     }
 
-    public Cell getGameMatrixCellByOldXY() {
-        return gameMatrix[oldXY.get("X")][oldXY.get("Y")];
+
+    public Cell getGameMatrixCell(int x, int y) {
+        return gameMatrix[x][y];
+    }
+
+    public void setGameMatrixCell(int x, int y, Cell gameMatrixCell) {
+        this.gameMatrix[x][y] = gameMatrixCell;
     }
 
     public String getPlayerName() {

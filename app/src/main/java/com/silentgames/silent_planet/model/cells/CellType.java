@@ -29,11 +29,11 @@ public class CellType extends CellTypeEx {
         this.onVisible = onVisible;
     }
 
-    public Default getaDefault() {
+    public Default getDefault() {
         return aDefault;
     }
 
-    public void setaDefault(Default aDefault) {
+    public void setDefault(Default aDefault) {
         this.aDefault = aDefault;
     }
 }
