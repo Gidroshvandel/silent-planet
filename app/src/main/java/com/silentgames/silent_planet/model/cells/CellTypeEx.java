@@ -13,7 +13,7 @@ public class CellTypeEx extends CellEx {
         setCanFly(cellEx.isCanFly());
         setCanMove(cellEx.isCanMove());
         setDead(cellEx.isDead());
-//        setCrystals(cellEx.getCrystals());
+        setCrystals(cellEx.getCrystals());
     }
 
 }

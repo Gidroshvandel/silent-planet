@@ -1,12 +1,18 @@
 package com.silentgames.silent_planet.mvp.main;
 
+import android.widget.Switch;
+
 import com.silentgames.silent_planet.logic.Constants;
 import com.silentgames.silent_planet.logic.TurnHandler;
 import com.silentgames.silent_planet.model.Cell;
 import com.silentgames.silent_planet.model.cells.CellType;
 import com.silentgames.silent_planet.model.cells.defaultCell.GroundDef;
 import com.silentgames.silent_planet.model.cells.defaultCell.SpaceDef;
+import com.silentgames.silent_planet.model.cells.onVisible.Arrows.Arrow;
 import com.silentgames.silent_planet.model.cells.onVisible.Arrows.Green;
+import com.silentgames.silent_planet.model.cells.onVisible.Arrows.Red;
+import com.silentgames.silent_planet.model.cells.onVisible.Arrows.Yellow;
+import com.silentgames.silent_planet.model.cells.onVisible.Crystals.Two;
 import com.silentgames.silent_planet.model.cells.onVisible.SpaceCell;
 import com.silentgames.silent_planet.model.entities.EntityType;
 import com.silentgames.silent_planet.model.entities.ground.Player;
@@ -27,6 +33,7 @@ import com.silentgames.silent_planet.utils.BitmapEditor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by gidroshvandel on 22.06.17.
@@ -44,7 +51,7 @@ public class MainModel {
                 }
                 else {
                     gameMatrix[x][y] = new Cell(new CellType(new GroundDef()), null);
-                    gameMatrix[x][y].getCellType().setOnVisible(new Green().rotate(x, y, BitmapEditor.RotateAngle.randomAngle()));
+                    gameMatrix[x][y].getCellType().setOnVisible(new Two());
                 }
             }
         }
@@ -108,5 +115,18 @@ public class MainModel {
         playerList.add(new Human("Andrea"));
         gameMatrixCell.setEntityType(new EntityType(new HumanShip()));
         gameMatrixCell.getEntityType().setPlayersOnCell(playerList);
+    }
+
+    private Arrow randomArrow(int x, int y){
+        switch (new Random().nextInt(Constants.countArrowCells - 1)){
+            case 0:
+                return new Green().rotate(x, y, BitmapEditor.RotateAngle.randomAngle());
+            case 1:
+                return new Red().rotate(x, y, BitmapEditor.RotateAngle.randomAngle());
+            case 2:
+                return new Yellow().rotate(x, y, BitmapEditor.RotateAngle.randomAngle());
+            default:
+                return null;
+        }
     }
 }

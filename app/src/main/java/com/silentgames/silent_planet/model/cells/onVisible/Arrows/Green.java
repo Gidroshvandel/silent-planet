@@ -21,33 +21,7 @@ public class Green extends Arrow {
         super.setBitmap(BitmapEditor.getCellBitmap(R.drawable.arrow_green_cell));
         super.setCanMove(true);
         super.setRotateAngle(BitmapEditor.RotateAngle.DEGREES0);
-//        super.setCrystals(1);
-
-    }
-
-    @Override
-    public GameMatrixHelper doEvent(GameMatrixHelper gameMatrixHelper) {
-        EntityMove entityMove = new EntityMove(gameMatrixHelper);
-        if (gameMatrixHelper.getGameMatrix()[getDestinationX()][getDestinationY()].getCellType().getDefault() == null){
-            return gameMatrixHelper;
-        }else if (gameMatrixHelper.getGameMatrix()[getDestinationX()][getDestinationY()].getCellType().getDefault().getClass() == SpaceDef.class ||
-                gameMatrixHelper.getGameMatrix()[getDestinationX()][getDestinationY()].getCellType().getOnVisible().getClass() == SpaceCell.class){
-            Map<String,Integer> oldXY = new HashMap<>();
-            oldXY.put("X", gameMatrixHelper.getX());
-            oldXY.put("Y", gameMatrixHelper.getY());
-            gameMatrixHelper.setOldXY(oldXY);
-            entityMove.moveOnBoardAllyShip();
-        }else {
-            Map<String,Integer> oldXY = new HashMap<>();
-            oldXY.put("X", gameMatrixHelper.getX());
-            oldXY.put("Y", gameMatrixHelper.getY());
-            gameMatrixHelper.setOldXY(oldXY);
-            gameMatrixHelper.setX(getDestinationX());
-            gameMatrixHelper.setY(getDestinationY());
-            gameMatrixHelper.setEventMove(true);
-            entityMove.movePlayer();
-        }
-        return gameMatrixHelper;
+        super.setDistance(1);
     }
 
 }

@@ -192,7 +192,7 @@ public class EntityMove {
         selectPlayer.add(getEntityTypeOldXY().getPlayersOnCell().getPlayerByName(gameMatrixHelper.getPlayerName()));
 
         gameMatrixHelper.getGameMatrixCellByXY().addEntityType(new EntityType(selectPlayer));
-        gameMatrixHelper.getGameMatrixCellByXY().setCellType(new CellType(gameMatrixHelper.getGameMatrixCellByXY().getCellType().getOnVisible()));
+        gameMatrixHelper.getGameMatrixCellByXY().setCellType(new CellType( gameMatrixHelper.getGameMatrixCellByXY().getCellType().getOnVisible()));
         deletePlayer();
     }
 
@@ -230,6 +230,17 @@ public class EntityMove {
 
     private EntityType getEntityTypeOldXY(){
         return gameMatrixHelper.getGameMatrixCellByOldXY().getEntityType();
+    }
+
+    public GameMatrixHelper getCrystal(){
+        EntityType entityType = gameMatrixHelper.getGameMatrixCellByXY().getEntityType();
+        CellType cellType = gameMatrixHelper.getGameMatrixCellByXY().getCellType();
+
+        if( cellType.getOnVisible().getCrystals() > 0 ){
+            entityType.getPlayersOnCell().getPlayerByName(gameMatrixHelper.getPlayerName()).setCrystals(entityType.getPlayersOnCell().getPlayerByName(gameMatrixHelper.getPlayerName()).getCrystals() + 1);
+            cellType.getOnVisible().setCrystals(cellType.getOnVisible().getCrystals() - 1);
+        };
+        return gameMatrixHelper;
     }
 
     //Проверки перемещения юнитов

@@ -26,12 +26,20 @@ public interface MainContract {
 
         void hideCellListItem();
 
+        void update(Runnable runnable);
+
+        void enableButton(boolean isEnabled);
+
+        void setImageCrystalText(String text);
+
     }
     interface Presenter extends BasePresenter {
 
         void onSingleTapConfirmed(int x, int y);
 
         void onCellListItemSelectedClick(int x, int y, String text);
+
+        void onActionButtonClick();
 
     }
 }

@@ -1,62 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:id="@+id/linerBoss"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/space_texture">
+    android:background="@drawable/space_texture"
+    android:orientation="vertical">
 
     <com.silentgames.silent_planet.view.GameView
-        android:fillViewport="true"
         android:id="@+id/game_view"
-        android:layout_gravity="center"
         android:layout_width="350dp"
-        android:layout_height="350dp" />
+        android:layout_height="350dp"
+        android:layout_gravity="center"
+        android:fillViewport="true" />
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        android:background="@drawable/panel"
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="110dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:orientation="vertical"
             android:weightSum="1">
 
-            <ImageView
+
+            <LinearLayout
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/panel"
+                android:orientation="vertical"
+                android:weightSum="1">
+
+                <ImageView
+                android:id="@+id/imageView"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:id="@+id/imageView"
+                    android:layout_marginTop="28dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="50dp" />
+                android:weightSum="1"/>
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="110dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="4dp"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/panel"
+                android:orientation="vertical"
+                android:weightSum="1">
+
+                <TableLayout
+                    android:layout_margin="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TableRow>
+                        <ImageView
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:src="@drawable/crystal"/>
+                        <TextView
+                            android:id="@+id/imageCrystalText"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="5dp"
+                            android:text=""/>
+                    </TableRow>
+
+                </TableLayout>
+
+
+
+            </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@drawable/panel"
+            android:weightSum="1"
+            android:orientation="vertical">
 
             <TextView
+                android:id="@+id/textView"
+                android:layout_margin="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Medium Text"
-                android:id="@+id/textView" />
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
+                android:id="@+id/textView2"
+                android:layout_margin="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Medium Text"
-                android:id="@+id/textView2" />
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <Spinner
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
                 android:id="@+id/spinner"
+                android:layout_marginRight="15dp"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="right" />
+
+            <Button
+                android:id="@+id/actionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="take crystal"/>
+
         </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

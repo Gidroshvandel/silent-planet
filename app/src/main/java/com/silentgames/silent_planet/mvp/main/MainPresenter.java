@@ -7,6 +7,7 @@ import com.silentgames.silent_planet.logic.EntityMove;
 import com.silentgames.silent_planet.logic.TurnHandler;
 import com.silentgames.silent_planet.model.Cell;
 import com.silentgames.silent_planet.model.GameMatrixHelper;
+import com.silentgames.silent_planet.model.cells.CellType;
 import com.silentgames.silent_planet.model.entities.EntityType;
 
 import java.util.HashMap;
@@ -41,12 +42,24 @@ public class MainPresenter implements MainContract.Presenter {
     }
 
     @Override
+    public void onActionButtonClick() {
+        viewModel.setGameMatrixHelper(new EntityMove(viewModel.getGameMatrixHelper()).getCrystal());
+        if (!overZeroCrystels()){
+            view.enableButton(false);
+        }
+        view.setImageCrystalText(String.valueOf(viewModel.getGameMatrixHelper().getGameMatrixCellByXY().getEntityType().getCrystals()));
+    }
+
+    @Override
     public void onCreate() {
         GameMatrixHelper gameMatrixHelper = new GameMatrixHelper();
-        gameMatrixHelper.setEventMove(true);
+        gameMatrixHelper.setEventMove(false);
         viewModel.setGameMatrixHelper(gameMatrixHelper);
         viewModel.getGameMatrixHelper().setGameMatrix(model.fillBattleGround());
+
         view.drawBattleGround(viewModel.getGameMatrixHelper().getGameMatrix());
+        view.enableButton(false);
+
     }
 
     private void select(int x, int y, Map<String,Integer> oldXY, String name){
@@ -54,9 +67,11 @@ public class MainPresenter implements MainContract.Presenter {
         viewModel.getGameMatrixHelper().setY(y);
 
         EntityType en = viewModel.getGameMatrixHelper().getGameMatrixCellByXY().getEntityType();
+        CellType cellType = viewModel.getGameMatrixHelper().getGameMatrixCellByXY().getCellType();
 
         if(oldXY == null) {
             if (en != null) {
+                view.setImageCrystalText(String.valueOf(en.getCrystals()));
                 oldXY = new HashMap<>();
                 if(name == null){
                     view.showCellListItem(x, y, model.findPlayerOnCell(viewModel.getGameMatrixHelper().getGameMatrixCellByXY()));
@@ -64,12 +79,19 @@ public class MainPresenter implements MainContract.Presenter {
                 if(name != null){
                     viewModel.getGameMatrixHelper().setPlayerName(name);
                 }
+                if (overZeroCrystels()){
+                    view.enableButton(true);
+                }
+                else {
+                    view.enableButton(false);
+                }
                 oldXY.put("X",x);
                 oldXY.put("Y",y);
                 view.showObjectIcon(viewModel.getGameMatrixHelper().getGameMatrixCellByXY());
                 viewModel.getGameMatrixHelper().setOldXY(oldXY);
             }
             else {
+                view.setImageCrystalText(String.valueOf(cellType.getCrystals()));
                 view.showObjectIcon(viewModel.getGameMatrixHelper().getGameMatrixCellByXY());
                 view.hideCellListItem();
                 viewModel.getGameMatrixHelper().setOldXY(null);
@@ -96,5 +118,13 @@ public class MainPresenter implements MainContract.Presenter {
             viewModel.getGameMatrixHelper().setOldXY(null);
             viewModel.getGameMatrixHelper().setPlayerName(null);
         }
+    }
+
+    private boolean overZeroCrystels(){
+       if(viewModel.getGameMatrixHelper().getGameMatrixCellByXY().getCellType().getCrystals() > 0){
+           return true;
+       }else {
+           return false;
+       }
     }
 }
