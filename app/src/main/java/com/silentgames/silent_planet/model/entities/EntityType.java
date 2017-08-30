@@ -13,7 +13,6 @@ public class EntityType extends EntityTypeEx {
 
     private SpaceShip spaceShip;
 
-
     public EntityType(PlayersOnCell player) {
         this.playersOnCell = player;
         setAll(player.getPlayerList().get(0));

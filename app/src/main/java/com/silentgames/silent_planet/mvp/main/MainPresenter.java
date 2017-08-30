@@ -32,22 +32,27 @@ public class MainPresenter implements MainContract.Presenter {
 
     @Override
     public void onSingleTapConfirmed(int x, int y) {
-        select(x,y, viewModel.getGameMatrixHelper().getOldXY(), null);
+        select(x, y, viewModel.getGameMatrixHelper().getOldXY(), null);
     }
 
     @Override
     public void onCellListItemSelectedClick(int x, int y, String text) {
         view.showToast(App.getContext().getResources().getString(R.string.selectPlayer) + " " + text);
-        select(x,y, null, text);
+        selectEntity(x, y, text);
     }
 
     @Override
     public void onActionButtonClick() {
         viewModel.setGameMatrixHelper(new EntityMove(viewModel.getGameMatrixHelper()).getCrystal());
-        if (!overZeroCrystels()){
+        if (!overZeroCrystels()) {
             view.enableButton(false);
         }
-        view.setImageCrystalText(String.valueOf(viewModel.getGameMatrixHelper().getGameMatrixCellByXY().getEntityType().getCrystals()));
+        if (viewModel.getGameMatrixHelper().getGameMatrixCellByXY().getEntityType().getSpaceShip() != null){
+            view.setImageCrystalText(String.valueOf(viewModel.getGameMatrixHelper().getGameMatrixCellByXY().getEntityType().getSpaceShip().getCrystals()));
+        }else{
+            if(viewModel.getGameMatrixHelper().getPlayerName() != null)
+            view.setImageCrystalText(String.valueOf(viewModel.getGameMatrixHelper().getGameMatrixCellByXY().getEntityType().getPlayersOnCell().getPlayerByName(viewModel.getGameMatrixHelper().getPlayerName()).getCrystals()));
+        }
     }
 
     @Override
@@ -56,75 +61,112 @@ public class MainPresenter implements MainContract.Presenter {
         gameMatrixHelper.setEventMove(false);
         viewModel.setGameMatrixHelper(gameMatrixHelper);
         viewModel.getGameMatrixHelper().setGameMatrix(model.fillBattleGround());
+        viewModel.setDoubleClick(false);
+
 
         view.drawBattleGround(viewModel.getGameMatrixHelper().getGameMatrix());
         view.enableButton(false);
 
     }
 
-    private void select(int x, int y, Map<String,Integer> oldXY, String name){
+    private void select(int x, int y, Map<String, Integer> oldXY, String name) {
         viewModel.getGameMatrixHelper().setX(x);
         viewModel.getGameMatrixHelper().setY(y);
 
         EntityType en = viewModel.getGameMatrixHelper().getGameMatrixCellByXY().getEntityType();
-        CellType cellType = viewModel.getGameMatrixHelper().getGameMatrixCellByXY().getCellType();
 
-        if(oldXY == null) {
-            if (en != null) {
-                view.setImageCrystalText(String.valueOf(en.getCrystals()));
-                oldXY = new HashMap<>();
-                if(name == null){
-                    view.showCellListItem(x, y, model.findPlayerOnCell(viewModel.getGameMatrixHelper().getGameMatrixCellByXY()));
-                }
-                if(name != null){
-                    viewModel.getGameMatrixHelper().setPlayerName(name);
-                }
-                if (overZeroCrystels()){
-                    view.enableButton(true);
-                }
-                else {
-                    view.enableButton(false);
-                }
-                oldXY.put("X",x);
-                oldXY.put("Y",y);
-                view.showObjectIcon(viewModel.getGameMatrixHelper().getGameMatrixCellByXY());
-                viewModel.getGameMatrixHelper().setOldXY(oldXY);
+        if (oldXY == null || isDoubleClick()) {
+            if (en != null && !viewModel.isDoubleClick()) {
+                selectEntity(x, y, name);
+            } else {
+                selectCell();
             }
-            else {
-                view.setImageCrystalText(String.valueOf(cellType.getCrystals()));
-                view.showObjectIcon(viewModel.getGameMatrixHelper().getGameMatrixCellByXY());
-                view.hideCellListItem();
-                viewModel.getGameMatrixHelper().setOldXY(null);
-                viewModel.getGameMatrixHelper().setPlayerName(null);
-            }
-        }
-        else {
-            GameMatrixHelper newGameMatrix = new EntityMove(viewModel.getGameMatrixHelper()).canMove();
-            if(newGameMatrix != null){
-                viewModel.setGameMatrixHelper(newGameMatrix);
-                int count = 0;
-                while (viewModel.getGameMatrixHelper().isEventMove()){
-                    viewModel.getGameMatrixHelper().setEventMove(false);
-                    view.drawBattleGround(viewModel.getGameMatrixHelper().getGameMatrix());
-                    viewModel.setGameMatrixHelper(new EntityMove(viewModel.getGameMatrixHelper()).doEvent());
-                    count ++;
-                    if(count > 20){
-                        break;
-                    }
-                }
-                view.drawBattleGround(viewModel.getGameMatrixHelper().getGameMatrix());
-                view.showToast(App.getContext().getResources().getString(R.string.turnMessage) + " " + TurnHandler.getFraction().toString());
-            }
-            viewModel.getGameMatrixHelper().setOldXY(null);
-            viewModel.getGameMatrixHelper().setPlayerName(null);
+        } else {
+            tryMove();
         }
     }
 
-    private boolean overZeroCrystels(){
-       if(viewModel.getGameMatrixHelper().getGameMatrixCellByXY().getCellType().getCrystals() > 0){
-           return true;
-       }else {
-           return false;
-       }
+    private boolean overZeroCrystels() {
+        if (viewModel.getGameMatrixHelper().getGameMatrixCellByXY().getCellType().getOnVisible().getCrystals() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean isDoubleClick() {
+        if (viewModel.getGameMatrixHelper().getOldXY() != null) {
+            if (viewModel.getGameMatrixHelper().getOldXY().get("X") == viewModel.getGameMatrixHelper().getX() &&
+                    viewModel.getGameMatrixHelper().getOldXY().get("Y") == viewModel.getGameMatrixHelper().getY()) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    private void selectEntity(int x, int y, String name) {
+        EntityType en = viewModel.getGameMatrixHelper().getGameMatrixCellByXY().getEntityType();
+        viewModel.setDoubleClick(true);
+        if (en.getSpaceShip() != null){
+            view.setImageCrystalText(String.valueOf(en.getSpaceShip().getCrystals()));
+        }
+        Map<String, Integer> oldXY = new HashMap<>();
+        if (name == null) {
+            view.showCellListItem(x, y, model.findPlayerOnCell(viewModel.getGameMatrixHelper().getGameMatrixCellByXY()));
+        }
+        if (name != null) {
+            viewModel.getGameMatrixHelper().setPlayerName(name);
+            if (en.getSpaceShip() == null){
+                view.setImageCrystalText(String.valueOf(en.getPlayersOnCell().getPlayerByName(name).getCrystals()));
+            }
+        }
+        if (overZeroCrystels()) {
+            view.enableButton(true);
+        } else {
+            view.enableButton(false);
+        }
+        oldXY.put("X", x);
+        oldXY.put("Y", y);
+        view.showObjectIcon(viewModel.getGameMatrixHelper().getGameMatrixCellByXY().getEntityType());
+        viewModel.getGameMatrixHelper().setOldXY(oldXY);
+    }
+
+    private void selectCell() {
+        view.enableButton(false);
+        CellType cellType = viewModel.getGameMatrixHelper().getGameMatrixCellByXY().getCellType();
+        if(cellType.getDefault() == null){
+            view.setImageCrystalText(String.valueOf(cellType.getOnVisible().getCrystals()));
+        }
+        view.showObjectIcon(viewModel.getGameMatrixHelper().getGameMatrixCellByXY().getCellType());
+        view.hideCellListItem();
+        viewModel.getGameMatrixHelper().setOldXY(null);
+        viewModel.getGameMatrixHelper().setPlayerName(null);
+        viewModel.setDoubleClick(false);
+    }
+
+    private void tryMove() {
+        view.enableButton(false);
+        GameMatrixHelper newGameMatrix = new EntityMove(viewModel.getGameMatrixHelper()).canMove();
+        if (newGameMatrix != null) {
+            viewModel.setGameMatrixHelper(newGameMatrix);
+            int count = 0;
+            while (viewModel.getGameMatrixHelper().isEventMove()) {
+                viewModel.getGameMatrixHelper().setEventMove(false);
+                view.drawBattleGround(viewModel.getGameMatrixHelper().getGameMatrix());
+                viewModel.setGameMatrixHelper(new EntityMove(viewModel.getGameMatrixHelper()).doEvent());
+                count++;
+                if (count > 20) {
+                    break;
+                }
+            }
+            view.drawBattleGround(viewModel.getGameMatrixHelper().getGameMatrix());
+            view.showToast(App.getContext().getResources().getString(R.string.turnMessage) + " " + TurnHandler.getFraction().toString());
+        }
+        viewModel.getGameMatrixHelper().setOldXY(null);
+        viewModel.getGameMatrixHelper().setPlayerName(null);
+        viewModel.setDoubleClick(false);
     }
 }

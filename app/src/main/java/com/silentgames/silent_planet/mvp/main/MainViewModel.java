@@ -12,11 +12,21 @@ public class MainViewModel {
 
     private GameMatrixHelper gameMatrixHelper;
 
+    private boolean doubleClick;
+
     public GameMatrixHelper getGameMatrixHelper() {
         return gameMatrixHelper;
     }
 
     public void setGameMatrixHelper(GameMatrixHelper gameMatrixHelper) {
         this.gameMatrixHelper = gameMatrixHelper;
+    }
+
+    public boolean isDoubleClick() {
+        return doubleClick;
+    }
+
+    public void setDoubleClick(boolean doubleClick) {
+        this.doubleClick = doubleClick;
     }
 }

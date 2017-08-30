@@ -19,6 +19,8 @@ import android.widget.Toast;
 import com.silentgames.silent_planet.R;
 import com.silentgames.silent_planet.logic.Constants;
 import com.silentgames.silent_planet.model.Cell;
+import com.silentgames.silent_planet.model.cells.CellType;
+import com.silentgames.silent_planet.model.entities.EntityType;
 import com.silentgames.silent_planet.utils.Calculator;
 import com.silentgames.silent_planet.view.GameView;
 
@@ -151,12 +153,14 @@ public class MainActivity extends Activity implements MainContract.View, GameVie
     }
 
     @Override
-    public void showObjectIcon(Cell gameCell) {
-        if (gameCell.getEntityType() != null ) {
-            selectObjectIcon.setImageBitmap(gameCell.getEntityType().getBitmap());
-        }else {
-            selectObjectIcon.setImageBitmap(gameCell.getCellType().getBitmap());
-        }
+    public void showObjectIcon(CellType cellType) {
+        selectObjectIcon.setImageBitmap(cellType.getBitmap());
+
+    }
+
+    @Override
+    public void showObjectIcon(EntityType entityType) {
+        selectObjectIcon.setImageBitmap(entityType.getBitmap());
     }
 
     @Override

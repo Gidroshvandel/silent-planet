@@ -42,7 +42,7 @@ public class EntityMove {
         int oldX = gameMatrixHelper.getOldXY().get("X");
         int oldY = gameMatrixHelper.getOldXY().get("Y");
         if (isMoveAtDistance(x, y, oldX, oldY) && isPlayable(oldX, oldY) && isCurrentPlayer(oldX, oldY)) {
-            if (isSpaceShip(oldX, oldY) && gameMatrixHelper.getGameMatrixCellByOldXY().getEntityType().isCanFly() && !isSpaceShip(x, y)) {
+            if (isSpaceShip(oldX, oldY) && gameMatrixHelper.getGameMatrixCellByOldXY().getEntityType().getSpaceShip().isCanFly() && !isSpaceShip(x, y)) {
                 if (isCanFlyToCell()) {
                     moveShip();
                     TurnHandler.turnCount();
@@ -53,7 +53,7 @@ public class EntityMove {
                 }
             } else if (isPlayer(oldX, oldY)) {
                 if (isCanMovePlayer()) {
-                    if (isCanMovePlayer() == gameMatrixHelper.getGameMatrixCellByXY().getCellType().isCanMove()) {
+                    if (isCanMovePlayer() == gameMatrixHelper.getGameMatrixCellByXY().getCellType().getOnVisible().isCanMove()) {
                         movePlayer();
                         gameMatrixHelper = gameMatrixHelper.getGameMatrixCellByXY().getCellType().getOnVisible().doEvent(gameMatrixHelper);
 //                        TurnHandler.turnCount();

@@ -17,7 +17,6 @@ public class DeadCell extends OnVisible {
         super.setBitmap(BitmapEditor.getCellBitmap(R.drawable.dead_cell));
         super.setDead(true);
         super.setCanMove(true);
-//        super.setCrystals(1);
     }
 
 

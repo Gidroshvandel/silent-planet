@@ -5,6 +5,8 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 
 import com.silentgames.silent_planet.model.Cell;
+import com.silentgames.silent_planet.model.cells.CellType;
+import com.silentgames.silent_planet.model.entities.EntityType;
 import com.silentgames.silent_planet.mvp.BasePresenter;
 
 import java.util.List;
@@ -20,7 +22,9 @@ public interface MainContract {
 
         void showToast(String text);
 
-        void showObjectIcon(Cell gameCell);
+        void showObjectIcon(CellType cellType);
+
+        void showObjectIcon(EntityType entityType);
 
         void showCellListItem(int x, int y, List<String> playerList);
 

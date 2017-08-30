@@ -9,4 +9,13 @@ import com.silentgames.silent_planet.model.entities.ground.PlayersOnCell;
  */
 public class SpaceShip extends EntityTypeEx {
 
+    private int crystals = 0;
+
+    public int getCrystals() {
+        return crystals;
+    }
+
+    public void setCrystals(int crystals) {
+        this.crystals = crystals;
+    }
 }
