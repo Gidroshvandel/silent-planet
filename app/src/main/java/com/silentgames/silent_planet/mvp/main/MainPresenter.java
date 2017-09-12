@@ -43,7 +43,7 @@ public class MainPresenter implements MainContract.Presenter {
 
     @Override
     public void onActionButtonClick() {
-        viewModel.setGameMatrixHelper(new EntityMove(viewModel.getGameMatrixHelper()).getCrystal());
+        viewModel.setGameMatrixHelper(getCrystal(viewModel.getGameMatrixHelper()));
         if (!overZeroCrystels()) {
             view.enableButton(false);
         }
@@ -168,5 +168,16 @@ public class MainPresenter implements MainContract.Presenter {
         viewModel.getGameMatrixHelper().setOldXY(null);
         viewModel.getGameMatrixHelper().setPlayerName(null);
         viewModel.setDoubleClick(false);
+    }
+
+    private GameMatrixHelper getCrystal(GameMatrixHelper gameMatrixHelper){
+        EntityType entityType = gameMatrixHelper.getGameMatrixCellByXY().getEntityType();
+        CellType cellType = gameMatrixHelper.getGameMatrixCellByXY().getCellType();
+
+        if( cellType.getOnVisible().getCrystals() > 0 ){
+            entityType.getPlayersOnCell().getPlayerByName(gameMatrixHelper.getPlayerName()).setCrystals(entityType.getPlayersOnCell().getPlayerByName(gameMatrixHelper.getPlayerName()).getCrystals() + 1);
+            cellType.getOnVisible().setCrystals(cellType.getOnVisible().getCrystals() - 1);
+        };
+        return gameMatrixHelper;
     }
 }

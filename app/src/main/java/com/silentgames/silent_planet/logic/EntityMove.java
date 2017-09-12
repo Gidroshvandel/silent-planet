@@ -23,13 +23,7 @@ public class EntityMove {
     }
 
     public GameMatrixHelper canMove(){
-//        int oldX = Integer.parseInt(oldXY.get("X"));
-//        int oldY = Integer.parseInt(oldXY.get("Y"));
-//        if(block){
-//            return gameMatrix[x][y].getCellType().getOnVisible().doEvent(oldX, oldY, gameMatrix);
-//        }else {
-            return moveCheck();
-//        }
+        return moveCheck();
     }
 
     public GameMatrixHelper doEvent(){
@@ -49,14 +43,14 @@ public class EntityMove {
                 } else if (gameMatrixHelper.getPlayerName() != null) {
                     moveFromBoard();
                     gameMatrixHelper = gameMatrixHelper.getGameMatrixCellByXY().getCellType().getOnVisible().doEvent(gameMatrixHelper);
-//                    TurnHandler.turnCount();
+                    TurnHandler.turnCount();
                 }
             } else if (isPlayer(oldX, oldY)) {
                 if (isCanMovePlayer()) {
                     if (isCanMovePlayer() == gameMatrixHelper.getGameMatrixCellByXY().getCellType().getOnVisible().isCanMove()) {
                         movePlayer();
                         gameMatrixHelper = gameMatrixHelper.getGameMatrixCellByXY().getCellType().getOnVisible().doEvent(gameMatrixHelper);
-//                        TurnHandler.turnCount();
+                        TurnHandler.turnCount();
                     } else if (isSpaceShip(x, y) && isEntityBelongFraction()) {
                         moveOnBoard();
                     }
@@ -230,17 +224,6 @@ public class EntityMove {
 
     private EntityType getEntityTypeOldXY(){
         return gameMatrixHelper.getGameMatrixCellByOldXY().getEntityType();
-    }
-
-    public GameMatrixHelper getCrystal(){
-        EntityType entityType = gameMatrixHelper.getGameMatrixCellByXY().getEntityType();
-        CellType cellType = gameMatrixHelper.getGameMatrixCellByXY().getCellType();
-
-        if( cellType.getOnVisible().getCrystals() > 0 ){
-            entityType.getPlayersOnCell().getPlayerByName(gameMatrixHelper.getPlayerName()).setCrystals(entityType.getPlayersOnCell().getPlayerByName(gameMatrixHelper.getPlayerName()).getCrystals() + 1);
-            cellType.getOnVisible().setCrystals(cellType.getOnVisible().getCrystals() - 1);
-        };
-        return gameMatrixHelper;
     }
 
     //Проверки перемещения юнитов
