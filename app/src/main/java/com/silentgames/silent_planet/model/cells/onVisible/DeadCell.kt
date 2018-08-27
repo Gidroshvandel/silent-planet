@@ -23,7 +23,7 @@ class DeadCell : OnVisible() {
 
         val gameMatrixCell = gameMatrixHelper.gameMatrixCellByXY
 
-        if (gameMatrixCell.cellType!!.isDead && !gameMatrixCell.entityType!!.isDead) {
+        if (gameMatrixCell.cellType.isDead && !gameMatrixCell.entityType!!.isDead) {
             val playerList = PlayersOnCell()
             playerList.add(DeadPlayer(gameMatrixCell.entityType!!.playersOnCell!!.playerList!![0]))
             gameMatrixCell.entityType = EntityType(playerList)

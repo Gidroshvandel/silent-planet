@@ -49,7 +49,7 @@ abstract class Arrow : OnVisible() {
     override fun doEvent(gameMatrixHelper: GameMatrixHelper): GameMatrixHelper {
         val entityMove = EntityMove(gameMatrixHelper)
         if (checkBorders()) {
-            if (gameMatrixHelper.gameMatrix!![destinationX][destinationY].cellType!!.default != null && gameMatrixHelper.gameMatrix!![destinationX][destinationY].cellType!!.default!!.javaClass == SpaceDef::class.java || gameMatrixHelper.gameMatrix!![destinationX][destinationY].cellType!!.onVisible!!.javaClass == SpaceCell::class.java) {
+            if (gameMatrixHelper.gameMatrix[destinationX][destinationY].cellType.default != null && gameMatrixHelper.gameMatrix[destinationX][destinationY].cellType.default!!.javaClass == SpaceDef::class.java || gameMatrixHelper.gameMatrix[destinationX][destinationY].cellType.onVisible!!.javaClass == SpaceCell::class.java) {
                 val oldXY = HashMap<String, Int>()
                 oldXY["X"] = gameMatrixHelper.x
                 oldXY["Y"] = gameMatrixHelper.y

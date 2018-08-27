@@ -39,14 +39,13 @@ class MainPresenter internal constructor(private val view: MainContract.View, pr
     }
 
     override fun onCreate() {
-        val gameMatrixHelper = GameMatrixHelper()
+        val gameMatrixHelper = GameMatrixHelper(model.fillBattleGround())
         gameMatrixHelper.isEventMove = false
         viewModel.gameMatrixHelper = gameMatrixHelper
-        viewModel.gameMatrixHelper.gameMatrix = model.fillBattleGround()
         viewModel.isDoubleClick = false
 
 
-        view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix as Array<Array<Cell>>)
+        view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix)
         view.enableButton(false)
 
     }
@@ -76,7 +75,7 @@ class MainPresenter internal constructor(private val view: MainContract.View, pr
         val en = viewModel.gameMatrixHelper.gameMatrixCellByXY.entityType
         viewModel.isDoubleClick = true
         if (en?.spaceShip != null) {
-            view.setImageCrystalText(en?.spaceShip!!.crystals.toString())
+            view.setImageCrystalText(en.spaceShip!!.crystals.toString())
         }
         val oldXY = HashMap<String, Int>()
         if (name == null) {
@@ -120,14 +119,14 @@ class MainPresenter internal constructor(private val view: MainContract.View, pr
             var count = 0
             while (viewModel.gameMatrixHelper.isEventMove) {
                 viewModel.gameMatrixHelper.isEventMove = false
-                view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix!!)
+                view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix)
                 viewModel.gameMatrixHelper = EntityMove(viewModel.gameMatrixHelper).doEvent()
                 count++
                 if (count > 20) {
                     break
                 }
             }
-            view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix!!)
+            view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix)
             view.showToast(App.getContext().resources.getString(R.string.turnMessage) + " " + TurnHandler.fraction!!.toString())
         }
         viewModel.gameMatrixHelper.oldXY = null
@@ -140,7 +139,7 @@ class MainPresenter internal constructor(private val view: MainContract.View, pr
         val cellType = gameMatrixHelper.gameMatrixCellByXY.cellType
 
         if (cellType.onVisible!!.crystals > 0) {
-            entityType?.playersOnCell?.getPlayerByName(gameMatrixHelper.playerName!!)!!.crystals = entityType?.playersOnCell?.getPlayerByName(gameMatrixHelper.playerName!!)!!.crystals + 1
+            entityType?.playersOnCell?.getPlayerByName(gameMatrixHelper.playerName!!)!!.crystals = entityType.playersOnCell?.getPlayerByName(gameMatrixHelper.playerName!!)!!.crystals + 1
             cellType.onVisible!!.crystals = cellType.onVisible!!.crystals - 1
         }
         return gameMatrixHelper

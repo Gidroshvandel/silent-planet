@@ -8,7 +8,7 @@ import com.silentgames.silent_planet.model.GameMatrixHelper
  */
 class MainViewModel {
 
-    var gameMatrixHelper: GameMatrixHelper = GameMatrixHelper()
+    lateinit var gameMatrixHelper: GameMatrixHelper
 
     var isDoubleClick: Boolean = false
 }
