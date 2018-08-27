@@ -49,13 +49,13 @@ public class BitmapEditor {
     public static Bitmap getEntityBitmap(int DefaultBitId){
         Resources res = App.getContext().getResources();
         Bitmap bitmap = BitmapFactory.decodeResource(res, DefaultBitId);
-        return resize(bitmap, Converter.convertDpToPixel(Constants.entitySize,res),Converter.convertDpToPixel(Constants.entitySize,res));
+        return resize(bitmap, Converter.convertDpToPixel(Constants.entityImageSize,res),Converter.convertDpToPixel(Constants.entityImageSize,res));
     }
 
     public static Bitmap getCellBitmap(int DefaultBitId){
         Resources res = App.getContext().getResources();
         Bitmap bitmap = BitmapFactory.decodeResource(res, DefaultBitId);
-        return resize(bitmap, Converter.convertDpToPixel(Constants.cellSize,res),Converter.convertDpToPixel(Constants.cellSize,res));
+        return resize(bitmap, Converter.convertDpToPixel(Constants.cellImageSize,res),Converter.convertDpToPixel(Constants.cellImageSize,res));
     }
 
     public static Bitmap rotateBitmap(RotateAngle rotateAngle, Bitmap bitmap){
