@@ -9,6 +9,6 @@ import com.silentgames.silent_planet.model.cells.CellTypeEx;
 /**
  * Created by gidroshvandel on 24.09.16.
  */
-public class Default extends CellTypeEx {
+public abstract class Default extends CellTypeEx {
 
 }

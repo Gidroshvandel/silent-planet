@@ -10,13 +10,17 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.silentgames.silent_planet.R;
 import com.silentgames.silent_planet.logic.Constants;
 import com.silentgames.silent_planet.model.Cell;
+import com.silentgames.silent_planet.model.cells.CellType;
+import com.silentgames.silent_planet.model.entities.EntityType;
 import com.silentgames.silent_planet.utils.Calculator;
 import com.silentgames.silent_planet.view.GameView;
 
@@ -37,6 +41,9 @@ public class MainActivity extends Activity implements MainContract.View, GameVie
     private  float mScaleFactor;
     private  float canvasSize;
     private  int viewSize;
+
+    private Button actionButton;
+    private TextView imageCrystalText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,6 +85,32 @@ public class MainActivity extends Activity implements MainContract.View, GameVie
         mBitmap = Bitmap.createBitmap((int) canvasSize, (int) canvasSize, Bitmap.Config.ARGB_8888);
         mCanvas = new Canvas(mBitmap);
         mBitmapPaint = new Paint(Paint.DITHER_FLAG);
+
+        imageCrystalText =(TextView) findViewById(R.id.imageCrystalText);
+
+        actionButton = (Button) findViewById(R.id.actionButton);
+
+        actionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.onActionButtonClick();
+            }
+        });
+    }
+
+    @Override
+    public void enableButton(boolean isEnabled) {
+        actionButton.setEnabled(isEnabled);
+//        if (isEnabled){
+////            actionButton.setVisibility(View.VISIBLE);
+//        }else {
+////            actionButton.setVisibility(View.INVISIBLE);
+//        }
+    }
+
+    @Override
+    public void setImageCrystalText(String text) {
+        imageCrystalText.setText(text);
     }
 
     @Override
@@ -120,12 +153,14 @@ public class MainActivity extends Activity implements MainContract.View, GameVie
     }
 
     @Override
-    public void showObjectIcon(Cell gameCell) {
-        if (gameCell.getEntityType() != null ) {
-            selectObjectIcon.setImageBitmap(gameCell.getEntityType().getBitmap());
-        }else {
-            selectObjectIcon.setImageBitmap(gameCell.getCellType().getBitmap());
-        }
+    public void showObjectIcon(CellType cellType) {
+        selectObjectIcon.setImageBitmap(cellType.getBitmap());
+
+    }
+
+    @Override
+    public void showObjectIcon(EntityType entityType) {
+        selectObjectIcon.setImageBitmap(entityType.getBitmap());
     }
 
     @Override
@@ -151,6 +186,11 @@ public class MainActivity extends Activity implements MainContract.View, GameVie
     @Override
     public void hideCellListItem() {
         objectListOnCell.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void update(Runnable runnable) {
+        this.runOnUiThread(runnable);
     }
 
     @Override

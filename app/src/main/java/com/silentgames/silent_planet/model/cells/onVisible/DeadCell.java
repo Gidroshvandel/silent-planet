@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import com.silentgames.silent_planet.App;
 import com.silentgames.silent_planet.R;
 import com.silentgames.silent_planet.model.Cell;
+import com.silentgames.silent_planet.model.GameMatrixHelper;
 import com.silentgames.silent_planet.model.entities.EntityType;
 import com.silentgames.silent_planet.model.entities.ground.PlayersOnCell;
 import com.silentgames.silent_planet.model.entities.ground.utils.DeadPlayer;
@@ -16,14 +17,13 @@ public class DeadCell extends OnVisible {
         super.setBitmap(BitmapEditor.getCellBitmap(R.drawable.dead_cell));
         super.setDead(true);
         super.setCanMove(true);
-//        super.setCrystals(1);
     }
 
 
     @Override
-    public Cell[][] doEvent(int x, int y, Cell[][] gameMatrix) {
+    public GameMatrixHelper doEvent(GameMatrixHelper gameMatrixHelper) {
 
-        Cell gameMatrixCell = gameMatrix[x][y];
+        Cell gameMatrixCell = gameMatrixHelper.getGameMatrixCellByXY();
 
         if(gameMatrixCell.getCellType().isDead() && ! gameMatrixCell.getEntityType().isDead()){
             PlayersOnCell playerList = new PlayersOnCell();
@@ -31,9 +31,9 @@ public class DeadCell extends OnVisible {
             gameMatrixCell.setEntityType(new EntityType(playerList));
         }
 
-        gameMatrix[x][y] = gameMatrixCell;
+        gameMatrixHelper.setGameMatrixCellByXY(gameMatrixCell);
 
-        return gameMatrix;
+        return gameMatrixHelper;
     }
 
 }

@@ -1,12 +1,13 @@
 package com.silentgames.silent_planet.model.cells;
 
+import com.silentgames.silent_planet.model.CellEx;
 import com.silentgames.silent_planet.model.cells.defaultCell.Default;
 import com.silentgames.silent_planet.model.cells.onVisible.OnVisible;
 
 /**
  * Created by gidroshvandel on 09.07.16.
  */
-public class CellType extends CellTypeEx {
+public class CellType extends CellTypeEx  {
 
     private Default aDefault;
     private OnVisible onVisible;
@@ -29,11 +30,12 @@ public class CellType extends CellTypeEx {
         this.onVisible = onVisible;
     }
 
-    public Default getaDefault() {
+    public Default getDefault() {
         return aDefault;
     }
 
-    public void setaDefault(Default aDefault) {
+    public void setDefault(Default aDefault) {
         this.aDefault = aDefault;
     }
+
 }

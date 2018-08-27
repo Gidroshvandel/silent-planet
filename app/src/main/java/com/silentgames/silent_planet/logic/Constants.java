@@ -17,11 +17,7 @@ public class Constants {
     public static final float mScaleFactor = 1f;
     public static final float cellSize = 31;
     public static final float entitySize = 20;
-
-    public static boolean eventMove = false;
-    public static Map<String,String> oldXY;
-    public static int x;
-    public static int y;
+    public static final int countArrowCells = 3;
 
     public static int getHorizontalCountOfCells() {
         return horizontalCountOfCells;
