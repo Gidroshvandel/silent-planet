@@ -7,15 +7,12 @@ class GameMatrixHelper(
         var gameMatrix: Array<Array<Cell>>,
         var x: Int = 0,
         var y: Int = 0,
-        var oldXY: Map<String, Int>? = null,
+        var oldXY: Axis? = null,
         var playerName: String? = null,
         var isEventMove: Boolean = false) {
 
-    var gameMatrixCellByOldXY: Cell
-        get() = gameMatrix[oldXY!!["X"]!!][oldXY!!["Y"]!!]
-        set(gameMatrixCell) {
-            this.gameMatrix[oldXY!!["X"]!!][oldXY!!["Y"]!!] = gameMatrixCell
-        }
+    var gameMatrixCellByOldXY: Cell? = null
+        get() = oldXY?.let { gameMatrix[it.x][it.y] }
 
     var gameMatrixCellByXY: Cell
         get() = gameMatrix[x][y]

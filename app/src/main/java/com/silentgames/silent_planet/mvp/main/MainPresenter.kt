@@ -4,17 +4,23 @@ import com.silentgames.silent_planet.App
 import com.silentgames.silent_planet.R
 import com.silentgames.silent_planet.logic.EntityMove
 import com.silentgames.silent_planet.logic.TurnHandler
-import com.silentgames.silent_planet.model.Cell
+import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.GameMatrixHelper
 import java.util.*
 
 /**
  * Created by gidroshvandel on 21.06.17.
  */
-class MainPresenter internal constructor(private val view: MainContract.View, private val viewModel: MainViewModel, private val model: MainModel) : MainContract.Presenter {
+class MainPresenter internal constructor(
+        private val view: MainContract.View,
+        private val viewModel: MainViewModel,
+        private val model: MainModel
+) : MainContract.Presenter {
 
-    private val isDoubleClick: Boolean
-        get() = viewModel.gameMatrixHelper.oldXY != null && viewModel.gameMatrixHelper.oldXY!!["X"] == viewModel.gameMatrixHelper.x && viewModel.gameMatrixHelper.oldXY!!["Y"] == viewModel.gameMatrixHelper.y
+    private val isClickForCurrentPosition: Boolean
+        get() = viewModel.gameMatrixHelper.oldXY != null
+                && viewModel.gameMatrixHelper.oldXY?.x == viewModel.gameMatrixHelper.x
+                && viewModel.gameMatrixHelper.oldXY?.y == viewModel.gameMatrixHelper.y
 
     override fun onSingleTapConfirmed(x: Int, y: Int) {
         select(x, y, viewModel.gameMatrixHelper.oldXY, null)
@@ -27,14 +33,16 @@ class MainPresenter internal constructor(private val view: MainContract.View, pr
 
     override fun onActionButtonClick() {
         viewModel.gameMatrixHelper = getCrystal(viewModel.gameMatrixHelper)
-        if (!overZeroCrystels()) {
+        if (!overZeroCrystals()) {
             view.enableButton(false)
         }
         if (viewModel.gameMatrixHelper.gameMatrixCellByXY.entityType?.spaceShip != null) {
-            view.setImageCrystalText(viewModel.gameMatrixHelper.gameMatrixCellByXY.entityType!!.spaceShip!!.crystals.toString())
+            view.setImageCrystalText(
+                    viewModel.gameMatrixHelper.gameMatrixCellByXY.entityType!!.spaceShip!!.crystals.toString())
         } else {
             if (viewModel.gameMatrixHelper.playerName != null)
-                view.setImageCrystalText(viewModel.gameMatrixHelper.gameMatrixCellByXY.entityType?.playersOnCell?.getPlayerByName(viewModel.gameMatrixHelper.playerName!!)!!.crystals.toString())
+                view.setImageCrystalText(
+                        viewModel.gameMatrixHelper.gameMatrixCellByXY.entityType?.playersOnCell?.getPlayerByName(viewModel.gameMatrixHelper.playerName!!)!!.crystals.toString())
         }
     }
 
@@ -50,14 +58,14 @@ class MainPresenter internal constructor(private val view: MainContract.View, pr
 
     }
 
-    private fun select(x: Int, y: Int, oldXY: Map<String, Int>?, name: String?) {
+    private fun select(x: Int, y: Int, oldXY: Axis?, name: String?) {
         viewModel.gameMatrixHelper.x = x
         viewModel.gameMatrixHelper.y = y
 
-        val en = viewModel.gameMatrixHelper.gameMatrixCellByXY.entityType
+        val entityType = viewModel.gameMatrixHelper.gameMatrixCellByXY.entityType
 
-        if (oldXY == null || isDoubleClick) {
-            if (en != null && !viewModel.isDoubleClick) {
+        if (oldXY == null || isClickForCurrentPosition) {
+            if (entityType != null && !viewModel.isDoubleClick) {
                 selectEntity(x, y, name)
             } else {
                 selectCell()
@@ -67,7 +75,7 @@ class MainPresenter internal constructor(private val view: MainContract.View, pr
         }
     }
 
-    private fun overZeroCrystels(): Boolean {
+    private fun overZeroCrystals(): Boolean {
         return viewModel.gameMatrixHelper.gameMatrixCellByXY.cellType.onVisible!!.crystals > 0
     }
 
@@ -77,7 +85,6 @@ class MainPresenter internal constructor(private val view: MainContract.View, pr
         if (en?.spaceShip != null) {
             view.setImageCrystalText(en.spaceShip!!.crystals.toString())
         }
-        val oldXY = HashMap<String, Int>()
         if (name == null) {
             view.showCellListItem(x, y, model.findPlayerOnCell(viewModel.gameMatrixHelper.gameMatrixCellByXY))
         }
@@ -87,15 +94,13 @@ class MainPresenter internal constructor(private val view: MainContract.View, pr
                 view.setImageCrystalText(en?.playersOnCell?.getPlayerByName(name)!!.crystals.toString())
             }
         }
-        if (overZeroCrystels()) {
+        if (overZeroCrystals()) {
             view.enableButton(true)
         } else {
             view.enableButton(false)
         }
-        oldXY["X"] = x
-        oldXY["Y"] = y
-        view.showObjectIcon(viewModel.gameMatrixHelper.gameMatrixCellByXY.entityType!!)
-        viewModel.gameMatrixHelper.oldXY = oldXY
+        viewModel.gameMatrixHelper.gameMatrixCellByXY.entityType?.let { view.showObjectIcon(it) }
+        viewModel.gameMatrixHelper.oldXY = Axis(x, y)
     }
 
     private fun selectCell() {

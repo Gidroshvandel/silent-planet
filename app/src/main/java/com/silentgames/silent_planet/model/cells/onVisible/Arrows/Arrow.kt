@@ -2,6 +2,7 @@ package com.silentgames.silent_planet.model.cells.onVisible.Arrows
 
 import com.silentgames.silent_planet.logic.Constants
 import com.silentgames.silent_planet.logic.EntityMove
+import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.GameMatrixHelper
 import com.silentgames.silent_planet.model.cells.defaultCell.SpaceDef
 import com.silentgames.silent_planet.model.cells.onVisible.OnVisible
@@ -49,27 +50,20 @@ abstract class Arrow : OnVisible() {
     override fun doEvent(gameMatrixHelper: GameMatrixHelper): GameMatrixHelper {
         val entityMove = EntityMove(gameMatrixHelper)
         if (checkBorders()) {
-            if (gameMatrixHelper.gameMatrix[destinationX][destinationY].cellType.default != null && gameMatrixHelper.gameMatrix[destinationX][destinationY].cellType.default!!.javaClass == SpaceDef::class.java || gameMatrixHelper.gameMatrix[destinationX][destinationY].cellType.onVisible!!.javaClass == SpaceCell::class.java) {
-                val oldXY = HashMap<String, Int>()
-                oldXY["X"] = gameMatrixHelper.x
-                oldXY["Y"] = gameMatrixHelper.y
-                gameMatrixHelper.oldXY = oldXY
+            if (gameMatrixHelper.gameMatrix[destinationX][destinationY].cellType.default != null
+                    && gameMatrixHelper.gameMatrix[destinationX][destinationY].cellType.default!!.javaClass == SpaceDef::class.java
+                    || gameMatrixHelper.gameMatrix[destinationX][destinationY].cellType.onVisible!!.javaClass == SpaceCell::class.java) {
+                gameMatrixHelper.oldXY = Axis(gameMatrixHelper.x, gameMatrixHelper.y)
                 entityMove.moveOnBoardAllyShip()
             } else {
-                val oldXY = HashMap<String, Int>()
-                oldXY["X"] = gameMatrixHelper.x
-                oldXY["Y"] = gameMatrixHelper.y
-                gameMatrixHelper.oldXY = oldXY
+                gameMatrixHelper.oldXY = Axis(gameMatrixHelper.x, gameMatrixHelper.y)
                 gameMatrixHelper.x = destinationX
                 gameMatrixHelper.y = destinationY
                 gameMatrixHelper.isEventMove = true
                 entityMove.movePlayer()
             }
         } else {
-            val oldXY = HashMap<String, Int>()
-            oldXY["X"] = gameMatrixHelper.x
-            oldXY["Y"] = gameMatrixHelper.y
-            gameMatrixHelper.oldXY = oldXY
+            gameMatrixHelper.oldXY = Axis(gameMatrixHelper.x, gameMatrixHelper.y)
             entityMove.moveOnBoardAllyShip()
         }
         return gameMatrixHelper
