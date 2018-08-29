@@ -1,21 +1,19 @@
 package com.silentgames.silent_planet.mvp.main
 
-import android.widget.Switch
-
 import com.silentgames.silent_planet.logic.Constants
 import com.silentgames.silent_planet.logic.TurnHandler
 import com.silentgames.silent_planet.model.Cell
 import com.silentgames.silent_planet.model.cells.CellType
 import com.silentgames.silent_planet.model.cells.defaultCell.GroundDef
 import com.silentgames.silent_planet.model.cells.defaultCell.SpaceDef
-import com.silentgames.silent_planet.model.cells.onVisible.Arrows.Arrow
-import com.silentgames.silent_planet.model.cells.onVisible.Arrows.Green
-import com.silentgames.silent_planet.model.cells.onVisible.Arrows.Red
-import com.silentgames.silent_planet.model.cells.onVisible.Arrows.Yellow
-import com.silentgames.silent_planet.model.cells.onVisible.Crystals.Two
+import com.silentgames.silent_planet.model.cells.onVisible.Arrow.Arrow
+import com.silentgames.silent_planet.model.cells.onVisible.Arrow.ArrowGreen
+import com.silentgames.silent_planet.model.cells.onVisible.Arrow.ArrowRed
+import com.silentgames.silent_planet.model.cells.onVisible.Arrow.ArrowYellow
+import com.silentgames.silent_planet.model.cells.onVisible.Crystal.Crystal
+import com.silentgames.silent_planet.model.cells.onVisible.Crystal.CrystalsEnum
 import com.silentgames.silent_planet.model.cells.onVisible.SpaceCell
 import com.silentgames.silent_planet.model.entities.EntityType
-import com.silentgames.silent_planet.model.entities.ground.Player
 import com.silentgames.silent_planet.model.entities.ground.PlayersOnCell
 import com.silentgames.silent_planet.model.entities.ground.fractions.Alien
 import com.silentgames.silent_planet.model.entities.ground.fractions.Human
@@ -25,14 +23,13 @@ import com.silentgames.silent_planet.model.entities.space.fractions.AlienShip
 import com.silentgames.silent_planet.model.entities.space.fractions.HumanShip
 import com.silentgames.silent_planet.model.entities.space.fractions.PirateShip
 import com.silentgames.silent_planet.model.entities.space.fractions.RobotShip
+import com.silentgames.silent_planet.model.fractions.FractionsType
 import com.silentgames.silent_planet.model.fractions.factionType.Aliens
 import com.silentgames.silent_planet.model.fractions.factionType.Humans
 import com.silentgames.silent_planet.model.fractions.factionType.Pirates
 import com.silentgames.silent_planet.model.fractions.factionType.Robots
 import com.silentgames.silent_planet.utils.BitmapEditor
-
-import java.util.ArrayList
-import java.util.Random
+import java.util.*
 
 /**
  * Created by gidroshvandel on 22.06.17.
@@ -40,20 +37,23 @@ import java.util.Random
 class MainModel {
 
     fun fillBattleGround(): Array<Array<Cell>> {
-        val CountOfCells = Constants.getHorizontalCountOfCells()
-        val gameMatrix = Array<Array<Cell?>>(Constants.getVerticalCountOfCells() + 1) { arrayOfNulls(Constants.getHorizontalCountOfCells() + 1) }
-        for (x in 0 until CountOfCells + 1) {
-            for (y in 0 until CountOfCells + 1) {
-                if (x == 0 || x == CountOfCells - 1 || y == 0 || y == CountOfCells - 1) {
-                    gameMatrix[x][y] = Cell(CellType(SpaceDef()), null)
-                    gameMatrix[x][y]!!.cellType.onVisible = SpaceCell()
+        val vCountOfCells = Constants.verticalCountOfCells
+        val hCountOfCells = Constants.horizontalCountOfCells
+        val gameMatrix = Array(hCountOfCells) { x ->
+            Array(vCountOfCells) { y ->
+                if (x == 0 || x == hCountOfCells - 1 || y == 0 || y == vCountOfCells - 1) {
+                    Cell(CellType(SpaceDef()), null).apply {
+                        cellType.onVisible = SpaceCell()
+                    }
                 } else {
-                    gameMatrix[x][y] = Cell(CellType(GroundDef()), null)
-                    gameMatrix[x][y]!!.cellType.onVisible = Two()
+                    Cell(CellType(GroundDef()), null).apply {
+//                        cellType.onVisible = ArrowGreen().rotate(x, y, BitmapEditor.RotateAngle.randomAngle())
+                        cellType.onVisible = Crystal(CrystalsEnum.random())
+                    }
                 }
             }
         }
-        spawnShips(gameMatrix as Array<Array<Cell>>)
+        spawnShips(gameMatrix)
         return gameMatrix
     }
 
@@ -119,9 +119,9 @@ class MainModel {
 
     private fun randomArrow(x: Int, y: Int): Arrow? {
         when (Random().nextInt(Constants.countArrowCells - 1)) {
-            0 -> return Green().rotate(x, y, BitmapEditor.RotateAngle.randomAngle())
-            1 -> return Red().rotate(x, y, BitmapEditor.RotateAngle.randomAngle())
-            2 -> return Yellow().rotate(x, y, BitmapEditor.RotateAngle.randomAngle())
+            0 -> return ArrowGreen().rotate(x, y, BitmapEditor.RotateAngle.randomAngle())
+            1 -> return ArrowRed().rotate(x, y, BitmapEditor.RotateAngle.randomAngle())
+            2 -> return ArrowYellow().rotate(x, y, BitmapEditor.RotateAngle.randomAngle())
             else -> return null
         }
     }

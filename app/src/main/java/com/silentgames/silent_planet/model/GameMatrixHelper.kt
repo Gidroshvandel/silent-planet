@@ -5,8 +5,7 @@ package com.silentgames.silent_planet.model
  */
 class GameMatrixHelper(
         var gameMatrix: Array<Array<Cell>>,
-        var x: Int = 0,
-        var y: Int = 0,
+        var currentXY: Axis = Axis(0, 0),
         var oldXY: Axis? = null,
         var playerName: String? = null,
         var isEventMove: Boolean = false) {
@@ -15,9 +14,9 @@ class GameMatrixHelper(
         get() = oldXY?.let { gameMatrix[it.x][it.y] }
 
     var gameMatrixCellByXY: Cell
-        get() = gameMatrix[x][y]
+        get() = gameMatrix[currentXY.x][currentXY.y]
         set(gameMatrixCell) {
-            this.gameMatrix[x][y] = gameMatrixCell
+            this.gameMatrix[currentXY.x][currentXY.y] = gameMatrixCell
         }
 
 

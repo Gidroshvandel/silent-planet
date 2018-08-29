@@ -99,8 +99,8 @@ class MainActivity : Activity(), MainContract.View, GameView.Callback {
 
     override fun drawGrid() {
         //рисуем сетку
-        val horizontalCountOfCells = Constants.getHorizontalCountOfCells()
-        val verticalCountOfCells = Constants.getVerticalCountOfCells()
+        val horizontalCountOfCells = Constants.horizontalCountOfCells
+        val verticalCountOfCells = Constants.verticalCountOfCells
         for (x in 0 until horizontalCountOfCells + 1)
             mCanvas.drawLine(x.toFloat() * Constants.getCanvasSize(this) / horizontalCountOfCells, 0f, x.toFloat() * Constants.getCanvasSize(this) / horizontalCountOfCells, Constants.getCanvasSize(this), paint)
         for (y in 0 until verticalCountOfCells + 1)
@@ -109,12 +109,16 @@ class MainActivity : Activity(), MainContract.View, GameView.Callback {
     }
 
     override fun drawBattleGround(gameMatrix: Array<Array<Cell>>) {
-
-        val horizontalCountOfCells = Constants.getHorizontalCountOfCells()
-        val verticalCountOfCells = Constants.getVerticalCountOfCells()
-        for (x in 0 until horizontalCountOfCells + 1) {
-            for (y in 0 until verticalCountOfCells + 1) {
-                mCanvas.drawBitmap(gameMatrix[x][y].cellType.bitmap, x.toFloat() * Constants.getCanvasSize(this) / verticalCountOfCells, y.toFloat() * Constants.getCanvasSize(this) / verticalCountOfCells, paint)
+        val horizontalCountOfCells = Constants.horizontalCountOfCells
+        val verticalCountOfCells = Constants.verticalCountOfCells
+        for (x in 0 until horizontalCountOfCells) {
+            for (y in 0 until verticalCountOfCells) {
+                mCanvas.drawBitmap(
+                        gameMatrix[x][y].cellType.bitmap,
+                        x.toFloat() * Constants.getCanvasSize(this) / horizontalCountOfCells,
+                        y.toFloat() * Constants.getCanvasSize(this) / verticalCountOfCells,
+                        paint
+                )
                 if (gameMatrix[x][y].entityType != null)
                     reDraw(x, y, gameMatrix[x][y].entityType!!.bitmap!!)
             }
@@ -187,8 +191,8 @@ class MainActivity : Activity(), MainContract.View, GameView.Callback {
     override fun onSingleTapConfirmed(event: MotionEvent) {
         val eventX = (event.x + gameView.scrollX) / mScaleFactor
         val eventY = (event.y + gameView.scrollY) / mScaleFactor
-        val x = (Constants.getHorizontalCountOfCells() * eventX / viewSize).toInt()
-        val y = (Constants.getVerticalCountOfCells() * eventY / viewSize).toInt()
+        val x = (Constants.horizontalCountOfCells * eventX / viewSize).toInt()
+        val y = (Constants.verticalCountOfCells * eventY / viewSize).toInt()
 
         presenter.onSingleTapConfirmed(x, y)
     }

@@ -1,4 +1,4 @@
-package com.silentgames.silent_planet.model.cells.onVisible.Arrows
+package com.silentgames.silent_planet.model.cells.onVisible.Arrow
 
 import com.silentgames.silent_planet.logic.Constants
 import com.silentgames.silent_planet.logic.EntityMove
@@ -8,8 +8,6 @@ import com.silentgames.silent_planet.model.cells.defaultCell.SpaceDef
 import com.silentgames.silent_planet.model.cells.onVisible.OnVisible
 import com.silentgames.silent_planet.model.cells.onVisible.SpaceCell
 import com.silentgames.silent_planet.utils.BitmapEditor
-
-import java.util.HashMap
 
 /**
  * Created by gidroshvandel on 09.12.16.
@@ -53,26 +51,25 @@ abstract class Arrow : OnVisible() {
             if (gameMatrixHelper.gameMatrix[destinationX][destinationY].cellType.default != null
                     && gameMatrixHelper.gameMatrix[destinationX][destinationY].cellType.default!!.javaClass == SpaceDef::class.java
                     || gameMatrixHelper.gameMatrix[destinationX][destinationY].cellType.onVisible!!.javaClass == SpaceCell::class.java) {
-                gameMatrixHelper.oldXY = Axis(gameMatrixHelper.x, gameMatrixHelper.y)
+                gameMatrixHelper.oldXY = gameMatrixHelper.currentXY
                 entityMove.moveOnBoardAllyShip()
             } else {
-                gameMatrixHelper.oldXY = Axis(gameMatrixHelper.x, gameMatrixHelper.y)
-                gameMatrixHelper.x = destinationX
-                gameMatrixHelper.y = destinationY
+                gameMatrixHelper.oldXY = gameMatrixHelper.currentXY
+                gameMatrixHelper.currentXY = Axis(destinationX, destinationY)
                 gameMatrixHelper.isEventMove = true
                 entityMove.movePlayer()
             }
         } else {
-            gameMatrixHelper.oldXY = Axis(gameMatrixHelper.x, gameMatrixHelper.y)
+            gameMatrixHelper.oldXY = gameMatrixHelper.currentXY
             entityMove.moveOnBoardAllyShip()
         }
         return gameMatrixHelper
     }
 
     private fun checkBorders(): Boolean {
-        return destinationX <= Constants.getVerticalCountOfCells() &&
+        return destinationX <= Constants.verticalCountOfCells &&
                 destinationX >= 0 &&
-                destinationY <= Constants.getHorizontalCountOfCells() &&
+                destinationY <= Constants.horizontalCountOfCells &&
                 destinationY >= 0
     }
 }

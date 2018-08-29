@@ -18,14 +18,7 @@ public class Constants {
     public static final float cellImageSize = 31;
     public static final float entityImageSize = 20;
     public static final int countArrowCells = 3;
-
-    public static int getHorizontalCountOfCells() {
-        return horizontalCountOfCells;
-    }
-
-    public static int getVerticalCountOfCells() {
-        return verticalCountOfCells;
-    }
+    public static final int countCrystalsToWin = 20;
 
     public static float getmScaleFactor() {
         return mScaleFactor;

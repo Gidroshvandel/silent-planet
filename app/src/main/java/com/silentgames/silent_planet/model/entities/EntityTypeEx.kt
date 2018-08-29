@@ -1,7 +1,6 @@
 package com.silentgames.silent_planet.model.entities
 
 import com.silentgames.silent_planet.model.fractions.Fractions
-import com.silentgames.silent_planet.model.fractions.FractionsEnum
 import com.silentgames.silent_planet.model.CellEx
 
 /**

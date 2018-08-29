@@ -1,7 +1,5 @@
 package com.silentgames.silent_planet.model.entities.ground.fractions
 
-import android.content.res.Resources
-
 import com.silentgames.silent_planet.R
 import com.silentgames.silent_planet.model.fractions.factionType.Aliens
 import com.silentgames.silent_planet.model.entities.ground.Player

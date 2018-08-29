@@ -1,7 +1,7 @@
 package com.silentgames.silent_planet.logic
 
 import com.silentgames.silent_planet.model.fractions.Fractions
-import com.silentgames.silent_planet.model.fractions.FractionsEnum
+import com.silentgames.silent_planet.model.fractions.FractionsType
 
 /**
  * Created by gidroshvandel on 26.09.16.
@@ -10,7 +10,7 @@ class TurnHandler {
     companion object {
 
         private var turnCount: Int = 0
-        var fraction: FractionsEnum? = null
+        lateinit var fractionType: FractionsType
 
         fun turnCount() {
             var turnCount = turnCount
@@ -19,8 +19,7 @@ class TurnHandler {
         }
 
         fun start(fraction: Fractions) {
-
-            this.fraction = fraction.fractionsEnum
+            this.fractionType = fraction.fractionsType
         }
 
         fun setPlayable(fraction: Fractions) {
@@ -28,7 +27,7 @@ class TurnHandler {
         }
 
         private fun nextPlayer() {
-            fraction = fraction!!.next()
+            fractionType = fractionType.next()
         }
     }
 }

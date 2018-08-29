@@ -7,10 +7,11 @@ import com.silentgames.silent_planet.logic.Constants;
 /**
  * Created by gidroshvandel on 07.07.16.
  */
+//todo доработать расчёты чтобы работало с разными сторонами поля
 public class Calculator {
 
-    public static float CellCenterNumeratorPoint(float cell, int viewSize){
-        int lineCountOfCells = Constants.getHorizontalCountOfCells();
+    private static float CellCenterNumeratorPoint(float cell, int viewSize){
+        int lineCountOfCells = Constants.horizontalCountOfCells;
         return ((1f/(2* lineCountOfCells))*viewSize+(1f/ lineCountOfCells)*cell*viewSize);
     }
 
