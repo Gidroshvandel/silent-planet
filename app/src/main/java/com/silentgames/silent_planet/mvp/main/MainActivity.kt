@@ -119,8 +119,8 @@ class MainActivity : Activity(), MainContract.View, GameView.Callback {
                         y.toFloat() * Constants.getCanvasSize(this) / verticalCountOfCells,
                         paint
                 )
-                if (gameMatrix[x][y].entityType != null)
-                    reDraw(x, y, gameMatrix[x][y].entityType!!.bitmap!!)
+                if (gameMatrix[x][y].entityType.isNotEmpty())
+                    reDraw(x, y, gameMatrix[x][y].entityType.first().bitmap)
             }
         }
         drawGrid()

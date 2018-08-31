@@ -3,8 +3,7 @@ package com.silentgames.silent_planet.logic
 import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.GameMatrixHelper
 import com.silentgames.silent_planet.model.entities.EntityType
-import com.silentgames.silent_planet.model.entities.ground.PlayersOnCell
-import com.silentgames.silent_planet.model.entities.ground.utils.DeadPlayer
+import com.silentgames.silent_planet.utils.*
 
 /**
  * Created by gidroshvandel on 23.09.16.
@@ -12,19 +11,20 @@ import com.silentgames.silent_planet.model.entities.ground.utils.DeadPlayer
 class EntityMove(private var gameMatrixHelper: GameMatrixHelper) {
 
     private val isEntityBelongFraction: Boolean
-        get() = gameMatrixHelper.gameMatrixCellByXY.entityType?.fraction === gameMatrixHelper.gameMatrixCellByOldXY?.entityType?.fraction
+        get() = gameMatrixHelper.gameMatrixCellByXY.entityType.first().fraction === gameMatrixHelper.gameMatrixCellByOldXY?.entityType?.first()?.fraction
 
     private val isCanMovePlayer: Boolean
-        get() = gameMatrixHelper.gameMatrixCellByOldXY?.entityType?.playersOnCell?.getPlayerByName(gameMatrixHelper.playerName!!)!!.isCanMove
+        get() = gameMatrixHelper.gameMatrixCellByOldXY?.entityType?.getPlayerByName(gameMatrixHelper.playerName!!)?.isCanMove
+                ?: false
 
     private val isCanFlyToCell: Boolean
-        get() = gameMatrixHelper.gameMatrixCellByOldXY?.entityType?.isCanFly == gameMatrixHelper.gameMatrixCellByXY.cellType.isCanFly
+        get() = gameMatrixHelper.gameMatrixCellByXY.cellType.isCanFly == gameMatrixHelper.gameMatrixCellByOldXY?.entityType?.getSpaceShip()?.isCanFly
 
-    private val entityTypeXY: EntityType
-        get() = gameMatrixHelper.gameMatrixCellByXY.entityType!!
+    private val entityTypeXY: MutableList<EntityType>
+        get() = gameMatrixHelper.gameMatrixCellByXY.entityType
 
-    private val entityTypeOldXY: EntityType?
-        get() = gameMatrixHelper.gameMatrixCellByOldXY?.entityType
+    private val entityTypeOldXY: MutableList<EntityType>
+        get() = gameMatrixHelper.gameMatrixCellByOldXY?.entityType ?: mutableListOf()
 
     fun canMove(): GameMatrixHelper? {
         return moveCheck()
@@ -40,7 +40,7 @@ class EntityMove(private var gameMatrixHelper: GameMatrixHelper) {
         val oldX = gameMatrixHelper.oldXY?.x ?: -1
         val oldY = gameMatrixHelper.oldXY?.y ?: -1
         if (isMoveAtDistance(x, y, oldX, oldY) && isPlayable(oldX, oldY) && isCurrentPlayer(oldX, oldY)) {
-            if (isSpaceShip(oldX, oldY) && gameMatrixHelper.gameMatrixCellByOldXY?.entityType?.spaceShip!!.isCanFly && !isSpaceShip(x, y)) {
+            if (isSpaceShip(oldX, oldY) && gameMatrixHelper.gameMatrixCellByOldXY?.entityType?.getSpaceShip()?.isCanFly == true && !isSpaceShip(x, y)) {
                 if (isCanFlyToCell) {
                     moveShip()
                     TurnHandler.turnCount()
@@ -68,27 +68,27 @@ class EntityMove(private var gameMatrixHelper: GameMatrixHelper) {
     }
 
     private fun isCurrentPlayer(x: Int, y: Int): Boolean {
-        return getEntityType(x, y)!!.fraction?.fractionsType == TurnHandler.fractionType
+        return getEntityType(x, y).firstOrNull { it.fraction.fractionsType == TurnHandler.fractionType } != null
     }
 
     private fun isPlayable(x: Int, y: Int): Boolean {
-        return getEntityType(x, y)!!.fraction?.isPlayable!!
+        return getEntityType(x, y).firstOrNull { it.fraction.isPlayable } != null
     }
 
-    private fun event(x: Int, y: Int) {
-        if (gameMatrixHelper.gameMatrixCellByXY.cellType.isDead && !getEntityType(x, y)!!.isDead) {
-            val playerList = PlayersOnCell()
-            playerList.add(DeadPlayer(getEntityType(x, y)!!.playersOnCell?.playerList!![0]))
-            gameMatrixHelper.gameMatrixCellByXY.entityType = EntityType(playerList)
-        }
-    }
+//    private fun event(x: Int, y: Int) {
+//        if (gameMatrixHelper.gameMatrixCellByXY.cellType.isDead && !getEntityType(x, y)!!.isDead) {
+//            val playerList = PlayersOnCell()
+//            playerList.add(DeadPlayer(getEntityType(x, y)!!.playersOnCell.playerList!![0]))
+//            gameMatrixHelper.gameMatrixCellByXY.entityType = EntityType(playerList)
+//        }
+//    }
 
     private fun moveOnBoard() {
         val player = gameMatrixHelper.playerName?.let {
-            entityTypeOldXY?.playersOnCell?.getPlayerByName(it)
+            entityTypeOldXY.getPlayerByName(it)
         }
-        entityTypeXY.spaceShip?.crystals = player!!.crystals
-        entityTypeXY.playersOnCell?.add(player.apply { crystals = 0 })
+        entityTypeXY.getSpaceShip()?.crystals = player!!.crystals
+        entityTypeXY.getSpaceShip()?.playersOnBord?.add(player.apply { crystals = 0 })
         deletePlayer()
     }
 
@@ -101,7 +101,7 @@ class EntityMove(private var gameMatrixHelper: GameMatrixHelper) {
     private fun findAllyShip(): Axis? {
         gameMatrixHelper.gameMatrix.forEachIndexed { x, arrayOfCells ->
             val y = arrayOfCells.indexOfFirst {
-                it.entityType?.spaceShip?.fraction?.fractionsType == TurnHandler.fractionType
+                it.entityType.getSpaceShip()?.fraction?.fractionsType == TurnHandler.fractionType
             }
             if (y != -1) {
                 return Axis(x, y)
@@ -111,59 +111,51 @@ class EntityMove(private var gameMatrixHelper: GameMatrixHelper) {
     }
 
     private fun moveFromBoard() {
-        val selectPlayer = PlayersOnCell()
-        selectPlayer.add(gameMatrixHelper.gameMatrixCellByOldXY?.entityType?.playersOnCell?.getPlayerByName(gameMatrixHelper.playerName!!)!!)
+        val selectPlayer = gameMatrixHelper.gameMatrixCellByOldXY?.entityType?.getPlayerByName(gameMatrixHelper.playerName!!)
 
-        gameMatrixHelper.gameMatrixCellByXY.addEntityType(EntityType(selectPlayer))
+        gameMatrixHelper.gameMatrixCellByXY.entityType.add(selectPlayer!!)
         gameMatrixHelper.gameMatrixCellByXY.cellType.isVisible = true
         deletePlayerOnBoard()
     }
 
-    private fun deleteEntity(x: Int, y: Int) {
-        gameMatrixHelper.gameMatrix[x][y].entityType = null
-    }
+//    private fun deleteEntity(x: Int, y: Int) {
+//        gameMatrixHelper.gameMatrix[x][y].entityType = null
+//    }
 
+    //todo объединить
     private fun deletePlayer() {
-        if (entityTypeOldXY?.playersOnCell?.playerList?.size == 1) {
-            gameMatrixHelper.gameMatrixCellByOldXY?.entityType = null
-        } else {
-            entityTypeOldXY?.playersOnCell?.removePlayerByName(gameMatrixHelper.playerName!!)
-        }
+        entityTypeOldXY.removePlayerByName(gameMatrixHelper.playerName!!)
     }
 
+    //todo объединить
     private fun deletePlayerOnBoard() {
-        if (entityTypeOldXY?.playersOnCell?.playerList!!.size == 1) {
-            entityTypeOldXY?.playersOnCell?.playerList = null
-        } else {
-            entityTypeOldXY?.playersOnCell?.removePlayerByName(gameMatrixHelper.playerName!!)
-        }
+        entityTypeOldXY.removePlayerByName(gameMatrixHelper.playerName!!)
     }
 
     fun movePlayer() {
 
-        val selectPlayer = PlayersOnCell()
-        selectPlayer.add(entityTypeOldXY?.playersOnCell?.getPlayerByName(gameMatrixHelper.playerName!!)!!)
+        val selectPlayer = entityTypeOldXY.getPlayerByName(gameMatrixHelper.playerName!!)
 
-        gameMatrixHelper.gameMatrixCellByXY.addEntityType(EntityType(selectPlayer))
+        gameMatrixHelper.gameMatrixCellByXY.entityType.add(selectPlayer!!)
         gameMatrixHelper.gameMatrixCellByXY.cellType.isVisible = true
         deletePlayer()
     }
 
     private fun moveShip() {
-        gameMatrixHelper.gameMatrixCellByXY.addEntityType(gameMatrixHelper.gameMatrixCellByOldXY?.entityType!!)
+        gameMatrixHelper.gameMatrixCellByXY.entityType = gameMatrixHelper.gameMatrixCellByOldXY?.entityType!!
         gameMatrixHelper.gameMatrixCellByXY.cellType.isVisible = true
-        gameMatrixHelper.gameMatrixCellByOldXY?.entityType = null
+        gameMatrixHelper.gameMatrixCellByOldXY?.entityType?.removeSpaceShip()
     }
 
     private fun isSpaceShip(x: Int, y: Int): Boolean {
-        return getEntityType(x, y) != null && getEntityType(x, y)!!.spaceShip != null
+        return getEntityType(x, y).getSpaceShip() != null
     }
 
     private fun isPlayer(x: Int, y: Int): Boolean {
-        return getEntityType(x, y) != null && getEntityType(x, y)!!.playersOnCell != null && getEntityType(x, y)!!.playersOnCell?.playerList?.size ?: 0 != 0
+        return getEntityType(x, y).getAllPlayersFromCell().isNotEmpty()
     }
 
-    private fun getEntityType(x: Int, y: Int): EntityType? {
+    private fun getEntityType(x: Int, y: Int): MutableList<EntityType> {
         return gameMatrixHelper.gameMatrix[x][y].entityType
     }
 

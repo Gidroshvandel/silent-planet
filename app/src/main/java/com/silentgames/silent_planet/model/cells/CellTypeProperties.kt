@@ -6,7 +6,7 @@ import com.silentgames.silent_planet.model.CellProperties
 /**
  * Created by gidroshvandel on 27.09.16.
  */
-interface CellTypeEx : CellProperties {
+interface CellTypeProperties : CellProperties {
 
     var closeBitmap: Bitmap
     var isVisible: Boolean

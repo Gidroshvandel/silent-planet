@@ -10,12 +10,12 @@ import com.silentgames.silent_planet.model.cells.Arrow.ArrowYellow
 import com.silentgames.silent_planet.model.cells.Crystal.Crystal
 import com.silentgames.silent_planet.model.cells.Crystal.CrystalsEnum
 import com.silentgames.silent_planet.model.cells.SpaceCell
-import com.silentgames.silent_planet.model.entities.EntityType
-import com.silentgames.silent_planet.model.entities.ground.PlayersOnCell
+import com.silentgames.silent_planet.model.entities.ground.Player
 import com.silentgames.silent_planet.model.entities.ground.fractions.Alien
 import com.silentgames.silent_planet.model.entities.ground.fractions.Human
 import com.silentgames.silent_planet.model.entities.ground.fractions.Pirate
 import com.silentgames.silent_planet.model.entities.ground.fractions.Robot
+import com.silentgames.silent_planet.model.entities.space.SpaceShip
 import com.silentgames.silent_planet.model.entities.space.fractions.AlienShip
 import com.silentgames.silent_planet.model.entities.space.fractions.HumanShip
 import com.silentgames.silent_planet.model.entities.space.fractions.PirateShip
@@ -38,10 +38,9 @@ class MainModel {
         val gameMatrix = Array(hCountOfCells) { x ->
             Array(vCountOfCells) { y ->
                 if (x == 0 || x == hCountOfCells - 1 || y == 0 || y == vCountOfCells - 1) {
-                    Cell(SpaceCell(), null)
+                    Cell(SpaceCell())
                 } else {
-                    Cell(Crystal(CrystalsEnum.random()), null)
-//                    Cell(ArrowGreen().rotate(x, y, BitmapEditor.RotateAngle.randomAngle()), null)
+                    Cell(Crystal(CrystalsEnum.random()))
                 }
             }
         }
@@ -49,12 +48,16 @@ class MainModel {
         return gameMatrix
     }
 
-    fun findPlayerOnCell(gameMatrixCell: Cell): List<String> {
+    fun getPlayersNameOnCell(gameMatrixCell: Cell): List<String> {
         val data = ArrayList<String>()
 
-        if (gameMatrixCell.entityType!!.playersOnCell != null && gameMatrixCell.entityType!!.playersOnCell!!.getPlayerList() != null) {
-            for (player in gameMatrixCell.entityType!!.playersOnCell!!.getPlayerList()!!) {
-                data.add(player.playerName!!)
+        if (gameMatrixCell.entityType.isNotEmpty()) {
+            for (entityType in gameMatrixCell.entityType) {
+                if (entityType is SpaceShip) {
+                    entityType.playersOnBord.forEach { data.add(it.playerName) }
+                } else if (entityType is Player) {
+                    data.add(entityType.playerName)
+                }
             }
         }
         return data
@@ -73,40 +76,47 @@ class MainModel {
     }
 
     private fun spawnRobots(gameMatrixCell: Cell) {
-        val playerList = PlayersOnCell()
-        playerList.add(Robot("Maxim"))
-        playerList.add(Robot("Oxik"))
-        playerList.add(Robot("Andrea"))
-        gameMatrixCell.entityType = EntityType(RobotShip())
-        gameMatrixCell.entityType!!.playersOnCell = playerList
+        val playerList = mutableListOf(
+                Robot("Maxim"),
+                Robot("Oxik"),
+                Robot("Andrea")
+        )
+        gameMatrixCell.entityType.add(RobotShip().apply {
+            playersOnBord = playerList.toMutableList()
+        })
     }
 
     private fun spawnAliens(gameMatrixCell: Cell) {
-        val playerList = PlayersOnCell()
-        playerList.add(Alien("Maxim"))
-        playerList.add(Alien("Oxik"))
-        playerList.add(Alien("Andrea"))
-        gameMatrixCell.entityType = EntityType(AlienShip())
-        gameMatrixCell.entityType!!.playersOnCell = playerList
+        val playerList = mutableListOf(
+                Alien("Maxim"),
+                Alien("Oxik"),
+                Alien("Andrea")
+        )
+        gameMatrixCell.entityType.add(AlienShip().apply {
+            playersOnBord = playerList.toMutableList()
+        })
     }
 
     private fun spawnPirates(gameMatrixCell: Cell) {
-        val playerList = PlayersOnCell()
-        playerList.add(Pirate("Maxim"))
-        playerList.add(Pirate("Oxik"))
-        playerList.add(Pirate("Andrea"))
-        gameMatrixCell.entityType = EntityType(PirateShip())
-        gameMatrixCell.entityType!!.playersOnCell = playerList
+        val playerList = mutableListOf(
+                Pirate("Maxim"),
+                Pirate("Oxik"),
+                Pirate("Andrea")
+        )
+        gameMatrixCell.entityType.add(PirateShip().apply {
+            playersOnBord = playerList.toMutableList()
+        })
     }
 
     private fun spawnHumans(gameMatrixCell: Cell) {
-        val playerList = PlayersOnCell()
-
-        playerList.add(Human("Maxim"))
-        playerList.add(Human("Oxik"))
-        playerList.add(Human("Andrea"))
-        gameMatrixCell.entityType = EntityType(HumanShip())
-        gameMatrixCell.entityType!!.playersOnCell = playerList
+        val playerList = mutableListOf(
+                Human("Maxim"),
+                Human("Oxik"),
+                Human("Andrea")
+        )
+        gameMatrixCell.entityType.add(HumanShip().apply {
+            playersOnBord = playerList.toMutableList()
+        })
     }
 
     private fun randomArrow(x: Int, y: Int): Arrow? {

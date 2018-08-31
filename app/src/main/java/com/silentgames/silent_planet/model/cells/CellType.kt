@@ -9,12 +9,12 @@ import com.silentgames.silent_planet.utils.BitmapEditor
  * Created by gidroshvandel on 09.07.16.
  */
 abstract class CellType(
-        var crystals: Int = 0,
+        override var crystals: Int = 0,
         override var closeBitmap: Bitmap = BitmapEditor.getCellBitmap(R.drawable.planet_background),
         override var isCanFly: Boolean = false,
         override var isDead: Boolean = false,
         override var isVisible: Boolean = false
-) : CellTypeEx {
+) : CellTypeProperties {
 
     abstract fun doEvent(gameMatrixHelper: GameMatrixHelper): GameMatrixHelper
 

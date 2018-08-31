@@ -6,6 +6,8 @@ import com.silentgames.silent_planet.logic.EntityMove
 import com.silentgames.silent_planet.logic.TurnHandler
 import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.GameMatrixHelper
+import com.silentgames.silent_planet.utils.getPlayerByName
+import com.silentgames.silent_planet.utils.getSpaceShip
 
 
 /**
@@ -35,13 +37,13 @@ class MainPresenter internal constructor(
         if (!overZeroCrystals()) {
             view.enableButton(false)
         }
-        if (viewModel.gameMatrixHelper.gameMatrixCellByXY.entityType?.spaceShip != null) {
+        if (viewModel.gameMatrixHelper.gameMatrixCellByXY.entityType.getSpaceShip() != null) {
             view.setImageCrystalText(
-                    viewModel.gameMatrixHelper.gameMatrixCellByXY.entityType!!.spaceShip!!.crystals.toString())
+                    viewModel.gameMatrixHelper.gameMatrixCellByXY.entityType.getSpaceShip()!!.crystals.toString())
         } else {
             if (viewModel.gameMatrixHelper.playerName != null)
                 view.setImageCrystalText(
-                        viewModel.gameMatrixHelper.gameMatrixCellByXY.entityType?.playersOnCell?.getPlayerByName(viewModel.gameMatrixHelper.playerName!!)!!.crystals.toString())
+                        viewModel.gameMatrixHelper.gameMatrixCellByXY.entityType.getPlayerByName(viewModel.gameMatrixHelper.playerName!!)!!.crystals.toString())
         }
     }
 
@@ -63,7 +65,7 @@ class MainPresenter internal constructor(
         val entityType = viewModel.gameMatrixHelper.gameMatrixCellByXY.entityType
 
         if (oldXY == null || isClickForCurrentPosition) {
-            if (entityType != null && !viewModel.isDoubleClick) {
+            if (entityType.isNotEmpty() && !viewModel.isDoubleClick) {
                 selectEntity(currentXY, name)
             } else {
                 selectCell()
@@ -80,16 +82,16 @@ class MainPresenter internal constructor(
     private fun selectEntity(currentXY: Axis, name: String?) {
         val en = viewModel.gameMatrixHelper.gameMatrixCellByXY.entityType
         viewModel.isDoubleClick = true
-        if (en?.spaceShip != null) {
-            view.setImageCrystalText(en.spaceShip!!.crystals.toString())
+        if (en.getSpaceShip() != null) {
+            view.setImageCrystalText(en.getSpaceShip()!!.crystals.toString())
         }
         if (name == null) {
-            view.showCellListItem(currentXY.x, currentXY.y, model.findPlayerOnCell(viewModel.gameMatrixHelper.gameMatrixCellByXY))
+            view.showCellListItem(currentXY.x, currentXY.y, model.getPlayersNameOnCell(viewModel.gameMatrixHelper.gameMatrixCellByXY))
         }
         if (name != null) {
             viewModel.gameMatrixHelper.playerName = name
-            if (en?.spaceShip == null) {
-                view.setImageCrystalText(en?.playersOnCell?.getPlayerByName(name)!!.crystals.toString())
+            if (en.getSpaceShip() == null) {
+                view.setImageCrystalText(en.getPlayerByName(name)!!.crystals.toString())
             }
         }
         if (overZeroCrystals()) {
@@ -97,7 +99,7 @@ class MainPresenter internal constructor(
         } else {
             view.enableButton(false)
         }
-        viewModel.gameMatrixHelper.gameMatrixCellByXY.entityType?.let { view.showObjectIcon(it) }
+        viewModel.gameMatrixHelper.gameMatrixCellByXY.entityType.let { view.showObjectIcon(it.first()) }
         viewModel.gameMatrixHelper.oldXY = currentXY
     }
 
@@ -150,7 +152,7 @@ class MainPresenter internal constructor(
         val cellType = gameMatrixHelper.gameMatrixCellByXY.cellType
 
         if (cellType.crystals > 0) {
-            entityType?.playersOnCell?.getPlayerByName(gameMatrixHelper.playerName!!)!!.crystals = entityType.playersOnCell?.getPlayerByName(gameMatrixHelper.playerName!!)!!.crystals + 1
+            entityType.getPlayerByName(gameMatrixHelper.playerName!!)!!.crystals = entityType.getPlayerByName(gameMatrixHelper.playerName!!)!!.crystals + 1
             cellType.crystals = cellType.crystals - 1
         }
         return gameMatrixHelper
