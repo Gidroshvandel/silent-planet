@@ -142,7 +142,7 @@ class EntityMove(private var gameMatrixHelper: GameMatrixHelper) {
     }
 
     private fun moveShip() {
-        gameMatrixHelper.gameMatrixCellByXY.entityType = gameMatrixHelper.gameMatrixCellByOldXY?.entityType!!
+        gameMatrixHelper.gameMatrixCellByXY.entityType.add(entityTypeOldXY.getSpaceShip()!!)
         gameMatrixHelper.gameMatrixCellByXY.cellType.isVisible = true
         gameMatrixHelper.gameMatrixCellByOldXY?.entityType?.removeSpaceShip()
     }
