@@ -114,7 +114,7 @@ class MainActivity : Activity(), MainContract.View, GameView.Callback {
         for (x in 0 until horizontalCountOfCells) {
             for (y in 0 until verticalCountOfCells) {
                 mCanvas.drawBitmap(
-                        gameMatrix[x][y].cellType.bitmap,
+                        gameMatrix[x][y].cellType.getVisibleBitmap(),
                         x.toFloat() * Constants.getCanvasSize(this) / horizontalCountOfCells,
                         y.toFloat() * Constants.getCanvasSize(this) / verticalCountOfCells,
                         paint

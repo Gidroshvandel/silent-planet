@@ -1,15 +1,11 @@
 package com.silentgames.silent_planet.mvp.main
 
-import android.os.Handler
 import com.silentgames.silent_planet.App
 import com.silentgames.silent_planet.R
 import com.silentgames.silent_planet.logic.EntityMove
 import com.silentgames.silent_planet.logic.TurnHandler
 import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.GameMatrixHelper
-import android.content.ContentValues.TAG
-
-
 
 
 /**
@@ -78,7 +74,7 @@ class MainPresenter internal constructor(
     }
 
     private fun overZeroCrystals(): Boolean {
-        return viewModel.gameMatrixHelper.gameMatrixCellByXY.cellType.onVisible!!.crystals > 0
+        return viewModel.gameMatrixHelper.gameMatrixCellByXY.cellType.crystals > 0
     }
 
     private fun selectEntity(currentXY: Axis, name: String?) {
@@ -108,8 +104,8 @@ class MainPresenter internal constructor(
     private fun selectCell() {
         view.enableButton(false)
         val cellType = viewModel.gameMatrixHelper.gameMatrixCellByXY.cellType
-        if (cellType.default == null) {
-            view.setImageCrystalText(cellType.onVisible?.crystals.toString())
+        if (cellType.isVisible) {
+            view.setImageCrystalText(cellType.crystals.toString())
         }
         view.showObjectIcon(viewModel.gameMatrixHelper.gameMatrixCellByXY.cellType)
         view.hideCellListItem()
@@ -153,9 +149,9 @@ class MainPresenter internal constructor(
         val entityType = gameMatrixHelper.gameMatrixCellByXY.entityType
         val cellType = gameMatrixHelper.gameMatrixCellByXY.cellType
 
-        if (cellType.onVisible!!.crystals > 0) {
+        if (cellType.crystals > 0) {
             entityType?.playersOnCell?.getPlayerByName(gameMatrixHelper.playerName!!)!!.crystals = entityType.playersOnCell?.getPlayerByName(gameMatrixHelper.playerName!!)!!.crystals + 1
-            cellType.onVisible!!.crystals = cellType.onVisible!!.crystals - 1
+            cellType.crystals = cellType.crystals - 1
         }
         return gameMatrixHelper
     }

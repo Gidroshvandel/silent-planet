@@ -6,6 +6,9 @@ import android.graphics.Bitmap
 /**
  * Created by gidroshvandel on 09.07.16.
  */
+@Deprecated(
+        message = "Use CellProperties",
+        level = DeprecationLevel.WARNING)
 abstract class CellEx {
 
     var bitmap: Bitmap? = null

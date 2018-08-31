@@ -3,16 +3,13 @@ package com.silentgames.silent_planet.mvp.main
 import com.silentgames.silent_planet.logic.Constants
 import com.silentgames.silent_planet.logic.TurnHandler
 import com.silentgames.silent_planet.model.Cell
-import com.silentgames.silent_planet.model.cells.CellType
-import com.silentgames.silent_planet.model.cells.defaultCell.GroundDef
-import com.silentgames.silent_planet.model.cells.defaultCell.SpaceDef
-import com.silentgames.silent_planet.model.cells.onVisible.Arrow.Arrow
-import com.silentgames.silent_planet.model.cells.onVisible.Arrow.ArrowGreen
-import com.silentgames.silent_planet.model.cells.onVisible.Arrow.ArrowRed
-import com.silentgames.silent_planet.model.cells.onVisible.Arrow.ArrowYellow
-import com.silentgames.silent_planet.model.cells.onVisible.Crystal.Crystal
-import com.silentgames.silent_planet.model.cells.onVisible.Crystal.CrystalsEnum
-import com.silentgames.silent_planet.model.cells.onVisible.SpaceCell
+import com.silentgames.silent_planet.model.cells.Arrow.Arrow
+import com.silentgames.silent_planet.model.cells.Arrow.ArrowGreen
+import com.silentgames.silent_planet.model.cells.Arrow.ArrowRed
+import com.silentgames.silent_planet.model.cells.Arrow.ArrowYellow
+import com.silentgames.silent_planet.model.cells.Crystal.Crystal
+import com.silentgames.silent_planet.model.cells.Crystal.CrystalsEnum
+import com.silentgames.silent_planet.model.cells.SpaceCell
 import com.silentgames.silent_planet.model.entities.EntityType
 import com.silentgames.silent_planet.model.entities.ground.PlayersOnCell
 import com.silentgames.silent_planet.model.entities.ground.fractions.Alien
@@ -23,7 +20,6 @@ import com.silentgames.silent_planet.model.entities.space.fractions.AlienShip
 import com.silentgames.silent_planet.model.entities.space.fractions.HumanShip
 import com.silentgames.silent_planet.model.entities.space.fractions.PirateShip
 import com.silentgames.silent_planet.model.entities.space.fractions.RobotShip
-import com.silentgames.silent_planet.model.fractions.FractionsType
 import com.silentgames.silent_planet.model.fractions.factionType.Aliens
 import com.silentgames.silent_planet.model.fractions.factionType.Humans
 import com.silentgames.silent_planet.model.fractions.factionType.Pirates
@@ -42,14 +38,10 @@ class MainModel {
         val gameMatrix = Array(hCountOfCells) { x ->
             Array(vCountOfCells) { y ->
                 if (x == 0 || x == hCountOfCells - 1 || y == 0 || y == vCountOfCells - 1) {
-                    Cell(CellType(SpaceDef()), null).apply {
-                        cellType.onVisible = SpaceCell()
-                    }
+                    Cell(SpaceCell(), null)
                 } else {
-                    Cell(CellType(GroundDef()), null).apply {
-//                        cellType.onVisible = ArrowGreen().rotate(x, y, BitmapEditor.RotateAngle.randomAngle())
-                        cellType.onVisible = Crystal(CrystalsEnum.random())
-                    }
+                    Cell(Crystal(CrystalsEnum.random()), null)
+//                    Cell(ArrowGreen().rotate(x, y, BitmapEditor.RotateAngle.randomAngle()), null)
                 }
             }
         }

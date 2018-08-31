@@ -1,14 +1,14 @@
 package com.silentgames.silent_planet.model.cells
 
-import com.silentgames.silent_planet.model.CellEx
+import android.graphics.Bitmap
+import com.silentgames.silent_planet.model.CellProperties
 
 /**
  * Created by gidroshvandel on 27.09.16.
  */
-abstract class CellTypeEx : CellEx() {
+interface CellTypeEx : CellProperties {
 
-    protected var all: CellTypeEx
-        get() = this
-        set(cellEx) = super.setAll(cellEx)
+    var closeBitmap: Bitmap
+    var isVisible: Boolean
 
 }

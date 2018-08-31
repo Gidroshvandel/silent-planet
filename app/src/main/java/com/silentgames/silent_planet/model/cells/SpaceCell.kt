@@ -1,20 +1,17 @@
-package com.silentgames.silent_planet.model.cells.onVisible
+package com.silentgames.silent_planet.model.cells
 
-import android.content.res.Resources
-
+import android.graphics.Bitmap
 import com.silentgames.silent_planet.R
-import com.silentgames.silent_planet.model.Cell
 import com.silentgames.silent_planet.model.GameMatrixHelper
 import com.silentgames.silent_planet.utils.BitmapEditor
 
 /**
  * Created by gidroshvandel on 07.07.16.
  */
-class SpaceCell : OnVisible() {
-    init {
-        super.bitmap = BitmapEditor.getCellBitmap(R.drawable.space_texture)
-        super.isCanFly = true
-    }
+class SpaceCell(
+        override var bitmap: Bitmap = BitmapEditor.getCellBitmap(R.drawable.space_texture),
+        override var isCanMove: Boolean = false
+) : CellType(isCanFly = true, closeBitmap = BitmapEditor.getCellBitmap(R.drawable.space_texture)) {
 
     override fun doEvent(gameMatrixHelper: GameMatrixHelper): GameMatrixHelper {
         return gameMatrixHelper

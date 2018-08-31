@@ -2,7 +2,6 @@ package com.silentgames.silent_planet.logic
 
 import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.GameMatrixHelper
-import com.silentgames.silent_planet.model.cells.CellType
 import com.silentgames.silent_planet.model.entities.EntityType
 import com.silentgames.silent_planet.model.entities.ground.PlayersOnCell
 import com.silentgames.silent_planet.model.entities.ground.utils.DeadPlayer
@@ -32,7 +31,7 @@ class EntityMove(private var gameMatrixHelper: GameMatrixHelper) {
     }
 
     fun doEvent(): GameMatrixHelper {
-        return gameMatrixHelper.gameMatrixCellByXY.cellType.onVisible!!.doEvent(gameMatrixHelper)
+        return gameMatrixHelper.gameMatrixCellByXY.cellType.doEvent(gameMatrixHelper)
     }
 
     private fun moveCheck(): GameMatrixHelper? {
@@ -47,14 +46,14 @@ class EntityMove(private var gameMatrixHelper: GameMatrixHelper) {
                     TurnHandler.turnCount()
                 } else if (gameMatrixHelper.playerName != null) {
                     moveFromBoard()
-                    gameMatrixHelper = gameMatrixHelper.gameMatrixCellByXY.cellType.onVisible?.doEvent(gameMatrixHelper)!!
+                    gameMatrixHelper = gameMatrixHelper.gameMatrixCellByXY.cellType.doEvent(gameMatrixHelper)
                     TurnHandler.turnCount()
                 }
             } else if (isPlayer(oldX, oldY)) {
                 if (isCanMovePlayer) {
-                    if (isCanMovePlayer == gameMatrixHelper.gameMatrixCellByXY.cellType.onVisible!!.isCanMove) {
+                    if (isCanMovePlayer == gameMatrixHelper.gameMatrixCellByXY.cellType.isCanMove) {
                         movePlayer()
-                        gameMatrixHelper = gameMatrixHelper.gameMatrixCellByXY.cellType.onVisible?.doEvent(gameMatrixHelper)!!
+                        gameMatrixHelper = gameMatrixHelper.gameMatrixCellByXY.cellType.doEvent(gameMatrixHelper)
                         TurnHandler.turnCount()
                     } else if (isSpaceShip(x, y) && isEntityBelongFraction) {
                         moveOnBoard()
@@ -116,7 +115,7 @@ class EntityMove(private var gameMatrixHelper: GameMatrixHelper) {
         selectPlayer.add(gameMatrixHelper.gameMatrixCellByOldXY?.entityType?.playersOnCell?.getPlayerByName(gameMatrixHelper.playerName!!)!!)
 
         gameMatrixHelper.gameMatrixCellByXY.addEntityType(EntityType(selectPlayer))
-        gameMatrixHelper.gameMatrixCellByXY.cellType = CellType(gameMatrixHelper.gameMatrixCellByXY.cellType.onVisible!!)
+        gameMatrixHelper.gameMatrixCellByXY.cellType.isVisible = true
         deletePlayerOnBoard()
     }
 
@@ -146,13 +145,13 @@ class EntityMove(private var gameMatrixHelper: GameMatrixHelper) {
         selectPlayer.add(entityTypeOldXY?.playersOnCell?.getPlayerByName(gameMatrixHelper.playerName!!)!!)
 
         gameMatrixHelper.gameMatrixCellByXY.addEntityType(EntityType(selectPlayer))
-        gameMatrixHelper.gameMatrixCellByXY.cellType = CellType(gameMatrixHelper.gameMatrixCellByXY.cellType.onVisible!!)
+        gameMatrixHelper.gameMatrixCellByXY.cellType.isVisible = true
         deletePlayer()
     }
 
     private fun moveShip() {
         gameMatrixHelper.gameMatrixCellByXY.addEntityType(gameMatrixHelper.gameMatrixCellByOldXY?.entityType!!)
-        gameMatrixHelper.gameMatrixCellByXY.cellType = CellType(gameMatrixHelper.gameMatrixCellByXY.cellType.onVisible!!)
+        gameMatrixHelper.gameMatrixCellByXY.cellType.isVisible = true
         gameMatrixHelper.gameMatrixCellByOldXY?.entityType = null
     }
 

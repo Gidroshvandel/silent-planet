@@ -1,4 +1,4 @@
-package com.silentgames.silent_planet.model.cells.onVisible.Crystal
+package com.silentgames.silent_planet.model.cells.Crystal
 
 import android.graphics.Bitmap
 import com.silentgames.silent_planet.R

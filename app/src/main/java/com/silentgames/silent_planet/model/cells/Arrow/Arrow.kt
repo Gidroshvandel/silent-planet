@@ -1,23 +1,23 @@
-package com.silentgames.silent_planet.model.cells.onVisible.Arrow
+package com.silentgames.silent_planet.model.cells.Arrow
 
 import com.silentgames.silent_planet.logic.Constants
 import com.silentgames.silent_planet.logic.EntityMove
 import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.GameMatrixHelper
-import com.silentgames.silent_planet.model.cells.defaultCell.SpaceDef
-import com.silentgames.silent_planet.model.cells.onVisible.OnVisible
-import com.silentgames.silent_planet.model.cells.onVisible.SpaceCell
+import com.silentgames.silent_planet.model.cells.CellType
+import com.silentgames.silent_planet.model.cells.SpaceCell
 import com.silentgames.silent_planet.utils.BitmapEditor
 
 /**
  * Created by gidroshvandel on 09.12.16.
  */
-abstract class Arrow : OnVisible() {
-
-    var rotateAngle: BitmapEditor.RotateAngle? = null
-    var destinationX: Int = 0
-    var destinationY: Int = 0
-    var distance: Int = 0
+abstract class Arrow(
+        var rotateAngle: BitmapEditor.RotateAngle,
+        override var isCanMove: Boolean = true,
+        var destinationX: Int = 0,
+        var destinationY: Int = 0,
+        var distance: Int = 0
+) : CellType() {
 
     open fun rotate(x: Int, y: Int, rotateAngle: BitmapEditor.RotateAngle): Arrow {
         when (rotateAngle) {
@@ -48,9 +48,8 @@ abstract class Arrow : OnVisible() {
     override fun doEvent(gameMatrixHelper: GameMatrixHelper): GameMatrixHelper {
         val entityMove = EntityMove(gameMatrixHelper)
         if (checkBorders()) {
-            if (gameMatrixHelper.gameMatrix[destinationX][destinationY].cellType.default != null
-                    && gameMatrixHelper.gameMatrix[destinationX][destinationY].cellType.default!!.javaClass == SpaceDef::class.java
-                    || gameMatrixHelper.gameMatrix[destinationX][destinationY].cellType.onVisible!!.javaClass == SpaceCell::class.java) {
+            if (!gameMatrixHelper.gameMatrix[destinationX][destinationY].cellType.isVisible
+                    && gameMatrixHelper.gameMatrix[destinationX][destinationY].cellType == SpaceCell::class) {
                 gameMatrixHelper.oldXY = gameMatrixHelper.currentXY
                 entityMove.moveOnBoardAllyShip()
             } else {
