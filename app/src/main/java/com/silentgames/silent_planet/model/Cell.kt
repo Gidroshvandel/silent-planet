@@ -6,7 +6,7 @@ import com.silentgames.silent_planet.model.entities.EntityType
 /**
  * Created by gidroshvandel on 09.07.16.
  */
-class Cell(var cellType: CellType, var entityType: MutableList<EntityType> = mutableListOf()) {
+class Cell(val cellType: CellType, val entityType: MutableList<EntityType> = mutableListOf()) {
 
 //    fun addEntityType(entityType: EntityType) {
 //        if (this.entityType == null) {

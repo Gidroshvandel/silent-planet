@@ -12,7 +12,7 @@
                 android:endColor="@color/gradientEnd"
                 android:gradientRadius="@integer/gradient_radius"
                 android:startColor="@color/gradientStart"
-                android:type="radial"></gradient>
+                android:type="radial" />
         </shape>
     </item>
     <item>

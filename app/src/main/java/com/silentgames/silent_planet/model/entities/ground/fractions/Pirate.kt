@@ -10,6 +10,7 @@ import com.silentgames.silent_planet.utils.BitmapEditor
  * Created by gidroshvandel on 24.09.16.
  */
 class Pirate(
-        playerName: String,
-        override var bitmap: Bitmap = BitmapEditor.getEntityBitmap(R.drawable.pirate)
-) : Player(playerName, Pirates.getInstance())
+        override var name: String,
+        override var bitmap: Bitmap = BitmapEditor.getEntityBitmap(R.drawable.pirate),
+        override var description: String = ""
+) : Player(Pirates.getInstance())

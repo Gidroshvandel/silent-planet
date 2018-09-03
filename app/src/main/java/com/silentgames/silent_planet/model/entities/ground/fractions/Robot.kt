@@ -10,6 +10,7 @@ import com.silentgames.silent_planet.utils.BitmapEditor
  * Created by gidroshvandel on 24.09.16.
  */
 class Robot(
-        playerName: String,
-        override var bitmap: Bitmap = BitmapEditor.getEntityBitmap(R.drawable.robot)
-) : Player(playerName, Robots.getInstance())
+        override var name: String,
+        override var bitmap: Bitmap = BitmapEditor.getEntityBitmap(R.drawable.robot),
+        override var description: String = ""
+) : Player(Robots.getInstance())

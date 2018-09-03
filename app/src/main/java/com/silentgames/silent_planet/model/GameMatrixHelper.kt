@@ -1,5 +1,7 @@
 package com.silentgames.silent_planet.model
 
+import com.silentgames.silent_planet.model.entities.EntityType
+
 /**
  * Created by gidroshvandel on 28.06.17.
  */
@@ -7,6 +9,7 @@ class GameMatrixHelper(
         var gameMatrix: Array<Array<Cell>>,
         var currentXY: Axis = Axis(0, 0),
         var oldXY: Axis? = null,
+        var selectedEntity: EntityType? = null,
         var playerName: String? = null,
         var isEventMove: Boolean = false) {
 

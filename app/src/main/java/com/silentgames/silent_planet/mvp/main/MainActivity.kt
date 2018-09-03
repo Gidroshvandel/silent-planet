@@ -10,6 +10,7 @@ import android.view.ScaleGestureDetector
 import android.view.View
 import android.widget.*
 import com.silentgames.silent_planet.R
+import com.silentgames.silent_planet.dialog.BottomSheetMenu
 import com.silentgames.silent_planet.logic.Constants
 import com.silentgames.silent_planet.model.Cell
 import com.silentgames.silent_planet.model.cells.CellType
@@ -34,8 +35,8 @@ class MainActivity : Activity(), MainContract.View, GameView.Callback {
     private var canvasSize: Float = 0.toFloat()
     private var viewSize: Int = 0
 
-    private var actionButton: Button? = null
-    private var imageCrystalText: TextView? = null
+    private lateinit var actionButton: Button
+    private lateinit var imageCrystalText: TextView
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,11 +82,12 @@ class MainActivity : Activity(), MainContract.View, GameView.Callback {
 
         actionButton = findViewById<View>(R.id.actionButton) as Button
 
-        actionButton!!.setOnClickListener { presenter.onActionButtonClick() }
+        actionButton.setOnClickListener { presenter.onActionButtonClick() }
+
     }
 
     override fun enableButton(isEnabled: Boolean) {
-        actionButton!!.isEnabled = isEnabled
+        actionButton.isEnabled = isEnabled
         //        if (isEnabled){
         ////            actionButton.setVisibility(View.VISIBLE);
         //        }else {
@@ -94,7 +96,7 @@ class MainActivity : Activity(), MainContract.View, GameView.Callback {
     }
 
     override fun setImageCrystalText(text: String) {
-        imageCrystalText!!.text = text
+        imageCrystalText.text = text
     }
 
     override fun drawGrid() {
@@ -137,7 +139,7 @@ class MainActivity : Activity(), MainContract.View, GameView.Callback {
     }
 
     override fun showObjectIcon(cellType: CellType) {
-        selectObjectIcon.setImageBitmap(cellType.bitmap)
+        selectObjectIcon.setImageBitmap(cellType.getVisibleBitmap())
 
     }
 
@@ -218,5 +220,14 @@ class MainActivity : Activity(), MainContract.View, GameView.Callback {
         }
         //вызываем перерисовку принудительно
         gameView.invalidate()
+    }
+
+    override fun showEntityMenuDialog(
+            entityList: MutableList<EntityType>,
+            currentCell: CellType
+    ) {
+        BottomSheetMenu(this, entityList, currentCell) { entityType ->
+            presenter.onEntityDialogElementSelect(entityType)
+        }.show()
     }
 }

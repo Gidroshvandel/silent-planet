@@ -10,11 +10,11 @@ fun MutableList<EntityType>.removePlayerByName(name: String) {
 
 fun MutableList<EntityType>.getPlayerByName(name: String): Player? {
     this.forEach { entityType ->
-        return if (entityType is Player && entityType.playerName == name) {
+        return if (entityType is Player && entityType.name == name) {
             entityType
         } else if (entityType is SpaceShip) {
             entityType.playersOnBord.find { player ->
-                player.playerName === name
+                player.name === name
             }
         } else {
             null

@@ -13,7 +13,9 @@ abstract class CellType(
         override var closeBitmap: Bitmap = BitmapEditor.getCellBitmap(R.drawable.planet_background),
         override var isCanFly: Boolean = false,
         override var isDead: Boolean = false,
-        override var isVisible: Boolean = false
+        override var isVisible: Boolean = false,
+        override var name: String = "",
+        override var description: String = ""
 ) : CellTypeProperties {
 
     abstract fun doEvent(gameMatrixHelper: GameMatrixHelper): GameMatrixHelper

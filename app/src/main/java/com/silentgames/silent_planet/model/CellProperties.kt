@@ -8,4 +8,6 @@ interface CellProperties {
     var isCanFly: Boolean
     var isDead: Boolean
     var crystals: Int
+    var name: String
+    var description: String
 }

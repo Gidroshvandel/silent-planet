@@ -10,6 +10,7 @@ import com.silentgames.silent_planet.utils.BitmapEditor
  * Created by gidroshvandel on 24.09.16.
  */
 class Human(
-        playerName: String,
-        override var bitmap: Bitmap = BitmapEditor.getEntityBitmap(R.drawable.human_spaceman)
-) : Player(playerName, Humans.getInstance())
+        override var name: String,
+        override var bitmap: Bitmap = BitmapEditor.getEntityBitmap(R.drawable.human_spaceman),
+        override var description: String = ""
+) : Player(Humans.getInstance())

@@ -2,6 +2,7 @@ package com.silentgames.silent_planet.mvp.main
 
 import android.graphics.Bitmap
 import com.silentgames.silent_planet.model.Cell
+import com.silentgames.silent_planet.model.CellProperties
 import com.silentgames.silent_planet.model.cells.CellType
 import com.silentgames.silent_planet.model.entities.EntityType
 import com.silentgames.silent_planet.mvp.BasePresenter
@@ -31,6 +32,8 @@ interface MainContract {
 
         fun setImageCrystalText(text: String)
 
+        fun showEntityMenuDialog(entityList: MutableList<EntityType>, currentCell: CellType)
+
     }
 
     interface Presenter : BasePresenter {
@@ -40,6 +43,8 @@ interface MainContract {
         fun onCellListItemSelectedClick(x: Int, y: Int, text: String)
 
         fun onActionButtonClick()
+
+        fun onEntityDialogElementSelect(entityType: CellProperties)
 
     }
 }

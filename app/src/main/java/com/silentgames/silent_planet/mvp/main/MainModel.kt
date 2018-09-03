@@ -54,9 +54,9 @@ class MainModel {
         if (gameMatrixCell.entityType.isNotEmpty()) {
             for (entityType in gameMatrixCell.entityType) {
                 if (entityType is SpaceShip) {
-                    entityType.playersOnBord.forEach { data.add(it.playerName) }
+                    entityType.playersOnBord.forEach { data.add(it.name) }
                 } else if (entityType is Player) {
-                    data.add(entityType.playerName)
+                    data.add(entityType.name)
                 }
             }
         }

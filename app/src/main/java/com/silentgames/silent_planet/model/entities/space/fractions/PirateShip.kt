@@ -10,5 +10,7 @@ import com.silentgames.silent_planet.utils.BitmapEditor
  * Created by gidroshvandel on 24.09.16.
  */
 class PirateShip(
-        override var bitmap: Bitmap = BitmapEditor.getEntityBitmap(R.drawable.pirate_space_ship)
+        override var bitmap: Bitmap = BitmapEditor.getEntityBitmap(R.drawable.pirate_space_ship),
+        override var name: String = "Корсар",
+        override var description: String = "Космический корабль пиратов"
 ) : SpaceShip(Pirates.getInstance())

@@ -1,6 +1,5 @@
 package com.silentgames.silent_planet.mvp.main
 
-import com.silentgames.silent_planet.model.Cell
 import com.silentgames.silent_planet.model.GameMatrixHelper
 
 /**
@@ -10,5 +9,4 @@ class MainViewModel {
 
     lateinit var gameMatrixHelper: GameMatrixHelper
 
-    var isDoubleClick: Boolean = false
 }
