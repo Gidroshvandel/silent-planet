@@ -7,8 +7,10 @@ import android.graphics.Paint
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
-import android.view.View
-import android.widget.*
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import com.silentgames.silent_planet.R
 import com.silentgames.silent_planet.dialog.BottomSheetMenu
 import com.silentgames.silent_planet.logic.Constants
@@ -28,8 +30,6 @@ class MainActivity : Activity(), MainContract.View, GameView.Callback {
     private lateinit var paint: Paint
     private lateinit var mBitmapPaint: Paint
     private lateinit var selectObjectIcon: ImageView
-    private lateinit var objectListOnCell: Spinner
-    private lateinit var adapter: ArrayAdapter<String>
 
     private var mScaleFactor: Float = 0.toFloat()
     private var canvasSize: Float = 0.toFloat()
@@ -65,11 +65,9 @@ class MainActivity : Activity(), MainContract.View, GameView.Callback {
 
     private fun initUi() {
 
-        gameView = findViewById<View>(R.id.game_view) as GameView
+        gameView = findViewById(R.id.game_view)
 
-        selectObjectIcon = findViewById<View>(R.id.imageView) as ImageView
-
-        objectListOnCell = findViewById<View>(R.id.spinner) as Spinner
+        selectObjectIcon = findViewById(R.id.imageView)
 
         mScaleFactor = Constants.getmScaleFactor()
         canvasSize = Constants.getCanvasSize(this)
@@ -78,9 +76,9 @@ class MainActivity : Activity(), MainContract.View, GameView.Callback {
         mCanvas = Canvas(mBitmap)
         mBitmapPaint = Paint(Paint.DITHER_FLAG)
 
-        imageCrystalText = findViewById<View>(R.id.imageCrystalText) as TextView
+        imageCrystalText = findViewById(R.id.imageCrystalText)
 
-        actionButton = findViewById<View>(R.id.actionButton) as Button
+        actionButton = findViewById(R.id.actionButton)
 
         actionButton.setOnClickListener { presenter.onActionButtonClick() }
 
@@ -145,27 +143,6 @@ class MainActivity : Activity(), MainContract.View, GameView.Callback {
 
     override fun showObjectIcon(entityType: EntityType) {
         selectObjectIcon.setImageBitmap(entityType.bitmap)
-    }
-
-    override fun showCellListItem(x: Int, y: Int, playerList: List<String>) {
-        adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, playerList)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        objectListOnCell.visibility = View.VISIBLE
-        objectListOnCell.adapter = adapter
-        objectListOnCell.prompt = "Title"
-        objectListOnCell.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View,
-                                        position: Int, id: Long) {
-                presenter.onCellListItemSelectedClick(x, y, adapter.getItem(position))
-            }
-
-            override fun onNothingSelected(arg0: AdapterView<*>) {}
-        }
-    }
-
-    override fun hideCellListItem() {
-        objectListOnCell.visibility = View.INVISIBLE
     }
 
     override fun update(runnable: Runnable) {

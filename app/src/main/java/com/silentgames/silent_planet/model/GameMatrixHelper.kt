@@ -10,7 +10,6 @@ class GameMatrixHelper(
         var currentXY: Axis = Axis(0, 0),
         var oldXY: Axis? = null,
         var selectedEntity: EntityType? = null,
-        var playerName: String? = null,
         var isEventMove: Boolean = false) {
 
     var gameMatrixCellByOldXY: Cell? = null
@@ -21,13 +20,4 @@ class GameMatrixHelper(
         set(gameMatrixCell) {
             this.gameMatrix[currentXY.x][currentXY.y] = gameMatrixCell
         }
-
-
-    fun getGameMatrixCell(x: Int, y: Int): Cell {
-        return gameMatrix[x][y]
-    }
-
-    fun setGameMatrixCell(x: Int, y: Int, gameMatrixCell: Cell) {
-        this.gameMatrix[x][y] = gameMatrixCell
-    }
 }

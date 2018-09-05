@@ -6,6 +6,7 @@ import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.GameMatrixHelper
 import com.silentgames.silent_planet.model.cells.CellType
 import com.silentgames.silent_planet.model.cells.SpaceCell
+import com.silentgames.silent_planet.model.entities.ground.Player
 import com.silentgames.silent_planet.utils.BitmapEditor
 
 /**
@@ -47,20 +48,20 @@ abstract class Arrow(
 
     override fun doEvent(gameMatrixHelper: GameMatrixHelper): GameMatrixHelper {
         val entityMove = EntityMove(gameMatrixHelper)
+        val player = gameMatrixHelper.selectedEntity as Player
         if (checkBorders()) {
-            if (!gameMatrixHelper.gameMatrix[destinationX][destinationY].cellType.isVisible
-                    && gameMatrixHelper.gameMatrix[destinationX][destinationY].cellType == SpaceCell::class) {
+            if (gameMatrixHelper.gameMatrix[destinationX][destinationY].cellType is SpaceCell) {
                 gameMatrixHelper.oldXY = gameMatrixHelper.currentXY
-                entityMove.moveOnBoardAllyShip()
+                entityMove.moveOnBoardAllyShip(player)
             } else {
                 gameMatrixHelper.oldXY = gameMatrixHelper.currentXY
                 gameMatrixHelper.currentXY = Axis(destinationX, destinationY)
                 gameMatrixHelper.isEventMove = true
-                entityMove.movePlayer()
+                entityMove.movePlayer(player)
             }
         } else {
             gameMatrixHelper.oldXY = gameMatrixHelper.currentXY
-            entityMove.moveOnBoardAllyShip()
+            entityMove.moveOnBoardAllyShip(player)
         }
         return gameMatrixHelper
     }

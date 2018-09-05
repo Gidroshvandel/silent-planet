@@ -10,7 +10,7 @@ import com.silentgames.silent_planet.R
 import com.silentgames.silent_planet.model.CellProperties
 import com.silentgames.silent_planet.model.cells.CellType
 import com.silentgames.silent_planet.model.entities.EntityType
-import com.silentgames.silent_planet.model.entities.space.SpaceShip
+import com.silentgames.silent_planet.utils.getEntityList
 
 class EntityMenuAdapter(
         entityList: MutableList<EntityType>,
@@ -21,14 +21,7 @@ class EntityMenuAdapter(
     private val convertedList: MutableList<CellProperties> = mutableListOf()
 
     init {
-        entityList.forEach {
-            if (it is SpaceShip) {
-                convertedList.add(it)
-                convertedList.addAll(it.playersOnBord)
-            } else {
-                convertedList.add(it)
-            }
-        }
+        convertedList.addAll(entityList.getEntityList())
         convertedList.add(currentCell)
     }
 

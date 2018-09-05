@@ -22,10 +22,6 @@ interface MainContract {
 
         fun showObjectIcon(entityType: EntityType)
 
-        fun showCellListItem(x: Int, y: Int, playerList: List<String>)
-
-        fun hideCellListItem()
-
         fun update(runnable: Runnable)
 
         fun enableButton(isEnabled: Boolean)
@@ -40,11 +36,9 @@ interface MainContract {
 
         fun onSingleTapConfirmed(x: Int, y: Int)
 
-        fun onCellListItemSelectedClick(x: Int, y: Int, text: String)
-
         fun onActionButtonClick()
 
-        fun onEntityDialogElementSelect(entityType: CellProperties)
+        fun onEntityDialogElementSelect(cellProperties: CellProperties)
 
     }
 }

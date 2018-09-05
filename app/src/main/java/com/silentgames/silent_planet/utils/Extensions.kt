@@ -8,6 +8,20 @@ fun MutableList<EntityType>.removePlayerByName(name: String) {
     getPlayerByName(name)?.let { this.remove(it) }
 }
 
+fun MutableList<EntityType>.getEntityList(): MutableList<EntityType> {
+    val entityTypeList = mutableListOf<EntityType>()
+    this.forEach {
+        if (it is SpaceShip) {
+            entityTypeList.add(it)
+            entityTypeList.addAll(it.playersOnBord)
+        } else {
+            entityTypeList.add(it)
+        }
+    }
+    return entityTypeList
+}
+
+
 fun MutableList<EntityType>.getPlayerByName(name: String): Player? {
     this.forEach { entityType ->
         return if (entityType is Player && entityType.name == name) {
@@ -39,6 +53,9 @@ fun MutableList<EntityType>.getAllPlayersFromCell(): List<Player> {
 
 fun MutableList<EntityType>.getSpaceShip(): SpaceShip? =
         this.firstOrNull { it is SpaceShip }?.let { it as SpaceShip }
+
+fun MutableList<EntityType>.isSpaceShipBelongFraction(entityType: EntityType): Boolean =
+        entityType.fraction.fractionsType == this.getSpaceShip()?.fraction?.fractionsType
 
 fun MutableList<EntityType>.removeSpaceShip() {
     getSpaceShip()?.let { this.remove(it) }

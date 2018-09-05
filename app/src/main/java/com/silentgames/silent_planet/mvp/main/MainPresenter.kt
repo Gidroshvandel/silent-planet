@@ -9,8 +9,7 @@ import com.silentgames.silent_planet.model.CellProperties
 import com.silentgames.silent_planet.model.GameMatrixHelper
 import com.silentgames.silent_planet.model.cells.CellType
 import com.silentgames.silent_planet.model.entities.EntityType
-import com.silentgames.silent_planet.utils.getPlayerByName
-import com.silentgames.silent_planet.utils.getSpaceShip
+import com.silentgames.silent_planet.utils.getEntityList
 
 
 /**
@@ -30,31 +29,21 @@ class MainPresenter internal constructor(
         select(Axis(x, y))
     }
 
-    override fun onCellListItemSelectedClick(x: Int, y: Int, text: String) {
-        view.showToast(App.getContext().resources.getString(R.string.selectPlayer) + " " + text)
-        selectEntity(Axis(x, y), text)
-    }
-
     override fun onActionButtonClick() {
         viewModel.gameMatrixHelper = getCrystal(viewModel.gameMatrixHelper)
         if (!overZeroCrystals()) {
             view.enableButton(false)
         }
-        if (viewModel.gameMatrixHelper.gameMatrixCellByXY.entityType.getSpaceShip() != null) {
-            view.setImageCrystalText(
-                    viewModel.gameMatrixHelper.gameMatrixCellByXY.entityType.getSpaceShip()!!.crystals.toString())
-        } else {
-            if (viewModel.gameMatrixHelper.playerName != null)
-                view.setImageCrystalText(
-                        viewModel.gameMatrixHelper.gameMatrixCellByXY.entityType.getPlayerByName(viewModel.gameMatrixHelper.playerName!!)!!.crystals.toString())
+        viewModel.gameMatrixHelper.selectedEntity?.let {
+            view.setImageCrystalText(it.crystals.toString())
         }
     }
 
-    override fun onEntityDialogElementSelect(entityType: CellProperties) {
-        if (entityType is EntityType) {
-            selectEntity(entityType)
-        } else if (entityType is CellType) {
-            selectCell(entityType)
+    override fun onEntityDialogElementSelect(cellProperties: CellProperties) {
+        if (cellProperties is EntityType) {
+            selectEntity(cellProperties)
+        } else if (cellProperties is CellType) {
+            selectCell(cellProperties)
         }
     }
 
@@ -71,23 +60,36 @@ class MainPresenter internal constructor(
     private fun select(currentXY: Axis) {
         viewModel.gameMatrixHelper.currentXY = currentXY
 
-        val oldXY = viewModel.gameMatrixHelper.oldXY
         val entityType = viewModel.gameMatrixHelper.gameMatrixCellByXY.entityType
         val cellType = viewModel.gameMatrixHelper.gameMatrixCellByXY.cellType
 
-        if (viewModel.gameMatrixHelper.selectedEntity == null &&
-                (oldXY == null || isClickForCurrentPosition)) {
-            if (entityType.isNotEmpty()) {
-                view.showEntityMenuDialog(entityType, cellType)
-            } else {
-                selectCell()
-            }
+        if (viewModel.gameMatrixHelper.selectedEntity != null && !isClickForCurrentPosition) {
+            tryMove(viewModel.gameMatrixHelper.selectedEntity!!, currentXY)
         } else {
-            tryMove(viewModel.gameMatrixHelper.selectedEntity!!)
+            if (viewModel.gameMatrixHelper.selectedEntity == null
+                    && entityType.isNotEmpty()) {
+                if (entityType.getEntityList().size > 1) {
+                    view.showEntityMenuDialog(entityType, cellType)
+                } else {
+                    selectEntity(entityType.first())
+                }
+            } else {
+                if (entityType.getEntityList().size > 1) {
+                    view.showEntityMenuDialog(entityType, cellType)
+                } else {
+                    selectCell(cellType)
+                }
+            }
         }
     }
 
     private fun selectEntity(entityType: EntityType) {
+        updateEntityState(entityType)
+        viewModel.gameMatrixHelper.oldXY = viewModel.gameMatrixHelper.currentXY
+        viewModel.gameMatrixHelper.selectedEntity = entityType
+    }
+
+    private fun updateEntityState(entityType: EntityType) {
         view.setImageCrystalText(entityType.crystals.toString())
         if (overZeroCrystals()) {
             view.enableButton(true)
@@ -95,8 +97,6 @@ class MainPresenter internal constructor(
             view.enableButton(false)
         }
         view.showObjectIcon(entityType)
-        viewModel.gameMatrixHelper.oldXY = viewModel.gameMatrixHelper.currentXY
-        viewModel.gameMatrixHelper.selectedEntity = entityType
     }
 
     private fun selectCell(cellType: CellType) {
@@ -105,69 +105,15 @@ class MainPresenter internal constructor(
             view.setImageCrystalText(cellType.crystals.toString())
         }
         view.showObjectIcon(viewModel.gameMatrixHelper.gameMatrixCellByXY.cellType)
-        view.hideCellListItem()
         viewModel.gameMatrixHelper.oldXY = null
         viewModel.gameMatrixHelper.selectedEntity = null
-        viewModel.gameMatrixHelper.playerName = null
     }
-
-//    private fun select(currentXY: Axis, oldXY: Axis?, name: String?) {
-//        viewModel.gameMatrixHelper.currentXY = currentXY
-//
-//        val entityType = viewModel.gameMatrixHelper.gameMatrixCellByXY.entityType
-//
-//        if (oldXY == null || isClickForCurrentPosition) {
-//            if (entityType.isNotEmpty() && !viewModel.isDoubleClick) {
-//                selectEntity(currentXY, name)
-//            } else {
-//                selectCell()
-//            }
-//        } else {
-//            tryMove()
-//        }
-//    }
 
     private fun overZeroCrystals(): Boolean {
         return viewModel.gameMatrixHelper.gameMatrixCellByXY.cellType.crystals > 0
     }
 
-    private fun selectEntity(currentXY: Axis, name: String?) {
-        val en = viewModel.gameMatrixHelper.gameMatrixCellByXY.entityType
-        if (en.getSpaceShip() != null) {
-            view.setImageCrystalText(en.getSpaceShip()!!.crystals.toString())
-        }
-        if (name == null) {
-            view.showCellListItem(currentXY.x, currentXY.y, model.getPlayersNameOnCell(viewModel.gameMatrixHelper.gameMatrixCellByXY))
-        }
-        if (name != null) {
-            viewModel.gameMatrixHelper.playerName = name
-            if (en.getSpaceShip() == null) {
-                view.setImageCrystalText(en.getPlayerByName(name)!!.crystals.toString())
-            }
-        }
-        if (overZeroCrystals()) {
-            view.enableButton(true)
-        } else {
-            view.enableButton(false)
-        }
-        viewModel.gameMatrixHelper.gameMatrixCellByXY.entityType.let { view.showObjectIcon(it.first()) }
-        viewModel.gameMatrixHelper.oldXY = currentXY
-    }
-
-    private fun selectCell() {
-        view.enableButton(false)
-        val cellType = viewModel.gameMatrixHelper.gameMatrixCellByXY.cellType
-        if (cellType.isVisible) {
-            view.setImageCrystalText(cellType.crystals.toString())
-        }
-        view.showObjectIcon(viewModel.gameMatrixHelper.gameMatrixCellByXY.cellType)
-        view.hideCellListItem()
-        viewModel.gameMatrixHelper.oldXY = null
-        viewModel.gameMatrixHelper.selectedEntity = null
-        viewModel.gameMatrixHelper.playerName = null
-    }
-
-    private fun tryMove(entity: EntityType) {
+    private fun tryMove(entity: EntityType, currentXY: Axis) {
         view.enableButton(false)
         val newGameMatrix = EntityMove(viewModel.gameMatrixHelper).canMove(entity)
         if (newGameMatrix != null) {
@@ -175,10 +121,12 @@ class MainPresenter internal constructor(
             doEvent()
             view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix)
             view.showToast(App.getContext().resources.getString(R.string.turnMessage) + " " + TurnHandler.fractionType.toString())
+            updateEntityState(entity)
+        } else {
+            viewModel.gameMatrixHelper.oldXY = null
+            viewModel.gameMatrixHelper.selectedEntity = null
+            select(currentXY)
         }
-        viewModel.gameMatrixHelper.oldXY = null
-        viewModel.gameMatrixHelper.selectedEntity = null
-        viewModel.gameMatrixHelper.playerName = null
     }
 
     private fun checkToWin() {
