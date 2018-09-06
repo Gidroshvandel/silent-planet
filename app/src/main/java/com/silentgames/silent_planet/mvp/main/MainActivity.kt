@@ -5,11 +5,9 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import com.silentgames.silent_planet.R
 import com.silentgames.silent_planet.dialog.BottomSheetMenu
@@ -17,26 +15,23 @@ import com.silentgames.silent_planet.logic.Constants
 import com.silentgames.silent_planet.model.Cell
 import com.silentgames.silent_planet.model.cells.CellType
 import com.silentgames.silent_planet.model.entities.EntityType
+import com.silentgames.silent_planet.model.fractions.FractionsType
 import com.silentgames.silent_planet.utils.Calculator
 import com.silentgames.silent_planet.view.GameView
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : Activity(), MainContract.View, GameView.Callback {
 
     lateinit var presenter: MainContract.Presenter
 
-    private lateinit var gameView: GameView
     private lateinit var mBitmap: Bitmap
     private lateinit var mCanvas: Canvas
     private lateinit var paint: Paint
     private lateinit var mBitmapPaint: Paint
-    private lateinit var selectObjectIcon: ImageView
 
     private var mScaleFactor: Float = 0.toFloat()
     private var canvasSize: Float = 0.toFloat()
     private var viewSize: Int = 0
-
-    private lateinit var actionButton: Button
-    private lateinit var imageCrystalText: TextView
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,10 +60,6 @@ class MainActivity : Activity(), MainContract.View, GameView.Callback {
 
     private fun initUi() {
 
-        gameView = findViewById(R.id.game_view)
-
-        selectObjectIcon = findViewById(R.id.imageView)
-
         mScaleFactor = Constants.getmScaleFactor()
         canvasSize = Constants.getCanvasSize(this)
         viewSize = Constants.getViewSize(this)
@@ -76,16 +67,63 @@ class MainActivity : Activity(), MainContract.View, GameView.Callback {
         mCanvas = Canvas(mBitmap)
         mBitmapPaint = Paint(Paint.DITHER_FLAG)
 
-        imageCrystalText = findViewById(R.id.imageCrystalText)
-
-        actionButton = findViewById(R.id.actionButton)
-
-        actionButton.setOnClickListener { presenter.onActionButtonClick() }
+        action_button.setOnClickListener { presenter.onActionButtonClick() }
 
     }
 
+    override fun selectCurrentFraction(fractionType: FractionsType) {
+        val white = ContextCompat.getColor(this, R.color.white)
+        val red = ContextCompat.getColor(this, R.color.red)
+        tv_humans.setTextColor(white)
+        tv_aliens.setTextColor(white)
+        tv_robots.setTextColor(white)
+        tv_pirates.setTextColor(white)
+        when (fractionType) {
+            FractionsType.HUMAN -> tv_humans.setTextColor(red)
+            FractionsType.ALIEN -> tv_aliens.setTextColor(red)
+            FractionsType.ROBOT -> tv_robots.setTextColor(red)
+            FractionsType.PIRATE -> tv_pirates.setTextColor(red)
+        }
+    }
+
+    override fun changeAlienCristalCount(crystals: Int) {
+        tv_aliens.text = getString(
+                R.string.crystal_count,
+                getString(R.string.aliens),
+                crystals,
+                Constants.countCrystalsToWin
+        )
+    }
+
+    override fun changeHumanCristalCount(crystals: Int) {
+        tv_humans.text = getString(
+                R.string.crystal_count,
+                getString(R.string.humans),
+                crystals,
+                Constants.countCrystalsToWin
+        )
+    }
+
+    override fun changePirateCristalCount(crystals: Int) {
+        tv_pirates.text = getString(
+                R.string.crystal_count,
+                getString(R.string.pirates),
+                crystals,
+                Constants.countCrystalsToWin
+        )
+    }
+
+    override fun changeRobotCristalCount(crystals: Int) {
+        tv_robots.text = getString(
+                R.string.crystal_count,
+                getString(R.string.robots),
+                crystals,
+                Constants.countCrystalsToWin
+        )
+    }
+
     override fun enableButton(isEnabled: Boolean) {
-        actionButton.isEnabled = isEnabled
+        action_button.isEnabled = isEnabled
         //        if (isEnabled){
         ////            actionButton.setVisibility(View.VISIBLE);
         //        }else {
@@ -94,7 +132,7 @@ class MainActivity : Activity(), MainContract.View, GameView.Callback {
     }
 
     override fun setImageCrystalText(text: String) {
-        imageCrystalText.text = text
+        image_crystal_text.text = text
     }
 
     override fun drawGrid() {
@@ -105,7 +143,7 @@ class MainActivity : Activity(), MainContract.View, GameView.Callback {
             mCanvas.drawLine(x.toFloat() * Constants.getCanvasSize(this) / horizontalCountOfCells, 0f, x.toFloat() * Constants.getCanvasSize(this) / horizontalCountOfCells, Constants.getCanvasSize(this), paint)
         for (y in 0 until verticalCountOfCells + 1)
             mCanvas.drawLine(0f, y.toFloat() * Constants.getCanvasSize(this) / verticalCountOfCells, Constants.getCanvasSize(this), y.toFloat() * Constants.getCanvasSize(this) / verticalCountOfCells, paint)
-        gameView.invalidate()
+        game_view.invalidate()
     }
 
     override fun drawBattleGround(gameMatrix: Array<Array<Cell>>) {
@@ -137,12 +175,12 @@ class MainActivity : Activity(), MainContract.View, GameView.Callback {
     }
 
     override fun showObjectIcon(cellType: CellType) {
-        selectObjectIcon.setImageBitmap(cellType.getVisibleBitmap())
+        select_object_icon.setImageBitmap(cellType.getVisibleBitmap())
 
     }
 
     override fun showObjectIcon(entityType: EntityType) {
-        selectObjectIcon.setImageBitmap(entityType.bitmap)
+        select_object_icon.setImageBitmap(entityType.bitmap)
     }
 
     override fun update(runnable: Runnable) {
@@ -158,18 +196,18 @@ class MainActivity : Activity(), MainContract.View, GameView.Callback {
 
     override fun onScroll(distanceX: Float, distanceY: Float) {
         //не даем канвасу показать края по горизонтали
-        if (gameView.scrollX + distanceX < canvasSize - viewSize && gameView.scrollX + distanceX > 0) {
-            gameView.scrollBy(distanceX.toInt(), 0)
+        if (game_view.scrollX + distanceX < canvasSize - viewSize && game_view.scrollX + distanceX > 0) {
+            game_view.scrollBy(distanceX.toInt(), 0)
         }
         //не даем канвасу показать края по вертикали
-        if (gameView.scrollY + distanceY < canvasSize - viewSize && gameView.scrollY + distanceY > 0) {
-            gameView.scrollBy(0, distanceY.toInt())
+        if (game_view.scrollY + distanceY < canvasSize - viewSize && game_view.scrollY + distanceY > 0) {
+            game_view.scrollBy(0, distanceY.toInt())
         }
     }
 
     override fun onSingleTapConfirmed(event: MotionEvent) {
-        val eventX = (event.x + gameView.scrollX) / mScaleFactor
-        val eventY = (event.y + gameView.scrollY) / mScaleFactor
+        val eventX = (event.x + game_view.scrollX) / mScaleFactor
+        val eventY = (event.y + game_view.scrollY) / mScaleFactor
         val x = (Constants.horizontalCountOfCells * eventX / viewSize).toInt()
         val y = (Constants.verticalCountOfCells * eventY / viewSize).toInt()
 
@@ -189,14 +227,14 @@ class MainActivity : Activity(), MainContract.View, GameView.Callback {
             //по умолчанию после зума канвас отскролит в левый верхний угол. Скролим канвас так, чтобы на экране оставалась обасть канваса, над которой был
             //жест зума
             //Для получения данной формулы достаточно школьных знаний математики (декартовы координаты).
-            var scrollX = ((gameView.scrollX + focusX) * scaleFactor - focusX).toInt()
+            var scrollX = ((game_view.scrollX + focusX) * scaleFactor - focusX).toInt()
             scrollX = Math.min(Math.max(scrollX, 0), canvasSize.toInt() - viewSize)
-            var scrollY = ((gameView.scrollY + focusY) * scaleFactor - focusY).toInt()
+            var scrollY = ((game_view.scrollY + focusY) * scaleFactor - focusY).toInt()
             scrollY = Math.min(Math.max(scrollY, 0), canvasSize.toInt() - viewSize)
-            gameView.scrollTo(scrollX, scrollY)
+            game_view.scrollTo(scrollX, scrollY)
         }
         //вызываем перерисовку принудительно
-        gameView.invalidate()
+        game_view.invalidate()
     }
 
     override fun showEntityMenuDialog(

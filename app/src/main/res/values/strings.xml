@@ -5,4 +5,11 @@
     <string name="turnMessage">Now turn</string>
     <string name="selectPlayer">Выбран:</string>
     <string name="deadPlayer">Мёртв</string>
+
+    <string name="aliens">Инопланетяне</string>
+    <string name="pirates">Пираты</string>
+    <string name="humans">Земляне</string>
+    <string name="robots">Роботы</string>
+
+    <string name="crystal_count">%1$s %2$d/%3$d</string>
 </resources>

@@ -1,10 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linerBoss"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/space_texture"
     android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_humans"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/view_padding_small"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_s"
+            tools:text="@string/humans" />
+
+        <TextView
+            android:id="@+id/tv_pirates"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/view_padding_small"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_s"
+            tools:text="@string/pirates" />
+
+        <TextView
+            android:id="@+id/tv_robots"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/view_padding_small"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_s"
+            tools:text="@string/robots" />
+
+        <TextView
+            android:id="@+id/tv_aliens"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/view_padding_small"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_s"
+            tools:text="@string/aliens" />
+
+    </LinearLayout>
 
     <com.silentgames.silent_planet.view.GameView
         android:id="@+id/game_view"
@@ -37,45 +82,45 @@
                 android:weightSum="1">
 
                 <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                    android:id="@+id/select_object_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
                     android:layout_marginTop="28dp"
-                android:layout_gravity="center"
-                android:weightSum="1"/>
+                    android:weightSum="1" />
 
             </LinearLayout>
-
 
 
             <LinearLayout
                 android:layout_width="110dp"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="4dp"
                 android:layout_marginBottom="4dp"
+                android:layout_marginLeft="4dp"
                 android:background="@drawable/panel"
                 android:orientation="vertical"
                 android:weightSum="1">
 
                 <TableLayout
-                    android:layout_margin="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp">
 
                     <TableRow>
+
                         <ImageView
                             android:layout_width="25dp"
                             android:layout_height="25dp"
-                            android:src="@drawable/crystal"/>
+                            android:src="@drawable/crystal" />
+
                         <TextView
-                            android:id="@+id/imageCrystalText"
+                            android:id="@+id/image_crystal_text"
                             android:layout_marginLeft="20dp"
                             android:layout_marginTop="5dp"
-                            android:text=""/>
+                            android:text="" />
                     </TableRow>
 
                 </TableLayout>
-
 
 
             </LinearLayout>
@@ -86,31 +131,31 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/panel"
-            android:weightSum="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:weightSum="1">
 
             <TextView
                 android:id="@+id/textView"
-                android:layout_margin="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
                 android:text="Medium Text"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
                 android:id="@+id/textView2"
-                android:layout_margin="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
                 android:text="Medium Text"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <Button
-                android:id="@+id/actionButton"
+                android:id="@+id/action_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:text="take crystal"/>
+                android:text="take crystal" />
 
         </LinearLayout>
 

@@ -5,6 +5,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="text_s">12sp</dimen>
 
     <dimen name="margin">50dp</dimen>
     <dimen name="text">64sp</dimen>

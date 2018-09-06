@@ -1,7 +1,6 @@
 package com.silentgames.silent_planet.mvp.main
 
-import com.silentgames.silent_planet.App
-import com.silentgames.silent_planet.R
+import com.silentgames.silent_planet.logic.Constants
 import com.silentgames.silent_planet.logic.EntityMove
 import com.silentgames.silent_planet.logic.TurnHandler
 import com.silentgames.silent_planet.model.Axis
@@ -52,8 +51,15 @@ class MainPresenter internal constructor(
         gameMatrixHelper.isEventMove = false
         viewModel.gameMatrixHelper = gameMatrixHelper
 
+        view.changeAlienCristalCount(0)
+        view.changeHumanCristalCount(0)
+        view.changePirateCristalCount(0)
+        view.changeRobotCristalCount(0)
+
         view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix)
         view.enableButton(false)
+
+        view.selectCurrentFraction(TurnHandler.fractionType)
 
     }
 
@@ -120,8 +126,9 @@ class MainPresenter internal constructor(
             viewModel.gameMatrixHelper = newGameMatrix
             doEvent()
             view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix)
-            view.showToast(App.getContext().resources.getString(R.string.turnMessage) + " " + TurnHandler.fractionType.toString())
+            view.selectCurrentFraction(TurnHandler.fractionType)
             updateEntityState(entity)
+            checkToWin()
         } else {
             viewModel.gameMatrixHelper.oldXY = null
             viewModel.gameMatrixHelper.selectedEntity = null
@@ -130,7 +137,27 @@ class MainPresenter internal constructor(
     }
 
     private fun checkToWin() {
+        val alienCrystals = viewModel.gameMatrixHelper.alienShip.crystals
+        val pirateCrystals = viewModel.gameMatrixHelper.pirateShip.crystals
+        val humanCrystals = viewModel.gameMatrixHelper.humanShip.crystals
+        val robotCrystals = viewModel.gameMatrixHelper.robotShip.crystals
+        view.changeRobotCristalCount(robotCrystals)
+        view.changePirateCristalCount(pirateCrystals)
+        view.changeHumanCristalCount(humanCrystals)
+        view.changeAlienCristalCount(alienCrystals)
 
+        if (alienCrystals >= Constants.countCrystalsToWin) {
+            view.showToast("WIN ALIEN")
+        }
+        if (pirateCrystals >= Constants.countCrystalsToWin) {
+            view.showToast("WIN PIRATE")
+        }
+        if (humanCrystals >= Constants.countCrystalsToWin) {
+            view.showToast("WIN HUMAN")
+        }
+        if (robotCrystals >= Constants.countCrystalsToWin) {
+            view.showToast("WIN ROBOT")
+        }
     }
 
     private fun doEvent() {

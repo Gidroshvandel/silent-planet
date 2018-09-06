@@ -5,6 +5,7 @@ import com.silentgames.silent_planet.model.Cell
 import com.silentgames.silent_planet.model.CellProperties
 import com.silentgames.silent_planet.model.cells.CellType
 import com.silentgames.silent_planet.model.entities.EntityType
+import com.silentgames.silent_planet.model.fractions.FractionsType
 import com.silentgames.silent_planet.mvp.BasePresenter
 
 interface MainContract {
@@ -29,6 +30,16 @@ interface MainContract {
         fun setImageCrystalText(text: String)
 
         fun showEntityMenuDialog(entityList: MutableList<EntityType>, currentCell: CellType)
+
+        fun changeAlienCristalCount(crystals: Int)
+
+        fun changeHumanCristalCount(crystals: Int)
+
+        fun changePirateCristalCount(crystals: Int)
+
+        fun changeRobotCristalCount(crystals: Int)
+
+        fun selectCurrentFraction(fractionType: FractionsType)
 
     }
 

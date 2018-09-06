@@ -1,5 +1,6 @@
 package com.silentgames.silent_planet.utils
 
+import com.silentgames.silent_planet.model.Cell
 import com.silentgames.silent_planet.model.entities.EntityType
 import com.silentgames.silent_planet.model.entities.ground.Player
 import com.silentgames.silent_planet.model.entities.space.SpaceShip
@@ -59,4 +60,17 @@ fun MutableList<EntityType>.isSpaceShipBelongFraction(entityType: EntityType): B
 
 fun MutableList<EntityType>.removeSpaceShip() {
     getSpaceShip()?.let { this.remove(it) }
+}
+
+inline fun <reified T : SpaceShip> Array<Array<Cell>>.findSpaceShip(): T? {
+    this.forEachIndexed { x, arrayOfCells ->
+        arrayOfCells.forEachIndexed { y, cell ->
+            if (x == 0 || x == this.size - 1 || y == 0 || y == arrayOfCells.size - 1) {
+                val ship = cell.entityType.getSpaceShip()
+                if (ship != null && ship is T)
+                    return ship
+            }
+        }
+    }
+    return null
 }

@@ -74,8 +74,11 @@ class EntityMove(private var gameMatrixHelper: GameMatrixHelper) {
     }
 
     private fun moveOnBoard(player: Player) {
-        entityTypeXY.getSpaceShip()?.crystals = player.crystals
-        entityTypeXY.getSpaceShip()?.playersOnBord?.add(player.apply { crystals = 0 })
+        val entityType = entityTypeXY.getSpaceShip()
+        if (entityType != null) {
+            entityType.crystals = entityType.crystals + player.crystals
+            entityType.playersOnBord.add(player.apply { crystals = 0 })
+        }
         deletePlayer(player)
     }
 
