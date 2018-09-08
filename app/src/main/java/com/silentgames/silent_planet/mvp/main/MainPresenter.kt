@@ -89,10 +89,16 @@ class MainPresenter internal constructor(
         }
     }
 
+    private fun showDescription(cellProperties: CellProperties) {
+        view.fillDescription(cellProperties.description)
+        view.fillEntityName(cellProperties.name)
+    }
+
     private fun selectEntity(entityType: EntityType) {
         updateEntityState(entityType)
         viewModel.gameMatrixHelper.oldXY = viewModel.gameMatrixHelper.currentXY
         viewModel.gameMatrixHelper.selectedEntity = entityType
+        showDescription(entityType)
     }
 
     private fun updateEntityState(entityType: EntityType) {
@@ -113,6 +119,7 @@ class MainPresenter internal constructor(
         view.showObjectIcon(viewModel.gameMatrixHelper.gameMatrixCellByXY.cellType)
         viewModel.gameMatrixHelper.oldXY = null
         viewModel.gameMatrixHelper.selectedEntity = null
+        showDescription(cellType)
     }
 
     private fun overZeroCrystals(): Boolean {

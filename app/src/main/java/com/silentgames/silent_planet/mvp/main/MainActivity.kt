@@ -71,6 +71,15 @@ class MainActivity : Activity(), MainContract.View, GameView.Callback {
 
     }
 
+    override fun fillEntityName(text: String) {
+        tv_entity_name.text = text
+    }
+
+    override fun fillDescription(text: String) {
+        tv_description.text = text
+    }
+
+
     override fun selectCurrentFraction(fractionType: FractionsType) {
         val white = ContextCompat.getColor(this, R.color.white)
         val red = ContextCompat.getColor(this, R.color.red)
@@ -124,11 +133,6 @@ class MainActivity : Activity(), MainContract.View, GameView.Callback {
 
     override fun enableButton(isEnabled: Boolean) {
         action_button.isEnabled = isEnabled
-        //        if (isEnabled){
-        ////            actionButton.setVisibility(View.VISIBLE);
-        //        }else {
-        ////            actionButton.setVisibility(View.INVISIBLE);
-        //        }
     }
 
     override fun setImageCrystalText(text: String) {
@@ -152,7 +156,7 @@ class MainActivity : Activity(), MainContract.View, GameView.Callback {
         for (x in 0 until horizontalCountOfCells) {
             for (y in 0 until verticalCountOfCells) {
                 mCanvas.drawBitmap(
-                        gameMatrix[x][y].cellType.getVisibleBitmap(),
+                        gameMatrix[x][y].cellType.getCurrentBitmap(),
                         x.toFloat() * Constants.getCanvasSize(this) / horizontalCountOfCells,
                         y.toFloat() * Constants.getCanvasSize(this) / verticalCountOfCells,
                         paint
@@ -175,7 +179,7 @@ class MainActivity : Activity(), MainContract.View, GameView.Callback {
     }
 
     override fun showObjectIcon(cellType: CellType) {
-        select_object_icon.setImageBitmap(cellType.getVisibleBitmap())
+        select_object_icon.setImageBitmap(cellType.getCurrentBitmap())
 
     }
 

@@ -19,6 +19,10 @@ interface MainContract {
 
         fun showToast(text: String)
 
+        fun fillEntityName(text: String)
+
+        fun fillDescription(text: String)
+
         fun showObjectIcon(cellType: CellType)
 
         fun showObjectIcon(entityType: EntityType)

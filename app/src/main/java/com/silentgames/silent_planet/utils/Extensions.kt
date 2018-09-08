@@ -52,6 +52,24 @@ fun MutableList<EntityType>.getAllPlayersFromCell(): List<Player> {
     return data
 }
 
+fun MutableList<EntityType>.getDeathPlayersFromCell(): List<Player> {
+    val data = mutableListOf<Player>()
+    if (this.isNotEmpty()) {
+        for (entityType in this) {
+            if (entityType is SpaceShip) {
+                entityType.playersOnBord.forEach {
+                    if (it.isDead) {
+                        data.add(it)
+                    }
+                }
+            } else if (entityType is Player && entityType.isDead) {
+                data.add(entityType)
+            }
+        }
+    }
+    return data
+}
+
 fun MutableList<EntityType>.getSpaceShip(): SpaceShip? =
         this.firstOrNull { it is SpaceShip }?.let { it as SpaceShip }
 

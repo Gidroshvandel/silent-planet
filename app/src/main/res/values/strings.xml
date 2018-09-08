@@ -11,5 +11,25 @@
     <string name="humans">Земляне</string>
     <string name="robots">Роботы</string>
 
-    <string name="crystal_count">%1$s %2$d/%3$d</string>
+    <string name="crystal_count">%1$s\n%2$d/%3$d</string>
+
+    <string name="unknown_cell_name">Unknown</string>
+    <string name="unknown_cell_description">Terra Incognita</string>
+
+    <string name="space_cell_name">Космос</string>
+    <string name="space_cell_description">Участок неизведанного космоса</string>
+
+    <string name="empty_cell_name">Пустошь</string>
+    <string name="empty_cell_description">Пустынная поверхность планеты</string>
+
+    <string name="death_cell_name">Смерть</string>
+    <string name="death_cell_description">Мгновенная смерть по неизвестным причинам</string>
+
+    <string name="crystal_cell_name">Кристалы</string>
+    <string name="crystal_cell_description">Кристалов %1$d</string>
+
+    <string name="arrow_cell_name">Стрела</string>
+
+    <string name="arrow_green_cell_description">Зелёная стрела перемещает на 1 клетку</string>
+    <string name="arrow_red_cell_description">Красная стрела перемещает на 2 клетки</string>
 </resources>

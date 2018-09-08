@@ -1,6 +1,7 @@
 package com.silentgames.silent_planet.model.cells.Arrow
 
 import android.graphics.Bitmap
+import com.silentgames.silent_planet.App
 import com.silentgames.silent_planet.R
 import com.silentgames.silent_planet.utils.BitmapEditor
 
@@ -12,7 +13,8 @@ class ArrowRed(
         override var bitmap: Bitmap = BitmapEditor.getCellBitmap(R.drawable.arow_red_cell)
 ) : Arrow(
         distance = 3,
-        rotateAngle = BitmapEditor.RotateAngle.DEGREES0
+        rotateAngle = BitmapEditor.RotateAngle.DEGREES0,
+        description = App.getContext().getString(R.string.arrow_red_cell_description)
 ) {
 
     override fun rotate(x: Int, y: Int, rotateAngle: BitmapEditor.RotateAngle): ArrowRed {

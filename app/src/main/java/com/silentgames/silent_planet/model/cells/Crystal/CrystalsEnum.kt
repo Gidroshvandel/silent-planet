@@ -11,9 +11,6 @@ enum class CrystalsEnum(val crystalsCount: Int, val image: Bitmap) {
     TWO(2, BitmapEditor.getCellBitmap(R.drawable.two_crystals)),
     THREE(3, BitmapEditor.getCellBitmap(R.drawable.three_crystals));
 
-//    private val values =
-//            Collections.unmodifiableList<CrystalsEnum>(Arrays.asList<CrystalsEnum>(*values()))
-
     companion object {
         private val values = mutableListOf(*values())
         private val size = values.size

@@ -2,13 +2,16 @@ package com.silentgames.silent_planet.mvp.main
 
 import com.silentgames.silent_planet.logic.Constants
 import com.silentgames.silent_planet.logic.TurnHandler
+import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.Cell
 import com.silentgames.silent_planet.model.cells.Arrow.Arrow
 import com.silentgames.silent_planet.model.cells.Arrow.ArrowGreen
 import com.silentgames.silent_planet.model.cells.Arrow.ArrowRed
-import com.silentgames.silent_planet.model.cells.Arrow.ArrowYellow
+import com.silentgames.silent_planet.model.cells.CellType
 import com.silentgames.silent_planet.model.cells.Crystal.Crystal
 import com.silentgames.silent_planet.model.cells.Crystal.CrystalsEnum
+import com.silentgames.silent_planet.model.cells.DeadCell
+import com.silentgames.silent_planet.model.cells.EmptyCell
 import com.silentgames.silent_planet.model.cells.SpaceCell
 import com.silentgames.silent_planet.model.entities.ground.Player
 import com.silentgames.silent_planet.model.entities.ground.fractions.Alien
@@ -40,7 +43,7 @@ class MainModel {
                 if (x == 0 || x == hCountOfCells - 1 || y == 0 || y == vCountOfCells - 1) {
                     Cell(SpaceCell())
                 } else {
-                    Cell(Crystal(CrystalsEnum.random()))
+                    Cell(getRandomCell(Axis(x, y)))
                 }
             }
         }
@@ -119,12 +122,19 @@ class MainModel {
         })
     }
 
-    private fun randomArrow(x: Int, y: Int): Arrow? {
-        when (Random().nextInt(Constants.countArrowCells - 1)) {
-            0 -> return ArrowGreen().rotate(x, y, BitmapEditor.RotateAngle.randomAngle())
-            1 -> return ArrowRed().rotate(x, y, BitmapEditor.RotateAngle.randomAngle())
-            2 -> return ArrowYellow().rotate(x, y, BitmapEditor.RotateAngle.randomAngle())
-            else -> return null
+    private fun randomArrow(axis: Axis): Arrow {
+        return when (Random().nextInt(Constants.countArrowCells - 1)) {
+            0 -> ArrowGreen().rotate(axis.x, axis.y, BitmapEditor.RotateAngle.randomAngle())
+            else -> ArrowRed().rotate(axis.x, axis.y, BitmapEditor.RotateAngle.randomAngle())
+        }
+    }
+
+    private fun getRandomCell(axis: Axis): CellType {
+        return when (Random().nextInt(3)) {
+            0 -> Crystal(CrystalsEnum.random())
+            1 -> randomArrow(axis)
+            2 -> DeadCell()
+            else -> EmptyCell()
         }
     }
 }

@@ -1,5 +1,7 @@
 package com.silentgames.silent_planet.model.cells.Arrow
 
+import com.silentgames.silent_planet.App
+import com.silentgames.silent_planet.R
 import com.silentgames.silent_planet.logic.Constants
 import com.silentgames.silent_planet.logic.EntityMove
 import com.silentgames.silent_planet.model.Axis
@@ -17,8 +19,12 @@ abstract class Arrow(
         override var isCanMove: Boolean = true,
         var destinationX: Int = 0,
         var destinationY: Int = 0,
-        var distance: Int = 0
-) : CellType() {
+        var distance: Int = 0,
+        description: String = ""
+) : CellType(
+        name = App.getContext().getString(R.string.arrow_cell_name),
+        description = description
+) {
 
     open fun rotate(x: Int, y: Int, rotateAngle: BitmapEditor.RotateAngle): Arrow {
         when (rotateAngle) {

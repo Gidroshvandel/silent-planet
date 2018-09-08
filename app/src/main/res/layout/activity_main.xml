@@ -85,9 +85,18 @@
                     android:id="@+id/select_object_icon"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="28dp"
-                    android:weightSum="1" />
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="25dp"
+                    android:weightSum="1"
+                    tools:src="@tools:sample/avatars" />
+
+                <TextView
+                    android:id="@+id/tv_entity_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center"
+                    tools:text="Test Name" />
 
             </LinearLayout>
 
@@ -135,20 +144,12 @@
             android:weightSum="1">
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/tv_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="Medium Text"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="Medium Text"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:layout_margin="10dp"
+                android:textSize="@dimen/text_m"
+                tools:text="Description" />
 
             <Button
                 android:id="@+id/action_button"
