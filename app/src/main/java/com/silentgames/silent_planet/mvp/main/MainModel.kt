@@ -1,5 +1,6 @@
 package com.silentgames.silent_planet.mvp.main
 
+import android.content.Context
 import com.silentgames.silent_planet.logic.Constants
 import com.silentgames.silent_planet.logic.TurnHandler
 import com.silentgames.silent_planet.model.Axis
@@ -33,7 +34,7 @@ import java.util.*
 /**
  * Created by gidroshvandel on 22.06.17.
  */
-class MainModel {
+class MainModel(val context: Context) {
 
     fun fillBattleGround(): Array<Array<Cell>> {
         val vCountOfCells = Constants.verticalCountOfCells
@@ -41,7 +42,7 @@ class MainModel {
         val gameMatrix = Array(hCountOfCells) { x ->
             Array(vCountOfCells) { y ->
                 if (x == 0 || x == hCountOfCells - 1 || y == 0 || y == vCountOfCells - 1) {
-                    Cell(SpaceCell())
+                    Cell(SpaceCell(context))
                 } else {
                     Cell(getRandomCell(Axis(x, y)))
                 }
@@ -80,61 +81,61 @@ class MainModel {
 
     private fun spawnRobots(gameMatrixCell: Cell) {
         val playerList = mutableListOf(
-                Robot("Maxim"),
-                Robot("Oxik"),
-                Robot("Andrea")
+                Robot(context, "Maxim"),
+                Robot(context, "Oxik"),
+                Robot(context, "Andrea")
         )
-        gameMatrixCell.entityType.add(RobotShip().apply {
+        gameMatrixCell.entityType.add(RobotShip(context).apply {
             playersOnBord = playerList.toMutableList()
         })
     }
 
     private fun spawnAliens(gameMatrixCell: Cell) {
         val playerList = mutableListOf(
-                Alien("Maxim"),
-                Alien("Oxik"),
-                Alien("Andrea")
+                Alien(context, "Maxim"),
+                Alien(context, "Oxik"),
+                Alien(context, "Andrea")
         )
-        gameMatrixCell.entityType.add(AlienShip().apply {
+        gameMatrixCell.entityType.add(AlienShip(context).apply {
             playersOnBord = playerList.toMutableList()
         })
     }
 
     private fun spawnPirates(gameMatrixCell: Cell) {
         val playerList = mutableListOf(
-                Pirate("Maxim"),
-                Pirate("Oxik"),
-                Pirate("Andrea")
+                Pirate(context, "Maxim"),
+                Pirate(context, "Oxik"),
+                Pirate(context, "Andrea")
         )
-        gameMatrixCell.entityType.add(PirateShip().apply {
+        gameMatrixCell.entityType.add(PirateShip(context).apply {
             playersOnBord = playerList.toMutableList()
         })
     }
 
     private fun spawnHumans(gameMatrixCell: Cell) {
         val playerList = mutableListOf(
-                Human("Maxim"),
-                Human("Oxik"),
-                Human("Andrea")
+                Human(context, "Maxim"),
+                Human(context, "Oxik"),
+                Human(context, "Andrea")
         )
-        gameMatrixCell.entityType.add(HumanShip().apply {
+        gameMatrixCell.entityType.add(HumanShip(context).apply {
             playersOnBord = playerList.toMutableList()
         })
     }
 
     private fun randomArrow(axis: Axis): Arrow {
         return when (Random().nextInt(Constants.countArrowCells - 1)) {
-            0 -> ArrowGreen().rotate(axis.x, axis.y, BitmapEditor.RotateAngle.randomAngle())
-            else -> ArrowRed().rotate(axis.x, axis.y, BitmapEditor.RotateAngle.randomAngle())
+            0 -> ArrowGreen(context).rotate(axis.x, axis.y, BitmapEditor.RotateAngle.randomAngle())
+            else -> ArrowRed(context).rotate(axis.x, axis.y, BitmapEditor.RotateAngle.randomAngle())
         }
     }
 
     private fun getRandomCell(axis: Axis): CellType {
         return when (Random().nextInt(3)) {
-            0 -> Crystal(CrystalsEnum.random())
+            0 -> Crystal(context, CrystalsEnum.random())
             1 -> randomArrow(axis)
-            2 -> DeadCell()
-            else -> EmptyCell()
+            2 -> DeadCell(context)
+            else -> EmptyCell(context)
         }
     }
 }

@@ -4,7 +4,7 @@ import android.content.Context
 import android.support.design.widget.BottomSheetDialog
 import android.view.View
 import com.silentgames.silent_planet.R
-import com.silentgames.silent_planet.model.CellProperties
+import com.silentgames.silent_planet.model.BaseProperties
 import com.silentgames.silent_planet.model.cells.CellType
 import com.silentgames.silent_planet.model.entities.EntityType
 import kotlinx.android.synthetic.main.dialog_entity_menu.*
@@ -13,7 +13,7 @@ class BottomSheetMenu(
         context: Context,
         entityList: MutableList<EntityType>,
         currentCell: CellType,
-        onClick: (CellProperties) -> Unit
+        onClick: (BaseProperties) -> Unit
 ) : BottomSheetDialog(context) {
 
     init {

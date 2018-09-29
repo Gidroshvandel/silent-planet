@@ -1,6 +1,6 @@
 package com.silentgames.silent_planet.model.cells.Arrow
 
-import com.silentgames.silent_planet.App
+import android.content.Context
 import com.silentgames.silent_planet.R
 import com.silentgames.silent_planet.logic.Constants
 import com.silentgames.silent_planet.logic.EntityMove
@@ -15,6 +15,7 @@ import com.silentgames.silent_planet.utils.BitmapEditor
  * Created by gidroshvandel on 09.12.16.
  */
 abstract class Arrow(
+        context: Context,
         var rotateAngle: BitmapEditor.RotateAngle,
         override var isCanMove: Boolean = true,
         var destinationX: Int = 0,
@@ -22,7 +23,8 @@ abstract class Arrow(
         var distance: Int = 0,
         description: String = ""
 ) : CellType(
-        name = App.getContext().getString(R.string.arrow_cell_name),
+        context = context,
+        name = context.getString(R.string.arrow_cell_name),
         description = description
 ) {
 

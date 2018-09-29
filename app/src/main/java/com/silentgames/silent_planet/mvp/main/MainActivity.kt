@@ -37,7 +37,7 @@ class MainActivity : Activity(), MainContract.View, GameView.Callback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        presenter = MainPresenter(this, MainViewModel(), MainModel())
+        presenter = MainPresenter(this, MainViewModel(), MainModel(this))
 
         initUi()
         paintSettings()

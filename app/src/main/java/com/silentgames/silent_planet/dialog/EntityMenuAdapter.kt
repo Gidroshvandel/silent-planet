@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.silentgames.silent_planet.R
-import com.silentgames.silent_planet.model.CellProperties
+import com.silentgames.silent_planet.model.BaseProperties
 import com.silentgames.silent_planet.model.cells.CellType
 import com.silentgames.silent_planet.model.entities.EntityType
 import com.silentgames.silent_planet.utils.getEntityList
@@ -15,10 +15,10 @@ import com.silentgames.silent_planet.utils.getEntityList
 class EntityMenuAdapter(
         entityList: MutableList<EntityType>,
         currentCell: CellType,
-        val onClick: (CellProperties) -> Unit
+        val onClick: (BaseProperties) -> Unit
 ) : RecyclerView.Adapter<EntityMenuAdapter.EntityMenu>() {
 
-    private val convertedList: MutableList<CellProperties> = mutableListOf()
+    private val convertedList: MutableList<BaseProperties> = mutableListOf()
 
     init {
         convertedList.addAll(entityList.getEntityList())
@@ -46,7 +46,7 @@ class EntityMenuAdapter(
         private val tvDescription: TextView = itemView.findViewById(R.id.tv_description)
         private val tvCrystalCount: TextView = itemView.findViewById(R.id.tv_crystal_count)
 
-        fun update(entity: CellProperties, onClick: (CellProperties) -> Unit) {
+        fun update(entity: BaseProperties, onClick: (BaseProperties) -> Unit) {
             ivEntityIcon.setImageBitmap(entity.bitmap)
             tvEntityName.text = entity.name
             tvDescription.text = entity.description

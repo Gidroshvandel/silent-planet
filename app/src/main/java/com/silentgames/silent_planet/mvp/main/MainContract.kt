@@ -1,8 +1,8 @@
 package com.silentgames.silent_planet.mvp.main
 
 import android.graphics.Bitmap
+import com.silentgames.silent_planet.model.BaseProperties
 import com.silentgames.silent_planet.model.Cell
-import com.silentgames.silent_planet.model.CellProperties
 import com.silentgames.silent_planet.model.cells.CellType
 import com.silentgames.silent_planet.model.entities.EntityType
 import com.silentgames.silent_planet.model.fractions.FractionsType
@@ -53,7 +53,7 @@ interface MainContract {
 
         fun onActionButtonClick()
 
-        fun onEntityDialogElementSelect(cellProperties: CellProperties)
+        fun onEntityDialogElementSelect(baseProperties: BaseProperties)
 
     }
 }

@@ -4,7 +4,7 @@ import com.silentgames.silent_planet.logic.Constants
 import com.silentgames.silent_planet.logic.EntityMove
 import com.silentgames.silent_planet.logic.TurnHandler
 import com.silentgames.silent_planet.model.Axis
-import com.silentgames.silent_planet.model.CellProperties
+import com.silentgames.silent_planet.model.BaseProperties
 import com.silentgames.silent_planet.model.GameMatrixHelper
 import com.silentgames.silent_planet.model.cells.CellType
 import com.silentgames.silent_planet.model.entities.EntityType
@@ -38,11 +38,11 @@ class MainPresenter internal constructor(
         }
     }
 
-    override fun onEntityDialogElementSelect(cellProperties: CellProperties) {
-        if (cellProperties is EntityType) {
-            selectEntity(cellProperties)
-        } else if (cellProperties is CellType) {
-            selectCell(cellProperties)
+    override fun onEntityDialogElementSelect(baseProperties: BaseProperties) {
+        if (baseProperties is EntityType) {
+            selectEntity(baseProperties)
+        } else if (baseProperties is CellType) {
+            selectCell(baseProperties)
         }
     }
 
@@ -89,9 +89,9 @@ class MainPresenter internal constructor(
         }
     }
 
-    private fun showDescription(cellProperties: CellProperties) {
-        view.fillDescription(cellProperties.description)
-        view.fillEntityName(cellProperties.name)
+    private fun showDescription(baseProperties: BaseProperties) {
+        view.fillDescription(baseProperties.description)
+        view.fillEntityName(baseProperties.name)
     }
 
     private fun selectEntity(entityType: EntityType) {

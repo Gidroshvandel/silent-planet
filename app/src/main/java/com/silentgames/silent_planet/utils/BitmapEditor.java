@@ -1,11 +1,12 @@
 package com.silentgames.silent_planet.utils;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.support.annotation.DrawableRes;
 
-import com.silentgames.silent_planet.App;
 import com.silentgames.silent_planet.logic.Constants;
 
 import java.util.Arrays;
@@ -33,7 +34,7 @@ public class BitmapEditor {
         }
     }
 
-    public static Bitmap resize(Bitmap bit, float newWidth, float newHeight) {
+    private static Bitmap resize(Bitmap bit, float newWidth, float newHeight) {
 
         int width = bit.getWidth();
         int height = bit.getHeight();
@@ -41,19 +42,18 @@ public class BitmapEditor {
         float scaleHeight = (newHeight) / height;
         Matrix matrix = new Matrix();
         matrix.postScale(scaleWidth, scaleHeight);
-        Bitmap resizedBitmap = Bitmap.createBitmap(bit, 0, 0,
+        return Bitmap.createBitmap(bit, 0, 0,
                 width, height, matrix, true);
-        return resizedBitmap;
     }
 
-    public static Bitmap getEntityBitmap(int DefaultBitId){
-        Resources res = App.getContext().getResources();
+    public static Bitmap getEntityBitmap(Context context, @DrawableRes int DefaultBitId) {
+        Resources res = context.getResources();
         Bitmap bitmap = BitmapFactory.decodeResource(res, DefaultBitId);
         return resize(bitmap, Converter.convertDpToPixel(Constants.entityImageSize,res),Converter.convertDpToPixel(Constants.entityImageSize,res));
     }
 
-    public static Bitmap getCellBitmap(int DefaultBitId){
-        Resources res = App.getContext().getResources();
+    public static Bitmap getCellBitmap(Context context, int DefaultBitId) {
+        Resources res = context.getResources();
         Bitmap bitmap = BitmapFactory.decodeResource(res, DefaultBitId);
         return resize(bitmap, Converter.convertDpToPixel(Constants.cellImageSize,res),Converter.convertDpToPixel(Constants.cellImageSize,res));
     }
