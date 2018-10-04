@@ -80,7 +80,7 @@ fun MutableList<EntityType>.removeSpaceShip() {
     getSpaceShip()?.let { this.remove(it) }
 }
 
-inline fun <reified T : SpaceShip> Array<Array<Cell>>.findSpaceShip(): T? {
+inline fun <reified T : SpaceShip> Array<Array<Cell>>.findSpaceShip(): T {
     this.forEachIndexed { x, arrayOfCells ->
         arrayOfCells.forEachIndexed { y, cell ->
             if (x == 0 || x == this.size - 1 || y == 0 || y == arrayOfCells.size - 1) {
@@ -90,5 +90,5 @@ inline fun <reified T : SpaceShip> Array<Array<Cell>>.findSpaceShip(): T? {
             }
         }
     }
-    return null
+    throw NullPointerException("Ship didn't find, SPAWN any Ship")
 }

@@ -11,15 +11,22 @@ import com.silentgames.silent_planet.utils.findSpaceShip
  * Created by gidroshvandel on 28.06.17.
  */
 class GameMatrixHelper(
-        var gameMatrix: Array<Array<Cell>>,
+        gameMatrix: Array<Array<Cell>>,
+        var oldGameMatrix: Array<Array<Cell>>? = null,
         var currentXY: Axis = Axis(0, 0),
         var oldXY: Axis? = null,
         var selectedEntity: EntityType? = null,
         var isEventMove: Boolean = false,
-        val humanShip: HumanShip = gameMatrix.findSpaceShip()!!,
-        val robotShip: RobotShip = gameMatrix.findSpaceShip()!!,
-        val pirateShip: PirateShip = gameMatrix.findSpaceShip()!!,
-        val alienShip: AlienShip = gameMatrix.findSpaceShip()!!) {
+        val humanShip: HumanShip = gameMatrix.findSpaceShip(),
+        val robotShip: RobotShip = gameMatrix.findSpaceShip(),
+        val pirateShip: PirateShip = gameMatrix.findSpaceShip(),
+        val alienShip: AlienShip = gameMatrix.findSpaceShip()) {
+
+    var gameMatrix: Array<Array<Cell>> = gameMatrix
+        set(value) {
+            oldGameMatrix = field
+            field = value
+        }
 
     var gameMatrixCellByOldXY: Cell? = null
         get() = oldXY?.let { gameMatrix[it.x][it.y] }

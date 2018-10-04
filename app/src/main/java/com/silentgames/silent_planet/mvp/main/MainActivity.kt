@@ -60,7 +60,7 @@ class MainActivity : Activity(), MainContract.View, GameView.Callback {
 
     private fun initUi() {
 
-        mScaleFactor = Constants.getmScaleFactor()
+        mScaleFactor = Constants.mScaleFactor
         canvasSize = Constants.getCanvasSize(this)
         viewSize = Constants.getViewSize(this)
         mBitmap = Bitmap.createBitmap(canvasSize.toInt(), canvasSize.toInt(), Bitmap.Config.ARGB_8888)
