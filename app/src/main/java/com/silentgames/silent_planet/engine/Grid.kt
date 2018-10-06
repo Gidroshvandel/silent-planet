@@ -5,7 +5,7 @@ import android.graphics.Paint
 import com.silentgames.silent_planet.engine.base.Basic
 import com.silentgames.silent_planet.logic.Constants
 
-class Grid(private var canvasSize: Float) : Basic() {
+class Grid : Basic() {
     private fun paintSettings(paint: Paint) {
         //определяем параметры кисти
         paint.isAntiAlias = true
@@ -26,19 +26,19 @@ class Grid(private var canvasSize: Float) : Basic() {
         val verticalCountOfCells = Constants.verticalCountOfCells
         for (x in 0 until horizontalCountOfCells + 1) {
             canvas.drawLine(
-                    x.toFloat() * canvasSize / horizontalCountOfCells,
+                    x.toFloat() * canvas.width / horizontalCountOfCells,
                     0f,
-                    x.toFloat() * canvasSize / horizontalCountOfCells,
-                    canvasSize,
+                    x.toFloat() * canvas.height / horizontalCountOfCells,
+                    canvas.height.toFloat(),
                     paint
             )
         }
         for (y in 0 until verticalCountOfCells + 1) {
             canvas.drawLine(
                     0f,
-                    y.toFloat() * canvasSize / verticalCountOfCells,
-                    canvasSize,
-                    y.toFloat() * canvasSize / verticalCountOfCells,
+                    y.toFloat() * canvas.width / verticalCountOfCells,
+                    canvas.width.toFloat(),
+                    y.toFloat() * canvas.height / verticalCountOfCells,
                     paint
             )
         }

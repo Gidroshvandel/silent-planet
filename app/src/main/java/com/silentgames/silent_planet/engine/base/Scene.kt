@@ -1,5 +1,7 @@
 package com.silentgames.silent_planet.engine.base
 
+import com.silentgames.silent_planet.model.Axis
+
 
 class Scene(
         /**
@@ -12,11 +14,14 @@ class Scene(
         const val ORIENTATION_HOR = 1
     }
 
+    var mScaleFactor = 1f
+    var scrollAxis = Axis(0, 0)
+
     /**
      * высота и ширина сцены
      */
-    private var width: Int = 0
-    private var height: Int = 0
+    var width: Int = 0
+    var height: Int = 0
 
 
     /**

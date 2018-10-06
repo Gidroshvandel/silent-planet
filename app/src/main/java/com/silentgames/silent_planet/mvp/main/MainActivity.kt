@@ -1,9 +1,6 @@
 package com.silentgames.silent_planet.mvp.main
 
 import android.app.Activity
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Paint
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.widget.Toast
@@ -27,10 +24,6 @@ class MainActivity : Activity(), MainContract.View, Callback {
 
     lateinit var presenter: MainContract.Presenter
 
-    private lateinit var mBitmap: Bitmap
-    private lateinit var mCanvas: Canvas
-    private lateinit var paint: Paint
-
     private lateinit var scene: Scene
 
     public override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,40 +33,20 @@ class MainActivity : Activity(), MainContract.View, Callback {
         presenter = MainPresenter(this, MainViewModel(), MainModel(this))
 
         initUi()
-        paintSettings()
 
         presenter.onCreate()
 
     }
 
-    private fun paintSettings() {
-        //определяем параметры кисти
-        paint = Paint()
-        paint.isAntiAlias = true
-        paint.isDither = true
-        paint.color = -0x1
-        paint.strokeWidth = 2f
-        paint.style = Paint.Style.STROKE
-        paint.strokeJoin = Paint.Join.ROUND
-        paint.strokeCap = Paint.Cap.ROUND
-    }
-
     private fun initUi() {
-
-        mBitmap = Bitmap.createBitmap(
-                Constants.getCanvasSize(this).toInt(),
-                Constants.getCanvasSize(this).toInt(),
-                Bitmap.Config.ARGB_8888
-        )
-        mCanvas = Canvas(mBitmap)
 
         scene = Scene(mutableListOf(
                 Layer(),
-                GridLayer(Constants.getCanvasSize(this)),
+                GridLayer(),
                 Layer()
         ))
 
-        surface_view.init(scene)
+        surface_view.setScene(scene)
 
         action_button.setOnClickListener { presenter.onActionButtonClick() }
 
@@ -155,13 +128,11 @@ class MainActivity : Activity(), MainContract.View, Callback {
         for (x in 0 until horizontalCountOfCells) {
             for (y in 0 until verticalCountOfCells) {
                 backgroundLayer?.add(Background(
-                        Constants.getCanvasSize(this),
                         Axis(x, y),
                         gameMatrix[x][y].cellType.getCurrentBitmap()
                 ))
                 if (gameMatrix[x][y].entityType.isNotEmpty()) {
                     entityLayer?.add(Entity(
-                            Constants.getCanvasSize(this),
                             Axis(x, y),
                             gameMatrix[x][y].entityType.first().bitmap
                     ))

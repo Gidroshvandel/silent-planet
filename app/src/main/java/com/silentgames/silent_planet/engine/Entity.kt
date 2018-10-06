@@ -8,7 +8,6 @@ import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.utils.Calculator
 
 class Entity(
-        private var canvasSize: Float,
         axis: Axis,
         bmp: Bitmap
 ) : Sprite(axis, bmp) {
@@ -16,8 +15,16 @@ class Entity(
     override fun update() {}
 
     override fun draw(canvas: Canvas, paint: Paint) {
-        val x = Calculator.CellCenterNumeratorSquare(axis.x.toFloat(), canvasSize.toInt(), bmp)
-        val y = Calculator.CellCenterNumeratorSquare(axis.y.toFloat(), canvasSize.toInt(), bmp)
+        val x = Calculator.CellCenterNumeratorSquare(
+                axis.x.toFloat(),
+                canvas.width,
+                bmp
+        )
+        val y = Calculator.CellCenterNumeratorSquare(
+                axis.y.toFloat(),
+                canvas.height,
+                bmp
+        )
         canvas.drawBitmap(bmp, x, y, paint)
     }
 

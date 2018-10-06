@@ -1,7 +1,6 @@
 package com.silentgames.silent_planet.view
 
 import android.content.Context
-import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.*
 import com.silentgames.silent_planet.customListeners.CustomGestureListener
@@ -20,24 +19,7 @@ class SurfaceGameView(
         CustomGestureListener.Callback,
         CustomScaleGestureListener.Callback {
 
-    override fun onSingleTapConfirmed(event: MotionEvent?) {
-        event?.let {
-            val eventX = (event.x + scrollX) / mScaleFactor
-            val eventY = (event.y + scrollY) / mScaleFactor
-            val x = (Constants.horizontalCountOfCells * eventX / Constants.getCanvasSize(context)).toInt()
-            val y = (Constants.verticalCountOfCells * eventY / Constants.getCanvasSize(context)).toInt()
-            callback.onSingleTapConfirmed(Axis(x, y))
-        }
-    }
-
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        detector.onTouchEvent(event)
-        scaleGestureDetector.onTouchEvent(event)
-        return true
-    }
-
     private var mScaleFactor = 1f
-    private var canvasSize: Float
 
     private val detector: GestureDetector
     private val scaleGestureDetector: ScaleGestureDetector
@@ -48,12 +30,9 @@ class SurfaceGameView(
 
     private var scene: Scene? = null
 
-    private lateinit var canvas: Canvas
-
     private var timer: Timer = Timer()
 
     init {
-        canvasSize = Constants.getCanvasSize(context)
         holder.addCallback(this)
         callback = context as Callback
         scaleGestureDetector = ScaleGestureDetector(
@@ -63,13 +42,30 @@ class SurfaceGameView(
         detector = GestureDetector(context, CustomGestureListener(this))
     }
 
-    fun init(scene: Scene) {
+    fun setScene(scene: Scene) {
+        this.scene = scene
         drawer = DrawerTask(holder, scene)
+    }
+
+    override fun onSingleTapConfirmed(event: MotionEvent?) {
+        event?.let {
+            val eventX = (event.x + scrollX) / mScaleFactor
+            val eventY = (event.y + scrollY) / mScaleFactor
+            val x = (Constants.horizontalCountOfCells * eventX / (scene?.width ?: 1)).toInt()
+            val y = (Constants.verticalCountOfCells * eventY / (scene?.height ?: 1)).toInt()
+            callback.onSingleTapConfirmed(Axis(x, y))
+        }
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        detector.onTouchEvent(event)
+        scaleGestureDetector.onTouchEvent(event)
+        return true
     }
 
     override fun surfaceCreated(p0: SurfaceHolder?) {
         timer.scheduleAtFixedRate(drawer, 0, 40)
-        canvas = holder.lockCanvas()
+        val canvas = holder.lockCanvas()
         scene?.setWH(canvas.width, canvas.height)
         holder.unlockCanvasAndPost(canvas)
     }
@@ -83,15 +79,17 @@ class SurfaceGameView(
     }
 
     override fun onScroll(distanceX: Float, distanceY: Float) {
-        //не даем канвасу показать края по горизонтали
-        if (scrollX + distanceX < canvasSize - Constants.horizontalCountOfCells
-                && scrollX + distanceX > 0) {
-            scrollBy(distanceX.toInt(), 0)
-        }
-        //не даем канвасу показать края по вертикали
-        if (scrollY + distanceY < canvasSize - Constants.horizontalCountOfCells
-                && scrollY + distanceY > 0) {
-            scrollBy(0, distanceY.toInt())
+        scene?.let {
+            //не даем канвасу показать края по горизонтали
+            if (scrollX + distanceX < it.width && scrollX + distanceX > 0) {
+                scrollBy(distanceX.toInt(), 0)
+                scene?.scrollAxis = Axis((scrollX + distanceX).toInt(), scrollY)
+            }
+            //не даем канвасу показать края по вертикали
+            if (scrollY + distanceY < it.height && scrollY + distanceY > 0) {
+                scrollBy(0, distanceY.toInt())
+                scene?.scrollAxis = Axis(scrollX, (scrollY + distanceY).toInt())
+            }
         }
     }
 
@@ -100,22 +98,27 @@ class SurfaceGameView(
         //получаем координаты фокальной точки - точки между пальцами
         val focusX = scaleGestureDetector.focusX
         val focusY = scaleGestureDetector.focusY
-        //следим чтобы канвас не уменьшили меньше исходного размера и не допускаем увеличения больше чем в 2 раза
-        if (mScaleFactor * scaleFactor > 1 && mScaleFactor * scaleFactor < 2) {
-            mScaleFactor *= scaleGestureDetector.scaleFactor
-            canvasSize = Constants.getCanvasSize(context) * mScaleFactor//изменяем хранимое в памяти значение размера канваса
-            //используется при расчетах
-            //по умолчанию после зума канвас отскролит в левый верхний угол. Скролим канвас так, чтобы на экране оставалась обасть канваса, над которой был
-            //жест зума
-            //Для получения данной формулы достаточно школьных знаний математики (декартовы координаты).
-            var scrollX = ((scrollX + focusX) * scaleFactor - focusX).toInt()
-            scrollX = Math.min(Math.max(scrollX, 0), canvasSize.toInt() - Constants.getCanvasSize(context).toInt())
-            var scrollY = ((scrollY + focusY) * scaleFactor - focusY).toInt()
-            scrollY = Math.min(Math.max(scrollY, 0), canvasSize.toInt() - Constants.getCanvasSize(context).toInt())
-            scrollTo(scrollX, scrollY)
+        scene?.let {
+            //следим чтобы канвас не уменьшили меньше исходного размера и не допускаем увеличения больше чем в 2 раза
+            if (mScaleFactor * scaleFactor > 1 && mScaleFactor * scaleFactor < 2) {
+                mScaleFactor *= scaleGestureDetector.scaleFactor
+                scene?.mScaleFactor = mScaleFactor
+                //используется при расчетах
+                //по умолчанию после зума канвас отскролит в левый верхний угол. Скролим канвас так, чтобы на экране оставалась обасть канваса, над которой был
+                //жест зума
+                //Для получения данной формулы достаточно школьных знаний математики (декартовы координаты).
+                var scrollX = ((scrollX + focusX) * scaleFactor - focusX).toInt()
+                scrollX = Math.min(
+                        Math.max(scrollX, 0),
+                        it.width)
+                var scrollY = ((scrollY + focusY) * scaleFactor - focusY).toInt()
+                scrollY = Math.min(
+                        Math.max(scrollY, 0),
+                        it.height
+                )
+                scrollTo(scrollX, scrollY)
+            }
         }
-        //вызываем перерисовку принудительно
-        invalidate()
     }
 }
 

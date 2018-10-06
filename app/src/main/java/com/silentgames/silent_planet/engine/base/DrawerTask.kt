@@ -14,6 +14,12 @@ class DrawerTask(
         var canvas: Canvas? = null
         try {
             canvas = holder.lockCanvas()
+            canvas.scale(
+                    scene.mScaleFactor,
+                    scene.mScaleFactor,
+                    scene.scrollAxis.x.toFloat(),
+                    scene.scrollAxis.y.toFloat()
+            )//зумируем канвас
             canvas.drawRGB(9, 9, 9)
             for (l in 0 until scene.getLayerCount()) {
                 val layer = scene.getLayerByNum(l)
