@@ -30,9 +30,6 @@ class MainActivity : Activity(), MainContract.View, Callback {
     private lateinit var mBitmap: Bitmap
     private lateinit var mCanvas: Canvas
     private lateinit var paint: Paint
-    private lateinit var mBitmapPaint: Paint
-
-    private var canvasSize: Float = 0.toFloat()
 
     private lateinit var scene: Scene
 
@@ -63,10 +60,12 @@ class MainActivity : Activity(), MainContract.View, Callback {
 
     private fun initUi() {
 
-        canvasSize = Constants.getCanvasSize(this)
-        mBitmap = Bitmap.createBitmap(canvasSize.toInt(), canvasSize.toInt(), Bitmap.Config.ARGB_8888)
+        mBitmap = Bitmap.createBitmap(
+                Constants.getCanvasSize(this).toInt(),
+                Constants.getCanvasSize(this).toInt(),
+                Bitmap.Config.ARGB_8888
+        )
         mCanvas = Canvas(mBitmap)
-        mBitmapPaint = Paint(Paint.DITHER_FLAG)
 
         scene = Scene(mutableListOf(
                 Layer(),
