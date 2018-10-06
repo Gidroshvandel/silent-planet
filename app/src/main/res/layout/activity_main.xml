@@ -51,8 +51,9 @@
 
     </LinearLayout>
 
-    <com.silentgames.silent_planet.view.GameView
-        android:id="@+id/game_view"
+
+    <com.silentgames.silent_planet.view.SurfaceGameView
+        android:id="@+id/surface_view"
         android:layout_width="350dp"
         android:layout_height="350dp"
         android:layout_gravity="center"

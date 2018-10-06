@@ -24,8 +24,8 @@ class MainPresenter internal constructor(
         get() = viewModel.gameMatrixHelper.oldXY != null
                 && viewModel.gameMatrixHelper.currentXY == viewModel.gameMatrixHelper.oldXY
 
-    override fun onSingleTapConfirmed(x: Int, y: Int) {
-        select(Axis(x, y))
+    override fun onSingleTapConfirmed(axis: Axis) {
+        select(axis)
     }
 
     override fun onActionButtonClick() {

@@ -1,6 +1,6 @@
 package com.silentgames.silent_planet.mvp.main
 
-import android.graphics.Bitmap
+import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.BaseProperties
 import com.silentgames.silent_planet.model.Cell
 import com.silentgames.silent_planet.model.cells.CellType
@@ -11,11 +11,7 @@ import com.silentgames.silent_planet.mvp.BasePresenter
 interface MainContract {
     interface View {
 
-        fun drawGrid()
-
         fun drawBattleGround(gameMatrix: Array<Array<Cell>>)
-
-        fun reDraw(eventX: Int, eventY: Int, entity: Bitmap)
 
         fun showToast(text: String)
 
@@ -49,7 +45,7 @@ interface MainContract {
 
     interface Presenter : BasePresenter {
 
-        fun onSingleTapConfirmed(x: Int, y: Int)
+        fun onSingleTapConfirmed(axis: Axis)
 
         fun onActionButtonClick()
 

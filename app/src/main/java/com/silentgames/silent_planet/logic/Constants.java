@@ -17,7 +17,7 @@ public class Constants {
     public static final int countArrowCells = 2;
     public static final int countCrystalsToWin = 20;
 
-    public static int getViewSize(Context context) {
+    private static int getViewSize(Context context) {
         return (int) Converter.convertDpToPixel(350, context.getResources());
     }
 
