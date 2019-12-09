@@ -1,5 +1,6 @@
 package com.silentgames.silent_planet.view
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.*
@@ -10,6 +11,8 @@ import com.silentgames.silent_planet.engine.base.Scene
 import com.silentgames.silent_planet.logic.Constants
 import com.silentgames.silent_planet.model.Axis
 import java.util.*
+import kotlin.math.max
+import kotlin.math.min
 
 class SurfaceGameView(
         context: Context,
@@ -49,14 +52,17 @@ class SurfaceGameView(
 
     override fun onSingleTapConfirmed(event: MotionEvent?) {
         event?.let {
-            val eventX = (event.x + scrollX) / mScaleFactor
-            val eventY = (event.y + scrollY) / mScaleFactor
-            val x = (Constants.horizontalCountOfCells * eventX / (scene?.width ?: 1)).toInt()
-            val y = (Constants.verticalCountOfCells * eventY / (scene?.height ?: 1)).toInt()
-            callback.onSingleTapConfirmed(Axis(x, y))
+            scene?.let {
+                val eventX = (event.x + it.scrollAxis.x) / mScaleFactor
+                val eventY = (event.y + it.scrollAxis.y) / mScaleFactor
+                val x = ((Constants.horizontalCountOfCells) * eventX / (it.width)).toInt()
+                val y = ((Constants.verticalCountOfCells) * eventY / (it.height)).toInt()
+                callback.onSingleTapConfirmed(Axis(x, y))
+            }
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         detector.onTouchEvent(event)
         scaleGestureDetector.onTouchEvent(event)
@@ -81,17 +87,17 @@ class SurfaceGameView(
     override fun onScroll(distanceX: Float, distanceY: Float) {
         scene?.let {
             //не даем канвасу показать края по горизонтали
-            if (scrollX + distanceX < it.width && scrollX + distanceX > 0) {
-                scrollBy(distanceX.toInt(), 0)
-                scene?.scrollAxis = Axis((scrollX + distanceX).toInt(), scrollY)
+            if (it.scrollAxis.x + distanceX < it.width.toScale() && it.scrollAxis.x + distanceX > 0) {
+                scene?.scrollAxis = Axis((it.scrollAxis.x + distanceX).toInt(), it.scrollAxis.y)
             }
             //не даем канвасу показать края по вертикали
-            if (scrollY + distanceY < it.height && scrollY + distanceY > 0) {
-                scrollBy(0, distanceY.toInt())
-                scene?.scrollAxis = Axis(scrollX, (scrollY + distanceY).toInt())
+            if (it.scrollAxis.y + distanceY < it.height.toScale() && it.scrollAxis.y + distanceY > 0) {
+                scene?.scrollAxis = Axis(it.scrollAxis.x, (it.scrollAxis.y + distanceY).toInt())
             }
         }
     }
+
+    private fun Int.toScale(): Int = (this * (mScaleFactor - 1)).toInt()
 
     override fun onScale() {
         val scaleFactor = scaleGestureDetector.scaleFactor//получаем значение зума относительно предыдущего состояния
@@ -102,21 +108,22 @@ class SurfaceGameView(
             //следим чтобы канвас не уменьшили меньше исходного размера и не допускаем увеличения больше чем в 2 раза
             if (mScaleFactor * scaleFactor > 1 && mScaleFactor * scaleFactor < 2) {
                 mScaleFactor *= scaleGestureDetector.scaleFactor
-                scene?.mScaleFactor = mScaleFactor
+                it.mScaleFactor = mScaleFactor
                 //используется при расчетах
                 //по умолчанию после зума канвас отскролит в левый верхний угол. Скролим канвас так, чтобы на экране оставалась обасть канваса, над которой был
                 //жест зума
                 //Для получения данной формулы достаточно школьных знаний математики (декартовы координаты).
                 var scrollX = ((scrollX + focusX) * scaleFactor - focusX).toInt()
-                scrollX = Math.min(
-                        Math.max(scrollX, 0),
-                        it.width)
-                var scrollY = ((scrollY + focusY) * scaleFactor - focusY).toInt()
-                scrollY = Math.min(
-                        Math.max(scrollY, 0),
-                        it.height
+                scrollX = min(
+                        it.scrollAxis.x + max(scrollX, 0),
+                        it.width.toScale()
                 )
-                scrollTo(scrollX, scrollY)
+                var scrollY = ((scrollY + focusY) * scaleFactor - focusY).toInt()
+                scrollY = min(
+                        it.scrollAxis.y + max(scrollY, 0),
+                        it.height.toScale()
+                )
+                it.scrollAxis = Axis(scrollX, scrollY)
             }
         }
     }
