@@ -54,10 +54,10 @@
 
     <com.silentgames.silent_planet.view.SurfaceGameView
         android:id="@+id/surface_view"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
         android:fillViewport="true" />
 
     <LinearLayout
@@ -98,6 +98,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:gravity="center"
+                    android:textColor="@color/white"
                     tools:text="Test Name" />
 
             </LinearLayout>
@@ -106,8 +107,8 @@
             <LinearLayout
                 android:layout_width="110dp"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="4dp"
                 android:layout_marginStart="4dp"
+                android:layout_marginBottom="4dp"
                 android:background="@drawable/panel"
                 android:orientation="vertical"
                 android:weightSum="1">
@@ -125,11 +126,12 @@
                             android:layout_height="25dp"
                             android:src="@drawable/crystal" />
 
-                        <TextView
+                        <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/image_crystal_text"
                             android:layout_marginStart="20dp"
                             android:layout_marginTop="5dp"
-                            android:text="" />
+                            android:textColor="@color/white"
+                            tools:text="12" />
                     </TableRow>
 
                 </TableLayout>
@@ -150,6 +152,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:textColor="@color/white"
                 android:textSize="@dimen/text_m"
                 tools:text="Description" />
 
