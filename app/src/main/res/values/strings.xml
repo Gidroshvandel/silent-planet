@@ -32,4 +32,13 @@
 
     <string name="arrow_green_cell_description">Зелёная стрела перемещает на 1 клетку</string>
     <string name="arrow_red_cell_description">Красная стрела перемещает на 2 клетки</string>
+
+    <string name="robot_ship_name">Зиро</string>
+    <string name="robot_ship_description">Космический корабль роботов</string>
+    <string name="pirate_ship_name">Корсар</string>
+    <string name="pirate_ship_description">Космический корабль пиратов</string>
+    <string name="human_ship_name">Пионер</string>
+    <string name="human_ship_description">Космический корабль землян</string>
+    <string name="alien_ship_name">Лиира</string>
+    <string name="alien_ship_description">Космический корабль загадочной рассы</string>
 </resources>

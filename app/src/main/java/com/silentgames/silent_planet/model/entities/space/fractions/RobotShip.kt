@@ -13,6 +13,6 @@ import com.silentgames.silent_planet.utils.BitmapEditor
 class RobotShip(
         context: Context,
         override var bitmap: Bitmap = BitmapEditor.getEntityBitmap(context, R.drawable.robot_space_ship),
-        override var name: String = "Зиро",
-        override var description: String = "Космический корабль роботов"
+        override var name: String = context.getString(R.string.robot_ship_name),
+        override var description: String = context.getString(R.string.robot_ship_description)
 ) : SpaceShip(context, Robots.getInstance())
