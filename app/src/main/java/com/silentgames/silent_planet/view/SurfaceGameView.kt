@@ -6,7 +6,9 @@ import android.util.AttributeSet
 import android.view.*
 import com.silentgames.silent_planet.customListeners.CustomGestureListener
 import com.silentgames.silent_planet.customListeners.CustomScaleGestureListener
+import com.silentgames.silent_planet.engine.GridLayer
 import com.silentgames.silent_planet.engine.base.DrawerTask
+import com.silentgames.silent_planet.engine.base.Layer
 import com.silentgames.silent_planet.engine.base.Scene
 import com.silentgames.silent_planet.logic.Constants
 import com.silentgames.silent_planet.model.Axis
@@ -35,6 +37,8 @@ class SurfaceGameView(
 
     private var timer: Timer = Timer()
 
+    private var toDrawLayerList = mutableListOf<Pair<LayerType, Layer>>()
+
     init {
         holder.addCallback(this)
         callback = context as Callback
@@ -45,9 +49,13 @@ class SurfaceGameView(
         detector = GestureDetector(context, CustomGestureListener(this))
     }
 
-    fun setScene(scene: Scene) {
-        this.scene = scene
-        drawer = DrawerTask(holder, scene)
+    fun updateLayer(layerType: LayerType, layer: Layer) {
+        val scene = this.scene
+        if (scene != null) {
+            scene.setLayer(layerType.id, layer)
+        } else {
+            toDrawLayerList.add(Pair(layerType, layer))
+        }
     }
 
     override fun onSingleTapConfirmed(event: MotionEvent?) {
@@ -70,10 +78,15 @@ class SurfaceGameView(
     }
 
     override fun surfaceCreated(p0: SurfaceHolder?) {
-        timer.scheduleAtFixedRate(drawer, 0, 40)
         val canvas = holder.lockCanvas()
-        scene?.setWH(canvas.width, canvas.height)
+        scene = Scene(mutableListOf(Layer(), GridLayer(), Layer()), canvas.width, canvas.height).apply {
+            toDrawLayerList.forEach {
+                setLayer(it.first.id, it.second)
+            }
+        }
         holder.unlockCanvasAndPost(canvas)
+        scene?.let { drawer = DrawerTask(holder, it) }
+        timer.scheduleAtFixedRate(drawer, 0, 40)
     }
 
     override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {}
@@ -126,6 +139,11 @@ class SurfaceGameView(
                 it.scrollAxis = Axis(scrollX, scrollY)
             }
         }
+    }
+
+    enum class LayerType(val id: Int) {
+        BACKGROUND(0),
+        ENTITY(2)
     }
 }
 

@@ -22,14 +22,10 @@ class DrawerTask(
             )//зумируем канвас
 
             canvas.drawRGB(9, 9, 9)
-            for (l in 0 until scene.getLayerCount()) {
-                val layer = scene.getLayerByNum(l)
-                if (layer != null) {
-                    val mainPaint = layer.paint
-                    for (tmp in layer.data) {
-                        tmp.draw(canvas, mainPaint)
-                    }
-
+            scene.getLayers().forEach { layer ->
+                val mainPaint = layer.paint
+                for (tmp in layer.data) {
+                    tmp.draw(canvas, mainPaint)
                 }
             }
             scene.update()

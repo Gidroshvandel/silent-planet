@@ -8,9 +8,7 @@ import com.silentgames.silent_planet.R
 import com.silentgames.silent_planet.dialog.BottomSheetMenu
 import com.silentgames.silent_planet.engine.Background
 import com.silentgames.silent_planet.engine.Entity
-import com.silentgames.silent_planet.engine.GridLayer
 import com.silentgames.silent_planet.engine.base.Layer
-import com.silentgames.silent_planet.engine.base.Scene
 import com.silentgames.silent_planet.logic.Constants
 import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.Cell
@@ -18,13 +16,12 @@ import com.silentgames.silent_planet.model.cells.CellType
 import com.silentgames.silent_planet.model.entities.EntityType
 import com.silentgames.silent_planet.model.fractions.FractionsType
 import com.silentgames.silent_planet.view.Callback
+import com.silentgames.silent_planet.view.SurfaceGameView
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : Activity(), MainContract.View, Callback {
 
     lateinit var presenter: MainContract.Presenter
-
-    private lateinit var scene: Scene
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,17 +36,7 @@ class MainActivity : Activity(), MainContract.View, Callback {
     }
 
     private fun initUi() {
-
-        scene = Scene(mutableListOf(
-                Layer(),
-                GridLayer(),
-                Layer()
-        ))
-
-        surface_view.setScene(scene)
-
         action_button.setOnClickListener { presenter.onActionButtonClick() }
-
     }
 
     override fun fillEntityName(text: String) {
@@ -121,24 +108,26 @@ class MainActivity : Activity(), MainContract.View, Callback {
     }
 
     override fun drawBattleGround(gameMatrix: Array<Array<Cell>>) {
-        val backgroundLayer = scene.getLayerByNum(0)
-        val entityLayer = scene.getLayerByNum(2)
+        val backgroundLayer = Layer()
+        val entityLayer = Layer()
         val horizontalCountOfCells = Constants.horizontalCountOfCells
         val verticalCountOfCells = Constants.verticalCountOfCells
         for (x in 0 until horizontalCountOfCells) {
             for (y in 0 until verticalCountOfCells) {
-                backgroundLayer?.add(Background(
+                backgroundLayer.add(Background(
                         Axis(x, y),
                         gameMatrix[x][y].cellType.getCurrentBitmap()
                 ))
                 if (gameMatrix[x][y].entityType.isNotEmpty()) {
-                    entityLayer?.add(Entity(
+                    entityLayer.add(Entity(
                             Axis(x, y),
                             gameMatrix[x][y].entityType.first().bitmap
                     ))
                 }
             }
         }
+        surface_view.updateLayer(SurfaceGameView.LayerType.BACKGROUND, backgroundLayer)
+        surface_view.updateLayer(SurfaceGameView.LayerType.ENTITY, entityLayer)
     }
 
     override fun showToast(text: String) {
