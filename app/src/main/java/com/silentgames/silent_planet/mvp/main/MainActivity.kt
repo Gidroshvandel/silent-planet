@@ -7,6 +7,7 @@ import android.widget.Toast
 import com.silentgames.silent_planet.R
 import com.silentgames.silent_planet.dialog.BottomSheetMenu
 import com.silentgames.silent_planet.engine.Background
+import com.silentgames.silent_planet.engine.EngineAxis
 import com.silentgames.silent_planet.engine.Entity
 import com.silentgames.silent_planet.engine.base.Layer
 import com.silentgames.silent_planet.logic.Constants
@@ -115,13 +116,15 @@ class MainActivity : Activity(), MainContract.View, Callback {
         for (x in 0 until horizontalCountOfCells) {
             for (y in 0 until verticalCountOfCells) {
                 backgroundLayer.add(Background(
-                        Axis(x, y),
+                        EngineAxis(x.toFloat(), y.toFloat()),
                         gameMatrix[x][y].cellType.getCurrentBitmap()
                 ))
                 if (gameMatrix[x][y].entityType.isNotEmpty()) {
+                    val entity = gameMatrix[x][y].entityType.first()
                     entityLayer.add(Entity(
-                            Axis(x, y),
-                            gameMatrix[x][y].entityType.first().bitmap
+                            entity.name.hashCode() + entity.fraction.fractionsType.ordinal,
+                            EngineAxis(x.toFloat(), y.toFloat()),
+                            entity.bitmap
                     ))
                 }
             }

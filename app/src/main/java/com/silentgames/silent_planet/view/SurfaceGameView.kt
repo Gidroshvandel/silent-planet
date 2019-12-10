@@ -7,6 +7,7 @@ import android.view.*
 import com.silentgames.silent_planet.customListeners.CustomGestureListener
 import com.silentgames.silent_planet.customListeners.CustomScaleGestureListener
 import com.silentgames.silent_planet.engine.GridLayer
+import com.silentgames.silent_planet.engine.LayerEntityMover
 import com.silentgames.silent_planet.engine.base.DrawerTask
 import com.silentgames.silent_planet.engine.base.Layer
 import com.silentgames.silent_planet.engine.base.Scene
@@ -52,7 +53,7 @@ class SurfaceGameView(
     fun updateLayer(layerType: LayerType, layer: Layer) {
         val scene = this.scene
         if (scene != null) {
-            scene.setLayer(layerType.id, layer)
+            LayerEntityMover(layerType.id, layer).attach(scene)
         } else {
             toDrawLayerList.add(Pair(layerType, layer))
         }

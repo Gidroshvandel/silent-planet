@@ -2,12 +2,12 @@ package com.silentgames.silent_planet.engine.base
 
 import android.graphics.Bitmap
 import android.graphics.Matrix
-import com.silentgames.silent_planet.model.Axis
+import com.silentgames.silent_planet.engine.EngineAxis
 
 
-abstract class Sprite(axis: Axis, var bmp: Bitmap) : Basic() {
+abstract class Sprite(axis: EngineAxis, var bmp: Bitmap) : Basic() {
 
-    var axis: Axis = axis
+    var axis: EngineAxis = axis
         set(value) {
             field = value
             refreshAll()
@@ -34,7 +34,7 @@ abstract class Sprite(axis: Axis, var bmp: Bitmap) : Basic() {
     private fun refreshAll() {
         this.width = bmp.width
         this.height = bmp.height
-        matrix.setTranslate(axis.x.toFloat(), axis.y.toFloat())
+        matrix.setTranslate(axis.x, axis.y)
     }
 
 }

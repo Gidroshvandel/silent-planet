@@ -39,6 +39,14 @@ class Scene(
         }
     }
 
+    fun getLayer(i: Int): Layer? {
+        return if (i < layers.size) {
+            layers[i]
+        } else {
+            null
+        }
+    }
+
     fun getLayers() = layers
 
     /**
