@@ -35,7 +35,7 @@ class SurfaceGameView(
 
     private var scene: Scene? = null
 
-    private var timer: Timer = Timer()
+    private var timer: Timer? = null
 
     private var toDrawLayerList = mutableListOf<Pair<LayerType, Layer>>()
 
@@ -78,15 +78,19 @@ class SurfaceGameView(
     }
 
     override fun surfaceCreated(p0: SurfaceHolder?) {
-        val canvas = holder.lockCanvas()
-        scene = Scene(mutableListOf(Layer(), GridLayer(), Layer()), canvas.width, canvas.height).apply {
-            toDrawLayerList.forEach {
-                setLayer(it.first.id, it.second)
+        if (scene == null) {
+            val canvas = holder.lockCanvas()
+            scene = Scene(mutableListOf(Layer(), GridLayer(), Layer()), canvas.width, canvas.height).apply {
+                toDrawLayerList.forEach {
+                    setLayer(it.first.id, it.second)
+                }
             }
+            holder.unlockCanvasAndPost(canvas)
         }
-        holder.unlockCanvasAndPost(canvas)
         scene?.let { drawer = DrawerTask(holder, it) }
-        timer.scheduleAtFixedRate(drawer, 0, 40)
+        timer = Timer().apply {
+            scheduleAtFixedRate(drawer, 0, 40)
+        }
     }
 
     override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {}
@@ -94,7 +98,9 @@ class SurfaceGameView(
     override fun surfaceDestroyed(p0: SurfaceHolder?) {
         //Прерываем поток при уничтожении surface
         drawer?.cancel()
-        timer.cancel()
+        drawer = null
+        timer?.cancel()
+        timer = null
     }
 
     override fun onScroll(distanceX: Float, distanceY: Float) {
