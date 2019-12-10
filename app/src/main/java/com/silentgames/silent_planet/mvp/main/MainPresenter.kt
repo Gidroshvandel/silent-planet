@@ -132,11 +132,13 @@ class MainPresenter internal constructor(
         if (newGameMatrix != null) {
             viewModel.gameMatrixHelper = newGameMatrix
             eventCount = 0
-            doEvent() {
-                view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix) {}
-                view.selectCurrentFraction(TurnHandler.fractionType)
-                updateEntityState(entity)
-                checkToWin()
+            doEvent {
+                view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix) {
+                    TurnHandler.turnCount()
+                    view.selectCurrentFraction(TurnHandler.fractionType)
+                    updateEntityState(entity)
+                    checkToWin()
+                }
             }
         } else {
             viewModel.gameMatrixHelper.oldXY = null
