@@ -15,4 +15,4 @@ class Pirate(
         override var name: String,
         override var bitmap: Bitmap = BitmapEditor.getEntityBitmap(context, R.drawable.pirate),
         override var description: String = ""
-) : Player(context, Pirates.getInstance())
+) : Player(context, Pirates)

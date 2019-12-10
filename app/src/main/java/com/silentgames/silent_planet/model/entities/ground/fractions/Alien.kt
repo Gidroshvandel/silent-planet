@@ -15,4 +15,4 @@ class Alien(
         override var name: String,
         override var bitmap: Bitmap = BitmapEditor.getEntityBitmap(context, R.drawable.alien),
         override var description: String = ""
-) : Player(context, Aliens.getInstance())
+) : Player(context, Aliens)

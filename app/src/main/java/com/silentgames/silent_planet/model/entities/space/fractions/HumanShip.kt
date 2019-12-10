@@ -15,4 +15,4 @@ class HumanShip(
         override var bitmap: Bitmap = BitmapEditor.getEntityBitmap(context, R.drawable.human_space_ship),
         override var name: String = context.getString(R.string.human_ship_name),
         override var description: String = context.getString(R.string.human_ship_description)
-) : SpaceShip(context, Humans.getInstance())
+) : SpaceShip(context, Humans)

@@ -15,4 +15,4 @@ class Robot(
         override var name: String,
         override var bitmap: Bitmap = BitmapEditor.getEntityBitmap(context, R.drawable.robot),
         override var description: String = ""
-) : Player(context, Robots.getInstance())
+) : Player(context, Robots)

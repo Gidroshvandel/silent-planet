@@ -15,4 +15,4 @@ class AlienShip(
         override var bitmap: Bitmap = BitmapEditor.getEntityBitmap(context, R.drawable.aliens_space_ship),
         override var name: String = context.getString(R.string.alien_ship_name),
         override var description: String = context.getString(R.string.alien_ship_description)
-) : SpaceShip(context, Aliens.getInstance())
+) : SpaceShip(context, Aliens)

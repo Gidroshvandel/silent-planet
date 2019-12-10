@@ -71,11 +71,11 @@ class MainModel(val context: Context) {
         spawnPirates(gameMatrix[0][1])
         spawnRobots(gameMatrix[0][2])
         spawnAliens(gameMatrix[0][3])
-        TurnHandler.start(Humans.getInstance())
-        TurnHandler.setPlayable(Aliens.getInstance())
-        TurnHandler.setPlayable(Humans.getInstance())
-        TurnHandler.setPlayable(Pirates.getInstance())
-        TurnHandler.setPlayable(Robots.getInstance())
+        TurnHandler.start(Humans)
+        TurnHandler.setPlayable(Aliens)
+        TurnHandler.setPlayable(Humans)
+        TurnHandler.setPlayable(Pirates)
+        TurnHandler.setPlayable(Robots)
     }
 
     private fun spawnRobots(gameMatrixCell: Cell) {

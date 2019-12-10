@@ -12,4 +12,6 @@ abstract class EntityType(
         override var fraction: Fractions,
         override var crystals: Int = 0,
         override var isDead: Boolean = false
-) : EntityTypeProperties
+) : EntityTypeProperties {
+    override val id: Int get() = name.hashCode() + description.hashCode()
+}
