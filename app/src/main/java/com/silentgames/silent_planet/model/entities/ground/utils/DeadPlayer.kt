@@ -12,6 +12,6 @@ class DeadPlayer(
         override var bitmap: Bitmap = player.bitmap,
         override var isDead: Boolean = true,
         override var isCanMove: Boolean = false,
-        override var name: String = "${player.name} ${player.context.resources.getString(R.string.deadPlayer)}",
-        override var description: String = "Ещё один труп на холодной планете"
+        override var name: String = "${player.name} ${player.context.resources.getString(R.string.dead_player)}",
+        override var description: String = player.context.getString(R.string.dead_player_description)
 ) : Player(player.context, player.fraction)
