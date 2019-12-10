@@ -59,4 +59,5 @@
     <string name="human_ship_description">Космический корабль землян</string>
     <string name="alien_ship_name">Лиира</string>
     <string name="alien_ship_description">Космический корабль загадочной рассы</string>
+    <string name="take_crystal">забрать кристал</string>
 </resources>
