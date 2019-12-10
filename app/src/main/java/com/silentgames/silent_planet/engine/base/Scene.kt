@@ -52,9 +52,20 @@ class Scene(
     /**
      * Обновляет все соержимое сцены
      */
-    fun update() {
-        for (l in layers) {
-            l.update()
+    fun update(onUpdated: ((Boolean) -> Unit)) {
+        var updatedLayerCount = 0
+        val dataSize = layers.size
+        var somethingChange = false
+        layers.forEach {
+            it.update { changed ->
+                updatedLayerCount++
+                if (changed) {
+                    somethingChange = true
+                }
+                if (dataSize == updatedLayerCount) {
+                    onUpdated.invoke(somethingChange)
+                }
+            }
         }
     }
 

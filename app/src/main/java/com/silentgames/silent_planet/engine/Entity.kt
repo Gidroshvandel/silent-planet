@@ -5,6 +5,8 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import com.silentgames.silent_planet.engine.base.Sprite
 import com.silentgames.silent_planet.logic.Constants
+import kotlin.math.max
+import kotlin.math.min
 
 class Entity(
         val id: Int,
@@ -12,9 +14,11 @@ class Entity(
         bmp: Bitmap
 ) : Sprite(axis, bmp) {
 
-    private var speed = 0.1
+    private var speed = 0.2
 
     private var destinationAxis = axis
+
+    var isMove = false
 
     override fun draw(canvas: Canvas, paint: Paint) {
         val x = cellCenterNumeratorSquare(
@@ -40,23 +44,41 @@ class Entity(
     }
 
     fun move(axis: EngineAxis) {
+        isMove = true
         destinationAxis = axis
     }
 
     fun move(fromAxis: EngineAxis, toAxis: EngineAxis) {
+        isMove = true
         axis = fromAxis
         destinationAxis = toAxis
     }
 
-    override fun update() {
+    override fun update(onUpdated: ((Boolean) -> Unit)) {
         if (destinationAxis != axis) {
-            val difX = destinationAxis.x - axis.x
-            val difY = destinationAxis.y - axis.y
-            val x = difX * speed
-            val y = difY * speed
-            axis = EngineAxis(axis.x + x.toFloat(), axis.y + y.toFloat())
+            isMove = true
+            val difX = (destinationAxis.x - axis.x).getDiff()
+            val difY = (destinationAxis.y - axis.y).getDiff()
+            var x = (axis.x + (difX * speed).toFloat())
+            var y = (axis.y + (difY * speed).toFloat())
+            if (difX >= 0 && x > destinationAxis.x || difX < 0 && x < destinationAxis.x) {
+                x = destinationAxis.x
+            }
+            if (difY >= 0 && y > destinationAxis.y || difY < 0 && y < destinationAxis.y) {
+                y = destinationAxis.y
+            }
+            axis = EngineAxis(x, y)
+        } else {
+            if (isMove) {
+                isMove = false
+                onUpdated.invoke(true)
+            } else {
+                onUpdated.invoke(false)
+            }
         }
     }
+
+    private fun Float.getDiff() = if (this >= 0) max(this, 0.01f) else min(this, -0.01f)
 
     override fun equals(other: Any?): Boolean {
         return if (other is Entity) {

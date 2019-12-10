@@ -108,7 +108,7 @@ class MainActivity : Activity(), MainContract.View, Callback {
         image_crystal_text.text = text
     }
 
-    override fun drawBattleGround(gameMatrix: Array<Array<Cell>>) {
+    override fun drawBattleGround(gameMatrix: Array<Array<Cell>>, onUpdateComplete: () -> Unit) {
         val backgroundLayer = Layer()
         val entityLayer = Layer()
         val horizontalCountOfCells = Constants.horizontalCountOfCells
@@ -130,7 +130,7 @@ class MainActivity : Activity(), MainContract.View, Callback {
             }
         }
         surface_view.updateLayer(SurfaceGameView.LayerType.BACKGROUND, backgroundLayer)
-        surface_view.updateLayer(SurfaceGameView.LayerType.ENTITY, entityLayer)
+        surface_view.updateLayer(SurfaceGameView.LayerType.ENTITY, entityLayer, onUpdateComplete)
     }
 
     override fun showToast(text: String) {

@@ -17,8 +17,6 @@ class Grid : Basic() {
         paint.strokeCap = Paint.Cap.ROUND
     }
 
-    override fun update() {}
-
     override fun draw(canvas: Canvas, paint: Paint) {
         paintSettings(paint)
         //рисуем сетку

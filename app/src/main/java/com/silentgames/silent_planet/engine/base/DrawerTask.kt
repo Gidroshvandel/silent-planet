@@ -10,6 +10,8 @@ class DrawerTask(
         private val scene: Scene
 ) : TimerTask() {
 
+    var onSceneChanged: (() -> Unit)? = null
+
     override fun run() {
         var canvas: Canvas? = null
         try {
@@ -28,7 +30,11 @@ class DrawerTask(
                     tmp.draw(canvas, mainPaint)
                 }
             }
-            scene.update()
+            scene.update {
+                if (it) {
+                    onSceneChanged?.invoke()
+                }
+            }
         } catch (e: Exception) {
 
         } finally {

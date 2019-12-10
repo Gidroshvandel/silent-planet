@@ -11,7 +11,6 @@ import com.silentgames.silent_planet.model.cells.Arrow.ArrowRed
 import com.silentgames.silent_planet.model.cells.CellType
 import com.silentgames.silent_planet.model.cells.Crystal.Crystal
 import com.silentgames.silent_planet.model.cells.Crystal.CrystalsEnum
-import com.silentgames.silent_planet.model.cells.DeadCell
 import com.silentgames.silent_planet.model.cells.EmptyCell
 import com.silentgames.silent_planet.model.cells.SpaceCell
 import com.silentgames.silent_planet.model.entities.ground.Player
@@ -134,7 +133,7 @@ class MainModel(val context: Context) {
         return when (Random().nextInt(3)) {
             0 -> Crystal(context, CrystalsEnum.random())
             1 -> randomArrow(axis)
-            2 -> DeadCell(context)
+            2 -> randomArrow(axis)
             else -> EmptyCell(context)
         }
     }

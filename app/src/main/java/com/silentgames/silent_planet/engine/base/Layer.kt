@@ -15,12 +15,6 @@ open class Layer {
 
     private var processing = false
 
-    /**
-     * Конструктор принимает в качестве параметра номер слоя
-     *
-     * @param lev
-     * номер слоя на сцене
-     */
     init {
         processing = true
         paint = Paint()
@@ -80,34 +74,24 @@ open class Layer {
     /**
      * обновляет все объекты на слое
      */
-    fun update() {
+    fun update(onUpdated: ((Boolean) -> Unit)) {
+        var updatedDataCount = 0
+        val dataSize = data.size
+        var somethingChange = false
         processing = true
-        for (a in data) {
-            a.update()
+        data.forEach {
+            it.update { changed ->
+                updatedDataCount++
+                if (changed) {
+                    somethingChange = true
+                }
+                if (dataSize == updatedDataCount) {
+                    processing = false
+                    onUpdated.invoke(somethingChange)
+                }
+            }
         }
-        processing = false
     }
-
-//     /**
-//     * выбирает первый объект на слое, в который попадает точка с кооординатами
-//     * (f,g)
-//     *
-//     * @param f
-//     * координата по x
-//     * @param g
-//     * координата по y
-//     * @return объект со слоя
-//     */
-//    fun select(f: Float, g: Float): Basic? {
-//        var tmp: Basic? = null
-//        for (i in 0 until data.size) {
-//            if (data[i].isSelected(f, g)) {
-//                tmp = data[i]
-//                break
-//            }
-//        }
-//        return tmp
-//    }
 
     fun isProcessing(): Boolean {
         return processing

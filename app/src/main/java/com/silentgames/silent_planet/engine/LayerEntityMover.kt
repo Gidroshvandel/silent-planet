@@ -9,7 +9,7 @@ class LayerEntityMover(private val position: Int, private val newLayer: Layer) {
         val oldLayer = scene.getLayer(position)
         if (oldLayer != null) {
             if (newLayer.data.firstOrNull { it is Entity } != null) {
-                scene.setLayer(position, moveChangedEntities(oldLayer, newLayer))
+                scene.setLayer(position, getChangedList(oldLayer, newLayer))
             } else {
                 scene.setLayer(position, newLayer)
             }
@@ -29,6 +29,28 @@ class LayerEntityMover(private val position: Int, private val newLayer: Layer) {
                 }
             }
         }
+        return newLayer
+    }
+
+    private fun getChangedList(oldLayer: Layer, newLayer: Layer): Layer {
+        val oldLayerData = oldLayer.data.filterIsInstance<Entity>()
+        val newLayerData = newLayer.data.filterIsInstance<Entity>()
+
+        val changed = mutableListOf<Entity>()
+
+        oldLayerData.forEach { oldEntity ->
+            newLayerData.forEach { newEntity ->
+                if (oldEntity == newEntity && oldEntity.axis != newEntity.axis) {
+                    newEntity.move(oldEntity.axis, newEntity.axis)
+                    changed.add(newEntity)
+                }
+            }
+        }
+
+        newLayerData.subtract(changed).forEach {
+            it.move(it.axis)
+        }
+
         return newLayer
     }
 

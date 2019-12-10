@@ -11,7 +11,7 @@ import com.silentgames.silent_planet.mvp.BasePresenter
 interface MainContract {
     interface View {
 
-        fun drawBattleGround(gameMatrix: Array<Array<Cell>>)
+        fun drawBattleGround(gameMatrix: Array<Array<Cell>>, onUpdateComplete: () -> Unit)
 
         fun showToast(text: String)
 

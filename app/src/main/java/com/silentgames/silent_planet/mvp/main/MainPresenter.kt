@@ -56,10 +56,10 @@ class MainPresenter internal constructor(
         view.changePirateCristalCount(0)
         view.changeRobotCristalCount(0)
 
-        view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix)
+        view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix) {
+            view.selectCurrentFraction(TurnHandler.fractionType)
+        }
         view.enableButton(false)
-
-        view.selectCurrentFraction(TurnHandler.fractionType)
 
     }
 
@@ -131,11 +131,13 @@ class MainPresenter internal constructor(
         val newGameMatrix = EntityMove(viewModel.gameMatrixHelper).canMove(entity)
         if (newGameMatrix != null) {
             viewModel.gameMatrixHelper = newGameMatrix
-            doEvent()
-            view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix)
-            view.selectCurrentFraction(TurnHandler.fractionType)
-            updateEntityState(entity)
-            checkToWin()
+            eventCount = 0
+            doEvent() {
+                view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix) {}
+                view.selectCurrentFraction(TurnHandler.fractionType)
+                updateEntityState(entity)
+                checkToWin()
+            }
         } else {
             viewModel.gameMatrixHelper.oldXY = null
             viewModel.gameMatrixHelper.selectedEntity = null
@@ -167,15 +169,17 @@ class MainPresenter internal constructor(
         }
     }
 
-    private fun doEvent() {
-        var count = 0
-        while (viewModel.gameMatrixHelper.isEventMove) {
-            viewModel.gameMatrixHelper.isEventMove = false
-            view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix)
+    private var eventCount = 0
+
+    private fun doEvent(onUpdateComplete: () -> Unit) {
+        view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix) {
             viewModel.gameMatrixHelper = EntityMove(viewModel.gameMatrixHelper).doEvent()
-            count++
-            if (count > 20) {
-                break
+            if (viewModel.gameMatrixHelper.isEventMove && eventCount < 20) {
+                viewModel.gameMatrixHelper.isEventMove = false
+                eventCount++
+                doEvent(onUpdateComplete)
+            } else {
+                onUpdateComplete.invoke()
             }
         }
     }

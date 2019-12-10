@@ -11,7 +11,6 @@ class Background(
         axis: EngineAxis,
         bmp: Bitmap
 ) : Sprite(axis, bmp) {
-    override fun update() {}
 
     override fun draw(canvas: Canvas, paint: Paint) {
         canvas.drawBitmap(

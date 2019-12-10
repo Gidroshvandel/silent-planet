@@ -48,7 +48,7 @@ class EntityMove(private var gameMatrixHelper: GameMatrixHelper) {
                 if (entityType.isCanMove) {
                     if (currentCellType.isCanMove) {
                         movePlayer(entityType)
-                        gameMatrixHelper = currentCellType.doEvent(gameMatrixHelper)
+//                        gameMatrixHelper = currentCellType.doEvent(gameMatrixHelper)
                         TurnHandler.turnCount()
                         return gameMatrixHelper
                     } else if (isSpaceShip(currentXY)
