@@ -1,6 +1,7 @@
 package com.silentgames.silent_planet.mvp.main
 
 import android.content.Context
+import com.silentgames.silent_planet.R
 import com.silentgames.silent_planet.logic.Constants
 import com.silentgames.silent_planet.logic.TurnHandler
 import com.silentgames.silent_planet.model.Axis
@@ -80,9 +81,9 @@ class MainModel(val context: Context) {
 
     private fun spawnRobots(gameMatrixCell: Cell) {
         val playerList = mutableListOf(
-                Robot(context, "Maxim"),
-                Robot(context, "Oxik"),
-                Robot(context, "Andrea")
+                Robot(context, context.getString(R.string.robot_player_name_one)),
+                Robot(context, context.getString(R.string.robot_player_name_two)),
+                Robot(context, context.getString(R.string.robot_player_name_three))
         )
         gameMatrixCell.entityType.add(RobotShip(context).apply {
             playersOnBord = playerList.toMutableList()
@@ -91,9 +92,9 @@ class MainModel(val context: Context) {
 
     private fun spawnAliens(gameMatrixCell: Cell) {
         val playerList = mutableListOf(
-                Alien(context, "Maxim"),
-                Alien(context, "Oxik"),
-                Alien(context, "Andrea")
+                Alien(context, context.getString(R.string.alien_player_name_one)),
+                Alien(context, context.getString(R.string.alien_player_name_two)),
+                Alien(context, context.getString(R.string.alien_player_name_three))
         )
         gameMatrixCell.entityType.add(AlienShip(context).apply {
             playersOnBord = playerList.toMutableList()
@@ -102,9 +103,9 @@ class MainModel(val context: Context) {
 
     private fun spawnPirates(gameMatrixCell: Cell) {
         val playerList = mutableListOf(
-                Pirate(context, "Maxim"),
-                Pirate(context, "Oxik"),
-                Pirate(context, "Andrea")
+                Pirate(context, context.getString(R.string.pirate_player_name_one)),
+                Pirate(context, context.getString(R.string.pirate_player_name_two)),
+                Pirate(context, context.getString(R.string.pirate_player_name_three))
         )
         gameMatrixCell.entityType.add(PirateShip(context).apply {
             playersOnBord = playerList.toMutableList()
@@ -113,9 +114,9 @@ class MainModel(val context: Context) {
 
     private fun spawnHumans(gameMatrixCell: Cell) {
         val playerList = mutableListOf(
-                Human(context, "Maxim"),
-                Human(context, "Oxik"),
-                Human(context, "Andrea")
+                Human(context, context.getString(R.string.human_player_name_one)),
+                Human(context, context.getString(R.string.human_player_name_two)),
+                Human(context, context.getString(R.string.human_player_name_three))
         )
         gameMatrixCell.entityType.add(HumanShip(context).apply {
             playersOnBord = playerList.toMutableList()

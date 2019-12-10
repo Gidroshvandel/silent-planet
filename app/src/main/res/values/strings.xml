@@ -34,6 +34,23 @@
     <string name="arrow_green_cell_description">Зелёная стрела перемещает на 1 клетку</string>
     <string name="arrow_red_cell_description">Красная стрела перемещает на 2 клетки</string>
 
+    <string name="robot_player_name_one">Х-3002</string>
+    <string name="robot_player_name_two">Z-702</string>
+    <string name="robot_player_name_three">P-02</string>
+    <string name="robot_player_description">Автоматическая единица - робот</string>
+    <string name="pirate_player_name_one">Марок</string>
+    <string name="pirate_player_name_two">Пинес</string>
+    <string name="pirate_player_name_three">Пак</string>
+    <string name="pirate_player_description">Корсар из экипажа пиратов</string>
+    <string name="human_player_name_one">Мирослав</string>
+    <string name="human_player_name_two">Максим</string>
+    <string name="human_player_name_three">Оксана</string>
+    <string name="human_player_description">Космонавт с корабля землян</string>
+    <string name="alien_player_name_one">Илио</string>
+    <string name="alien_player_name_two">Нараам</string>
+    <string name="alien_player_name_three">Пахар</string>
+    <string name="alien_player_description">Представитель загадочной рассы</string>
+
     <string name="robot_ship_name">Зиро</string>
     <string name="robot_ship_description">Космический корабль роботов</string>
     <string name="pirate_ship_name">Корсар</string>

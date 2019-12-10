@@ -14,5 +14,5 @@ class Human(
         context: Context,
         override var name: String,
         override var bitmap: Bitmap = BitmapEditor.getEntityBitmap(context, R.drawable.human_spaceman),
-        override var description: String = ""
+        override var description: String = context.getString(R.string.human_player_description)
 ) : Player(context, Humans)
