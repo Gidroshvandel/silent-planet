@@ -8,6 +8,10 @@ import com.silentgames.silent_planet.model.BaseProperties
 import com.silentgames.silent_planet.model.GameMatrixHelper
 import com.silentgames.silent_planet.model.cells.CellType
 import com.silentgames.silent_planet.model.entities.EntityType
+import com.silentgames.silent_planet.model.fractions.factionType.Aliens
+import com.silentgames.silent_planet.model.fractions.factionType.Humans
+import com.silentgames.silent_planet.model.fractions.factionType.Pirates
+import com.silentgames.silent_planet.model.fractions.factionType.Robots
 import com.silentgames.silent_planet.utils.getEntityList
 
 
@@ -47,7 +51,14 @@ class MainPresenter internal constructor(
     }
 
     override fun onCreate() {
-        val gameMatrixHelper = GameMatrixHelper(model.fillBattleGround())
+        val gameMatrixHelper = GameMatrixHelper(model.generateBattleGround())
+
+        TurnHandler.start(Humans)
+        TurnHandler.setPlayable(Aliens)
+        TurnHandler.setPlayable(Humans)
+        TurnHandler.setPlayable(Pirates)
+        TurnHandler.setPlayable(Robots)
+
         gameMatrixHelper.isEventMove = false
         viewModel.gameMatrixHelper = gameMatrixHelper
 
@@ -56,9 +67,9 @@ class MainPresenter internal constructor(
         view.changePirateCristalCount(0)
         view.changeRobotCristalCount(0)
 
-        view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix) {
-            view.selectCurrentFraction(TurnHandler.fractionType)
-        }
+        view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix) {}
+        view.selectCurrentFraction(TurnHandler.fractionType)
+
         view.enableButton(false)
 
     }
