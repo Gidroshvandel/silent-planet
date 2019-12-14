@@ -13,7 +13,7 @@ import java.util.*
  */
 class MainModel(val context: Context) {
 
-    fun generateBattleGround(): Array<Array<Cell>> {
+    suspend fun generateBattleGround(): Array<Array<Cell>> {
         val gameMatrix = CellRandomGenerator(context).generateBattleGround()
         EntityRandomGenerator(context).spawnShips(gameMatrix)
         return gameMatrix

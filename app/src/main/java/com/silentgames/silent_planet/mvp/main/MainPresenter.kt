@@ -13,7 +13,9 @@ import com.silentgames.silent_planet.model.fractions.factionType.Humans
 import com.silentgames.silent_planet.model.fractions.factionType.Pirates
 import com.silentgames.silent_planet.model.fractions.factionType.Robots
 import com.silentgames.silent_planet.utils.getEntityList
-
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 /**
  * Created by gidroshvandel on 21.06.17.
@@ -22,7 +24,7 @@ class MainPresenter internal constructor(
         private val view: MainContract.View,
         private val viewModel: MainViewModel,
         private val model: MainModel
-) : MainContract.Presenter {
+) : MainContract.Presenter, CoroutineScope by MainScope() {
 
     private val isClickForCurrentPosition: Boolean
         get() = viewModel.gameMatrixHelper.oldXY != null
@@ -51,27 +53,28 @@ class MainPresenter internal constructor(
     }
 
     override fun onCreate() {
-        val gameMatrixHelper = GameMatrixHelper(model.generateBattleGround())
+        launch {
+            val gameMatrixHelper = GameMatrixHelper(model.generateBattleGround())
 
-        TurnHandler.start(Humans)
-        TurnHandler.setPlayable(Aliens)
-        TurnHandler.setPlayable(Humans)
-        TurnHandler.setPlayable(Pirates)
-        TurnHandler.setPlayable(Robots)
+            TurnHandler.start(Humans)
+            TurnHandler.setPlayable(Aliens)
+            TurnHandler.setPlayable(Humans)
+            TurnHandler.setPlayable(Pirates)
+            TurnHandler.setPlayable(Robots)
 
-        gameMatrixHelper.isEventMove = false
-        viewModel.gameMatrixHelper = gameMatrixHelper
+            gameMatrixHelper.isEventMove = false
+            viewModel.gameMatrixHelper = gameMatrixHelper
 
-        view.changeAlienCristalCount(0)
-        view.changeHumanCristalCount(0)
-        view.changePirateCristalCount(0)
-        view.changeRobotCristalCount(0)
+            view.changeAlienCristalCount(0)
+            view.changeHumanCristalCount(0)
+            view.changePirateCristalCount(0)
+            view.changeRobotCristalCount(0)
 
-        view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix) {}
-        view.selectCurrentFraction(TurnHandler.fractionType)
+            view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix) {}
+            view.selectCurrentFraction(TurnHandler.fractionType)
 
-        view.enableButton(false)
-
+            view.enableButton(false)
+        }
     }
 
     private fun select(currentXY: Axis) {

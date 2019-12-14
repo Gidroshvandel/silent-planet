@@ -12,24 +12,40 @@ import com.silentgames.silent_planet.model.cells.DeadCell
 import com.silentgames.silent_planet.model.cells.EmptyCell
 import com.silentgames.silent_planet.model.cells.SpaceCell
 import com.silentgames.silent_planet.utils.BitmapEditor
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.util.*
 
 class CellRandomGenerator(val context: Context) {
 
+    private val random = Random()
     private val randomList = mutableListOf<RandomEntity>()
 
-    fun generateBattleGround(): Array<Array<Cell>> {
+    suspend fun generateBattleGround(): Array<Array<Cell>> = withContext(Dispatchers.Default) {
         randomList.clear()
         randomList.addAll(RandomCellType.values().map { RandomEntity(it) })
 
         val vCountOfCells = Constants.verticalCountOfCells
         val hCountOfCells = Constants.horizontalCountOfCells
-        return Array(hCountOfCells) { x ->
+
+        val randomCellTypeList = mutableListOf<CellType>()
+
+        for (x in 0 until (Constants.horizontalCountOfGroundCells)) {
+            for (y in 0 until (Constants.verticalCountOfGroundCells)) {
+                randomCellTypeList.add(getRandomCell(Axis(x, y)))
+            }
+        }
+
+        randomCellTypeList.shuffle()
+        var count = -1
+
+        return@withContext Array(hCountOfCells) { x ->
             Array(vCountOfCells) { y ->
                 if (x == 0 || x == hCountOfCells - 1 || y == 0 || y == vCountOfCells - 1) {
                     Cell(SpaceCell(context))
                 } else {
-                    Cell(getRandomCell(Axis(x, y)))
+                    count++
+                    Cell(randomCellTypeList[count])
                 }
             }
         }
@@ -48,10 +64,30 @@ class CellRandomGenerator(val context: Context) {
         }
     }
 
+    /**
+     * value - значение которое должно часто выпадать
+     * сhans - шанс его выпадения в процентах от 0 до 100
+     * max - ограничитель рандумных чисел
+     *
+     * @return от нуля, включительно, до max не включительно
+     */
+    private fun Random.randPlus(value: Int, chance: Int, max: Int): Int {
+        if (chance < 0 || chance > 100) {
+            throw IllegalArgumentException("Chance must be between 0 and 100")
+        }
+        val random = nextInt(100)
+        return if (random < chance) {
+            value
+        } else nextInt(max)
+        //Даже при нулевом шансе число всё-таки может выпасть ТУТ.
+    }
+
     private fun randomizeCell(): RandomCellType {
         return if (randomList.size > 0) {
-            val index = Random().nextInt(randomList.size)
+            val pair = randomList.getMaxChance()
+            val index = random.randPlus(pair.first, pair.second, randomList.size)
             val cellType = randomList[index]
+            println("cellType = " + cellType.randomCellType.name)
             if (cellType.isGenerationComplete()) {
                 randomList.remove(cellType)
                 randomizeCell()
@@ -62,6 +98,12 @@ class CellRandomGenerator(val context: Context) {
         } else {
             RandomCellType.EMPTY
         }
+    }
+
+    private fun List<RandomEntity>.getMaxChance(): Pair<Int, Int> {
+        val max = maxBy { it.randomCellType.count }
+        val index = indexOf(max)
+        return Pair(index, max?.randomCellType?.count!! - max.generatedCount)
     }
 
     private class RandomEntity(val randomCellType: RandomCellType) {
@@ -82,7 +124,7 @@ class CellRandomGenerator(val context: Context) {
         CRYSTAL_ONE(10),
         CRYSTAL_TWO(5),
         CRYSTAL_THREE(5),
-        EMPTY(0)
+        EMPTY(59)
     }
 
 }

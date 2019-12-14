@@ -13,30 +13,34 @@ import com.silentgames.silent_planet.model.entities.space.fractions.HumanShip
 import com.silentgames.silent_planet.model.entities.space.fractions.PirateShip
 import com.silentgames.silent_planet.model.entities.space.fractions.RobotShip
 import com.silentgames.silent_planet.model.fractions.FractionsType
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.util.*
 
 class EntityRandomGenerator(val context: Context) {
 
-    fun spawnShips(gameMatrix: Array<Array<Cell>>) {
-        val axisList = BoardSide.values().toList().shuffled().map {
-            val borderInset = 1
-            when (it) {
-                BoardSide.TOP, BoardSide.BOTTOM -> it.getAxis(Random().nextInt(
-                        borderInset,
-                        Constants.horizontalCountOfCells - borderInset
-                ))
-                BoardSide.RIGHT, BoardSide.LEFT -> it.getAxis(Random().nextInt(
-                        borderInset,
-                        Constants.horizontalCountOfCells - borderInset
-                ))
+    suspend fun spawnShips(gameMatrix: Array<Array<Cell>>) {
+        withContext(Dispatchers.Default) {
+            val axisList = BoardSide.values().toList().shuffled().map {
+                val borderInset = 1
+                when (it) {
+                    BoardSide.TOP, BoardSide.BOTTOM -> it.getAxis(Random().nextInt(
+                            borderInset,
+                            Constants.horizontalCountOfCells - borderInset
+                    ))
+                    BoardSide.RIGHT, BoardSide.LEFT -> it.getAxis(Random().nextInt(
+                            borderInset,
+                            Constants.horizontalCountOfCells - borderInset
+                    ))
+                }
             }
-        }
-        FractionsType.values().forEach {
-            when (it) {
-                FractionsType.HUMAN -> spawnHumans(gameMatrix[axisList[0].x][axisList[0].y])
-                FractionsType.PIRATE -> spawnPirates(gameMatrix[axisList[1].x][axisList[1].y])
-                FractionsType.ROBOT -> spawnRobots(gameMatrix[axisList[2].x][axisList[2].y])
-                FractionsType.ALIEN -> spawnAliens(gameMatrix[axisList[3].x][axisList[3].y])
+            FractionsType.values().forEach {
+                when (it) {
+                    FractionsType.HUMAN -> spawnHumans(gameMatrix[axisList[0].x][axisList[0].y])
+                    FractionsType.PIRATE -> spawnPirates(gameMatrix[axisList[1].x][axisList[1].y])
+                    FractionsType.ROBOT -> spawnRobots(gameMatrix[axisList[2].x][axisList[2].y])
+                    FractionsType.ALIEN -> spawnAliens(gameMatrix[axisList[3].x][axisList[3].y])
+                }
             }
         }
     }
