@@ -28,28 +28,28 @@ class EntityMove(private var gameMatrixHelper: GameMatrixHelper) {
     }
 
     private fun moveCheck(entityType: EntityType): GameMatrixHelper? {
-        val currentXY = gameMatrixHelper.currentXY
-        val oldXY = gameMatrixHelper.oldXY ?: Axis(-1, -1)
+        val targetXY = gameMatrixHelper.currentXY
+        val currentXY = gameMatrixHelper.oldXY ?: Axis(-1, -1)
 
-        val currentCellType = gameMatrixHelper.gameMatrixCellByXY.cellType
-        val currentEntityType = gameMatrixHelper.gameMatrixCellByXY.entityType
+        val targetCellType = gameMatrixHelper.gameMatrixCellByXY.cellType
+        val targetEntityType = gameMatrixHelper.gameMatrixCellByXY.entityType
 
-        if (isMoveAtDistance(currentXY, oldXY)
-                && isPlayable(oldXY)
-                && isCurrentPlayer(oldXY)) {
+        if (isMoveAtDistance(targetXY, currentXY)
+                && isPlayable(currentXY)
+                && isNowPlaying(currentXY)) {
             if (entityType is SpaceShip
                     && entityType.isCanFly
-                    && currentCellType.isCanFly
-                    && !isSpaceShip(currentXY)) {
+                    && targetCellType.isCanFly
+                    && !isSpaceShip(targetXY)) {
                 moveShip(entityType)
                 return gameMatrixHelper
             } else if (entityType is Player) {
                 if (entityType.isCanMove) {
-                    if (currentCellType.isCanMove) {
+                    if (targetCellType.isCanMove) {
                         movePlayer(entityType)
                         return gameMatrixHelper
-                    } else if (isSpaceShip(currentXY)
-                            && currentEntityType.isSpaceShipBelongFraction(entityType)) {
+                    } else if (isSpaceShip(targetXY)
+                            && targetEntityType.isSpaceShipBelongFraction(entityType)) {
                         moveOnBoard(entityType)
                         return gameMatrixHelper
                     }
@@ -59,7 +59,7 @@ class EntityMove(private var gameMatrixHelper: GameMatrixHelper) {
         return null
     }
 
-    private fun isCurrentPlayer(axis: Axis): Boolean {
+    private fun isNowPlaying(axis: Axis): Boolean {
         return getEntityType(axis).firstOrNull {
             it.fraction.fractionsType == TurnHandler.fractionType
         } != null
@@ -123,15 +123,15 @@ class EntityMove(private var gameMatrixHelper: GameMatrixHelper) {
     }
 
     //Проверки перемещения юнитов
-    private fun isMoveAtDistance(currentXY: Axis, oldXY: Axis): Boolean {
-        val x = currentXY.x
-        val y = currentXY.y
-        val oldX = oldXY.x
-        val oldY = oldXY.y
-        if (!(oldX == x && oldY == y)) {
+    private fun isMoveAtDistance(target: Axis, current: Axis): Boolean {
+        val targetX = target.x
+        val targetY = target.y
+        val currentX = current.x
+        val currentY = current.y
+        if (!(currentX == targetX && currentY == targetY)) {
             for (i in 0..2) {
                 for (j in 0..2) {
-                    if (oldX + j - 1 == x && oldY + i - 1 == y) {
+                    if (currentX + j - 1 == targetX && currentY + i - 1 == targetY) {
                         return true
                     }
                 }
