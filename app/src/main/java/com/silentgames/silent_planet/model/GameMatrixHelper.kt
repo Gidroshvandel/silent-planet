@@ -1,5 +1,6 @@
 package com.silentgames.silent_planet.model
 
+import com.silentgames.silent_planet.logic.TurnHandler
 import com.silentgames.silent_planet.model.entities.EntityType
 import com.silentgames.silent_planet.model.entities.space.fractions.AlienShip
 import com.silentgames.silent_planet.model.entities.space.fractions.HumanShip
@@ -22,18 +23,21 @@ class GameMatrixHelper(
         val pirateShip: PirateShip = gameMatrix.findSpaceShip(),
         val alienShip: AlienShip = gameMatrix.findSpaceShip()) {
 
+    val currentTurnFraction get() = TurnHandler.fractionType
+
     var gameMatrix: Array<Array<Cell>> = gameMatrix
         set(value) {
             oldGameMatrix = field
             field = value
         }
 
-    var gameMatrixCellByOldXY: Cell? = null
-        get() = oldXY?.let { gameMatrix[it.x][it.y] }
+    val gameMatrixCellByOldXY: Cell? get() = oldXY?.let { gameMatrix[it.x][it.y] }
 
     var gameMatrixCellByXY: Cell
         get() = gameMatrix[currentXY.x][currentXY.y]
         set(gameMatrixCell) {
             this.gameMatrix[currentXY.x][currentXY.y] = gameMatrixCell
         }
+
+    fun getCell(axis: Axis) = gameMatrix[axis.x][axis.y]
 }
