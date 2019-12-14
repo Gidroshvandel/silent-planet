@@ -5,6 +5,7 @@ import com.silentgames.silent_planet.model.BaseProperties
 import com.silentgames.silent_planet.model.Cell
 import com.silentgames.silent_planet.model.cells.CellType
 import com.silentgames.silent_planet.model.entities.EntityType
+import com.silentgames.silent_planet.model.entities.ground.Player
 import com.silentgames.silent_planet.model.fractions.FractionsType
 import com.silentgames.silent_planet.mvp.BasePresenter
 
@@ -23,8 +24,6 @@ interface MainContract {
 
         fun showObjectIcon(entityType: EntityType)
 
-        fun update(runnable: Runnable)
-
         fun enableButton(isEnabled: Boolean)
 
         fun setImageCrystalText(text: String)
@@ -41,6 +40,10 @@ interface MainContract {
 
         fun selectCurrentFraction(fractionType: FractionsType)
 
+        fun showPlayerBuybackSuccessMessage(name: String)
+
+        fun showPlayerBuybackFailureMessage(missingAmount: Int)
+
     }
 
     interface Presenter : BasePresenter {
@@ -50,6 +53,8 @@ interface MainContract {
         fun onActionButtonClick()
 
         fun onEntityDialogElementSelect(baseProperties: BaseProperties)
+
+        fun onCapturedPlayerClick(player: Player)
 
     }
 }

@@ -146,10 +146,6 @@ class MainActivity : Activity(), MainContract.View, Callback {
         select_object_icon.setImageBitmap(entityType.bitmap)
     }
 
-    override fun update(runnable: Runnable) {
-        this.runOnUiThread(runnable)
-    }
-
     override fun onSingleTapConfirmed(axis: Axis) {
         presenter.onSingleTapConfirmed(axis)
     }
@@ -158,8 +154,24 @@ class MainActivity : Activity(), MainContract.View, Callback {
             entityList: MutableList<EntityType>,
             currentCell: CellType
     ) {
-        BottomSheetMenu(this, entityList, currentCell) { entityType ->
-            presenter.onEntityDialogElementSelect(entityType)
-        }.show()
+        BottomSheetMenu(
+                this,
+                entityList,
+                currentCell,
+                { entityType ->
+                    presenter.onEntityDialogElementSelect(entityType)
+                },
+                {
+                    presenter.onCapturedPlayerClick(it)
+                }
+        ).show()
+    }
+
+    override fun showPlayerBuybackSuccessMessage(name: String) {
+        Toast.makeText(this, getString(R.string.player_buyback_success, name), Toast.LENGTH_SHORT).show()
+    }
+
+    override fun showPlayerBuybackFailureMessage(missingAmount: Int) {
+        Toast.makeText(this, getString(R.string.player_buyback_failure, missingAmount), Toast.LENGTH_SHORT).show()
     }
 }

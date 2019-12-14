@@ -3,11 +3,13 @@ package com.silentgames.silent_planet.mvp.main
 import com.silentgames.silent_planet.logic.Constants
 import com.silentgames.silent_planet.logic.EntityMove
 import com.silentgames.silent_planet.logic.TurnHandler
+import com.silentgames.silent_planet.logic.buyBack
 import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.BaseProperties
 import com.silentgames.silent_planet.model.GameMatrixHelper
 import com.silentgames.silent_planet.model.cells.CellType
 import com.silentgames.silent_planet.model.entities.EntityType
+import com.silentgames.silent_planet.model.entities.ground.Player
 import com.silentgames.silent_planet.model.fractions.factionType.Aliens
 import com.silentgames.silent_planet.model.fractions.factionType.Humans
 import com.silentgames.silent_planet.model.fractions.factionType.Pirates
@@ -50,6 +52,19 @@ class MainPresenter internal constructor(
         } else if (baseProperties is CellType) {
             selectCell(baseProperties)
         }
+    }
+
+    override fun onCapturedPlayerClick(player: Player) {
+        viewModel.gameMatrixHelper.buyBack(
+                player,
+                {
+                    view.showPlayerBuybackSuccessMessage(player.name)
+                    checkToWin()
+                },
+                {
+                    view.showPlayerBuybackFailureMessage(it)
+                }
+        )
     }
 
     override fun onCreate() {

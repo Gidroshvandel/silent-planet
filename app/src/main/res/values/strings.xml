@@ -60,4 +60,8 @@
     <string name="alien_ship_name">Лиира</string>
     <string name="alien_ship_description">Космический корабль загадочной рассы</string>
     <string name="take_crystal">забрать кристал</string>
+    <string name="player_buyback_success">%1$s возвращён на корабль</string>
+    <string name="player_buyback_failure">Необходимо ещё кристалов: %1$d</string>
+    <string name="captive">Пленный</string>
+    <string name="buyout">Выкуп</string>
 </resources>

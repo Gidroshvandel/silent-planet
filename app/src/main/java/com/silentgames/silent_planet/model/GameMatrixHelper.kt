@@ -6,6 +6,8 @@ import com.silentgames.silent_planet.model.entities.space.fractions.AlienShip
 import com.silentgames.silent_planet.model.entities.space.fractions.HumanShip
 import com.silentgames.silent_planet.model.entities.space.fractions.PirateShip
 import com.silentgames.silent_planet.model.entities.space.fractions.RobotShip
+import com.silentgames.silent_planet.model.fractions.FractionsType
+import com.silentgames.silent_planet.model.fractions.FractionsType.*
 import com.silentgames.silent_planet.utils.findSpaceShip
 
 /**
@@ -17,11 +19,12 @@ class GameMatrixHelper(
         var currentXY: Axis = Axis(0, 0),
         var oldXY: Axis? = null,
         var selectedEntity: EntityType? = null,
-        var isEventMove: Boolean = false,
-        val humanShip: HumanShip = gameMatrix.findSpaceShip(),
-        val robotShip: RobotShip = gameMatrix.findSpaceShip(),
-        val pirateShip: PirateShip = gameMatrix.findSpaceShip(),
-        val alienShip: AlienShip = gameMatrix.findSpaceShip()) {
+        var isEventMove: Boolean = false) {
+
+    val humanShip: HumanShip get() = gameMatrix.findSpaceShip()
+    val robotShip: RobotShip get() = gameMatrix.findSpaceShip()
+    val pirateShip: PirateShip get() = gameMatrix.findSpaceShip()
+    val alienShip: AlienShip get() = gameMatrix.findSpaceShip()
 
     val currentTurnFraction get() = TurnHandler.fractionType
 
@@ -40,4 +43,12 @@ class GameMatrixHelper(
         }
 
     fun getCell(axis: Axis) = gameMatrix[axis.x][axis.y]
+
+    fun getShip(fractionsType: FractionsType) =
+            when (fractionsType) {
+                ALIEN -> alienShip
+                HUMAN -> humanShip
+                PIRATE -> pirateShip
+                ROBOT -> robotShip
+            }
 }

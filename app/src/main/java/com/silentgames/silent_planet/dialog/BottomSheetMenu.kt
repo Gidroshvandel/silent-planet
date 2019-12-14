@@ -7,13 +7,15 @@ import com.silentgames.silent_planet.R
 import com.silentgames.silent_planet.model.BaseProperties
 import com.silentgames.silent_planet.model.cells.CellType
 import com.silentgames.silent_planet.model.entities.EntityType
+import com.silentgames.silent_planet.model.entities.ground.Player
 import kotlinx.android.synthetic.main.dialog_entity_menu.*
 
 class BottomSheetMenu(
         context: Context,
         entityList: MutableList<EntityType>,
         currentCell: CellType,
-        onClick: (BaseProperties) -> Unit
+        onClick: (BaseProperties) -> Unit,
+        onCapturedPlayerClick: (Player) -> Unit
 ) : BottomSheetDialog(context) {
 
     init {
@@ -23,10 +25,18 @@ class BottomSheetMenu(
                 null
         )
         setContentView(contentView)
-        rv_menu.adapter = EntityMenuAdapter(entityList, currentCell) {
-            onClick.invoke(it)
-            dismiss()
-        }
+        rv_menu.adapter = EntityMenuAdapter(
+                entityList,
+                currentCell,
+                {
+                    onClick.invoke(it)
+                    dismiss()
+                },
+                {
+                    onCapturedPlayerClick.invoke(it)
+                    dismiss()
+                }
+        )
     }
 
 }
