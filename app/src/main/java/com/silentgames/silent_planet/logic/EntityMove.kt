@@ -5,6 +5,7 @@ import com.silentgames.silent_planet.model.GameMatrixHelper
 import com.silentgames.silent_planet.model.entities.EntityType
 import com.silentgames.silent_planet.model.entities.ground.Player
 import com.silentgames.silent_planet.model.entities.space.SpaceShip
+import com.silentgames.silent_planet.utils.ShipNotFoundException
 import com.silentgames.silent_planet.utils.getSpaceShip
 import com.silentgames.silent_planet.utils.isSpaceShipBelongFraction
 
@@ -79,12 +80,11 @@ class EntityMove(private var gameMatrixHelper: GameMatrixHelper) {
     }
 
     fun moveOnBoardAllyShip(player: Player) {
-        //Если не найден корабль то что-то не так(должен быть всегда)
-        gameMatrixHelper.currentXY = findAllyShip()!!
+        gameMatrixHelper.currentXY = findAllyShip()
         moveOnBoard(player)
     }
 
-    private fun findAllyShip(): Axis? {
+    private fun findAllyShip(): Axis {
         gameMatrixHelper.gameMatrix.forEachIndexed { x, arrayOfCells ->
             val y = arrayOfCells.indexOfFirst {
                 it.entityType.getSpaceShip()?.fraction?.fractionsType == TurnHandler.fractionType
@@ -93,7 +93,7 @@ class EntityMove(private var gameMatrixHelper: GameMatrixHelper) {
                 return Axis(x, y)
             }
         }
-        return null
+        throw ShipNotFoundException()
     }
 
     private fun deletePlayer(player: Player) {

@@ -90,5 +90,5 @@ inline fun <reified T : SpaceShip> Array<Array<Cell>>.findSpaceShip(): T {
             }
         }
     }
-    throw NullPointerException("Ship didn't find, SPAWN any Ship")
+    throw ShipNotFoundException()
 }
