@@ -12,7 +12,6 @@ import com.silentgames.silent_planet.model.entities.space.fractions.AlienShip
 import com.silentgames.silent_planet.model.entities.space.fractions.HumanShip
 import com.silentgames.silent_planet.model.entities.space.fractions.PirateShip
 import com.silentgames.silent_planet.model.entities.space.fractions.RobotShip
-import com.silentgames.silent_planet.model.fractions.FractionsType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.*
@@ -21,27 +20,24 @@ class EntityRandomGenerator(val context: Context) {
 
     suspend fun spawnShips(gameMatrix: Array<Array<Cell>>) {
         withContext(Dispatchers.Default) {
-            //            val axisList = BoardSide.values().toList().shuffled().map {
-//                val borderInset = 1
-//                when (it) {
-//                    BoardSide.TOP, BoardSide.BOTTOM -> it.getAxis(Random().nextInt(
-//                            borderInset,
-//                            Constants.horizontalCountOfCells - borderInset
-//                    ))
-//                    BoardSide.RIGHT, BoardSide.LEFT -> it.getAxis(Random().nextInt(
-//                            borderInset,
-//                            Constants.horizontalCountOfCells - borderInset
-//                    ))
-//                }
-//            }
-            FractionsType.values().forEach {
+            val axisList = BoardSide.values().toList().shuffled().map {
+                val borderInset = 1
                 when (it) {
-                    FractionsType.HUMAN -> spawnHumans(gameMatrix[0][0])
-                    FractionsType.PIRATE -> spawnPirates(gameMatrix[0][1])
-                    FractionsType.ROBOT -> spawnRobots(gameMatrix[0][2])
-                    FractionsType.ALIEN -> spawnAliens(gameMatrix[0][3])
+                    BoardSide.TOP, BoardSide.BOTTOM -> it.getAxis(Random().nextInt(
+                            borderInset,
+                            Constants.horizontalCountOfCells - borderInset
+                    ))
+                    BoardSide.RIGHT, BoardSide.LEFT -> it.getAxis(Random().nextInt(
+                            borderInset,
+                            Constants.horizontalCountOfCells - borderInset
+                    ))
                 }
             }
+
+            spawnHumans(gameMatrix[axisList[0].x][axisList[0].y])
+            spawnPirates(gameMatrix[axisList[1].x][axisList[1].y])
+            spawnRobots(gameMatrix[axisList[2].x][axisList[2].y])
+            spawnAliens(gameMatrix[axisList[3].x][axisList[3].y])
         }
     }
 
