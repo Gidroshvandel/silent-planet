@@ -57,10 +57,10 @@ class MainPresenter internal constructor(
             val gameMatrixHelper = GameMatrixHelper(model.generateBattleGround())
 
             TurnHandler.start(Humans)
-            TurnHandler.setPlayable(Aliens)
-            TurnHandler.setPlayable(Humans)
-            TurnHandler.setPlayable(Pirates)
-            TurnHandler.setPlayable(Robots)
+            Aliens.isPlayable = true
+            Humans.isPlayable = true
+            Pirates.isPlayable = true
+            Robots.isPlayable = true
 
             gameMatrixHelper.isEventMove = false
             viewModel.gameMatrixHelper = gameMatrixHelper

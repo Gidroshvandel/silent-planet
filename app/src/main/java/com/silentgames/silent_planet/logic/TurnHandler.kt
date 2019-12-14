@@ -6,28 +6,20 @@ import com.silentgames.silent_planet.model.fractions.FractionsType
 /**
  * Created by gidroshvandel on 26.09.16.
  */
-class TurnHandler {
-    companion object {
+object TurnHandler {
+    private var turnCount: Int = 0
+    lateinit var fractionType: FractionsType
 
-        private var turnCount: Int = 0
-        lateinit var fractionType: FractionsType
+    fun turnCount() {
+        turnCount++
+        nextPlayer()
+    }
 
-        fun turnCount() {
-            var turnCount = turnCount
-            turnCount = turnCount++
-            nextPlayer()
-        }
+    fun start(fraction: Fractions) {
+        this.fractionType = fraction.fractionsType
+    }
 
-        fun start(fraction: Fractions) {
-            this.fractionType = fraction.fractionsType
-        }
-
-        fun setPlayable(fraction: Fractions) {
-            fraction.isPlayable = true
-        }
-
-        private fun nextPlayer() {
-            fractionType = fractionType.next()
-        }
+    private fun nextPlayer() {
+        fractionType = fractionType.next()
     }
 }
