@@ -21,9 +21,11 @@ class CellRandomGenerator(val context: Context) {
     private val random = Random()
     private val randomList = mutableListOf<RandomEntity>()
 
-    suspend fun generateBattleGround(): Array<Array<Cell>> = withContext(Dispatchers.Default) {
+    suspend fun generateBattleGround(
+            cellGeneratorParams: CellGeneratorParams = CellGeneratorParams()
+    ): Array<Array<Cell>> = withContext(Dispatchers.Default) {
         randomList.clear()
-        randomList.addAll(RandomCellType.values().map { RandomEntity(it) })
+        randomList.addAll(cellGeneratorParams.getRandomEntityList())
 
         val vCountOfCells = Constants.verticalCountOfCells
         val hCountOfCells = Constants.horizontalCountOfCells
@@ -87,7 +89,6 @@ class CellRandomGenerator(val context: Context) {
             val pair = randomList.getMaxChance()
             val index = random.randPlus(pair.first, pair.second, randomList.size)
             val cellType = randomList[index]
-            println("cellType = " + cellType.randomCellType.name)
             if (cellType.isGenerationComplete()) {
                 randomList.remove(cellType)
                 randomizeCell()
@@ -101,30 +102,57 @@ class CellRandomGenerator(val context: Context) {
     }
 
     private fun List<RandomEntity>.getMaxChance(): Pair<Int, Int> {
-        val max = maxBy { it.randomCellType.count }
+        val max = maxBy { it.totalCount }
         val index = indexOf(max)
-        return Pair(index, max?.randomCellType?.count!! - max.generatedCount)
+        return Pair(index, max?.totalCount?.minus(max.generatedCount) ?: 0)
     }
 
-    private class RandomEntity(val randomCellType: RandomCellType) {
-        var generatedCount: Int = 0
-            private set
+}
 
-        fun incrementGeneratedCount() {
-            generatedCount++
-        }
+class CellGeneratorParams(
+        private val deathCellCount: Int = 1,
+        private val greenArrowCellCount: Int = 10,
+        private val redArrowCellCount: Int = 10,
+        private val crystalOneCellCount: Int = 10,
+        private val crystalTwoCellCount: Int = 5,
+        private val crystalThreeCellCount: Int = 5
+) {
+    private val emptyCount: Int = Constants.countOfGroundCells - (
+            deathCellCount +
+            greenArrowCellCount +
+            redArrowCellCount +
+            crystalOneCellCount +
+            crystalTwoCellCount +
+                    crystalThreeCellCount)
 
-        fun isGenerationComplete() = randomCellType.count <= generatedCount
+    fun getRandomEntityList() = listOf(
+            RandomEntity(RandomCellType.DEATH, deathCellCount),
+            RandomEntity(RandomCellType.GREEN_ARROW, greenArrowCellCount),
+            RandomEntity(RandomCellType.RED_ARROW, redArrowCellCount),
+            RandomEntity(RandomCellType.CRYSTAL_ONE, crystalOneCellCount),
+            RandomEntity(RandomCellType.CRYSTAL_TWO, crystalTwoCellCount),
+            RandomEntity(RandomCellType.CRYSTAL_THREE, crystalThreeCellCount),
+            RandomEntity(RandomCellType.EMPTY, emptyCount)
+    )
+}
+
+class RandomEntity(val randomCellType: RandomCellType, val totalCount: Int) {
+    var generatedCount: Int = 0
+        private set
+
+    fun incrementGeneratedCount() {
+        generatedCount++
     }
 
-    private enum class RandomCellType(val count: Int) {
-        DEATH(1),
-        GREEN_ARROW(10),
-        RED_ARROW(10),
-        CRYSTAL_ONE(10),
-        CRYSTAL_TWO(5),
-        CRYSTAL_THREE(5),
-        EMPTY(59)
-    }
+    fun isGenerationComplete() = totalCount <= generatedCount
+}
 
+enum class RandomCellType {
+    DEATH,
+    GREEN_ARROW,
+    RED_ARROW,
+    CRYSTAL_ONE,
+    CRYSTAL_TWO,
+    CRYSTAL_THREE,
+    EMPTY
 }

@@ -10,6 +10,7 @@ object Constants {
     const val verticalCountOfCells = 12
     private const val verticalCountOfSpaceCells = 2
     const val verticalCountOfGroundCells = verticalCountOfCells - verticalCountOfSpaceCells
+    const val countOfGroundCells = verticalCountOfGroundCells * horizontalCountOfGroundCells
     const val cellImageSize = 31f
     const val entityImageSize = 20f
     const val countCrystalsToWin = 20
