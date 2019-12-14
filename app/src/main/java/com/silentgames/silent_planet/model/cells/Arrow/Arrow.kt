@@ -75,9 +75,9 @@ abstract class Arrow(
     }
 
     private fun checkBorders(): Boolean {
-        return destinationX <= Constants.verticalCountOfCells &&
+        return destinationX < Constants.verticalCountOfCells &&
                 destinationX >= 0 &&
-                destinationY <= Constants.horizontalCountOfCells &&
+                destinationY < Constants.horizontalCountOfCells &&
                 destinationY >= 0
     }
 }

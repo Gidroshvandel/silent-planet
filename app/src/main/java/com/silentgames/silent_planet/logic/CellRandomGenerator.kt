@@ -30,12 +30,8 @@ class CellRandomGenerator(val context: Context) {
         val vCountOfCells = Constants.verticalCountOfCells
         val hCountOfCells = Constants.horizontalCountOfCells
 
-        val randomCellTypeList = mutableListOf<CellType>()
-
-        for (x in 0 until (Constants.horizontalCountOfGroundCells)) {
-            for (y in 0 until (Constants.verticalCountOfGroundCells)) {
-                randomCellTypeList.add(getRandomCell(Axis(x, y)))
-            }
+        val randomCellTypeList = MutableList(Constants.countOfGroundCells) {
+            randomizeCell()
         }
 
         randomCellTypeList.shuffle()
@@ -47,15 +43,15 @@ class CellRandomGenerator(val context: Context) {
                     Cell(SpaceCell(context))
                 } else {
                     count++
-                    Cell(randomCellTypeList[count])
+                    Cell(randomCellTypeList[count].getCellType(Axis(x, y)))
                 }
             }
         }
     }
 
 
-    private fun getRandomCell(axis: Axis): CellType {
-        return when (randomizeCell()) {
+    private fun RandomCellType.getCellType(axis: Axis): CellType {
+        return when (this) {
             RandomCellType.DEATH -> DeadCell(context)
             RandomCellType.GREEN_ARROW -> ArrowGreen(context).rotate(axis.x, axis.y, BitmapEditor.RotateAngle.randomAngle())
             RandomCellType.RED_ARROW -> ArrowRed(context).rotate(axis.x, axis.y, BitmapEditor.RotateAngle.randomAngle())
