@@ -10,7 +10,7 @@ import com.silentgames.silent_planet.utils.BitmapEditor
  * Created by gidroshvandel on 09.07.16.
  */
 abstract class CellType(
-        override val context: Context,
+        val context: Context,
         override var crystals: Int = 0,
         override val closeBitmap: Bitmap = BitmapEditor.getCellBitmap(context, R.drawable.planet_background),
         override var isCanFly: Boolean = false,

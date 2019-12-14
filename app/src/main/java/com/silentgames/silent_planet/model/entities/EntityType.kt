@@ -8,7 +8,7 @@ import com.silentgames.silent_planet.model.fractions.Fractions
  */
 
 abstract class EntityType(
-        override var context: Context,
+        val context: Context,
         override var fraction: Fractions,
         override var crystals: Int = 0,
         override var isDead: Boolean = false
