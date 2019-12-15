@@ -20,8 +20,8 @@ class GameMatrixHelper(
         var oldGameMatrix: Array<Array<Cell>>? = null,
         var currentXY: Axis = Axis(0, 0),
         var oldXY: Axis? = null,
-        var selectedEntity: EntityType? = null,
-        var isEventMove: Boolean = false) {
+        var selectedEntity: EntityType? = null
+) {
 
     val humanShip: HumanShip get() = gameMatrix.findSpaceShip()
     val robotShip: RobotShip get() = gameMatrix.findSpaceShip()

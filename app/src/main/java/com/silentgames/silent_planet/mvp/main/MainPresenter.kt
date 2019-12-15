@@ -74,7 +74,6 @@ class MainPresenter internal constructor(
             Pirates.isPlayable = true
             Robots.isPlayable = true
 
-            gameMatrixHelper.isEventMove = false
             viewModel.gameMatrixHelper = gameMatrixHelper
 
             view.changeAlienCristalCount(0)
@@ -202,8 +201,7 @@ class MainPresenter internal constructor(
     private fun doEvent(onUpdateComplete: () -> Unit) {
         view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix) {
             viewModel.gameMatrixHelper = EntityMove(viewModel.gameMatrixHelper).doEvent()
-            if (viewModel.gameMatrixHelper.isEventMove && eventCount < 20) {
-                viewModel.gameMatrixHelper.isEventMove = false
+            if (eventCount < 20) {
                 eventCount++
                 doEvent(onUpdateComplete)
             } else {

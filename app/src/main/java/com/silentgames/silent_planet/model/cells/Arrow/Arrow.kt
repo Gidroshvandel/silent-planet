@@ -59,11 +59,15 @@ abstract class Arrow(
         val current = gameMatrixHelper.currentXY
         val player = gameMatrixHelper.selectedEntity as Player
         val target = Axis(destinationX, destinationY)
+
+        gameMatrixHelper.oldXY = gameMatrixHelper.currentXY
         if (checkBorders()) {
+            gameMatrixHelper.currentXY = target
             gameMatrixHelper.gameMatrix.tryMovePlayer(target, Entity(player, current))
         } else {
             gameMatrixHelper.gameMatrix.moveOnBoardAllyShip(Entity(player, current))
         }
+
         return gameMatrixHelper
     }
 
