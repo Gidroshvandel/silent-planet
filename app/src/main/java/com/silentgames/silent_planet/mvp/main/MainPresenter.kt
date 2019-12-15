@@ -1,9 +1,6 @@
 package com.silentgames.silent_planet.mvp.main
 
-import com.silentgames.silent_planet.logic.Constants
-import com.silentgames.silent_planet.logic.EntityMove
-import com.silentgames.silent_planet.logic.TurnHandler
-import com.silentgames.silent_planet.logic.buyBack
+import com.silentgames.silent_planet.logic.*
 import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.BaseProperties
 import com.silentgames.silent_planet.model.GameMatrixHelper
@@ -55,8 +52,8 @@ class MainPresenter internal constructor(
     }
 
     override fun onCapturedPlayerClick(player: Player) {
-        viewModel.gameMatrixHelper.buyBack(
-                player,
+        viewModel.gameMatrixHelper.gameMatrix.buyBack(
+                Entity(player, viewModel.gameMatrixHelper.currentXY),
                 {
                     view.showPlayerBuybackSuccessMessage(player.name)
                     checkToWin()

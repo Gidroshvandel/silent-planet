@@ -13,6 +13,8 @@ import com.silentgames.silent_planet.utils.findSpaceShip
 /**
  * Created by gidroshvandel on 28.06.17.
  */
+typealias GameMatrix = Array<Array<Cell>>
+
 class GameMatrixHelper(
         gameMatrix: Array<Array<Cell>>,
         var oldGameMatrix: Array<Array<Cell>>? = null,
@@ -42,13 +44,14 @@ class GameMatrixHelper(
             this.gameMatrix[currentXY.x][currentXY.y] = gameMatrixCell
         }
 
-    fun getCell(axis: Axis) = gameMatrix[axis.x][axis.y]
-
-    fun getShip(fractionsType: FractionsType) =
-            when (fractionsType) {
-                ALIEN -> alienShip
-                HUMAN -> humanShip
-                PIRATE -> pirateShip
-                ROBOT -> robotShip
-            }
 }
+
+fun GameMatrix.getCell(axis: Axis) = this[axis.x][axis.y]
+
+fun GameMatrix.getShip(fractionsType: FractionsType) =
+        when (fractionsType) {
+            ALIEN -> this.findSpaceShip<AlienShip>()
+            HUMAN -> this.findSpaceShip<HumanShip>()
+            PIRATE -> this.findSpaceShip<PirateShip>()
+            ROBOT -> this.findSpaceShip<RobotShip>()
+        }

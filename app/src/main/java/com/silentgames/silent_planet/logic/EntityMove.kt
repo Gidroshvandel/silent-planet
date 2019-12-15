@@ -47,9 +47,9 @@ class EntityMove(private var gameMatrixHelper: GameMatrixHelper) {
             } else if (entityType is Player) {
                 if (entityType.isCanMove) {
                     if (targetCellType.isCanMove) {
-                        val enemy = gameMatrixHelper.getEnemy(targetAxis)
+                        val enemy = gameMatrixHelper.gameMatrix.getEnemy(targetAxis, gameMatrixHelper.currentTurnFraction)
                         if (enemy != null) {
-                            gameMatrixHelper.captureEnemyUnit(Entity(entityType, currentAxis), enemy)
+                            gameMatrixHelper.gameMatrix.captureEnemyUnit(Entity(entityType, currentAxis), enemy)
                         } else {
                             movePlayer(entityType)
                         }
