@@ -11,8 +11,88 @@ import com.silentgames.silent_planet.model.getCell
 import com.silentgames.silent_planet.model.getShip
 import com.silentgames.silent_planet.utils.ShipNotFoundException
 import com.silentgames.silent_planet.utils.getSpaceShip
+import com.silentgames.silent_planet.utils.isSpaceShipBelongFraction
 
-fun GameMatrix.movePlayer(target: Axis, player: Entity<Player>) {
+fun GameMatrix.moveEntity(target: Axis, entityAxis: Axis, entity: EntityType): Boolean {
+    return if (targetIsAvailable(target, entityAxis)) {
+        when (entity) {
+            is SpaceShip -> moveShip(target, Entity(entity, entityAxis))
+            is Player -> movePlayer(target, Entity(entity, entityAxis))
+            else -> false
+        }
+    } else {
+        false
+    }
+}
+
+
+fun GameMatrix.moveShip(target: Axis, spaceShip: Entity<SpaceShip>): Boolean {
+    val targetCell = this.getCell(target)
+    return if (spaceShip.entity.isCanFly
+            && targetCell.cellType.isCanFly
+            && !this.isSpaceShip(target)) {
+        moveShipTo(target, spaceShip)
+        true
+    } else {
+        false
+    }
+}
+
+private fun GameMatrix.moveShipTo(target: Axis, spaceShip: Entity<SpaceShip>) {
+    val targetCell = this.getCell(target)
+    val currentCell = this.getCell(spaceShip.axis)
+    targetCell.entityType.add(spaceShip.entity)
+    targetCell.cellType.isVisible = true
+    currentCell.entityType.remove(spaceShip.entity)
+}
+
+fun GameMatrix.targetIsAvailable(target: Axis, current: Axis) =
+        isMoveAtDistance(target, current)
+                && this.isNowPlaying(current, TurnHandler.fractionType)
+
+private fun isMoveAtDistance(target: Axis, current: Axis): Boolean {
+    if (!(current.x == target.x && current.y == target.y)) {
+        for (i in 0..2) {
+            for (j in 0..2) {
+                if (current.x + j - 1 == target.x && current.y + i - 1 == target.y) {
+                    return true
+                }
+            }
+        }
+    }
+    return false
+}
+
+private fun GameMatrix.isNowPlaying(axis: Axis, fractionsType: FractionsType): Boolean {
+    return this.getCell(axis).entityType.firstOrNull {
+        it.fraction.fractionsType == fractionsType
+    } != null
+}
+
+fun GameMatrix.movePlayer(target: Axis, player: Entity<Player>): Boolean {
+    val targetCell = this.getCell(target)
+    return if (targetCell.cellType.isCanMove && player.entity.isCanMove) {
+        val enemy = this.getEnemy(target, TurnHandler.fractionType)
+        if (enemy != null) {
+            this.captureEnemyUnit(player, enemy)
+            true
+        } else {
+            this.movePlayerTo(target, player)
+            true
+        }
+    } else if (isSpaceShip(target) && targetCell.entityType.isSpaceShipBelongFraction(player.entity)) {
+        this.moveOnBoardAllyShip(player)
+        true
+    } else {
+        false
+    }
+}
+
+private fun GameMatrix.isSpaceShip(axis: Axis): Boolean {
+    return this.getCell(axis).entityType.getSpaceShip() != null
+}
+
+fun GameMatrix.movePlayerTo(target: Axis, player: Entity<Player>) {
     val targetCell = this.getCell(target)
     targetCell.entityType.add(player.entity)
     targetCell.cellType.isVisible = true
