@@ -3,11 +3,12 @@ package com.silentgames.silent_planet.model.cells.Arrow
 import android.content.Context
 import com.silentgames.silent_planet.R
 import com.silentgames.silent_planet.logic.Constants
-import com.silentgames.silent_planet.logic.EntityMove
+import com.silentgames.silent_planet.logic.Entity
+import com.silentgames.silent_planet.logic.moveOnBoardAllyShip
+import com.silentgames.silent_planet.logic.tryMovePlayer
 import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.GameMatrixHelper
 import com.silentgames.silent_planet.model.cells.CellType
-import com.silentgames.silent_planet.model.cells.SpaceCell
 import com.silentgames.silent_planet.model.entities.ground.Player
 import com.silentgames.silent_planet.utils.BitmapEditor
 
@@ -55,29 +56,21 @@ abstract class Arrow(
     }
 
     override fun doEvent(gameMatrixHelper: GameMatrixHelper): GameMatrixHelper {
-        val entityMove = EntityMove(gameMatrixHelper)
+        val current = gameMatrixHelper.currentXY
         val player = gameMatrixHelper.selectedEntity as Player
+        val target = Axis(destinationX, destinationY)
         if (checkBorders()) {
-            if (gameMatrixHelper.gameMatrix[destinationX][destinationY].cellType is SpaceCell) {
-                gameMatrixHelper.oldXY = gameMatrixHelper.currentXY
-                entityMove.moveOnBoardAllyShip(player)
-            } else {
-                gameMatrixHelper.oldXY = gameMatrixHelper.currentXY
-                gameMatrixHelper.currentXY = Axis(destinationX, destinationY)
-                gameMatrixHelper.isEventMove = true
-                entityMove.movePlayer(player)
-            }
+            gameMatrixHelper.gameMatrix.tryMovePlayer(target, Entity(player, current))
         } else {
-            gameMatrixHelper.oldXY = gameMatrixHelper.currentXY
-            entityMove.moveOnBoardAllyShip(player)
+            gameMatrixHelper.gameMatrix.moveOnBoardAllyShip(Entity(player, current))
         }
         return gameMatrixHelper
     }
 
     private fun checkBorders(): Boolean {
-        return destinationX < Constants.verticalCountOfCells &&
-                destinationX >= 0 &&
-                destinationY < Constants.horizontalCountOfCells &&
-                destinationY >= 0
+        return destinationX <= Constants.verticalCountOfGroundCells &&
+                destinationX >= 1 &&
+                destinationY <= Constants.horizontalCountOfGroundCells &&
+                destinationY >= 1
     }
 }

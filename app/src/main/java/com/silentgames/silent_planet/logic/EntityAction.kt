@@ -16,8 +16,8 @@ import com.silentgames.silent_planet.utils.isSpaceShipBelongFraction
 fun GameMatrix.moveEntity(target: Axis, entityAxis: Axis, entity: EntityType): Boolean {
     return if (targetIsAvailable(target, entityAxis)) {
         when (entity) {
-            is SpaceShip -> moveShip(target, Entity(entity, entityAxis))
-            is Player -> movePlayer(target, Entity(entity, entityAxis))
+            is SpaceShip -> tryMoveShip(target, Entity(entity, entityAxis))
+            is Player -> tryMovePlayer(target, Entity(entity, entityAxis))
             else -> false
         }
     } else {
@@ -26,19 +26,19 @@ fun GameMatrix.moveEntity(target: Axis, entityAxis: Axis, entity: EntityType): B
 }
 
 
-fun GameMatrix.moveShip(target: Axis, spaceShip: Entity<SpaceShip>): Boolean {
+fun GameMatrix.tryMoveShip(target: Axis, spaceShip: Entity<SpaceShip>): Boolean {
     val targetCell = this.getCell(target)
     return if (spaceShip.entity.isCanFly
             && targetCell.cellType.isCanFly
             && !this.isSpaceShip(target)) {
-        moveShipTo(target, spaceShip)
+        moveShip(target, spaceShip)
         true
     } else {
         false
     }
 }
 
-private fun GameMatrix.moveShipTo(target: Axis, spaceShip: Entity<SpaceShip>) {
+private fun GameMatrix.moveShip(target: Axis, spaceShip: Entity<SpaceShip>) {
     val targetCell = this.getCell(target)
     val currentCell = this.getCell(spaceShip.axis)
     targetCell.entityType.add(spaceShip.entity)
@@ -69,7 +69,7 @@ private fun GameMatrix.isNowPlaying(axis: Axis, fractionsType: FractionsType): B
     } != null
 }
 
-fun GameMatrix.movePlayer(target: Axis, player: Entity<Player>): Boolean {
+fun GameMatrix.tryMovePlayer(target: Axis, player: Entity<Player>): Boolean {
     val targetCell = this.getCell(target)
     return if (targetCell.cellType.isCanMove && player.entity.isCanMove) {
         val enemy = this.getEnemy(target, TurnHandler.fractionType)
@@ -77,7 +77,7 @@ fun GameMatrix.movePlayer(target: Axis, player: Entity<Player>): Boolean {
             this.captureEnemyUnit(player, enemy)
             true
         } else {
-            this.movePlayerTo(target, player)
+            this.movePlayer(target, player)
             true
         }
     } else if (isSpaceShip(target) && targetCell.entityType.isSpaceShipBelongFraction(player.entity)) {
@@ -92,7 +92,7 @@ private fun GameMatrix.isSpaceShip(axis: Axis): Boolean {
     return this.getCell(axis).entityType.getSpaceShip() != null
 }
 
-fun GameMatrix.movePlayerTo(target: Axis, player: Entity<Player>) {
+fun GameMatrix.movePlayer(target: Axis, player: Entity<Player>) {
     val targetCell = this.getCell(target)
     targetCell.entityType.add(player.entity)
     targetCell.cellType.isVisible = true

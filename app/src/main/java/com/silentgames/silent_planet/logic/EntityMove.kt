@@ -12,6 +12,7 @@ import com.silentgames.silent_planet.utils.isSpaceShipBelongFraction
 /**
  * Created by gidroshvandel on 23.09.16.
  */
+@Deprecated("Use EntityActions")
 class EntityMove(private var gameMatrixHelper: GameMatrixHelper) {
 
     private val entityTypeXY: MutableList<EntityType>
