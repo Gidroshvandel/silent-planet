@@ -7,6 +7,6 @@ import com.silentgames.silent_planet.model.fractions.Fractions
  * Created by gidroshvandel on 27.09.16.
  */
 interface EntityTypeProperties : BaseProperties {
-    val id: Int
+    val id: String
     var fraction: Fractions
 }

@@ -9,7 +9,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 class Entity(
-        val id: Int,
+        val id: String,
         axis: EngineAxis,
         bmp: Bitmap
 ) : Sprite(axis, bmp) {

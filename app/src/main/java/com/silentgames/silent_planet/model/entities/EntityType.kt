@@ -15,7 +15,8 @@ abstract class EntityType(
         override var isDead: Boolean = false,
         val effects: MutableList<Effect> = mutableListOf()
 ) : EntityTypeProperties {
-    override val id: Int get() = name.hashCode() + description.hashCode()
+
+    override val id: String get() = name + "_" + description + "_" + fraction.fractionsType.name
 
     fun addEffect(effect: Effect) {
         effects.add(effect)
@@ -28,4 +29,19 @@ abstract class EntityType(
     inline fun <reified T : Effect> hasEffect() = getEffect<T>() != null
 
     inline fun <reified T : Effect> getEffect() = effects.filterIsInstance<T>().firstOrNull()
+
+    override fun equals(other: Any?): Boolean {
+        return if (other is EntityType) {
+            other.id == id
+        } else {
+            super.equals(other)
+        }
+    }
+
+    override fun hashCode(): Int {
+        var result = name.hashCode()
+        result = 31 * result + description.hashCode()
+        result = 31 * result + fraction.fractionsType.hashCode()
+        return result
+    }
 }

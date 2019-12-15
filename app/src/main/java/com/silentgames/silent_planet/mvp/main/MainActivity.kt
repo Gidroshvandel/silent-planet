@@ -122,7 +122,7 @@ class MainActivity : Activity(), MainContract.View, Callback {
                 if (gameMatrix[x][y].entityType.isNotEmpty()) {
                     val entity = gameMatrix[x][y].entityType.first()
                     entityLayer.add(Entity(
-                            entity.name.hashCode() + entity.fraction.fractionsType.ordinal,
+                            entity.id,
                             EngineAxis(x.toFloat(), y.toFloat()),
                             entity.bitmap
                     ))
