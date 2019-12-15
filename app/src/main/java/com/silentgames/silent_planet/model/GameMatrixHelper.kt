@@ -55,3 +55,10 @@ fun GameMatrix.getShip(fractionsType: FractionsType) =
             PIRATE -> this.findSpaceShip<PirateShip>()
             ROBOT -> this.findSpaceShip<RobotShip>()
         }
+
+fun GameMatrix.doEvent(entityType: EntityType) {
+    this.getEntityCell(entityType)?.cellType?.doEvent(Event(this, entityType))
+}
+
+fun GameMatrix.getEntityCell(entityType: EntityType) =
+        flatten().find { it.entityType.contains(entityType) }

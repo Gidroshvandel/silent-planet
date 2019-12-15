@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import com.silentgames.silent_planet.R
 import com.silentgames.silent_planet.model.Axis
-import com.silentgames.silent_planet.model.GameMatrixHelper
 import com.silentgames.silent_planet.utils.BitmapEditor
 
 /**
@@ -23,7 +22,4 @@ class SpaceCell(
         description = context.getString(R.string.space_cell_description)
 ) {
 
-    override fun doEvent(gameMatrixHelper: GameMatrixHelper): GameMatrixHelper {
-        return gameMatrixHelper
-    }
 }

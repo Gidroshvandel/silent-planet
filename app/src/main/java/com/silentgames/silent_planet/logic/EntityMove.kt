@@ -25,10 +25,6 @@ class EntityMove(private var gameMatrixHelper: GameMatrixHelper) {
         return moveCheck(entityType)
     }
 
-    fun doEvent(): GameMatrixHelper {
-        return gameMatrixHelper.gameMatrixCellByXY.cellType.doEvent(gameMatrixHelper)
-    }
-
     private fun moveCheck(entityType: EntityType): GameMatrixHelper? {
         val targetAxis = gameMatrixHelper.currentXY
         val currentAxis = gameMatrixHelper.oldXY ?: Axis(-1, -1)
@@ -152,4 +148,7 @@ data class Entity<out A : EntityType>(
         val axis: Axis
 ) {
     override fun toString(): String = "($entity, $axis)"
+
+    @Suppress("UNCHECKED_CAST")
+    inline fun <reified T : EntityType> getInstance(): Entity<T>? = if (entity is T) this as Entity<T> else null
 }

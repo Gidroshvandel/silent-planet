@@ -7,7 +7,7 @@ import com.silentgames.silent_planet.logic.Entity
 import com.silentgames.silent_planet.logic.moveOnBoardAllyShip
 import com.silentgames.silent_planet.logic.tryMovePlayer
 import com.silentgames.silent_planet.model.Axis
-import com.silentgames.silent_planet.model.GameMatrixHelper
+import com.silentgames.silent_planet.model.Event
 import com.silentgames.silent_planet.model.cells.CellType
 import com.silentgames.silent_planet.model.entities.ground.Player
 import com.silentgames.silent_planet.utils.BitmapEditor
@@ -55,20 +55,14 @@ abstract class Arrow(
         return this
     }
 
-    override fun doEvent(gameMatrixHelper: GameMatrixHelper): GameMatrixHelper {
-        val current = gameMatrixHelper.currentXY
-        val player = gameMatrixHelper.selectedEntity as Player
-        val target = Axis(destinationX, destinationY)
-
-        gameMatrixHelper.oldXY = gameMatrixHelper.currentXY
-        if (checkBorders()) {
-            gameMatrixHelper.currentXY = target
-            gameMatrixHelper.gameMatrix.tryMovePlayer(target, Entity(player, current))
-        } else {
-            gameMatrixHelper.gameMatrix.moveOnBoardAllyShip(Entity(player, current))
+    override fun doEvent(event: Event) {
+        if (event.entity is Player) {
+            if (checkBorders()) {
+                event.gameMatrix.tryMovePlayer(Axis(destinationX, destinationY), Entity(event.entity, position))
+            } else {
+                event.gameMatrix.moveOnBoardAllyShip(Entity(event.entity, position))
+            }
         }
-
-        return gameMatrixHelper
     }
 
     private fun checkBorders(): Boolean {

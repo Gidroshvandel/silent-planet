@@ -107,8 +107,8 @@ class CellRandomGenerator(val context: Context) {
 
 class CellGeneratorParams(
         private val deathCellCount: Int = 1,
-        private val greenArrowCellCount: Int = 10,
-        private val redArrowCellCount: Int = 10,
+        private val greenArrowCellCount: Int = 20,
+        private val redArrowCellCount: Int = 20,
         private val crystalOneCellCount: Int = 10,
         private val crystalTwoCellCount: Int = 5,
         private val crystalThreeCellCount: Int = 5

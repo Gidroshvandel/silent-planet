@@ -5,6 +5,7 @@ import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.BaseProperties
 import com.silentgames.silent_planet.model.GameMatrixHelper
 import com.silentgames.silent_planet.model.cells.CellType
+import com.silentgames.silent_planet.model.doEvent
 import com.silentgames.silent_planet.model.entities.EntityType
 import com.silentgames.silent_planet.model.entities.ground.Player
 import com.silentgames.silent_planet.model.fractions.factionType.Aliens
@@ -157,7 +158,7 @@ class MainPresenter internal constructor(
         if (newGameMatrix != null) {
             viewModel.gameMatrixHelper = newGameMatrix
             eventCount = 0
-            doEvent {
+            doEvent(entity) {
                 view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix) {
                     TurnHandler.turnCount()
                     view.selectCurrentFraction(TurnHandler.fractionType)
@@ -198,12 +199,12 @@ class MainPresenter internal constructor(
 
     private var eventCount = 0
 
-    private fun doEvent(onUpdateComplete: () -> Unit) {
+    private fun doEvent(entity: EntityType, onUpdateComplete: () -> Unit) {
         view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix) {
-            viewModel.gameMatrixHelper = EntityMove(viewModel.gameMatrixHelper).doEvent()
+            viewModel.gameMatrixHelper.gameMatrix.doEvent(entity)
             if (eventCount < 20) {
                 eventCount++
-                doEvent(onUpdateComplete)
+                doEvent(entity, onUpdateComplete)
             } else {
                 onUpdateComplete.invoke()
             }

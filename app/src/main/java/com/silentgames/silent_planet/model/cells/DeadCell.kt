@@ -4,8 +4,9 @@ import android.content.Context
 import android.graphics.Bitmap
 import com.silentgames.silent_planet.R
 import com.silentgames.silent_planet.model.Axis
-import com.silentgames.silent_planet.model.GameMatrixHelper
+import com.silentgames.silent_planet.model.Event
 import com.silentgames.silent_planet.model.entities.ground.utils.DeadPlayer
+import com.silentgames.silent_planet.model.getCell
 import com.silentgames.silent_planet.utils.BitmapEditor
 import com.silentgames.silent_planet.utils.getAllPlayersFromCell
 import com.silentgames.silent_planet.utils.getDeathPlayersFromCell
@@ -22,10 +23,8 @@ class DeadCell(
         description = context.getString(R.string.death_cell_description)
 ) {
 
-    override fun doEvent(gameMatrixHelper: GameMatrixHelper): GameMatrixHelper {
-
-        val gameMatrixCell = gameMatrixHelper.gameMatrixCellByXY
-
+    override fun doEvent(event: Event) {
+        val gameMatrixCell = event.gameMatrix.getCell(position)
         if (gameMatrixCell.cellType.isDead
                 && gameMatrixCell.entityType.getDeathPlayersFromCell().isEmpty()) {
             val alivePlayer = gameMatrixCell.entityType.getAllPlayersFromCell().firstOrNull()
@@ -34,10 +33,6 @@ class DeadCell(
                 gameMatrixCell.entityType.add(DeadPlayer(alivePlayer))
             }
         }
-
-        gameMatrixHelper.gameMatrixCellByXY = gameMatrixCell
-
-        return gameMatrixHelper
     }
 
 }
