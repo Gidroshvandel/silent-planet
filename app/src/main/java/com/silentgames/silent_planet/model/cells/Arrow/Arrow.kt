@@ -29,26 +29,26 @@ abstract class Arrow(
         description = description
 ) {
 
-    open fun rotate(x: Int, y: Int, rotateAngle: BitmapEditor.RotateAngle): Arrow {
+    open fun rotate(rotateAngle: BitmapEditor.RotateAngle): Arrow {
         when (rotateAngle) {
             BitmapEditor.RotateAngle.DEGREES0 -> {
-                destinationX = x + distance
-                destinationY = y - distance
+                destinationX = position.x + distance
+                destinationY = position.y - distance
             }
             BitmapEditor.RotateAngle.DEGREES90 -> {
                 bitmap = BitmapEditor.rotateBitmap(BitmapEditor.RotateAngle.DEGREES90, bitmap)
-                destinationX = x + distance
-                destinationY = y + distance
+                destinationX = position.x + distance
+                destinationY = position.y + distance
             }
             BitmapEditor.RotateAngle.DEGREES180 -> {
                 bitmap = BitmapEditor.rotateBitmap(BitmapEditor.RotateAngle.DEGREES180, bitmap)
-                destinationX = x - distance
-                destinationY = y + distance
+                destinationX = position.x - distance
+                destinationY = position.y + distance
             }
             BitmapEditor.RotateAngle.DEGREES270 -> {
                 bitmap = BitmapEditor.rotateBitmap(BitmapEditor.RotateAngle.DEGREES270, bitmap)
-                destinationX = x - distance
-                destinationY = y - distance
+                destinationX = position.x - distance
+                destinationY = position.y - distance
             }
         }
         this.rotateAngle = rotateAngle

@@ -3,6 +3,7 @@ package com.silentgames.silent_planet.model.cells
 import android.content.Context
 import android.graphics.Bitmap
 import com.silentgames.silent_planet.R
+import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.GameMatrixHelper
 import com.silentgames.silent_planet.utils.BitmapEditor
 
@@ -11,6 +12,7 @@ import com.silentgames.silent_planet.utils.BitmapEditor
  */
 class SpaceCell(
         context: Context,
+        override val position: Axis,
         override var bitmap: Bitmap = BitmapEditor.getCellBitmap(context, R.drawable.space_texture),
         override var isCanMove: Boolean = false
 ) : CellType(

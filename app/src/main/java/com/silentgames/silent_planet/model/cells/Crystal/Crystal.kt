@@ -3,6 +3,7 @@ package com.silentgames.silent_planet.model.cells.Crystal
 import android.content.Context
 import android.graphics.Bitmap
 import com.silentgames.silent_planet.R
+import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.GameMatrixHelper
 import com.silentgames.silent_planet.model.cells.CellType
 
@@ -12,6 +13,7 @@ import com.silentgames.silent_planet.model.cells.CellType
 
 class Crystal(
         context: Context,
+        override val position: Axis,
         titleType: CrystalsEnum,
         override var bitmap: Bitmap = titleType.getImage(context),
         override var isCanMove: Boolean = true

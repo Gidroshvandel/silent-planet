@@ -40,7 +40,7 @@ class CellRandomGenerator(val context: Context) {
         return@withContext Array(hCountOfCells) { x ->
             Array(vCountOfCells) { y ->
                 if (x == 0 || x == hCountOfCells - 1 || y == 0 || y == vCountOfCells - 1) {
-                    Cell(SpaceCell(context))
+                    Cell(SpaceCell(context, Axis(x, y)))
                 } else {
                     count++
                     Cell(randomCellTypeList[count].getCellType(Axis(x, y)))
@@ -52,13 +52,13 @@ class CellRandomGenerator(val context: Context) {
 
     private fun RandomCellType.getCellType(axis: Axis): CellType {
         return when (this) {
-            RandomCellType.DEATH -> DeadCell(context)
-            RandomCellType.GREEN_ARROW -> ArrowGreen(context).rotate(axis.x, axis.y, BitmapEditor.RotateAngle.randomAngle())
-            RandomCellType.RED_ARROW -> ArrowRed(context).rotate(axis.x, axis.y, BitmapEditor.RotateAngle.randomAngle())
-            RandomCellType.CRYSTAL_ONE -> Crystal(context, CrystalsEnum.ONE)
-            RandomCellType.CRYSTAL_TWO -> Crystal(context, CrystalsEnum.TWO)
-            RandomCellType.CRYSTAL_THREE -> Crystal(context, CrystalsEnum.THREE)
-            RandomCellType.EMPTY -> EmptyCell(context)
+            RandomCellType.DEATH -> DeadCell(context, axis)
+            RandomCellType.GREEN_ARROW -> ArrowGreen(context, axis).rotate(BitmapEditor.RotateAngle.randomAngle())
+            RandomCellType.RED_ARROW -> ArrowRed(context, axis).rotate(BitmapEditor.RotateAngle.randomAngle())
+            RandomCellType.CRYSTAL_ONE -> Crystal(context, axis, CrystalsEnum.ONE)
+            RandomCellType.CRYSTAL_TWO -> Crystal(context, axis, CrystalsEnum.TWO)
+            RandomCellType.CRYSTAL_THREE -> Crystal(context, axis, CrystalsEnum.THREE)
+            RandomCellType.EMPTY -> EmptyCell(context, axis)
         }
     }
 

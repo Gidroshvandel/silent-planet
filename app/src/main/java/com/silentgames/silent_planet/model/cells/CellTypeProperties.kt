@@ -1,6 +1,7 @@
 package com.silentgames.silent_planet.model.cells
 
 import android.graphics.Bitmap
+import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.BaseProperties
 
 /**
@@ -8,6 +9,7 @@ import com.silentgames.silent_planet.model.BaseProperties
  */
 interface CellTypeProperties : BaseProperties {
 
+    val position: Axis
     val closeBitmap: Bitmap
     var isVisible: Boolean
 
