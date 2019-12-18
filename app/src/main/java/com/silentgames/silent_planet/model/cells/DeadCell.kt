@@ -23,7 +23,7 @@ class DeadCell(
         description = context.getString(R.string.death_cell_description)
 ) {
 
-    override fun doEvent(event: Event) {
+    override fun doEvent(event: Event): Boolean {
         val gameMatrixCell = event.gameMatrix.getCell(position)
         if (gameMatrixCell.cellType.isDead
                 && gameMatrixCell.entityType.getDeathPlayersFromCell().isEmpty()) {
@@ -31,8 +31,10 @@ class DeadCell(
             if (alivePlayer != null) {
                 gameMatrixCell.entityType.remove(alivePlayer)
                 gameMatrixCell.entityType.add(DeadPlayer(alivePlayer))
+                return true
             }
         }
+        return false
     }
 
 }

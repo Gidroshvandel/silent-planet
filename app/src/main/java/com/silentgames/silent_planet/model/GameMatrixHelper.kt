@@ -9,6 +9,7 @@ import com.silentgames.silent_planet.model.entities.space.fractions.RobotShip
 import com.silentgames.silent_planet.model.fractions.FractionsType
 import com.silentgames.silent_planet.model.fractions.FractionsType.*
 import com.silentgames.silent_planet.utils.findSpaceShip
+import com.silentgames.silent_planet.utils.getSpaceShip
 
 /**
  * Created by gidroshvandel on 28.06.17.
@@ -56,9 +57,11 @@ fun GameMatrix.getShip(fractionsType: FractionsType) =
             ROBOT -> this.findSpaceShip<RobotShip>()
         }
 
-fun GameMatrix.doEvent(entityType: EntityType) {
-    this.getEntityCell(entityType)?.cellType?.doEvent(Event(this, entityType))
-}
+fun GameMatrix.doEvent(entityType: EntityType) =
+        this.getEntityCell(entityType)?.cellType?.doEvent(Event(this, entityType)) ?: false
 
 fun GameMatrix.getEntityCell(entityType: EntityType) =
-        flatten().find { it.entityType.contains(entityType) }
+        flatten().find {
+            it.entityType.contains(entityType)
+                    || it.entityType.getSpaceShip()?.playersOnBord?.contains(entityType) == true
+        }

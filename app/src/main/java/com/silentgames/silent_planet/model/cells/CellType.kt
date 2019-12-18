@@ -26,8 +26,7 @@ abstract class CellType(
     override var description: String = description
         get() = if (isVisible) field else context.getString(R.string.unknown_cell_description)
 
-    open fun doEvent(event: Event) {
-    }
+    open fun doEvent(event: Event): Boolean = false
 
     fun getCurrentBitmap(): Bitmap = if (isVisible) {
         bitmap

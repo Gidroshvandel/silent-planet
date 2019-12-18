@@ -70,8 +70,10 @@ fun MutableList<EntityType>.getDeathPlayersFromCell(): List<Player> {
     return data
 }
 
+fun MutableList<EntityType>.isSpaceShip(): Boolean = this.getSpaceShip() != null
+
 fun MutableList<EntityType>.getSpaceShip(): SpaceShip? =
-        this.firstOrNull { it is SpaceShip }?.let { it as SpaceShip }
+        this.find { it is SpaceShip }?.let { it as SpaceShip }
 
 fun MutableList<EntityType>.isSpaceShipBelongFraction(entityType: EntityType): Boolean =
         entityType.fraction.fractionsType == this.getSpaceShip()?.fraction?.fractionsType

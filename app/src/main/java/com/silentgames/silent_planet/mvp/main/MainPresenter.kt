@@ -1,9 +1,9 @@
 package com.silentgames.silent_planet.mvp.main
 
 import com.silentgames.silent_planet.logic.Constants
-import com.silentgames.silent_planet.logic.EntityMove
 import com.silentgames.silent_planet.logic.TurnHandler
 import com.silentgames.silent_planet.logic.buyBack
+import com.silentgames.silent_planet.logic.tryMoveEntity
 import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.BaseProperties
 import com.silentgames.silent_planet.model.GameMatrixHelper
@@ -155,11 +155,9 @@ class MainPresenter internal constructor(
         return viewModel.gameMatrixHelper.gameMatrixCellByXY.cellType.crystals > 0
     }
 
-    private fun tryMove(entity: EntityType, currentXY: Axis) {
+    private fun tryMove(entity: EntityType, targetPosition: Axis) {
         view.enableButton(false)
-        val newGameMatrix = EntityMove(viewModel.gameMatrixHelper).canMove(entity)
-        if (newGameMatrix != null) {
-            viewModel.gameMatrixHelper = newGameMatrix
+        if (viewModel.gameMatrixHelper.gameMatrix.tryMoveEntity(targetPosition, entity)) {
             eventCount = 0
             doEvent(entity) {
                 view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix) {
@@ -172,7 +170,7 @@ class MainPresenter internal constructor(
         } else {
             viewModel.gameMatrixHelper.oldXY = null
             viewModel.gameMatrixHelper.selectedEntity = null
-            select(currentXY)
+            select(targetPosition)
         }
     }
 
@@ -204,8 +202,7 @@ class MainPresenter internal constructor(
 
     private fun doEvent(entity: EntityType, onUpdateComplete: () -> Unit) {
         view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix) {
-            viewModel.gameMatrixHelper.gameMatrix.doEvent(entity)
-            if (eventCount < 20) {
+            if (viewModel.gameMatrixHelper.gameMatrix.doEvent(entity) && eventCount < 20) {
                 eventCount++
                 doEvent(entity, onUpdateComplete)
             } else {

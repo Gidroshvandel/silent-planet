@@ -54,14 +54,16 @@ abstract class Arrow(
         return this
     }
 
-    override fun doEvent(event: Event) {
+    override fun doEvent(event: Event): Boolean {
         if (event.entity is Player) {
             if (checkBorders()) {
                 event.gameMatrix.tryMovePlayer(Axis(destinationX, destinationY), event.entity)
             } else {
                 event.gameMatrix.moveOnBoardAllyShip(event.entity)
             }
+            return true
         }
+        return false
     }
 
     private fun checkBorders(): Boolean {
