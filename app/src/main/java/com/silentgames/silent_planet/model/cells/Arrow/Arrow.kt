@@ -3,7 +3,6 @@ package com.silentgames.silent_planet.model.cells.Arrow
 import android.content.Context
 import com.silentgames.silent_planet.R
 import com.silentgames.silent_planet.logic.Constants
-import com.silentgames.silent_planet.logic.Entity
 import com.silentgames.silent_planet.logic.moveOnBoardAllyShip
 import com.silentgames.silent_planet.logic.tryMovePlayer
 import com.silentgames.silent_planet.model.Axis
@@ -58,9 +57,9 @@ abstract class Arrow(
     override fun doEvent(event: Event) {
         if (event.entity is Player) {
             if (checkBorders()) {
-                event.gameMatrix.tryMovePlayer(Axis(destinationX, destinationY), Entity(event.entity, position))
+                event.gameMatrix.tryMovePlayer(Axis(destinationX, destinationY), event.entity)
             } else {
-                event.gameMatrix.moveOnBoardAllyShip(Entity(event.entity, position))
+                event.gameMatrix.moveOnBoardAllyShip(event.entity)
             }
         }
     }

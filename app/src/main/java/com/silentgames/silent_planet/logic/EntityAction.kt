@@ -1,23 +1,20 @@
 package com.silentgames.silent_planet.logic
 
-import com.silentgames.silent_planet.model.Axis
-import com.silentgames.silent_planet.model.GameMatrix
+import com.silentgames.silent_planet.model.*
 import com.silentgames.silent_planet.model.effects.CaptureEffect
 import com.silentgames.silent_planet.model.entities.EntityType
 import com.silentgames.silent_planet.model.entities.ground.Player
 import com.silentgames.silent_planet.model.entities.space.SpaceShip
 import com.silentgames.silent_planet.model.fractions.FractionsType
-import com.silentgames.silent_planet.model.getCell
-import com.silentgames.silent_planet.model.getShip
 import com.silentgames.silent_planet.utils.ShipNotFoundException
 import com.silentgames.silent_planet.utils.getSpaceShip
 import com.silentgames.silent_planet.utils.isSpaceShipBelongFraction
 
-fun GameMatrix.moveEntity(target: Axis, entityAxis: Axis, entity: EntityType): Boolean {
-    return if (targetIsAvailable(target, entityAxis)) {
+fun GameMatrix.moveEntity(target: Axis, entityPosition: Axis, entity: EntityType): Boolean {
+    return if (targetIsAvailable(target, entityPosition)) {
         when (entity) {
-            is SpaceShip -> tryMoveShip(target, Entity(entity, entityAxis))
-            is Player -> tryMovePlayer(target, Entity(entity, entityAxis))
+            is SpaceShip -> tryMoveShip(target, entity)
+            is Player -> tryMovePlayer(target, entity)
             else -> false
         }
     } else {
@@ -26,9 +23,9 @@ fun GameMatrix.moveEntity(target: Axis, entityAxis: Axis, entity: EntityType): B
 }
 
 
-fun GameMatrix.tryMoveShip(target: Axis, spaceShip: Entity<SpaceShip>): Boolean {
+fun GameMatrix.tryMoveShip(target: Axis, spaceShip: SpaceShip): Boolean {
     val targetCell = this.getCell(target)
-    return if (spaceShip.entity.isCanFly
+    return if (spaceShip.isCanFly
             && targetCell.cellType.isCanFly
             && !this.isSpaceShip(target)) {
         moveShip(target, spaceShip)
@@ -38,12 +35,12 @@ fun GameMatrix.tryMoveShip(target: Axis, spaceShip: Entity<SpaceShip>): Boolean 
     }
 }
 
-private fun GameMatrix.moveShip(target: Axis, spaceShip: Entity<SpaceShip>) {
+private fun GameMatrix.moveShip(target: Axis, spaceShip: SpaceShip) {
     val targetCell = this.getCell(target)
-    val currentCell = this.getCell(spaceShip.axis)
-    targetCell.entityType.add(spaceShip.entity)
+    val currentCell = this.getEntityCell(spaceShip)
+    targetCell.entityType.add(spaceShip)
     targetCell.cellType.isVisible = true
-    currentCell.entityType.remove(spaceShip.entity)
+    currentCell?.entityType?.remove(spaceShip)
 }
 
 fun GameMatrix.targetIsAvailable(target: Axis, current: Axis) =
@@ -69,9 +66,9 @@ private fun GameMatrix.isNowPlaying(axis: Axis, fractionsType: FractionsType): B
     } != null
 }
 
-fun GameMatrix.tryMovePlayer(target: Axis, player: Entity<Player>): Boolean {
+fun GameMatrix.tryMovePlayer(target: Axis, player: Player): Boolean {
     val targetCell = this.getCell(target)
-    return if (targetCell.cellType.isCanMove && player.entity.isCanMove) {
+    return if (targetCell.cellType.isCanMove && player.isCanMove) {
         val enemy = this.getEnemy(target, TurnHandler.fractionType)
         if (enemy != null) {
             this.captureEnemyUnit(player, enemy)
@@ -80,7 +77,7 @@ fun GameMatrix.tryMovePlayer(target: Axis, player: Entity<Player>): Boolean {
             this.movePlayer(target, player)
             true
         }
-    } else if (isSpaceShip(target) && targetCell.entityType.isSpaceShipBelongFraction(player.entity)) {
+    } else if (isSpaceShip(target) && targetCell.entityType.isSpaceShipBelongFraction(player)) {
         this.moveOnBoardAllyShip(player)
         true
     } else {
@@ -92,61 +89,60 @@ private fun GameMatrix.isSpaceShip(axis: Axis): Boolean {
     return this.getCell(axis).entityType.getSpaceShip() != null
 }
 
-fun GameMatrix.movePlayer(target: Axis, player: Entity<Player>) {
+fun GameMatrix.movePlayer(target: Axis, player: Player) {
     val targetCell = this.getCell(target)
-    targetCell.entityType.add(player.entity)
+    targetCell.entityType.add(player)
     targetCell.cellType.isVisible = true
     deletePlayer(player)
 }
 
 fun GameMatrix.buyBack(
-        entity: Entity<Player>,
+        player: Player,
         onSuccess: () -> Unit,
         onFailure: (missingAmount: Int) -> Unit
 ) {
-    val playerShip = getShip(entity.entity.fraction.fractionsType)
-    val captureEffect = entity.entity.getEffect<CaptureEffect>()
+    val playerShip = getShip(player.fraction.fractionsType)
+    val captureEffect = player.getEffect<CaptureEffect>()
     if (playerShip.crystals >= captureEffect?.buybackPrice ?: 0) {
         playerShip.crystals = playerShip.crystals - (captureEffect?.buybackPrice ?: 0)
         captureEffect?.remove()
-        moveOnBoard(entity, playerShip)
+        moveOnBoard(player, playerShip)
         onSuccess.invoke()
     } else {
         onFailure.invoke(captureEffect?.buybackPrice?.minus(playerShip.crystals) ?: 0)
     }
 }
 
-fun GameMatrix.captureEnemyUnit(entity: Entity<Player>, enemyEntity: Entity<Player>) {
-    moveOnBoardAllyShip(entity)
-    CaptureEffect(enemyEntity.entity, entity.entity.fraction.fractionsType)
-    moveOnBoardFractionShip(enemyEntity, entity.entity.fraction.fractionsType)
+fun GameMatrix.captureEnemyUnit(player: Player, enemyPlayer: Player) {
+    moveOnBoardAllyShip(player)
+    CaptureEffect(enemyPlayer, player.fraction.fractionsType)
+    moveOnBoardFractionShip(enemyPlayer, player.fraction.fractionsType)
 }
 
-fun GameMatrix.getEnemy(axis: Axis, currentFraction: FractionsType): Entity<Player>? {
-    val enemy = getCell(axis).entityType.getEnemy(currentFraction)
-    return if (enemy != null) Entity(enemy, axis) else null
+fun GameMatrix.getEnemy(axis: Axis, currentFraction: FractionsType): Player? {
+    return getCell(axis).entityType.getEnemy(currentFraction)
 }
 
 private fun MutableList<EntityType>.getEnemy(currentFraction: FractionsType) =
         find { !it.isDead && it.fraction.fractionsType != currentFraction && it is Player } as? Player
 
-private fun GameMatrix.moveOnBoard(current: Entity<Player>, spaceShip: SpaceShip) {
-    spaceShip.crystals = spaceShip.crystals + current.entity.crystals
-    spaceShip.playersOnBord.add(current.entity.apply { crystals = 0 })
-    this.deletePlayer(current)
+private fun GameMatrix.moveOnBoard(player: Player, spaceShip: SpaceShip) {
+    spaceShip.crystals = spaceShip.crystals + player.crystals
+    spaceShip.playersOnBord.add(player.apply { crystals = 0 })
+    this.deletePlayer(player)
 }
 
-fun GameMatrix.moveOnBoardAllyShip(current: Entity<Player>) {
-    moveOnBoard(current, findFractionShip(current.entity.fraction.fractionsType).entity)
+fun GameMatrix.moveOnBoardAllyShip(player: Player) {
+    moveOnBoard(player, findFractionShip(player.fraction.fractionsType))
 }
 
-private fun GameMatrix.moveOnBoardFractionShip(current: Entity<Player>, fractionsType: FractionsType) {
-    moveOnBoard(current, findFractionShip(fractionsType).entity)
+private fun GameMatrix.moveOnBoardFractionShip(player: Player, fractionsType: FractionsType) {
+    moveOnBoard(player, findFractionShip(fractionsType))
 }
 
-private fun GameMatrix.findFractionShip(fractionsType: FractionsType): Entity<SpaceShip> {
+private fun GameMatrix.findFractionShip(fractionsType: FractionsType): SpaceShip {
     var spaceShip: SpaceShip? = null
-    this.forEachIndexed { x, arrayOfCells ->
+    this.forEach { arrayOfCells ->
         val y = arrayOfCells.indexOfFirst {
             spaceShip = it.entityType.getSpaceShip()
             if (spaceShip?.fraction?.fractionsType == fractionsType) {
@@ -158,15 +154,15 @@ private fun GameMatrix.findFractionShip(fractionsType: FractionsType): Entity<Sp
         }
         spaceShip?.let {
             if (y != -1) {
-                return Entity(it, Axis(x, y))
+                return it
             }
         }
     }
     throw ShipNotFoundException()
 }
 
-private fun GameMatrix.deletePlayer(current: Entity<Player>) {
-    this.getCell(current.axis).entityType.deletePlayer(current.entity)
+private fun GameMatrix.deletePlayer(player: Player) {
+    this.getEntityCell(player)?.entityType?.deletePlayer(player)
 }
 
 private fun MutableList<EntityType>.deletePlayer(player: Player) {

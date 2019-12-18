@@ -46,7 +46,7 @@ class EntityMove(private var gameMatrixHelper: GameMatrixHelper) {
                     if (targetCellType.isCanMove) {
                         val enemy = gameMatrixHelper.gameMatrix.getEnemy(targetAxis, gameMatrixHelper.currentTurnFraction)
                         if (enemy != null) {
-                            gameMatrixHelper.gameMatrix.captureEnemyUnit(Entity(entityType, currentAxis), enemy)
+                            gameMatrixHelper.gameMatrix.captureEnemyUnit(entityType, enemy)
                         } else {
                             movePlayer(entityType)
                         }
@@ -141,14 +141,4 @@ class EntityMove(private var gameMatrixHelper: GameMatrixHelper) {
         }
         return false
     }
-}
-
-data class Entity<out A : EntityType>(
-        val entity: A,
-        val axis: Axis
-) {
-    override fun toString(): String = "($entity, $axis)"
-
-    @Suppress("UNCHECKED_CAST")
-    inline fun <reified T : EntityType> getInstance(): Entity<T>? = if (entity is T) this as Entity<T> else null
 }
