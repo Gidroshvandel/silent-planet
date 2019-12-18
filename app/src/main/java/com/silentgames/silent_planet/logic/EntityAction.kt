@@ -103,11 +103,14 @@ fun GameMatrix.buyBack(
         onSuccess: () -> Unit,
         onFailure: (missingAmount: Int) -> Unit
 ) {
-    val playerShip = getShip(player.fraction.fractionsType)
+    val playerShip = this.getShip(player.fraction.fractionsType)
     val captureEffect = player.getEffect<CaptureEffect>()
-    if (playerShip.crystals >= captureEffect?.buybackPrice ?: 0) {
-        playerShip.crystals = playerShip.crystals - (captureEffect?.buybackPrice ?: 0)
-        captureEffect?.remove()
+    val buyBackPrice = captureEffect?.buybackPrice ?: 0
+    val invaderFaction = captureEffect?.invaderFaction
+    if (playerShip.crystals >= buyBackPrice && invaderFaction != null) {
+        playerShip.removeCrystals(buyBackPrice)
+        this.getShip(invaderFaction).addCrystals(buyBackPrice)
+        captureEffect.remove()
         moveOnBoard(player, playerShip)
         onSuccess.invoke()
     } else {

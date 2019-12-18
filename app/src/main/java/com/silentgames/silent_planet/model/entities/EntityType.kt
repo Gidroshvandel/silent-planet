@@ -26,6 +26,15 @@ abstract class EntityType(
         effects.remove(effect)
     }
 
+    fun addCrystals(crystals: Int) {
+        this.crystals = this.crystals + crystals
+    }
+
+    fun removeCrystals(crystals: Int) {
+        val result = this.crystals - crystals
+        this.crystals = if (result >= 0) result else 0
+    }
+
     inline fun <reified T : Effect> hasEffect() = getEffect<T>() != null
 
     inline fun <reified T : Effect> getEffect() = effects.filterIsInstance<T>().firstOrNull()
