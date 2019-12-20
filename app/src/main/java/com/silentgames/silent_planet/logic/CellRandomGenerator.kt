@@ -62,28 +62,10 @@ class CellRandomGenerator(val context: Context) {
         }
     }
 
-    /**
-     * value - значение которое должно часто выпадать
-     * сhans - шанс его выпадения в процентах от 0 до 100
-     * max - ограничитель рандумных чисел
-     *
-     * @return от нуля, включительно, до max не включительно
-     */
-    private fun Random.randPlus(value: Int, chance: Int, max: Int): Int {
-        if (chance < 0 || chance > 100) {
-            throw IllegalArgumentException("Chance must be between 0 and 100")
-        }
-        val random = nextInt(100)
-        return if (random < chance) {
-            value
-        } else nextInt(max)
-        //Даже при нулевом шансе число всё-таки может выпасть ТУТ.
-    }
-
     private fun randomizeCell(): RandomCellType {
         return if (randomList.size > 0) {
             val pair = randomList.getMaxChance()
-            val index = random.randPlus(pair.first, pair.second, randomList.size)
+            val index = random.randChance(pair.first, pair.second, randomList.size)
             val cellType = randomList[index]
             if (cellType.isGenerationComplete()) {
                 randomList.remove(cellType)

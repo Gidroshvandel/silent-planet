@@ -50,15 +50,28 @@ fun GameMatrix.targetIsAvailable(target: Axis, current: Axis) =
 
 private fun isMoveAtDistance(target: Axis, current: Axis): Boolean {
     if (!(current.x == target.x && current.y == target.y)) {
-        for (i in 0..2) {
-            for (j in 0..2) {
-                if (current.x + j - 1 == target.x && current.y + i - 1 == target.y) {
-                    return true
-                }
+        return getAvailableMoveDistancePositionList(current).contains(target)
+    }
+    return false
+}
+
+fun getAvailableMoveDistancePositionList(position: Axis): List<Axis> {
+    val positionList = mutableListOf<Axis>()
+    for (i in 0..2) {
+        for (j in 0..2) {
+            val x = position.x + j - 1
+            val y = position.y + i - 1
+            if ((x != position.x
+                            || y != position.y)
+                    && x >= 0
+                    && y >= 0
+                    && x < Constants.horizontalCountOfCells
+                    && y < Constants.verticalCountOfCells) {
+                positionList.add(Axis(x, y))
             }
         }
     }
-    return false
+    return positionList
 }
 
 private fun GameMatrix.isNowPlaying(axis: Axis, fractionsType: FractionsType): Boolean {

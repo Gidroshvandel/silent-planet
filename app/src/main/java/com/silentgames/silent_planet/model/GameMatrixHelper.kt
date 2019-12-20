@@ -1,13 +1,14 @@
 package com.silentgames.silent_planet.model
 
-import com.silentgames.silent_planet.logic.TurnHandler
 import com.silentgames.silent_planet.model.entities.EntityType
+import com.silentgames.silent_planet.model.entities.space.SpaceShip
 import com.silentgames.silent_planet.model.entities.space.fractions.AlienShip
 import com.silentgames.silent_planet.model.entities.space.fractions.HumanShip
 import com.silentgames.silent_planet.model.entities.space.fractions.PirateShip
 import com.silentgames.silent_planet.model.entities.space.fractions.RobotShip
 import com.silentgames.silent_planet.model.fractions.FractionsType
 import com.silentgames.silent_planet.model.fractions.FractionsType.*
+import com.silentgames.silent_planet.utils.ShipNotFoundException
 import com.silentgames.silent_planet.utils.findSpaceShip
 import com.silentgames.silent_planet.utils.getSpaceShip
 
@@ -29,8 +30,6 @@ class GameMatrixHelper(
     val pirateShip: PirateShip get() = gameMatrix.findSpaceShip()
     val alienShip: AlienShip get() = gameMatrix.findSpaceShip()
 
-    val currentTurnFraction get() = TurnHandler.fractionType
-
     var gameMatrix: Array<Array<Cell>> = gameMatrix
         set(value) {
             oldGameMatrix = field
@@ -49,12 +48,14 @@ class GameMatrixHelper(
 
 fun GameMatrix.getCell(axis: Axis) = this[axis.x][axis.y]
 
-fun GameMatrix.getShip(fractionsType: FractionsType) =
+fun GameMatrix.getShip(fractionsType: FractionsType) = this.getShipPosition(fractionsType).entity
+
+fun GameMatrix.getShipPosition(fractionsType: FractionsType) =
         when (fractionsType) {
-            ALIEN -> this.findSpaceShip<AlienShip>()
-            HUMAN -> this.findSpaceShip<HumanShip>()
-            PIRATE -> this.findSpaceShip<PirateShip>()
-            ROBOT -> this.findSpaceShip<RobotShip>()
+            ALIEN -> this.findPositionSpaceShip<AlienShip>()
+            HUMAN -> this.findPositionSpaceShip<HumanShip>()
+            PIRATE -> this.findPositionSpaceShip<PirateShip>()
+            ROBOT -> this.findPositionSpaceShip<RobotShip>()
         }
 
 fun GameMatrix.doEvent(entityType: EntityType) =
@@ -65,3 +66,23 @@ fun GameMatrix.getEntityCell(entityType: EntityType) =
             it.entityType.contains(entityType)
                     || it.entityType.getSpaceShip()?.playersOnBord?.contains(entityType) == true
         }
+
+inline fun <reified T : SpaceShip> GameMatrix.findPositionSpaceShip(): EntityPosition<T> {
+    this.forEachIndexed { x, arrayOfCells ->
+        arrayOfCells.forEachIndexed { y, cell ->
+            if (x == 0 || x == this.size - 1 || y == 0 || y == arrayOfCells.size - 1) {
+                val ship = cell.entityType.getSpaceShip()
+                if (ship != null && ship is T)
+                    return EntityPosition(ship, Axis(x, y))
+            }
+        }
+    }
+    throw ShipNotFoundException()
+}
+
+data class EntityPosition<out A : EntityType>(
+        val entity: A,
+        val position: Axis
+) {
+    override fun toString(): String = "($entity, $position)"
+}
