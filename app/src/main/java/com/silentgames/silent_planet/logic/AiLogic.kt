@@ -5,10 +5,6 @@ import com.silentgames.silent_planet.model.entities.EntityType
 import com.silentgames.silent_planet.model.entities.ground.Player
 import com.silentgames.silent_planet.model.fractions.FractionsType
 
-fun GameMatrix.moveAi(player: EntityPosition<Player>): Boolean {
-    return tryMovePlayer(player)
-}
-
 fun GameMatrix.choosePlayerToMove(fractionsType: FractionsType): EntityPosition<Player>? {
     val spaceShip = this.getShipPosition(fractionsType)
     val list = this.getCellListByFraction(fractionsType)
@@ -25,7 +21,27 @@ fun GameMatrix.choosePlayerToMove(fractionsType: FractionsType): EntityPosition<
     return null
 }
 
-private fun GameMatrix.tryMovePlayer(playerPosition: EntityPosition<Player>): Boolean {
+fun GameMatrix.moveAi(player: EntityPosition<Player>): Boolean {
+    val currentCell = this.getCell(player.position)
+    return if (currentCell.cellType.crystals > 0) {
+        player.entity.addCrystals(currentCell.cellType.takeAllCrystals())
+        this.tryReturnToShip(player)
+    } else {
+        this.tryFindCrystals(player)
+    }
+}
+
+private fun GameMatrix.tryReturnToShip(player: EntityPosition<Player>): Boolean {
+    val spaceShip = this.getShipPosition(player.entity.fraction.fractionsType)
+    val path = this.findPath(player.position, spaceShip.position, player.entity)
+    return if (path.isNotEmpty()) {
+        this.tryMovePlayer(path.last(), player.entity)
+    } else {
+        false
+    }
+}
+
+private fun GameMatrix.tryFindCrystals(playerPosition: EntityPosition<Player>): Boolean {
     val targetCell = this.chooseCellToMove(playerPosition)
     return this.tryMovePlayer(targetCell.cellType.position, playerPosition.entity)
 }

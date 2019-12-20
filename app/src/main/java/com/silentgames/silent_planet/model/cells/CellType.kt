@@ -28,6 +28,12 @@ abstract class CellType(
 
     open fun doEvent(event: Event): Boolean = false
 
+    fun takeAllCrystals(): Int {
+        val crystals = this.crystals
+        this.crystals = 0
+        return crystals
+    }
+
     fun getCurrentBitmap(): Bitmap = if (isVisible) {
         bitmap
     } else {

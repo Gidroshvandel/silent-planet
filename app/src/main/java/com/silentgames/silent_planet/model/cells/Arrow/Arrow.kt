@@ -7,9 +7,13 @@ import com.silentgames.silent_planet.logic.moveOnBoardAllyShip
 import com.silentgames.silent_planet.logic.tryMovePlayer
 import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.Event
+import com.silentgames.silent_planet.model.GameMatrix
 import com.silentgames.silent_planet.model.cells.CellType
 import com.silentgames.silent_planet.model.entities.ground.Player
+import com.silentgames.silent_planet.model.fractions.FractionsType
+import com.silentgames.silent_planet.model.getCell
 import com.silentgames.silent_planet.utils.BitmapEditor
+import com.silentgames.silent_planet.utils.getSpaceShip
 
 /**
  * Created by gidroshvandel on 09.12.16.
@@ -27,6 +31,8 @@ abstract class Arrow(
         name = context.getString(R.string.arrow_cell_name),
         description = description
 ) {
+
+    val destination: Axis get() = Axis(destinationX, destinationY)
 
     open fun rotate(rotateAngle: BitmapEditor.RotateAngle): Arrow {
         when (rotateAngle) {
@@ -56,8 +62,8 @@ abstract class Arrow(
 
     override fun doEvent(event: Event): Boolean {
         if (event.entity is Player) {
-            if (checkBorders()) {
-                event.gameMatrix.tryMovePlayer(Axis(destinationX, destinationY), event.entity)
+            if (checkGroundBorders()) {
+                event.gameMatrix.tryMovePlayer(destination, event.entity)
             } else {
                 event.gameMatrix.moveOnBoardAllyShip(event.entity)
             }
@@ -66,10 +72,28 @@ abstract class Arrow(
         return false
     }
 
+    fun getDestination(gameMatrix: GameMatrix, fractionsType: FractionsType): Axis? =
+            if (checkBorders() && checkGroundBorders()
+                    || checkBorders() && gameMatrix.isSpaceShipFraction(fractionsType)) {
+                destination
+            } else {
+                null
+            }
+
+    private fun GameMatrix.isSpaceShipFraction(fractionsType: FractionsType) =
+            this.getCell(destination).entityType.getSpaceShip()?.fraction?.fractionsType == fractionsType
+
+    private fun checkGroundBorders(): Boolean {
+        return destination.x <= Constants.verticalCountOfGroundCells &&
+                destination.x >= 1 &&
+                destination.y <= Constants.horizontalCountOfGroundCells &&
+                destination.y >= 1
+    }
+
     private fun checkBorders(): Boolean {
-        return destinationX <= Constants.verticalCountOfGroundCells &&
-                destinationX >= 1 &&
-                destinationY <= Constants.horizontalCountOfGroundCells &&
-                destinationY >= 1
+        return destination.x < Constants.verticalCountOfCells &&
+                destination.x >= 0 &&
+                destination.y < Constants.horizontalCountOfCells &&
+                destination.y >= 0
     }
 }

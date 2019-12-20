@@ -14,22 +14,62 @@ import com.silentgames.silent_planet.utils.isSpaceShipBelongFraction
 fun GameMatrix.tryMoveEntity(target: Axis, entity: EntityType): Boolean {
     val entityPosition = this.getEntityCell(entity)?.cellType?.position
     return if (entityPosition != null && targetIsAvailable(target, entityPosition)) {
-        when (entity) {
-            is SpaceShip -> tryMoveShip(target, entity)
-            is Player -> tryMovePlayer(target, entity)
-            else -> false
-        }
+        canMoveEntity(
+                target,
+                entity,
+                {
+                    val enemy = this.getEnemy(target, TurnHandler.fractionType)
+                    if (enemy != null) {
+                        this.captureEnemyUnit(it, enemy)
+                    } else {
+                        this.movePlayer(target, it)
+                    }
+                },
+                {
+                    this.moveOnBoardAllyShip(it)
+                },
+                {
+                    this.moveShip(target, it)
+                }
+        )
     } else {
         false
     }
 }
 
-fun GameMatrix.tryMoveShip(target: Axis, spaceShip: SpaceShip): Boolean {
-    val targetCell = this.getCell(target)
-    return if (spaceShip.isCanFly
-            && targetCell.cellType.isCanFly
-            && !this.isSpaceShip(target)) {
-        moveShip(target, spaceShip)
+fun GameMatrix.canMoveEntity(
+        target: Axis,
+        entity: EntityType,
+        moveToCell: ((Player) -> Unit)? = null,
+        moveToSpaceShip: ((Player) -> Unit)? = null,
+        moveShip: ((SpaceShip) -> Unit)? = null
+): Boolean {
+    return when (entity) {
+        is SpaceShip -> canMoveShip(target, entity) {
+            moveShip?.invoke(entity)
+        }
+        is Player -> canMovePlayer(
+                target,
+                entity,
+                {
+                    moveToCell?.invoke(entity)
+                },
+                {
+                    moveToSpaceShip?.invoke(entity)
+                }
+        )
+        else -> false
+    }
+}
+
+fun GameMatrix.canMoveShip(target: Axis, spaceShip: SpaceShip): Boolean =
+        (spaceShip.isCanFly
+                && this.getCell(target).cellType.isCanFly
+                && !this.isSpaceShip(target))
+
+fun GameMatrix.canMoveShip(target: Axis, spaceShip: SpaceShip, moveShip: () -> Unit): Boolean {
+    return if (canMoveShip(target, spaceShip)) {
+        moveShip.invoke()
         true
     } else {
         false
@@ -80,23 +120,40 @@ private fun GameMatrix.isNowPlaying(axis: Axis, fractionsType: FractionsType): B
     } != null
 }
 
-fun GameMatrix.tryMovePlayer(target: Axis, player: Player): Boolean {
+fun GameMatrix.canMovePlayer(
+        target: Axis,
+        player: Player,
+        moveToCell: (() -> Unit)? = null,
+        moveToSpaceShip: (() -> Unit)? = null
+): Boolean {
     val targetCell = this.getCell(target)
     return if (targetCell.cellType.isCanMove && player.isCanMove) {
-        val enemy = this.getEnemy(target, TurnHandler.fractionType)
-        if (enemy != null) {
-            this.captureEnemyUnit(player, enemy)
-            true
-        } else {
-            this.movePlayer(target, player)
-            true
-        }
+        moveToCell?.invoke()
+        true
     } else if (isSpaceShip(target) && targetCell.entityType.isSpaceShipBelongFraction(player)) {
-        this.moveOnBoardAllyShip(player)
+        moveToSpaceShip?.invoke()
         true
     } else {
         false
     }
+}
+
+fun GameMatrix.tryMovePlayer(target: Axis, player: Player): Boolean {
+    return canMovePlayer(
+            target,
+            player,
+            {
+                val enemy = this.getEnemy(target, TurnHandler.fractionType)
+                if (enemy != null) {
+                    this.captureEnemyUnit(player, enemy)
+                } else {
+                    this.movePlayer(target, player)
+                }
+            },
+            {
+                this.moveOnBoardAllyShip(player)
+            }
+    )
 }
 
 private fun GameMatrix.isSpaceShip(axis: Axis): Boolean {
