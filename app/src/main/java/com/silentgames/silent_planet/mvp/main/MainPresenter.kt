@@ -69,13 +69,14 @@ class MainPresenter internal constructor(
         launch {
             val gameMatrixHelper = GameMatrixHelper(model.generateBattleGround())
 
+            viewModel.gameMatrixHelper = gameMatrixHelper
+
+
             TurnHandler.start(Humans)
 //            Aliens.isPlayable = true
-            Humans.isPlayable = true
+//            Humans.isPlayable = true
 //            Pirates.isPlayable = true
 //            Robots.isPlayable = true
-
-            viewModel.gameMatrixHelper = gameMatrixHelper
 
             view.changeAlienCristalCount(0)
             view.changeHumanCristalCount(0)
@@ -87,6 +88,10 @@ class MainPresenter internal constructor(
 
             view.enableButton(false)
 
+            if (!TurnHandler.getCurrentFraction().isPlayable) {
+                tryMoveAi(TurnHandler.fractionType)
+            }
+
             TurnHandler.getFlow().collect {
                 view.selectCurrentFraction(it.fractionsType)
                 checkToWin()
@@ -94,6 +99,7 @@ class MainPresenter internal constructor(
                     tryMoveAi(TurnHandler.fractionType)
                 }
             }
+
         }
     }
 
@@ -185,7 +191,6 @@ class MainPresenter internal constructor(
             doEvent(player.entity) {
                 view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix) {
                     TurnHandler.turnCount()
-                    updateEntityState(player.entity)
                 }
             }
         } else {

@@ -39,7 +39,7 @@ object TurnHandler {
         this.fractionType = fraction.fractionsType
     }
 
-    private fun getCurrentFraction(): Fractions =
+    fun getCurrentFraction(): Fractions =
             when (fractionType) {
                 ALIEN -> Aliens
                 HUMAN -> Humans

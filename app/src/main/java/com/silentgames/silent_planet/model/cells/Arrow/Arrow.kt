@@ -62,7 +62,10 @@ abstract class Arrow(
 
     override fun doEvent(event: Event): Boolean {
         if (event.entity is Player) {
-            if (checkGroundBorders()) {
+            if (checkBorders() && event.gameMatrix.isCyclicMove()) {
+                event.gameMatrix.getCell(destination).cellType.isVisible = true
+                event.gameMatrix.moveOnBoardAllyShip(event.entity)
+            } else if (checkGroundBorders()) {
                 event.gameMatrix.tryMovePlayer(destination, event.entity)
             } else {
                 event.gameMatrix.moveOnBoardAllyShip(event.entity)
@@ -70,6 +73,11 @@ abstract class Arrow(
             return true
         }
         return false
+    }
+
+    private fun GameMatrix.isCyclicMove(): Boolean {
+        val destinationCell = this.getCell(destination).cellType
+        return destinationCell is Arrow && destinationCell.destination == position
     }
 
     fun getDestination(gameMatrix: GameMatrix, fractionsType: FractionsType): Axis? =
