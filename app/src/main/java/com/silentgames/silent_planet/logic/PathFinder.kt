@@ -1,11 +1,9 @@
 package com.silentgames.silent_planet.logic
 
-import com.silentgames.silent_planet.model.Axis
-import com.silentgames.silent_planet.model.GameMatrix
+import com.silentgames.silent_planet.model.*
 import com.silentgames.silent_planet.model.cells.Arrow.Arrow
 import com.silentgames.silent_planet.model.entities.EntityType
 import com.silentgames.silent_planet.model.entities.ground.Player
-import com.silentgames.silent_planet.model.getCell
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -96,6 +94,35 @@ private fun GameMatrix.getAdjacentNodes(node: Node, entity: EntityType): List<No
 
 fun GameMatrix.getAvailableMoveDistancePositionList(position: Axis, entity: EntityType) =
         getAvailableMoveDistancePositionList(position).filter { canMoveEntity(it, entity) }
+
+fun GameMatrix.findPathToCell(playerPosition: EntityPosition<EntityType>, event: (Cell) -> Boolean): List<Axis> {
+    val startPosition = Node(playerPosition.position, cost = 0)
+    val reachable = mutableListOf(startPosition)
+    val explored = mutableListOf<Node>()
+    while (reachable.isNotEmpty()) {
+        val node = reachable.minBy { it.cost } ?: return listOf()
+        if (event(this.getCell(node.position))) {
+            val result = buildPath(node).toMutableList()
+            result.remove(startPosition.position)
+            return result
+        } else {
+            reachable.remove(node)
+            explored.add(node)
+
+            val newReachable = this.getAdjacentNodes(node, playerPosition.entity) - explored
+            newReachable.forEach { adjacent ->
+                if (node.cost + 1 < adjacent.cost) {
+                    adjacent.previous = node
+                    adjacent.cost = node.cost + 1
+                }
+                if (!reachable.contains(adjacent)) {
+                    reachable.add(adjacent)
+                }
+            }
+        }
+    }
+    return listOf()
+}
 
 private class Node(val position: Axis, var previous: Node? = null, var cost: Int = 1) {
 

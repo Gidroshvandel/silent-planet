@@ -1,6 +1,7 @@
 package com.silentgames.silent_planet.model.entities
 
 import android.content.Context
+import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.effects.Effect
 import com.silentgames.silent_planet.model.fractions.Fractions
 
@@ -13,7 +14,8 @@ abstract class EntityType(
         override var fraction: Fractions,
         override var crystals: Int = 0,
         override var isDead: Boolean = false,
-        val effects: MutableList<Effect> = mutableListOf()
+        val effects: MutableList<Effect> = mutableListOf(),
+        var goal: Axis? = null
 ) : EntityTypeProperties {
 
     override val id: String get() = name + "_" + description + "_" + fraction.fractionsType.name
