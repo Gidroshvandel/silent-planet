@@ -2,7 +2,7 @@ package com.silentgames.silent_planet.mvp.main
 
 import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.BaseProperties
-import com.silentgames.silent_planet.model.Cell
+import com.silentgames.silent_planet.model.GameMatrix
 import com.silentgames.silent_planet.model.cells.CellType
 import com.silentgames.silent_planet.model.entities.EntityType
 import com.silentgames.silent_planet.model.entities.ground.Player
@@ -12,7 +12,7 @@ import com.silentgames.silent_planet.mvp.BasePresenter
 interface MainContract {
     interface View {
 
-        fun drawBattleGround(gameMatrix: Array<Array<Cell>>, onUpdateComplete: () -> Unit)
+        fun drawBattleGround(gameMatrix: GameMatrix, onUpdateComplete: () -> Unit)
 
         fun showToast(text: String)
 

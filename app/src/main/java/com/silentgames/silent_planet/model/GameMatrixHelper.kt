@@ -1,5 +1,6 @@
 package com.silentgames.silent_planet.model
 
+import com.silentgames.silent_planet.logic.Constants
 import com.silentgames.silent_planet.model.entities.EntityType
 import com.silentgames.silent_planet.model.entities.space.SpaceShip
 import com.silentgames.silent_planet.model.entities.space.fractions.AlienShip
@@ -44,6 +45,16 @@ class GameMatrixHelper(
             this.gameMatrix[currentXY.x][currentXY.y] = gameMatrixCell
         }
 
+}
+
+fun GameMatrix.copy(): GameMatrix {
+    val horizontalCountOfCells = Constants.horizontalCountOfCells
+    val verticalCountOfCells = Constants.verticalCountOfCells
+    return Array(horizontalCountOfCells) { x ->
+        Array(verticalCountOfCells) { y ->
+            Cell(this[x][y].cellType, this[x][y].entityType.toMutableList())
+        }
+    }
 }
 
 fun GameMatrix.getCell(axis: Axis) = this[axis.x][axis.y]

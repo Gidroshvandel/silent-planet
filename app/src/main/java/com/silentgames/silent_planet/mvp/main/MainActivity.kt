@@ -6,16 +6,14 @@ import android.support.v4.content.ContextCompat
 import android.widget.Toast
 import com.silentgames.silent_planet.R
 import com.silentgames.silent_planet.dialog.BottomSheetMenu
-import com.silentgames.silent_planet.engine.Background
-import com.silentgames.silent_planet.engine.EngineAxis
-import com.silentgames.silent_planet.engine.Entity
-import com.silentgames.silent_planet.engine.base.Layer
 import com.silentgames.silent_planet.logic.Constants
 import com.silentgames.silent_planet.model.Axis
-import com.silentgames.silent_planet.model.Cell
+import com.silentgames.silent_planet.model.GameMatrix
 import com.silentgames.silent_planet.model.cells.CellType
+import com.silentgames.silent_planet.model.copy
 import com.silentgames.silent_planet.model.entities.EntityType
 import com.silentgames.silent_planet.model.fractions.FractionsType
+import com.silentgames.silent_planet.utils.GameMatrixMover
 import com.silentgames.silent_planet.view.Callback
 import com.silentgames.silent_planet.view.SurfaceGameView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -108,29 +106,13 @@ class MainActivity : Activity(), MainContract.View, Callback {
         image_crystal_text.text = text
     }
 
-    override fun drawBattleGround(gameMatrix: Array<Array<Cell>>, onUpdateComplete: () -> Unit) {
-        val backgroundLayer = Layer()
-        val entityLayer = Layer()
-        val horizontalCountOfCells = Constants.horizontalCountOfCells
-        val verticalCountOfCells = Constants.verticalCountOfCells
-        for (x in 0 until horizontalCountOfCells) {
-            for (y in 0 until verticalCountOfCells) {
-                backgroundLayer.add(Background(
-                        EngineAxis(x.toFloat(), y.toFloat()),
-                        gameMatrix[x][y].cellType.getCurrentBitmap()
-                ))
-                if (gameMatrix[x][y].entityType.isNotEmpty()) {
-                    val entity = gameMatrix[x][y].entityType.first()
-                    entityLayer.add(Entity(
-                            entity.id,
-                            EngineAxis(x.toFloat(), y.toFloat()),
-                            entity.bitmap
-                    ))
-                }
-            }
-        }
-        surface_view.updateLayer(SurfaceGameView.LayerType.BACKGROUND, backgroundLayer)
-        surface_view.updateLayer(SurfaceGameView.LayerType.ENTITY, entityLayer, onUpdateComplete)
+    private var oldGameMatrix: GameMatrix? = null
+
+    override fun drawBattleGround(gameMatrix: GameMatrix, onUpdateComplete: () -> Unit) {
+        val sceneLayers = GameMatrixMover(oldGameMatrix, gameMatrix).convertToSceneLayers()
+        oldGameMatrix = gameMatrix.copy()
+        surface_view.updateLayer(SurfaceGameView.LayerType.BACKGROUND, sceneLayers.background)
+        surface_view.updateLayer(SurfaceGameView.LayerType.ENTITY, sceneLayers.entity, onUpdateComplete)
     }
 
     override fun showToast(text: String) {
