@@ -33,10 +33,6 @@ class LayerEntityMover(private val position: Int, private val newLayer: Layer) {
             }
         }
 
-        newLayerData.subtract(changed).forEach {
-            it.move(it.axis)
-        }
-
         return newLayer
     }
 

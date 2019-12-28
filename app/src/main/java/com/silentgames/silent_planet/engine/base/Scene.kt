@@ -20,6 +20,8 @@ class Scene(
         const val ORIENTATION_HOR = 1
     }
 
+    private var updated = false
+
     var mScaleFactor = 1f
     var scrollAxis = Axis(0, 0)
 
@@ -34,6 +36,7 @@ class Scene(
     }
 
     fun setLayer(i: Int, layer: Layer) {
+        updated = true
         if (i < layers.size) {
             layers[i] = layer
         }
@@ -53,6 +56,7 @@ class Scene(
      * Обновляет все соержимое сцены
      */
     fun update(onUpdated: ((Boolean) -> Unit)) {
+        val updated = this.updated
         var updatedLayerCount = 0
         val dataSize = layers.size
         var somethingChange = false
@@ -63,7 +67,8 @@ class Scene(
                     somethingChange = true
                 }
                 if (dataSize == updatedLayerCount) {
-                    onUpdated.invoke(somethingChange)
+                    this.updated = false
+                    onUpdated.invoke(somethingChange || updated)
                 }
             }
         }

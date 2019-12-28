@@ -62,12 +62,11 @@ class SurfaceGameView(
     }
 
     fun updateLayer(layerType: LayerType, layer: Layer, onUpdateComplete: () -> Unit) {
+        onSceneChanged = onUpdateComplete
         val scene = this.scene
         if (scene != null) {
             LayerEntityMover(layerType.id, layer).attach(scene)
-            drawer?.onSceneChanged = onUpdateComplete
         } else {
-            onSceneChanged = onUpdateComplete
             toDrawLayerList.add(Pair(layerType, layer))
         }
     }
@@ -101,10 +100,8 @@ class SurfaceGameView(
             }
             holder.unlockCanvasAndPost(canvas)
         }
-        scene?.let {
-            drawer = DrawerTask(holder, it).also {
-                it.onSceneChanged = this.onSceneChanged
-            }
+        drawer = DrawerTask(holder, scene!!) {
+            onSceneChanged?.invoke()
         }
         timer = Timer().apply {
             scheduleAtFixedRate(drawer, 0, 40)

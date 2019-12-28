@@ -43,11 +43,6 @@ class Entity(
         return 1f / (2 * lineCountOfCells) * viewSize + 1f / lineCountOfCells * cell * viewSize
     }
 
-    fun move(axis: EngineAxis) {
-        isMove = true
-        destinationAxis = axis
-    }
-
     fun move(fromAxis: EngineAxis, toAxis: EngineAxis) {
         isMove = true
         axis = fromAxis

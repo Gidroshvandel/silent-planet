@@ -7,10 +7,9 @@ import java.util.*
 
 class DrawerTask(
         private val holder: SurfaceHolder,
-        private val scene: Scene
+        private val scene: Scene,
+        private val onSceneChanged: (() -> Unit)
 ) : TimerTask() {
-
-    var onSceneChanged: (() -> Unit)? = null
 
     override fun run() {
         var canvas: Canvas? = null
@@ -32,7 +31,7 @@ class DrawerTask(
             }
             scene.update {
                 if (it) {
-                    onSceneChanged?.invoke()
+                    onSceneChanged.invoke()
                 }
             }
         } catch (e: Exception) {
