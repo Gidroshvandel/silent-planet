@@ -14,7 +14,7 @@ abstract class EntityType(
         override var fraction: Fractions,
         override var crystals: Int = 0,
         override var isDead: Boolean = false,
-        val effects: MutableList<Effect> = mutableListOf(),
+        var effects: MutableList<Effect> = mutableListOf(),
         var goal: Axis? = null
 ) : EntityTypeProperties {
 
@@ -55,4 +55,7 @@ abstract class EntityType(
         result = 31 * result + fraction.fractionsType.hashCode()
         return result
     }
+
+    abstract fun copy(): EntityType
+
 }

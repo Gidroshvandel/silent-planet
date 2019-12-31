@@ -8,6 +8,7 @@ import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.Cell
 import com.silentgames.silent_planet.model.GameMatrix
 import com.silentgames.silent_planet.model.entities.EntityType
+import com.silentgames.silent_planet.model.entities.space.SpaceShip
 
 class GameMatrixMover(oldGameMatrix: GameMatrix?, newGameMatrix: GameMatrix) {
 
@@ -19,7 +20,9 @@ class GameMatrixMover(oldGameMatrix: GameMatrix?, newGameMatrix: GameMatrix) {
         val backgroundLayer = Layer()
         val entityLayer = Layer()
 
-        val changedList = oldCells?.let { newCells.getChangedEntityList(oldCells) } ?: listOf()
+        val changedList = oldCells?.let { newCells.getChangedEntityList(oldCells).toMutableList() }
+                ?: mutableListOf()
+        changedList.ifShipMovingRemoveAnotherEntity()
 
         this.newCells.forEach { newCell ->
             backgroundLayer.add(Background(
@@ -27,32 +30,42 @@ class GameMatrixMover(oldGameMatrix: GameMatrix?, newGameMatrix: GameMatrix) {
                     newCell.cellType.getCurrentBitmap()
             ))
             if (newCell.entityType.isNotEmpty()) {
-                val entityType = newCell.entityType.first()
-                val entity = Entity(
-                        entityType.id,
-                        newCell.position.toEngineAxis(),
-                        entityType.bitmap
-                )
-                val changedEntity = changedList.find { it.entityType == entityType }
-                if (changedEntity != null) {
-                    entity.move(changedEntity.position.toEngineAxis(), newCell.position.toEngineAxis())
+                newCell.entityType.extractPlayersFromShips().forEachIndexed { index, entityType ->
+                    val changedEntity = changedList.find { it.entityType == entityType }
+                    if (changedEntity != null || index == 0) {
+                        val entity = Entity(
+                                entityType.id,
+                                newCell.position.toEngineAxis(),
+                                entityType.bitmap
+                        )
+
+                        if (changedEntity != null) {
+                            entity.move(changedEntity.oldPosition.toEngineAxis(), newCell.position.toEngineAxis())
+                        }
+                        entityLayer.add(entity)
+                    }
                 }
-                entityLayer.add(entity)
             }
         }
         return SceneLayers(backgroundLayer, entityLayer)
     }
 
+    private fun MutableList<EntityTypePosition>.ifShipMovingRemoveAnotherEntity() {
+        if (this.any { it.entityType is SpaceShip }) {
+            this.removeAll { it.entityType !is SpaceShip }
+        }
+    }
+
     private fun List<Cell>.getChangedEntityList(oldGameMatrix: List<Cell>): List<EntityTypePosition> {
         val changed = mutableListOf<EntityTypePosition>()
 
-        val oldEntities = oldGameMatrix.toEntityPositionList()
-        val newEntities = this.toEntityPositionList()
+        val oldEntities = oldGameMatrix.toEntityPositionList().fromShipsToList()
+        val newEntities = this.toEntityPositionList().fromShipsToList()
 
         oldEntities.forEach { oldEntity ->
             newEntities.forEach { newEntity ->
-                if (oldEntity.entityType == newEntity.entityType && oldEntity.position != newEntity.position) {
-                    changed.add(oldEntity)
+                if (oldEntity.entityType == newEntity.entityType && oldEntity.oldPosition != newEntity.oldPosition) {
+                    changed.add(oldEntity.copy(newPosition = newEntity.oldPosition))
                 }
             }
         }
@@ -66,7 +79,27 @@ class GameMatrixMover(oldGameMatrix: GameMatrix?, newGameMatrix: GameMatrix) {
     private fun List<Cell>.toEntityPositionList() =
             map { cell -> cell.entityType.map { EntityTypePosition(it, cell.position) } }.flatten()
 
-    private class EntityTypePosition(val entityType: EntityType, val position: Axis)
+    private fun List<EntityTypePosition>.fromShipsToList(): List<EntityTypePosition> =
+            this.toMutableList().apply {
+                addAll(
+                        filter { it.entityType is SpaceShip }.map { entityTypePosition ->
+                            (entityTypePosition.entityType as SpaceShip).playersOnBord.map {
+                                EntityTypePosition(it, entityTypePosition.oldPosition)
+                            }
+                        }.flatten()
+                )
+            }
+
+    private fun List<EntityType>.extractPlayersFromShips(): List<EntityType> =
+            this.toMutableList().apply {
+                addAll(filterIsInstance<SpaceShip>().map { it.playersOnBord }.flatten())
+            }
+
+    private data class EntityTypePosition(
+            val entityType: EntityType,
+            val oldPosition: Axis,
+            val newPosition: Axis? = null
+    )
 
 }
 

@@ -3,6 +3,7 @@ package com.silentgames.silent_planet.model.entities.ground.fractions
 import android.content.Context
 import android.graphics.Bitmap
 import com.silentgames.silent_planet.R
+import com.silentgames.silent_planet.model.entities.EntityType
 import com.silentgames.silent_planet.model.entities.ground.Player
 import com.silentgames.silent_planet.model.fractions.factionType.Humans
 import com.silentgames.silent_planet.utils.BitmapEditor
@@ -15,4 +16,18 @@ class Human(
         override var name: String,
         override var bitmap: Bitmap = BitmapEditor.getEntityBitmap(context, R.drawable.human_spaceman),
         override var description: String = context.getString(R.string.human_player_description)
-) : Player(context, Humans)
+) : Player(context, Humans) {
+
+    override fun copy(): EntityType = Human(
+            context,
+            name
+    ).also {
+        it.crystals = crystals
+        it.isCanFly = isCanFly
+        it.isCanMove = isCanMove
+        it.isDead = isDead
+        it.effects = effects
+        it.goal = goal
+    }
+
+}

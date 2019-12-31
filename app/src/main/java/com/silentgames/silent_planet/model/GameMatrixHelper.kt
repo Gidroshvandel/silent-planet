@@ -52,10 +52,14 @@ fun GameMatrix.copy(): GameMatrix {
     val verticalCountOfCells = Constants.verticalCountOfCells
     return Array(horizontalCountOfCells) { x ->
         Array(verticalCountOfCells) { y ->
-            Cell(this[x][y].cellType, this[x][y].entityType.toMutableList())
+            Cell(this[x][y].cellType, this[x][y].entityType.copy())
         }
     }
 }
+
+fun List<EntityType>.copy() = Array(this.size) {
+    this[it].copy()
+}.toMutableList()
 
 fun GameMatrix.getCell(axis: Axis) = this[axis.x][axis.y]
 

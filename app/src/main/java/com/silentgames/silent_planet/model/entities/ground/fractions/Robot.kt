@@ -3,6 +3,7 @@ package com.silentgames.silent_planet.model.entities.ground.fractions
 import android.content.Context
 import android.graphics.Bitmap
 import com.silentgames.silent_planet.R
+import com.silentgames.silent_planet.model.entities.EntityType
 import com.silentgames.silent_planet.model.entities.ground.Player
 import com.silentgames.silent_planet.model.fractions.factionType.Robots
 import com.silentgames.silent_planet.utils.BitmapEditor
@@ -15,4 +16,18 @@ class Robot(
         override var name: String,
         override var bitmap: Bitmap = BitmapEditor.getEntityBitmap(context, R.drawable.robot),
         override var description: String = context.getString(R.string.robot_player_description)
-) : Player(context, Robots)
+) : Player(context, Robots) {
+
+    override fun copy(): EntityType = Robot(
+            context,
+            name
+    ).also {
+        it.crystals = crystals
+        it.isCanFly = isCanFly
+        it.isCanMove = isCanMove
+        it.isDead = isDead
+        it.effects = effects
+        it.goal = goal
+    }
+
+}
