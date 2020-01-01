@@ -41,6 +41,15 @@ fun GameMatrix.moveAi(player: EntityPosition<Player>): Boolean {
     }
 }
 
+fun GameMatrix.moveAiShip(fractionsType: FractionsType): Boolean {
+    val shipPosition = this.getShipPosition(fractionsType)
+    val cellsAtMoveDistance = this.getCellsAtMoveDistance(shipPosition.position).getCanFlyCells()
+    val targetCell = cellsAtMoveDistance.random()
+    return this.canMoveShip(targetCell.position, shipPosition.entity) {
+        this.moveShip(targetCell.position, shipPosition.entity)
+    }
+}
+
 private fun EntityType.isGoalActual(matrix: GameMatrix): Boolean {
     val goal = this.goal
     return if (goal != null
@@ -116,6 +125,8 @@ private fun GameMatrix.moveToGoal(playerPosition: EntityPosition<Player>): Boole
 }
 
 private fun List<Cell>.getCanMoveCells() = filter { it.cellType.isCanMove }
+
+private fun List<Cell>.getCanFlyCells() = filter { it.cellType.isCanFly }
 
 private fun List<Cell>.getCellsWithCrystals() =
         filter { it.cellType.crystals > 0 }

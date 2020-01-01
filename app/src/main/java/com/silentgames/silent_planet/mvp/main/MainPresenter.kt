@@ -9,9 +9,7 @@ import com.silentgames.silent_planet.model.doEvent
 import com.silentgames.silent_planet.model.entities.EntityType
 import com.silentgames.silent_planet.model.entities.ground.Player
 import com.silentgames.silent_planet.model.fractions.FractionsType
-import com.silentgames.silent_planet.model.fractions.factionType.Aliens
 import com.silentgames.silent_planet.model.fractions.factionType.Humans
-import com.silentgames.silent_planet.model.fractions.factionType.Pirates
 import com.silentgames.silent_planet.utils.getEntityList
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
@@ -75,9 +73,9 @@ class MainPresenter internal constructor(
 
 
             TurnHandler.start(Humans)
-            Aliens.isPlayable = true
-            Humans.isPlayable = true
-            Pirates.isPlayable = true
+//            Aliens.isPlayable = true
+//            Humans.isPlayable = true
+//            Pirates.isPlayable = true
 //            Robots.isPlayable = true
 
             view.changeAlienCristalCount(0)
@@ -194,6 +192,10 @@ class MainPresenter internal constructor(
                 view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix) {
                     TurnHandler.turnCount()
                 }
+            }
+        } else if (viewModel.gameMatrixHelper.gameMatrix.moveAiShip(fractionsType)) {
+            view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix) {
+                TurnHandler.turnCount()
             }
         } else {
             TurnHandler.turnCount()

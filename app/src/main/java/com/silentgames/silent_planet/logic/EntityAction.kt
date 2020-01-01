@@ -76,7 +76,7 @@ fun GameMatrix.canMoveShip(target: Axis, spaceShip: SpaceShip, moveShip: () -> U
     }
 }
 
-private fun GameMatrix.moveShip(target: Axis, spaceShip: SpaceShip) {
+fun GameMatrix.moveShip(target: Axis, spaceShip: SpaceShip) {
     val targetCell = this.getCell(target)
     val currentCell = this.getEntityCell(spaceShip)
     targetCell.entityType.add(spaceShip)
