@@ -15,7 +15,7 @@ class MovementSystem : System {
             position: Position,
             targetPositionComponent: TargetPositionComponent
     ) {
-        
+
     }
 
 }
