@@ -1,18 +1,16 @@
 package com.silentgames.silent_planet.mvp.main
 
+import android.graphics.Bitmap
+import com.silentgames.silent_planet.dialog.EntityData
+import com.silentgames.silent_planet.logic.ecs.GameState
 import com.silentgames.silent_planet.model.Axis
-import com.silentgames.silent_planet.model.BaseProperties
-import com.silentgames.silent_planet.model.GameMatrix
-import com.silentgames.silent_planet.model.cells.CellType
-import com.silentgames.silent_planet.model.entities.EntityType
-import com.silentgames.silent_planet.model.entities.ground.Player
 import com.silentgames.silent_planet.model.fractions.FractionsType
 import com.silentgames.silent_planet.mvp.BasePresenter
 
 interface MainContract {
     interface View {
 
-        fun drawBattleGround(gameMatrix: GameMatrix, onUpdateComplete: () -> Unit)
+        fun drawBattleGround(gameState: GameState, onUpdateComplete: () -> Unit)
 
         fun showToast(text: String)
 
@@ -20,15 +18,13 @@ interface MainContract {
 
         fun fillDescription(text: String)
 
-        fun showObjectIcon(cellType: CellType)
-
-        fun showObjectIcon(entityType: EntityType)
+        fun showObjectIcon(bitmap: Bitmap)
 
         fun enableButton(isEnabled: Boolean)
 
         fun setImageCrystalText(text: String)
 
-        fun showEntityMenuDialog(entityList: MutableList<EntityType>, currentCell: CellType)
+        fun showEntityMenuDialog(entityList: MutableList<EntityData>, currentCell: EntityData)
 
         fun changeAlienCristalCount(crystals: Int)
 
@@ -52,9 +48,9 @@ interface MainContract {
 
         fun onActionButtonClick()
 
-        fun onEntityDialogElementSelect(baseProperties: BaseProperties)
+        fun onEntityDialogElementSelect(entityData: EntityData)
 
-        fun onCapturedPlayerClick(player: Player)
+        fun onCapturedPlayerClick(entityData: EntityData)
 
     }
 }

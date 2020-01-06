@@ -1,16 +1,14 @@
 package com.silentgames.silent_planet.mvp.main
 
-import com.silentgames.silent_planet.logic.*
+import com.silentgames.silent_planet.dialog.EntityData
+import com.silentgames.silent_planet.logic.TurnHandler
+import com.silentgames.silent_planet.logic.ecs.Engine
+import com.silentgames.silent_planet.logic.ecs.component.*
+import com.silentgames.silent_planet.logic.ecs.entity.Entity
+import com.silentgames.silent_planet.logic.ecs.system.MovementSystem
 import com.silentgames.silent_planet.model.Axis
-import com.silentgames.silent_planet.model.BaseProperties
 import com.silentgames.silent_planet.model.GameMatrixHelper
-import com.silentgames.silent_planet.model.cells.CellType
-import com.silentgames.silent_planet.model.doEvent
-import com.silentgames.silent_planet.model.entities.EntityType
-import com.silentgames.silent_planet.model.entities.ground.Player
-import com.silentgames.silent_planet.model.fractions.FractionsType
 import com.silentgames.silent_planet.model.fractions.factionType.Humans
-import com.silentgames.silent_planet.utils.getEntityList
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 
@@ -25,52 +23,51 @@ class MainPresenter internal constructor(
         private val model: MainModel
 ) : MainContract.Presenter, CoroutineScope by MainScope() {
 
-    private val isClickForCurrentPosition: Boolean
-        get() = viewModel.gameMatrixHelper.oldXY != null
-                && viewModel.gameMatrixHelper.currentXY == viewModel.gameMatrixHelper.oldXY
-
     override fun onSingleTapConfirmed(axis: Axis) {
         select(axis)
     }
 
     override fun onActionButtonClick() {
-        viewModel.gameMatrixHelper = getCrystal(viewModel.gameMatrixHelper)
-        if (!overZeroCrystals()) {
-            view.enableButton(false)
-        }
-        viewModel.gameMatrixHelper.selectedEntity?.let {
-            view.setImageCrystalText(it.crystals.toString())
+//        viewModel.gameMatrixHelper = getCrystal(viewModel.gameMatrixHelper)
+//        if (!crystalsOverZero()) {
+//            view.enableButton(false)
+//        }
+//        viewModel.selectedEntity?.let {
+//            view.setImageCrystalText(it.crystals.toString())
+//        }
+    }
+
+    override fun onEntityDialogElementSelect(entityData: EntityData) {
+        val entity = viewModel.engine.gameState.getUnit(entityData.id)
+        val cell = viewModel.engine.gameState.getCell(entityData.id)
+        if (entity != null) {
+            selectEntity(entity)
+        } else if (cell != null) {
+            selectCell(cell)
         }
     }
 
-    override fun onEntityDialogElementSelect(baseProperties: BaseProperties) {
-        if (baseProperties is EntityType) {
-            selectEntity(baseProperties)
-        } else if (baseProperties is CellType) {
-            selectCell(baseProperties)
-        }
-    }
-
-    override fun onCapturedPlayerClick(player: Player) {
-        viewModel.gameMatrixHelper.gameMatrix.buyBack(
-                player,
-                {
-                    view.showPlayerBuybackSuccessMessage(player.name)
-                    checkToWin()
-                },
-                {
-                    view.showPlayerBuybackFailureMessage(it)
-                }
-        )
+    override fun onCapturedPlayerClick(entityData: EntityData) {
+//        viewModel.gameMatrixHelper.gameMatrix.buyBack(
+//                player,
+//                {
+//                    view.showPlayerBuybackSuccessMessage(player.name)
+//                    checkToWin()
+//                },
+//                {
+//                    view.showPlayerBuybackFailureMessage(it)
+//                }
+//        )
     }
 
     @InternalCoroutinesApi
     override fun onCreate() {
         launch {
-            val gameMatrixHelper = GameMatrixHelper(model.generateBattleGround())
+            viewModel.engine = Engine(
+                    model.generateNewBattleGround()
+            )
 
-            viewModel.gameMatrixHelper = gameMatrixHelper
-
+            viewModel.engine.addSystem(MovementSystem())
 
             TurnHandler.start(Humans)
 //            Aliens.isPlayable = true
@@ -83,20 +80,21 @@ class MainPresenter internal constructor(
             view.changePirateCristalCount(0)
             view.changeRobotCristalCount(0)
 
-            view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix) {}
+//            view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix) {}
+            view.drawBattleGround(viewModel.engine.gameState) {}
             view.selectCurrentFraction(TurnHandler.fractionType)
 
             view.enableButton(false)
 
             if (!TurnHandler.getCurrentFraction().isPlayable) {
-                tryMoveAi(TurnHandler.fractionType)
+//                tryMoveAi(TurnHandler.fractionType)
             }
 
             TurnHandler.getFlow().collect {
                 view.selectCurrentFraction(it.fractionsType)
                 checkToWin()
                 if (!it.isPlayable) {
-                    tryMoveAi(TurnHandler.fractionType)
+//                    tryMoveAi(TurnHandler.fractionType)
                 }
             }
 
@@ -104,138 +102,176 @@ class MainPresenter internal constructor(
     }
 
     private fun select(currentXY: Axis) {
-        viewModel.gameMatrixHelper.currentXY = currentXY
+        val entities = viewModel.engine.gameState.getUnits(currentXY)
+        val cellType = viewModel.engine.gameState.getCell(currentXY)
 
-        val entityType = viewModel.gameMatrixHelper.gameMatrixCellByXY.entityType
-        val cellType = viewModel.gameMatrixHelper.gameMatrixCellByXY.cellType
-
-        if (viewModel.gameMatrixHelper.selectedEntity != null && !isClickForCurrentPosition) {
-            tryMove(viewModel.gameMatrixHelper.selectedEntity!!, currentXY)
+        if (viewModel.selectedEntity != null
+                && viewModel.selectedEntity?.getComponent<Position>()?.currentPosition != currentXY
+        ) {
+            tryMove(viewModel.selectedEntity!!, currentXY)
         } else {
-            if (viewModel.gameMatrixHelper.selectedEntity == null
-                    && entityType.isNotEmpty()) {
-                if (entityType.getEntityList().size > 1) {
-                    view.showEntityMenuDialog(entityType, cellType)
+            if (viewModel.selectedEntity == null
+                    && entities.isNotEmpty()) {
+                if (entities.size > 1) {
+                    view.showEntityMenuDialog(entities.map(), cellType?.toEntityData()!!)
                 } else {
-                    selectEntity(entityType.first())
+                    selectEntity(entities.first())
                 }
             } else {
-                if (entityType.getEntityList().size > 1) {
-                    view.showEntityMenuDialog(entityType, cellType)
+                if (entities.size > 1) {
+                    view.showEntityMenuDialog(entities.map(), cellType?.toEntityData()!!)
                 } else {
-                    selectCell(cellType)
+                    cellType?.let { selectCell(it) }
                 }
             }
         }
     }
 
-    private fun showDescription(baseProperties: BaseProperties) {
-        view.fillDescription(baseProperties.description)
-        view.fillEntityName(baseProperties.name)
+    private fun List<Entity>.map() =
+            map { it.toEntityData() }.toMutableList()
+
+    private fun Entity.toEntityData(): EntityData {
+        val texture = this.getComponent<Texture>()?.bitmap
+        val description = this.getComponent<Description>()
+        val crystal = this.getComponent<Crystal>()?.count ?: 0
+
+        return EntityData(
+                id,
+                texture!!,
+                description?.name ?: "",
+                description?.description ?: "",
+                crystal.toString()
+        )
     }
 
-    private fun selectEntity(entityType: EntityType) {
-        updateEntityState(entityType)
-        viewModel.gameMatrixHelper.oldXY = viewModel.gameMatrixHelper.currentXY
-        viewModel.gameMatrixHelper.selectedEntity = entityType
-        showDescription(entityType)
+    private fun showDescription(description: Description) {
+        view.fillDescription(description.description)
+        view.fillEntityName(description.name)
     }
 
-    private fun updateEntityState(entityType: EntityType) {
-        view.setImageCrystalText(entityType.crystals.toString())
-        if (overZeroCrystals()) {
+    private fun selectEntity(entity: Entity) {
+        updateEntityState(entity)
+        viewModel.selectedEntity = entity
+        entity.getComponent<Description>()?.let { showDescription(it) }
+    }
+
+    private fun updateEntityState(entity: Entity) {
+        val position = entity.getComponent<Position>()?.currentPosition
+        val crystals = entity.getComponent<Crystal>()?.count ?: 0
+        view.setImageCrystalText(crystals.toString())
+        if (position != null && crystalsOverZero(position)) {
             view.enableButton(true)
         } else {
             view.enableButton(false)
         }
-        view.showObjectIcon(entityType)
+        entity.getComponent<Texture>()?.bitmap?.let { view.showObjectIcon(it) }
     }
 
-    private fun selectCell(cellType: CellType) {
+    private fun crystalsOverZero(position: Axis): Boolean =
+            viewModel.engine.gameState.getCell(position)?.getComponent<Crystal>()?.count ?: 0 > 0
+
+    private fun selectCell(cellType: Entity) {
+        val crystals = cellType.getComponent<Crystal>()?.count ?: 0
+        val visible = cellType.getComponent<Visible>()
         view.enableButton(false)
-        if (cellType.isVisible) {
-            view.setImageCrystalText(cellType.crystals.toString())
+        if (visible != null) {
+            view.setImageCrystalText(crystals.toString())
         }
-        view.showObjectIcon(viewModel.gameMatrixHelper.gameMatrixCellByXY.cellType)
-        viewModel.gameMatrixHelper.oldXY = null
-        viewModel.gameMatrixHelper.selectedEntity = null
-        showDescription(cellType)
+        cellType.getComponent<Texture>()?.bitmap?.let { view.showObjectIcon(it) }
+        viewModel.selectedEntity = null
+        cellType.getComponent<Description>()?.let { showDescription(it) }
     }
 
-    private fun overZeroCrystals(): Boolean {
-        return viewModel.gameMatrixHelper.gameMatrixCellByXY.cellType.crystals > 0
-    }
-
-    private fun tryMove(entity: EntityType, targetPosition: Axis) {
+    private fun tryMove(entity: Entity, targetPosition: Axis) {
         view.enableButton(false)
-        if (viewModel.gameMatrixHelper.gameMatrix.tryMoveEntity(targetPosition, entity)) {
+
+        viewModel.selectedEntity?.addComponent(TargetPosition(targetPosition))
+        viewModel.engine.processSystems(viewModel.selectedEntity!!)
+
+        if (viewModel.engine.gameState.moveSuccess) {
             eventCount = 0
             doEvent(entity) {
-                view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix) {
+                view.drawBattleGround(viewModel.engine.gameState) {
                     TurnHandler.turnCount()
                     updateEntityState(entity)
                 }
             }
         } else {
-            viewModel.gameMatrixHelper.oldXY = null
-            viewModel.gameMatrixHelper.selectedEntity = null
+            viewModel.selectedEntity = null
             select(targetPosition)
         }
     }
 
-    private fun tryMoveAi(fractionsType: FractionsType) {
-        val player = viewModel.gameMatrixHelper.gameMatrix.choosePlayerToMove(fractionsType)
-        view.enableButton(false)
-        if (player != null && viewModel.gameMatrixHelper.gameMatrix.moveAi(player)) {
-            eventCount = 0
-            doEvent(player.entity) {
-                view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix) {
-                    TurnHandler.turnCount()
-                }
-            }
-        } else if (viewModel.gameMatrixHelper.gameMatrix.moveAiShip(fractionsType)) {
-            view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix) {
-                TurnHandler.turnCount()
-            }
-        } else {
-            TurnHandler.turnCount()
-        }
-    }
+//    private fun tryMove(entity: EntityType, targetPosition: Axis) {
+//        view.enableButton(false)
+//        if (viewModel.gameMatrixHelper.gameMatrix.tryMoveEntity(targetPosition, entity)) {
+//            eventCount = 0
+//            doEvent(entity) {
+//                view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix) {
+//                    TurnHandler.turnCount()
+//                    updateEntityState(entity)
+//                }
+//            }
+//        } else {
+//            viewModel.gameMatrixHelper.oldXY = null
+//            viewModel.gameMatrixHelper.selectedEntity = null
+//            select(targetPosition)
+//        }
+//    }
+
+//    private fun tryMoveAi(fractionsType: FractionsType) {
+//        val player = viewModel.gameMatrixHelper.gameMatrix.choosePlayerToMove(fractionsType)
+//        view.enableButton(false)
+//        if (player != null && viewModel.gameMatrixHelper.gameMatrix.moveAi(player)) {
+//            eventCount = 0
+//            doEvent(player.entity) {
+//                view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix) {
+//                    TurnHandler.turnCount()
+//                }
+//            }
+//        } else if (viewModel.gameMatrixHelper.gameMatrix.moveAiShip(fractionsType)) {
+//            view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix) {
+//                TurnHandler.turnCount()
+//            }
+//        } else {
+//            TurnHandler.turnCount()
+//        }
+//    }
 
     private fun checkToWin() {
-        val alienCrystals = viewModel.gameMatrixHelper.alienShip.crystals
-        val pirateCrystals = viewModel.gameMatrixHelper.pirateShip.crystals
-        val humanCrystals = viewModel.gameMatrixHelper.humanShip.crystals
-        val robotCrystals = viewModel.gameMatrixHelper.robotShip.crystals
-        view.changeRobotCristalCount(robotCrystals)
-        view.changePirateCristalCount(pirateCrystals)
-        view.changeHumanCristalCount(humanCrystals)
-        view.changeAlienCristalCount(alienCrystals)
-
-        if (alienCrystals >= Constants.countCrystalsToWin) {
-            view.showToast("WIN ALIEN")
-        }
-        if (pirateCrystals >= Constants.countCrystalsToWin) {
-            view.showToast("WIN PIRATE")
-        }
-        if (humanCrystals >= Constants.countCrystalsToWin) {
-            view.showToast("WIN HUMAN")
-        }
-        if (robotCrystals >= Constants.countCrystalsToWin) {
-            view.showToast("WIN ROBOT")
-        }
+//        val alienCrystals = viewModel.gameMatrixHelper.alienShip.crystals
+//        val pirateCrystals = viewModel.gameMatrixHelper.pirateShip.crystals
+//        val humanCrystals = viewModel.gameMatrixHelper.humanShip.crystals
+//        val robotCrystals = viewModel.gameMatrixHelper.robotShip.crystals
+//        view.changeRobotCristalCount(robotCrystals)
+//        view.changePirateCristalCount(pirateCrystals)
+//        view.changeHumanCristalCount(humanCrystals)
+//        view.changeAlienCristalCount(alienCrystals)
+//
+//        if (alienCrystals >= Constants.countCrystalsToWin) {
+//            view.showToast("WIN ALIEN")
+//        }
+//        if (pirateCrystals >= Constants.countCrystalsToWin) {
+//            view.showToast("WIN PIRATE")
+//        }
+//        if (humanCrystals >= Constants.countCrystalsToWin) {
+//            view.showToast("WIN HUMAN")
+//        }
+//        if (robotCrystals >= Constants.countCrystalsToWin) {
+//            view.showToast("WIN ROBOT")
+//        }
     }
 
     private var eventCount = 0
 
-    private fun doEvent(entity: EntityType, onUpdateComplete: () -> Unit) {
-        view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix) {
-            if (viewModel.gameMatrixHelper.gameMatrix.doEvent(entity) && eventCount < 20) {
-                eventCount++
-                doEvent(entity, onUpdateComplete)
-            } else {
-                onUpdateComplete.invoke()
-            }
+    private fun doEvent(entity: Entity, onUpdateComplete: () -> Unit) {
+        view.drawBattleGround(viewModel.engine.gameState) {
+            //            if (viewModel.engine.gameState.doEvent(entity) && eventCount < 20) {
+//                eventCount++
+//                doEvent(entity, onUpdateComplete)
+//            } else {
+//                onUpdateComplete.invoke()
+//            }
         }
     }
 

@@ -1,26 +1,29 @@
 package com.silentgames.silent_planet.mvp.main
 
 import android.app.Activity
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.widget.Toast
 import com.silentgames.silent_planet.R
 import com.silentgames.silent_planet.dialog.BottomSheetMenu
+import com.silentgames.silent_planet.dialog.EntityData
+import com.silentgames.silent_planet.engine.Background
+import com.silentgames.silent_planet.engine.EngineAxis
+import com.silentgames.silent_planet.engine.Entity
+import com.silentgames.silent_planet.engine.base.Layer
 import com.silentgames.silent_planet.logic.Constants
+import com.silentgames.silent_planet.logic.ecs.GameState
+import com.silentgames.silent_planet.logic.ecs.component.Texture
 import com.silentgames.silent_planet.model.Axis
-import com.silentgames.silent_planet.model.GameMatrix
-import com.silentgames.silent_planet.model.cells.CellType
-import com.silentgames.silent_planet.model.copy
-import com.silentgames.silent_planet.model.entities.EntityType
 import com.silentgames.silent_planet.model.fractions.FractionsType
-import com.silentgames.silent_planet.utils.GameMatrixMover
 import com.silentgames.silent_planet.view.Callback
 import com.silentgames.silent_planet.view.SurfaceGameView
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : Activity(), MainContract.View, Callback {
 
-    lateinit var presenter: MainContract.Presenter
+    private lateinit var presenter: MainContract.Presenter
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,26 +109,48 @@ class MainActivity : Activity(), MainContract.View, Callback {
         image_crystal_text.text = text
     }
 
-    private var oldGameMatrix: GameMatrix? = null
+//    private var oldGameMatrix: GameMatrix? = null
 
-    override fun drawBattleGround(gameMatrix: GameMatrix, onUpdateComplete: () -> Unit) {
-        val sceneLayers = GameMatrixMover(oldGameMatrix, gameMatrix).convertToSceneLayers()
-        oldGameMatrix = gameMatrix.copy()
-        surface_view.updateLayer(SurfaceGameView.LayerType.BACKGROUND, sceneLayers.background)
-        surface_view.updateLayer(SurfaceGameView.LayerType.ENTITY, sceneLayers.entity, onUpdateComplete)
+//    override fun drawBattleGround(gameMatrix: GameMatrix, onUpdateComplete: () -> Unit) {
+//        val sceneLayers = GameMatrixMover(oldGameMatrix, gameMatrix).convertToSceneLayers()
+//        oldGameMatrix = gameMatrix.copy()
+//        surface_view.updateLayer(SurfaceGameView.LayerType.BACKGROUND, sceneLayers.background)
+//        surface_view.updateLayer(SurfaceGameView.LayerType.ENTITY, sceneLayers.entity, onUpdateComplete)
+//    }
+
+    override fun drawBattleGround(gameState: GameState, onUpdateComplete: () -> Unit) {
+        val backgroundLayer = Layer()
+        val entityLayer = Layer()
+        val horizontalCountOfCells = Constants.horizontalCountOfCells
+        val verticalCountOfCells = Constants.verticalCountOfCells
+        for (x in 0 until horizontalCountOfCells) {
+            for (y in 0 until verticalCountOfCells) {
+                backgroundLayer.add(Background(
+                        EngineAxis(x.toFloat(), y.toFloat()),
+                        gameState.getCell(Axis(x, y))?.getComponent<Texture>()?.bitmap!!
+                ))
+                val entity = gameState.getUnit(Axis(x, y))?.getComponent<Texture>()?.bitmap
+                if (entity != null) {
+//                    val entity = gameMatrix[x][y].entityType.first()
+                    entityLayer.add(Entity(
+                            "111",
+                            EngineAxis(x.toFloat(), y.toFloat()),
+                            entity
+                    ))
+                }
+            }
+        }
+        surface_view.updateLayer(SurfaceGameView.LayerType.BACKGROUND, backgroundLayer)
+        surface_view.updateLayer(SurfaceGameView.LayerType.ENTITY, entityLayer, onUpdateComplete)
     }
 
     override fun showToast(text: String) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
     }
 
-    override fun showObjectIcon(cellType: CellType) {
-        select_object_icon.setImageBitmap(cellType.getCurrentBitmap())
+    override fun showObjectIcon(bitmap: Bitmap) {
+        select_object_icon.setImageBitmap(bitmap)
 
-    }
-
-    override fun showObjectIcon(entityType: EntityType) {
-        select_object_icon.setImageBitmap(entityType.bitmap)
     }
 
     override fun onSingleTapConfirmed(axis: Axis) {
@@ -133,8 +158,8 @@ class MainActivity : Activity(), MainContract.View, Callback {
     }
 
     override fun showEntityMenuDialog(
-            entityList: MutableList<EntityType>,
-            currentCell: CellType
+            entityList: MutableList<EntityData>,
+            currentCell: EntityData
     ) {
         BottomSheetMenu(
                 this,

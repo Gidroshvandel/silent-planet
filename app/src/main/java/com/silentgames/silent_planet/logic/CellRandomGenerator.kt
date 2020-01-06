@@ -49,6 +49,49 @@ class CellRandomGenerator(val context: Context) {
         }
     }
 
+    suspend fun generateNewBattleGround(
+            cellGeneratorParams: CellGeneratorParams = CellGeneratorParams()
+    ): List<com.silentgames.silent_planet.logic.ecs.entity.cell.Cell> = withContext(Dispatchers.Default) {
+        randomList.clear()
+        randomList.addAll(cellGeneratorParams.getRandomEntityList())
+
+        val vCountOfCells = Constants.verticalCountOfCells
+        val hCountOfCells = Constants.horizontalCountOfCells
+
+        val randomCellTypeList = MutableList(Constants.countOfGroundCells) {
+            randomizeCell()
+        }
+
+        randomCellTypeList.shuffle()
+        var count = -1
+
+        val listCells = mutableListOf<com.silentgames.silent_planet.logic.ecs.entity.cell.Cell>()
+
+        for (x in 0..hCountOfCells) {
+            for (y in 0..vCountOfCells) {
+                if (x == 0 || x == hCountOfCells - 1 || y == 0 || y == vCountOfCells - 1) {
+                    listCells.add(
+                            com.silentgames.silent_planet.logic.ecs.entity.cell.SpaceCell(
+                                    context,
+                                    Axis(x, y)
+                            )
+                    )
+                } else {
+                    count++
+                    listCells.add(
+                            com.silentgames.silent_planet.logic.ecs.entity.cell.EmptyCell(
+                                    context,
+                                    Axis(x, y)
+                            )
+                    )
+//                    Cell(randomCellTypeList[count].getCellType(Axis(x, y)))
+                }
+            }
+        }
+
+        return@withContext listCells
+    }
+
 
     private fun RandomCellType.getCellType(axis: Axis): CellType {
         return when (this) {
@@ -97,10 +140,10 @@ class CellGeneratorParams(
 ) {
     private val emptyCount: Int = Constants.countOfGroundCells - (
             deathCellCount +
-            greenArrowCellCount +
-            redArrowCellCount +
-            crystalOneCellCount +
-            crystalTwoCellCount +
+                    greenArrowCellCount +
+                    redArrowCellCount +
+                    crystalOneCellCount +
+                    crystalTwoCellCount +
                     crystalThreeCellCount)
 
     fun getRandomEntityList() = listOf(

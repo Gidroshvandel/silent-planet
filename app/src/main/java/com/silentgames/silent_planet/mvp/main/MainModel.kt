@@ -1,11 +1,18 @@
 package com.silentgames.silent_planet.mvp.main
 
 import android.content.Context
+import com.silentgames.silent_planet.R
 import com.silentgames.silent_planet.logic.CellRandomGenerator
 import com.silentgames.silent_planet.logic.EntityRandomGenerator
+import com.silentgames.silent_planet.logic.ecs.GameState
+import com.silentgames.silent_planet.logic.ecs.component.Position
+import com.silentgames.silent_planet.logic.ecs.component.Texture
+import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
+import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.Cell
 import com.silentgames.silent_planet.model.entities.ground.Player
 import com.silentgames.silent_planet.model.entities.space.SpaceShip
+import com.silentgames.silent_planet.utils.BitmapEditor
 import java.util.*
 
 /**
@@ -17,6 +24,15 @@ class MainModel(val context: Context) {
         val gameMatrix = CellRandomGenerator(context).generateBattleGround()
         EntityRandomGenerator(context).spawnShips(gameMatrix)
         return gameMatrix
+    }
+
+    suspend fun generateNewBattleGround(): GameState {
+        val cells = CellRandomGenerator(context).generateNewBattleGround()
+//        EntityRandomGenerator(context).spawnShips(gameMatrix)
+        return GameState(
+                cells.toMutableList(),
+                mutableListOf(Unit(Position(Axis(0, 0)), Texture(BitmapEditor.getEntityBitmap(context, R.drawable.aliens_space_ship))))
+        )
     }
 
     fun getPlayersNameOnCell(gameMatrixCell: Cell): List<String> {

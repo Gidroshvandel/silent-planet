@@ -14,9 +14,8 @@ import com.silentgames.silent_planet.utils.BitmapEditor
 class EmptyCell(
         context: Context,
         position: Axis
-) : Cell(
+) : GroundCell(
         Position(position),
         Description(context.getString(R.string.empty_cell_name), context.getString(R.string.empty_cell_description)),
-        Texture(BitmapEditor.getCellBitmap(context, R.drawable.empty_cell)),
         Texture(BitmapEditor.getCellBitmap(context, R.drawable.empty_cell))
 )
