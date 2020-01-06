@@ -5,6 +5,7 @@ import com.silentgames.silent_planet.logic.TurnHandler
 import com.silentgames.silent_planet.logic.ecs.Engine
 import com.silentgames.silent_planet.logic.ecs.component.*
 import com.silentgames.silent_planet.logic.ecs.entity.Entity
+import com.silentgames.silent_planet.logic.ecs.system.ExploreSystem
 import com.silentgames.silent_planet.logic.ecs.system.MovementSystem
 import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.GameMatrixHelper
@@ -68,6 +69,7 @@ class MainPresenter internal constructor(
             )
 
             viewModel.engine.addSystem(MovementSystem())
+            viewModel.engine.addSystem(ExploreSystem())
 
             TurnHandler.start(Humans)
 //            Aliens.isPlayable = true
@@ -149,7 +151,7 @@ class MainPresenter internal constructor(
         view.fillEntityName(description.name)
     }
 
-    private fun selectEntity(entity: Entity) {
+    private fun selectEntity(entity: com.silentgames.silent_planet.logic.ecs.entity.unit.Unit) {
         updateEntityState(entity)
         viewModel.selectedEntity = entity
         entity.getComponent<Description>()?.let { showDescription(it) }
@@ -172,9 +174,9 @@ class MainPresenter internal constructor(
 
     private fun selectCell(cellType: Entity) {
         val crystals = cellType.getComponent<Crystal>()?.count ?: 0
-        val visible = cellType.getComponent<Visible>()
+        val isVisible = cellType.getComponent<Hide>() == null
         view.enableButton(false)
-        if (visible != null) {
+        if (isVisible) {
             view.setImageCrystalText(crystals.toString())
         }
         cellType.getComponent<Texture>()?.bitmap?.let { view.showObjectIcon(it) }

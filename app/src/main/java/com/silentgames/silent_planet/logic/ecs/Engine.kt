@@ -1,6 +1,6 @@
 package com.silentgames.silent_planet.logic.ecs
 
-import com.silentgames.silent_planet.logic.ecs.entity.Entity
+import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
 import com.silentgames.silent_planet.logic.ecs.system.System
 
 class Engine(val gameState: GameState) {
@@ -11,7 +11,7 @@ class Engine(val gameState: GameState) {
         systems.add(system)
     }
 
-    fun processSystems(entity: Entity) {
+    fun processSystems(entity: Unit) {
         systems.forEach {
             it.execute(gameState, entity)
         }

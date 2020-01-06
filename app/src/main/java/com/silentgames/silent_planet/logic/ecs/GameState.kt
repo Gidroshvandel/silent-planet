@@ -30,7 +30,7 @@ class GameState(
         }
     }
 
-    private fun List<Entity>.getByPosition(axis: Axis) =
+    private fun <T : Entity> List<T>.getByPosition(axis: Axis) =
             find { it.getComponent<Position>()?.currentPosition == axis }
 
 }

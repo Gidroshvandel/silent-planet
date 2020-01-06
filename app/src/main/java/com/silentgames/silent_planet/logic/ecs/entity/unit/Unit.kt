@@ -18,6 +18,7 @@ class Unit(
 //        addComponent(description)
         addComponent(texture)
         addComponent(MovingMode.WALK)
+        addComponent(MovingMode.FLY)
     }
 
 }

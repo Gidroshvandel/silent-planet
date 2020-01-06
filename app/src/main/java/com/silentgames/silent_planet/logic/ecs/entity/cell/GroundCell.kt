@@ -1,18 +1,20 @@
 package com.silentgames.silent_planet.logic.ecs.entity.cell
 
-import com.silentgames.silent_planet.logic.ecs.component.Description
-import com.silentgames.silent_planet.logic.ecs.component.MovingMode
-import com.silentgames.silent_planet.logic.ecs.component.Position
-import com.silentgames.silent_planet.logic.ecs.component.Texture
+import android.content.Context
+import com.silentgames.silent_planet.R
+import com.silentgames.silent_planet.logic.ecs.component.*
+import com.silentgames.silent_planet.utils.BitmapEditor
 
 abstract class GroundCell(
+        context: Context,
         position: Position,
         description: Description,
-        texture: Texture
-) : Cell(position, description, texture) {
+        hide: Hide
+) : Cell(position, description, Texture(BitmapEditor.getCellBitmap(context, R.drawable.planet_background))) {
 
     init {
         addComponent(MovingMode.WALK)
+        addComponent(hide)
     }
 
 }

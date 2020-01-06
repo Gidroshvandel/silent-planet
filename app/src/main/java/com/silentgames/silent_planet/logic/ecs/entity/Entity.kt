@@ -23,6 +23,10 @@ open class Entity {
         localComponents.add(component)
     }
 
+    fun removeComponent(component: Component) {
+        localComponents.remove(component)
+    }
+
     override fun equals(other: Any?): Boolean {
         return if (other is Entity) {
             other.id == id

@@ -6,6 +6,7 @@ import com.silentgames.silent_planet.logic.ecs.component.Position
 import com.silentgames.silent_planet.logic.ecs.component.TargetPosition
 import com.silentgames.silent_planet.logic.ecs.component.Transport
 import com.silentgames.silent_planet.logic.ecs.entity.Entity
+import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
 import com.silentgames.silent_planet.logic.getAvailableMoveDistancePositionList
 import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.fractions.FractionsType
@@ -13,11 +14,11 @@ import com.silentgames.silent_planet.utils.notNull
 
 class MovementSystem : System {
 
-    override fun execute(gameState: GameState, entity: Entity) {
+    override fun execute(gameState: GameState, unit: Unit) {
         notNull(
-                entity.getComponent(),
-                entity.getComponent(),
-                entity,
+                unit.getComponent(),
+                unit.getComponent(),
+                unit,
                 gameState,
                 ::move
         )
@@ -26,7 +27,7 @@ class MovementSystem : System {
     private fun move(
             targetPosition: TargetPosition,
             position: Position,
-            unit: Entity,
+            unit: Unit,
             gameState: GameState
     ) {
         val targetCell = gameState.getCell(targetPosition.axis)
