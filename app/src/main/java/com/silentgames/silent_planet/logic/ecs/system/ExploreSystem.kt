@@ -24,6 +24,7 @@ class ExploreSystem : System {
 
     private fun makeCellExplored(hide: Hide, cell: Cell) {
         cell.addComponent(Texture(hide.bitmapToShow))
+        cell.addComponent(hide.descriptionToShow)
         cell.removeComponent(hide)
     }
 

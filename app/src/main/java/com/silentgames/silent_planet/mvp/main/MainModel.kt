@@ -31,7 +31,7 @@ class MainModel(val context: Context) {
 //        EntityRandomGenerator(context).spawnShips(gameMatrix)
         return GameState(
                 cells.toMutableList(),
-                mutableListOf(Unit(Position(Axis(0, 0)), Texture(BitmapEditor.getEntityBitmap(context, R.drawable.aliens_space_ship))))
+                mutableListOf(Unit(context, Position(Axis(0, 0)), Texture(BitmapEditor.getEntityBitmap(context, R.drawable.aliens_space_ship))))
         )
     }
 

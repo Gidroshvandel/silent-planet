@@ -79,7 +79,7 @@ class CellRandomGenerator(val context: Context) {
                 } else {
                     count++
                     listCells.add(
-                            com.silentgames.silent_planet.logic.ecs.entity.cell.EmptyCell(
+                            com.silentgames.silent_planet.logic.ecs.entity.cell.DeathCell(
                                     context,
                                     Axis(x, y)
                             )

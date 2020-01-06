@@ -5,6 +5,7 @@ import com.silentgames.silent_planet.logic.TurnHandler
 import com.silentgames.silent_planet.logic.ecs.Engine
 import com.silentgames.silent_planet.logic.ecs.component.*
 import com.silentgames.silent_planet.logic.ecs.entity.Entity
+import com.silentgames.silent_planet.logic.ecs.system.DeathSystem
 import com.silentgames.silent_planet.logic.ecs.system.ExploreSystem
 import com.silentgames.silent_planet.logic.ecs.system.MovementSystem
 import com.silentgames.silent_planet.model.Axis
@@ -70,6 +71,7 @@ class MainPresenter internal constructor(
 
             viewModel.engine.addSystem(MovementSystem())
             viewModel.engine.addSystem(ExploreSystem())
+            viewModel.engine.addSystem(DeathSystem())
 
             TurnHandler.start(Humans)
 //            Aliens.isPlayable = true
@@ -154,7 +156,6 @@ class MainPresenter internal constructor(
     private fun selectEntity(entity: com.silentgames.silent_planet.logic.ecs.entity.unit.Unit) {
         updateEntityState(entity)
         viewModel.selectedEntity = entity
-        entity.getComponent<Description>()?.let { showDescription(it) }
     }
 
     private fun updateEntityState(entity: Entity) {
@@ -167,6 +168,7 @@ class MainPresenter internal constructor(
             view.enableButton(false)
         }
         entity.getComponent<Texture>()?.bitmap?.let { view.showObjectIcon(it) }
+        entity.getComponent<Description>()?.let { showDescription(it) }
     }
 
     private fun crystalsOverZero(position: Axis): Boolean =
@@ -194,8 +196,10 @@ class MainPresenter internal constructor(
             eventCount = 0
             doEvent(entity) {
                 view.drawBattleGround(viewModel.engine.gameState) {
-                    TurnHandler.turnCount()
-                    updateEntityState(entity)
+                    launch {
+                        //                        TurnHandler.turnCount()
+                        updateEntityState(entity)
+                    }
                 }
             }
         } else {
@@ -268,6 +272,7 @@ class MainPresenter internal constructor(
 
     private fun doEvent(entity: Entity, onUpdateComplete: () -> Unit) {
         view.drawBattleGround(viewModel.engine.gameState) {
+            onUpdateComplete.invoke()
             //            if (viewModel.engine.gameState.doEvent(entity) && eventCount < 20) {
 //                eventCount++
 //                doEvent(entity, onUpdateComplete)
