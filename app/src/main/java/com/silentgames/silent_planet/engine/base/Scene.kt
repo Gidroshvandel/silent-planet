@@ -36,7 +36,7 @@ class Scene(
     }
 
     fun setLayer(i: Int, layer: Layer) {
-        updated = true
+//        updated = true
         if (i < layers.size) {
             layers[i] = layer
         }

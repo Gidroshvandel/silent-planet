@@ -2,12 +2,9 @@ package com.silentgames.silent_planet.logic.ecs.system
 
 import com.silentgames.silent_planet.logic.Constants
 import com.silentgames.silent_planet.logic.ecs.GameState
-import com.silentgames.silent_planet.logic.ecs.component.Arrow
+import com.silentgames.silent_planet.logic.ecs.component.*
 import com.silentgames.silent_planet.logic.ecs.component.ArrowMode.DIRECT
 import com.silentgames.silent_planet.logic.ecs.component.ArrowMode.SLANTING
-import com.silentgames.silent_planet.logic.ecs.component.Position
-import com.silentgames.silent_planet.logic.ecs.component.Teleport
-import com.silentgames.silent_planet.logic.ecs.component.Transport
 import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
 import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.fractions.FractionsType
@@ -38,17 +35,20 @@ class ArrowSystem : System {
     ) {
         val target = arrow.calculateTargetPosition(unitPosition.currentPosition)
         if (gameState.isDestinationCorrect(target, unitFractionsType)
-                && !gameState.isCyclicMove(target, unitPosition.currentPosition)) {
+                && !gameState.isCyclicMove(target, unitPosition.currentPosition, unitPosition.oldPosition)) {
             unit.addComponent(Teleport(target))
+            unit.removeComponent(TargetPosition::class.java)
         } else {
             //todo move to ship
         }
     }
 
-    private fun GameState.isCyclicMove(destination: Axis, unitPosition: Axis): Boolean {
+    private fun GameState.isCyclicMove(destination: Axis, unitPosition: Axis, previousPosition: Axis): Boolean {
+//        val previousCell = this.getCell(previousPosition)?.getComponent<Arrow>()
         val destinationCell = this.getCell(destination)?.getComponent<Arrow>()
         val target = destinationCell?.calculateTargetPosition(destination)
-        return target == unitPosition
+//        val previous = previousCell?.calculateTargetPosition(previousPosition)
+        return target == unitPosition && destination == previousPosition
     }
 
     private fun GameState.isDestinationCorrect(destination: Axis, fractionsType: FractionsType): Boolean =

@@ -7,6 +7,7 @@ import com.silentgames.silent_planet.engine.base.Layer
 import com.silentgames.silent_planet.logic.Constants
 import com.silentgames.silent_planet.logic.ecs.Engine
 import com.silentgames.silent_planet.logic.ecs.GameState
+import com.silentgames.silent_planet.logic.ecs.component.Position
 import com.silentgames.silent_planet.logic.ecs.component.Texture
 import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
 import com.silentgames.silent_planet.model.Axis
@@ -43,13 +44,22 @@ class RenderSystem(private val surfaceView: SurfaceGameView) : System {
                 ))
                 val entity = gameState.getUnit(Axis(x, y))
                 val texture = entity?.getComponent<Texture>()?.bitmap
-                if (entity != null && texture != null) {
+                val position = entity?.getComponent<Position>()
+                if (entity != null && texture != null && position != null) {
                     entityLayer.add(
                             Entity(
                                     entity.id.toString(),
                                     EngineAxis(x.toFloat(), y.toFloat()),
                                     texture
-                            )
+                            ).apply {
+                                if (!position.moved && position.oldPosition != position.currentPosition) {
+                                    position.moved = true
+                                    move(
+                                            position.oldPosition.toEngineAxis(),
+                                            position.currentPosition.toEngineAxis()
+                                    )
+                                }
+                            }
                     )
                 }
             }
@@ -57,5 +67,7 @@ class RenderSystem(private val surfaceView: SurfaceGameView) : System {
         surfaceView.updateLayer(SurfaceGameView.LayerType.BACKGROUND, backgroundLayer)
         surfaceView.updateLayer(SurfaceGameView.LayerType.ENTITY, entityLayer, onUpdateComplete)
     }
+
+    private fun Axis.toEngineAxis(): EngineAxis = EngineAxis(x.toFloat(), y.toFloat())
 
 }

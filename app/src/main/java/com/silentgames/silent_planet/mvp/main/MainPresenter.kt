@@ -76,10 +76,9 @@ class MainPresenter internal constructor(
                     model.generateNewBattleGround()
             )
 
-            viewModel.engine.addSystem(MovementSystem())
-            viewModel.engine.addSystem(ExploreSystem())
             viewModel.engine.addSystem(ArrowSystem())
             viewModel.engine.addSystem(TeleportSystem())
+            viewModel.engine.addSystem(MovementSystem())
             viewModel.engine.addSystem(ExploreSystem())
             viewModel.engine.addSystem(DeathSystem())
             viewModel.engine.addSystem(CrystalSystem())
@@ -253,20 +252,6 @@ class MainPresenter internal constructor(
 //            view.showToast("WIN ROBOT")
 //        }
     }
-
-    private var eventCount = 0
-
-//    private fun doEvent(unit: com.silentgames.silent_planet.logic.ecs.entity.unit.Unit, onUpdateComplete: () -> Unit) {
-//        view.drawBattleGround(viewModel.engine.gameState) {
-//            if (viewModel.engine.gameState.moveAgain && eventCount < 20) {
-//                viewModel.engine.processSystems(unit)
-//                eventCount++
-//                doEvent(unit, onUpdateComplete)
-//            } else {
-//                onUpdateComplete.invoke()
-//            }
-//        }
-//    }
 
     private fun getCrystal(gameMatrixHelper: GameMatrixHelper): GameMatrixHelper {
         val cellType = gameMatrixHelper.gameMatrixCellByXY.cellType

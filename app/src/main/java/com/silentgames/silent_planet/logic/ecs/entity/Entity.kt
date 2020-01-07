@@ -29,6 +29,12 @@ open class Entity {
         localComponents.remove(component)
     }
 
+    fun <T : Component> removeComponent(clazz: Class<T>) {
+        localComponents.filterIsInstance(clazz).firstOrNull()?.let {
+            removeComponent(it)
+        }
+    }
+
     override fun equals(other: Any?): Boolean {
         return if (other is Entity) {
             other.id == id
