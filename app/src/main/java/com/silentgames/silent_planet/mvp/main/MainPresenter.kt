@@ -79,10 +79,10 @@ class MainPresenter internal constructor(
             viewModel.engine.addSystem(MovementSystem())
             viewModel.engine.addSystem(ExploreSystem())
             viewModel.engine.addSystem(ArrowSystem())
-            viewModel.engine.addSystem(DeathSystem())
-            viewModel.engine.addSystem(CrystalSystem())
             viewModel.engine.addSystem(TeleportSystem())
             viewModel.engine.addSystem(ExploreSystem())
+            viewModel.engine.addSystem(DeathSystem())
+            viewModel.engine.addSystem(CrystalSystem())
             viewModel.engine.addSystem(TransportSystem())
 
             TurnHandler.start(Humans)

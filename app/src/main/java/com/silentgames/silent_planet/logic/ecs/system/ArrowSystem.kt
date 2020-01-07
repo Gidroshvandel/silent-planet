@@ -48,13 +48,14 @@ class ArrowSystem : System {
             unit.addComponent(Teleport(target))
             true
         } else {
+            //todo move to ship
             false
         }
     }
 
     private fun GameState.isCyclicMove(destination: Axis, unitPosition: Axis): Boolean {
         val destinationCell = this.getCell(destination)?.getComponent<Arrow>()
-        val target = destinationCell?.calculateTargetPosition(unitPosition)
+        val target = destinationCell?.calculateTargetPosition(destination)
         return target == unitPosition
     }
 
