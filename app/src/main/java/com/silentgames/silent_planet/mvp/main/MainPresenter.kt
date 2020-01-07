@@ -83,7 +83,13 @@ class MainPresenter internal constructor(
             viewModel.engine.addSystem(DeathSystem())
             viewModel.engine.addSystem(CrystalSystem())
             viewModel.engine.addSystem(TransportSystem())
-            viewModel.engine.addSystem(model.getRenderSystem())
+            viewModel.engine.addSystem(
+                    model.getRenderSystem {
+                        launch {
+                            viewModel.selectedEntity?.let { updateEntityState(it) }
+                        }
+                    }
+            )
 
             viewModel.engine.processSystems()
 
@@ -172,17 +178,17 @@ class MainPresenter internal constructor(
         viewModel.selectedEntity = entity
     }
 
-    private fun updateEntityState(entity: Entity) {
-        val position = entity.getComponent<Position>()?.currentPosition
-        val crystals = entity.getComponent<Crystal>()?.count ?: 0
+    private fun updateEntityState(unit: Unit) {
+        val position = unit.getComponent<Position>()?.currentPosition
+        val crystals = unit.getComponent<Crystal>()?.count ?: 0
         view.setImageCrystalText(crystals.toString())
         if (position != null && crystalsOverZero(position)) {
             view.enableButton(true)
         } else {
             view.enableButton(false)
         }
-        entity.getComponent<Texture>()?.bitmap?.let { view.showObjectIcon(it) }
-        entity.getComponent<Description>()?.let { showDescription(it) }
+        unit.getComponent<Texture>()?.bitmap?.let { view.showObjectIcon(it) }
+        unit.getComponent<Description>()?.let { showDescription(it) }
     }
 
     private fun crystalsOverZero(position: Axis): Boolean =

@@ -13,7 +13,7 @@ import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
 import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.view.SurfaceGameView
 
-class RenderSystem(private val surfaceView: SurfaceGameView) : System {
+class RenderSystem(private val surfaceView: SurfaceGameView, private val onSceneUpdate: () -> kotlin.Unit) : System {
 
     private var engine: Engine? = null
 
@@ -22,11 +22,14 @@ class RenderSystem(private val surfaceView: SurfaceGameView) : System {
     }
 
     override fun execute(gameState: GameState) {
-        render(gameState) {}
+        render(gameState) {
+            onSceneUpdate.invoke()
+        }
     }
 
     override fun execute(gameState: GameState, unit: Unit) {
         render(gameState) {
+            onSceneUpdate.invoke()
             engine?.processSystems(unit)
         }
     }

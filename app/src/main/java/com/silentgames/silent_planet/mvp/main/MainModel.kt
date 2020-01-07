@@ -21,7 +21,7 @@ class MainModel(val context: Context, private val surfaceView: SurfaceGameView) 
             EntityRandomGenerator(context).generateShips().toMutableList()
     )
 
-    fun getRenderSystem() = RenderSystem(surfaceView)
+    fun getRenderSystem(onSceneUpdate: () -> kotlin.Unit) = RenderSystem(surfaceView, onSceneUpdate)
 
     fun getPlayersNameOnCell(gameMatrixCell: Cell): List<String> {
         val data = ArrayList<String>()
