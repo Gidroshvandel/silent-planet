@@ -8,7 +8,14 @@ class Engine(val gameState: GameState) {
     private val systems = mutableListOf<System>()
 
     fun addSystem(system: System) {
+        system.onEngineAttach(this)
         systems.add(system)
+    }
+
+    fun processSystems() {
+        systems.forEach {
+            it.execute(gameState)
+        }
     }
 
     fun processSystems(entity: Unit) {

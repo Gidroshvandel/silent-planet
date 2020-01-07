@@ -38,10 +38,12 @@ class MovementSystem : System {
                     && isTargetUnitFromAllyFraction(targetUnit.getComponent(), unit.getComponent())
             ) {
                 gameState.moveUnit(unit, targetPosition.axis)
+                unit.removeComponent(targetPosition)
                 gameState.moveSuccess = true
                 return
             } else if (targetCell != null && canMove(unit.getComponent(), targetCell.getComponent())) {
                 gameState.moveUnit(unit, targetPosition.axis)
+                unit.removeComponent(targetPosition)
                 gameState.moveSuccess = true
                 return
             }

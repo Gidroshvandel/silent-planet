@@ -84,6 +84,9 @@ class MainPresenter internal constructor(
             viewModel.engine.addSystem(DeathSystem())
             viewModel.engine.addSystem(CrystalSystem())
             viewModel.engine.addSystem(TransportSystem())
+            viewModel.engine.addSystem(model.getRenderSystem())
+
+            viewModel.engine.processSystems()
 
             TurnHandler.start(Humans)
 //            Aliens.isPlayable = true
@@ -97,7 +100,7 @@ class MainPresenter internal constructor(
             view.changeRobotCristalCount(0)
 
 //            view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix) {}
-            view.drawBattleGround(viewModel.engine.gameState) {}
+//            view.drawBattleGround(viewModel.engine.gameState) {}
             view.selectCurrentFraction(TurnHandler.fractionType)
 
             view.enableButton(false)
@@ -200,42 +203,13 @@ class MainPresenter internal constructor(
 
     private fun tryMove(unit: com.silentgames.silent_planet.logic.ecs.entity.unit.Unit, targetPosition: Axis) {
         view.enableButton(false)
-
-        viewModel.selectedEntity?.addComponent(TargetPosition(targetPosition))
-        viewModel.engine.processSystems(viewModel.selectedEntity!!)
-
-        if (viewModel.engine.gameState.moveSuccess) {
-            eventCount = 0
-            doEvent(unit) {
-                view.drawBattleGround(viewModel.engine.gameState) {
-                    launch {
-                        //                        TurnHandler.turnCount()
-                        updateEntityState(unit)
-                    }
-                }
-            }
-        } else {
+        unit.addComponent(TargetPosition(targetPosition))
+        viewModel.engine.processSystems(unit)
+        if (!viewModel.engine.gameState.moveSuccess) {
             viewModel.selectedEntity = null
             select(targetPosition)
         }
     }
-
-//    private fun tryMove(entity: EntityType, targetPosition: Axis) {
-//        view.enableButton(false)
-//        if (viewModel.gameMatrixHelper.gameMatrix.tryMoveEntity(targetPosition, entity)) {
-//            eventCount = 0
-//            doEvent(entity) {
-//                view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix) {
-//                    TurnHandler.turnCount()
-//                    updateEntityState(entity)
-//                }
-//            }
-//        } else {
-//            viewModel.gameMatrixHelper.oldXY = null
-//            viewModel.gameMatrixHelper.selectedEntity = null
-//            select(targetPosition)
-//        }
-//    }
 
 //    private fun tryMoveAi(fractionsType: FractionsType) {
 //        val player = viewModel.gameMatrixHelper.gameMatrix.choosePlayerToMove(fractionsType)
@@ -282,17 +256,17 @@ class MainPresenter internal constructor(
 
     private var eventCount = 0
 
-    private fun doEvent(unit: com.silentgames.silent_planet.logic.ecs.entity.unit.Unit, onUpdateComplete: () -> Unit) {
-        view.drawBattleGround(viewModel.engine.gameState) {
-            if (viewModel.engine.gameState.moveAgain && eventCount < 20) {
-                viewModel.engine.processSystems(unit)
-                eventCount++
-                doEvent(unit, onUpdateComplete)
-            } else {
-                onUpdateComplete.invoke()
-            }
-        }
-    }
+//    private fun doEvent(unit: com.silentgames.silent_planet.logic.ecs.entity.unit.Unit, onUpdateComplete: () -> Unit) {
+//        view.drawBattleGround(viewModel.engine.gameState) {
+//            if (viewModel.engine.gameState.moveAgain && eventCount < 20) {
+//                viewModel.engine.processSystems(unit)
+//                eventCount++
+//                doEvent(unit, onUpdateComplete)
+//            } else {
+//                onUpdateComplete.invoke()
+//            }
+//        }
+//    }
 
     private fun getCrystal(gameMatrixHelper: GameMatrixHelper): GameMatrixHelper {
         val cellType = gameMatrixHelper.gameMatrixCellByXY.cellType

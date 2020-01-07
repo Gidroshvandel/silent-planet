@@ -7,17 +7,19 @@ import com.silentgames.silent_planet.logic.ecs.GameState
 import com.silentgames.silent_planet.logic.ecs.component.Position
 import com.silentgames.silent_planet.logic.ecs.component.Texture
 import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
+import com.silentgames.silent_planet.logic.ecs.system.RenderSystem
 import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.Cell
 import com.silentgames.silent_planet.model.entities.ground.Player
 import com.silentgames.silent_planet.model.entities.space.SpaceShip
 import com.silentgames.silent_planet.utils.BitmapEditor
+import com.silentgames.silent_planet.view.SurfaceGameView
 import java.util.*
 
 /**
  * Created by gidroshvandel on 22.06.17.
  */
-class MainModel(val context: Context) {
+class MainModel(val context: Context, private val surfaceView: SurfaceGameView) {
 
     suspend fun generateNewBattleGround(): GameState {
         val cells = CellRandomGenerator(context).generateBattleGround()
@@ -27,6 +29,8 @@ class MainModel(val context: Context) {
                 mutableListOf(Unit(context, Position(Axis(0, 0)), Texture(BitmapEditor.getEntityBitmap(context, R.drawable.aliens_space_ship))))
         )
     }
+
+    fun getRenderSystem() = RenderSystem(surfaceView)
 
     fun getPlayersNameOnCell(gameMatrixCell: Cell): List<String> {
         val data = ArrayList<String>()

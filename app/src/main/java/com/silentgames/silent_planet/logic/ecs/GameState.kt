@@ -9,8 +9,7 @@ import com.silentgames.silent_planet.model.Axis
 class GameState(
         val cellMap: MutableList<Cell>,
         val unitMap: MutableList<Unit>,
-        var moveSuccess: Boolean = false,
-        var moveAgain: Boolean = false
+        var moveSuccess: Boolean = false
 ) {
 
     fun getUnit(id: Long) = unitMap.find { it.id == id }

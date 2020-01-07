@@ -8,17 +8,10 @@ import android.widget.Toast
 import com.silentgames.silent_planet.R
 import com.silentgames.silent_planet.dialog.BottomSheetMenu
 import com.silentgames.silent_planet.dialog.EntityData
-import com.silentgames.silent_planet.engine.Background
-import com.silentgames.silent_planet.engine.EngineAxis
-import com.silentgames.silent_planet.engine.Entity
-import com.silentgames.silent_planet.engine.base.Layer
 import com.silentgames.silent_planet.logic.Constants
-import com.silentgames.silent_planet.logic.ecs.GameState
-import com.silentgames.silent_planet.logic.ecs.component.Texture
 import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.fractions.FractionsType
 import com.silentgames.silent_planet.view.Callback
-import com.silentgames.silent_planet.view.SurfaceGameView
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : Activity(), MainContract.View, Callback {
@@ -29,7 +22,7 @@ class MainActivity : Activity(), MainContract.View, Callback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        presenter = MainPresenter(this, MainViewModel(), MainModel(this))
+        presenter = MainPresenter(this, MainViewModel(), MainModel(this, surface_view))
 
         initUi()
 
@@ -118,31 +111,31 @@ class MainActivity : Activity(), MainContract.View, Callback {
 //        surface_view.updateLayer(SurfaceGameView.LayerType.ENTITY, sceneLayers.entity, onUpdateComplete)
 //    }
 
-    override fun drawBattleGround(gameState: GameState, onUpdateComplete: () -> Unit) {
-        val backgroundLayer = Layer()
-        val entityLayer = Layer()
-        val horizontalCountOfCells = Constants.horizontalCountOfCells
-        val verticalCountOfCells = Constants.verticalCountOfCells
-        for (x in 0 until horizontalCountOfCells) {
-            for (y in 0 until verticalCountOfCells) {
-                backgroundLayer.add(Background(
-                        EngineAxis(x.toFloat(), y.toFloat()),
-                        gameState.getCell(Axis(x, y))?.getComponent<Texture>()?.bitmap!!
-                ))
-                val entity = gameState.getUnit(Axis(x, y))?.getComponent<Texture>()?.bitmap
-                if (entity != null) {
-//                    val entity = gameMatrix[x][y].entityType.first()
-                    entityLayer.add(Entity(
-                            "111",
-                            EngineAxis(x.toFloat(), y.toFloat()),
-                            entity
-                    ))
-                }
-            }
-        }
-        surface_view.updateLayer(SurfaceGameView.LayerType.BACKGROUND, backgroundLayer)
-        surface_view.updateLayer(SurfaceGameView.LayerType.ENTITY, entityLayer, onUpdateComplete)
-    }
+//    override fun drawBattleGround(gameState: GameState, onUpdateComplete: () -> Unit) {
+//        val backgroundLayer = Layer()
+//        val entityLayer = Layer()
+//        val horizontalCountOfCells = Constants.horizontalCountOfCells
+//        val verticalCountOfCells = Constants.verticalCountOfCells
+//        for (x in 0 until horizontalCountOfCells) {
+//            for (y in 0 until verticalCountOfCells) {
+//                backgroundLayer.add(Background(
+//                        EngineAxis(x.toFloat(), y.toFloat()),
+//                        gameState.getCell(Axis(x, y))?.getComponent<Texture>()?.bitmap!!
+//                ))
+//                val entity = gameState.getUnit(Axis(x, y))?.getComponent<Texture>()?.bitmap
+//                if (entity != null) {
+////                    val entity = gameMatrix[x][y].entityType.first()
+//                    entityLayer.add(Entity(
+//                            "111",
+//                            EngineAxis(x.toFloat(), y.toFloat()),
+//                            entity
+//                    ))
+//                }
+//            }
+//        }
+//        surface_view.updateLayer(SurfaceGameView.LayerType.BACKGROUND, backgroundLayer)
+//        surface_view.updateLayer(SurfaceGameView.LayerType.ENTITY, entityLayer, onUpdateComplete)
+//    }
 
     override fun showToast(text: String) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show()

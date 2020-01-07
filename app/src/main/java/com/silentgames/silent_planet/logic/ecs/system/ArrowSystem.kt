@@ -16,22 +16,16 @@ import com.silentgames.silent_planet.utils.notNull
 
 class ArrowSystem : System {
 
-    private var flag = true
-
     override fun execute(gameState: GameState, unit: Unit) {
         gameState.getCurrentUnitCell(unit) { cell ->
-            flag = false
-            gameState.moveAgain = notNull(
+            notNull(
                     cell.getComponent(),
                     unit.getComponent(),
                     unit.getComponent(),
                     unit,
                     gameState,
                     ::move
-            ) ?: false
-        }
-        if (flag) {
-            gameState.moveAgain = false
+            )
         }
     }
 
@@ -41,15 +35,13 @@ class ArrowSystem : System {
             unitFractionsType: FractionsType,
             unit: Unit,
             gameState: GameState
-    ): Boolean {
+    ) {
         val target = arrow.calculateTargetPosition(unitPosition.currentPosition)
-        return if (gameState.isDestinationCorrect(target, unitFractionsType)
+        if (gameState.isDestinationCorrect(target, unitFractionsType)
                 && !gameState.isCyclicMove(target, unitPosition.currentPosition)) {
             unit.addComponent(Teleport(target))
-            true
         } else {
             //todo move to ship
-            false
         }
     }
 
@@ -68,7 +60,7 @@ class ArrowSystem : System {
         return (unit != null && unit.hasComponent<Transport>() && unit.getComponent<FractionsType>() == fractionsType)
     }
 
-    fun Axis.inGroundBorders(): Boolean {
+    private fun Axis.inGroundBorders(): Boolean {
         return x <= Constants.verticalCountOfGroundCells &&
                 x >= 1 &&
                 y <= Constants.horizontalCountOfGroundCells &&
