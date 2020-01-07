@@ -76,6 +76,7 @@ class MainPresenter internal constructor(
                     model.generateNewBattleGround()
             )
 
+            viewModel.engine.addSystem(CaptureSystem())
             viewModel.engine.addSystem(ArrowSystem())
             viewModel.engine.addSystem(TeleportSystem())
             viewModel.engine.addSystem(MovementSystem())
@@ -157,14 +158,22 @@ class MainPresenter internal constructor(
     private fun Entity.toEntityData(): EntityData {
         val texture = this.getComponent<Texture>()?.bitmap
         val description = this.getComponent<Description>()
-        val crystal = this.getComponent<Crystal>()?.count ?: 0
+
+        val captured = this.getComponent<Capture>() != null
+
+        val crystal = if (captured) {
+            this.getComponent<Capture>()?.buybackPrice ?: 0
+        } else {
+            this.getComponent<Crystal>()?.count ?: 0
+        }
 
         return EntityData(
                 id,
                 texture!!,
                 description?.name ?: "",
                 description?.description ?: "",
-                crystal.toString()
+                crystal.toString(),
+                captured
         )
     }
 
