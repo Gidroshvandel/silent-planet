@@ -31,6 +31,9 @@ class GameState(
     }
 
     fun moveUnit(unit: Unit, toPosition: Axis) {
+        if (!unitMap.contains(unit)) {
+            unitMap.add(unit)
+        }
         unit.getComponent<Position>()?.currentPosition = toPosition
     }
 

@@ -11,6 +11,18 @@ class TransportSystem : System {
         unit.getComponent<Position>()?.let {
             gameState.moveAllUnitsOnTransport(it)
         }
+        gameState.removeUnitsFromTransport()
+    }
+
+    private fun GameState.removeUnitsFromTransport() {
+        unitMap.forEach {
+            val transport = it.getComponent<Transport>()
+            transport?.unitsOnBoard?.toMutableList()?.forEach { unit ->
+                if (unitMap.contains(unit)) {
+                    transport.removeFromBoard(unit)
+                }
+            }
+        }
     }
 
     private fun GameState.moveAllUnitsOnTransport(unitPosition: Position) {

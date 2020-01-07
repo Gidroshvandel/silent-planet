@@ -2,23 +2,20 @@ package com.silentgames.silent_planet.logic
 
 import android.content.Context
 import com.silentgames.silent_planet.R
+import com.silentgames.silent_planet.logic.ecs.component.Transport
+import com.silentgames.silent_planet.logic.ecs.entity.unit.ground.AlienPlayer
+import com.silentgames.silent_planet.logic.ecs.entity.unit.ground.HumanPlayer
+import com.silentgames.silent_planet.logic.ecs.entity.unit.ground.PiratePlayer
+import com.silentgames.silent_planet.logic.ecs.entity.unit.ground.RobotPlayer
+import com.silentgames.silent_planet.logic.ecs.entity.unit.space.*
 import com.silentgames.silent_planet.model.Axis
-import com.silentgames.silent_planet.model.Cell
-import com.silentgames.silent_planet.model.entities.ground.fractions.Alien
-import com.silentgames.silent_planet.model.entities.ground.fractions.Human
-import com.silentgames.silent_planet.model.entities.ground.fractions.Pirate
-import com.silentgames.silent_planet.model.entities.ground.fractions.Robot
-import com.silentgames.silent_planet.model.entities.space.fractions.AlienShip
-import com.silentgames.silent_planet.model.entities.space.fractions.HumanShip
-import com.silentgames.silent_planet.model.entities.space.fractions.PirateShip
-import com.silentgames.silent_planet.model.entities.space.fractions.RobotShip
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.*
 
 class EntityRandomGenerator(val context: Context) {
 
-    suspend fun spawnShips(gameMatrix: Array<Array<Cell>>) {
+    suspend fun generateShips(): List<SpaceShip> =
         withContext(Dispatchers.Default) {
             val axisList = BoardSide.values().toList().shuffled().map {
                 val borderInset = 1
@@ -34,56 +31,65 @@ class EntityRandomGenerator(val context: Context) {
                 }
             }
 
-            spawnHumans(gameMatrix[axisList[0].x][axisList[0].y])
-            spawnPirates(gameMatrix[axisList[1].x][axisList[1].y])
-            spawnRobots(gameMatrix[axisList[2].x][axisList[2].y])
-            spawnAliens(gameMatrix[axisList[3].x][axisList[3].y])
+            return@withContext listOf(
+                    spawnHumans(axisList[0]),
+                    spawnPirates(axisList[1]),
+                    spawnRobots(axisList[2]),
+                    spawnAliens(axisList[3])
+            )
         }
-    }
 
-    private fun spawnRobots(gameMatrixCell: Cell) {
-        val playerList = mutableListOf(
-                Robot(context, context.getString(R.string.robot_player_name_one)),
-                Robot(context, context.getString(R.string.robot_player_name_two)),
-                Robot(context, context.getString(R.string.robot_player_name_three))
-        )
-        gameMatrixCell.entityType.add(RobotShip(context).apply {
-            playersOnBord = playerList.toMutableList()
-        })
-    }
+    private fun spawnRobots(axis: Axis) =
+            RobotShip(context, axis).apply {
+                addComponent(
+                        Transport(
+                                mutableListOf(
+                                        RobotPlayer(context, context.getString(R.string.robot_player_name_one), axis),
+                                        RobotPlayer(context, context.getString(R.string.robot_player_name_two), axis),
+                                        RobotPlayer(context, context.getString(R.string.robot_player_name_three), axis)
+                                )
+                        )
+                )
+            }
 
-    private fun spawnAliens(gameMatrixCell: Cell) {
-        val playerList = mutableListOf(
-                Alien(context, context.getString(R.string.alien_player_name_one)),
-                Alien(context, context.getString(R.string.alien_player_name_two)),
-                Alien(context, context.getString(R.string.alien_player_name_three))
-        )
-        gameMatrixCell.entityType.add(AlienShip(context).apply {
-            playersOnBord = playerList.toMutableList()
-        })
-    }
+    private fun spawnAliens(axis: Axis) =
+            AlienShip(context, axis).apply {
+                addComponent(
+                        Transport(
+                                mutableListOf(
+                                        AlienPlayer(context, context.getString(R.string.alien_player_name_one), axis),
+                                        AlienPlayer(context, context.getString(R.string.alien_player_name_two), axis),
+                                        AlienPlayer(context, context.getString(R.string.alien_player_name_three), axis)
+                                )
+                        )
+                )
+            }
 
-    private fun spawnPirates(gameMatrixCell: Cell) {
-        val playerList = mutableListOf(
-                Pirate(context, context.getString(R.string.pirate_player_name_one)),
-                Pirate(context, context.getString(R.string.pirate_player_name_two)),
-                Pirate(context, context.getString(R.string.pirate_player_name_three))
-        )
-        gameMatrixCell.entityType.add(PirateShip(context).apply {
-            playersOnBord = playerList.toMutableList()
-        })
-    }
+    private fun spawnPirates(axis: Axis) =
+            PirateShip(context, axis).apply {
+                addComponent(
+                        Transport(
+                                mutableListOf(
+                                        PiratePlayer(context, context.getString(R.string.pirate_player_name_one), axis),
+                                        PiratePlayer(context, context.getString(R.string.pirate_player_name_two), axis),
+                                        PiratePlayer(context, context.getString(R.string.pirate_player_name_three), axis)
+                                )
+                        )
+                )
+            }
 
-    private fun spawnHumans(gameMatrixCell: Cell) {
-        val playerList = mutableListOf(
-                Human(context, context.getString(R.string.human_player_name_one)),
-                Human(context, context.getString(R.string.human_player_name_two)),
-                Human(context, context.getString(R.string.human_player_name_three))
-        )
-        gameMatrixCell.entityType.add(HumanShip(context).apply {
-            playersOnBord = playerList.toMutableList()
-        })
-    }
+    private fun spawnHumans(axis: Axis) =
+            HumanShip(context, axis).apply {
+                addComponent(
+                        Transport(
+                                mutableListOf(
+                                        HumanPlayer(context, context.getString(R.string.human_player_name_one), axis),
+                                        HumanPlayer(context, context.getString(R.string.human_player_name_two), axis),
+                                        HumanPlayer(context, context.getString(R.string.human_player_name_three), axis)
+                                )
+                        )
+                )
+            }
 
     private enum class BoardSide {
         TOP {

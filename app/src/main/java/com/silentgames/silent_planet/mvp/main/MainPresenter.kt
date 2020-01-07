@@ -6,9 +6,9 @@ import com.silentgames.silent_planet.logic.ecs.Engine
 import com.silentgames.silent_planet.logic.ecs.component.*
 import com.silentgames.silent_planet.logic.ecs.component.event.AddCrystalEvent
 import com.silentgames.silent_planet.logic.ecs.entity.Entity
+import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
 import com.silentgames.silent_planet.logic.ecs.system.*
 import com.silentgames.silent_planet.model.Axis
-import com.silentgames.silent_planet.model.GameMatrixHelper
 import com.silentgames.silent_planet.model.fractions.factionType.Humans
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
@@ -47,7 +47,7 @@ class MainPresenter internal constructor(
     }
 
     override fun onEntityDialogElementSelect(entityData: EntityData) {
-        val entity = viewModel.engine.gameState.getUnit(entityData.id)
+        val entity = viewModel.engine.gameState.unitMap.extractTransports().find { it.id == entityData.id }
         val cell = viewModel.engine.gameState.getCell(entityData.id)
         if (entity != null) {
             selectEntity(entity)
@@ -120,7 +120,7 @@ class MainPresenter internal constructor(
     }
 
     private fun select(currentXY: Axis) {
-        val entities = viewModel.engine.gameState.getUnits(currentXY)
+        val entities = viewModel.engine.gameState.getUnits(currentXY).extractTransports()
         val cellType = viewModel.engine.gameState.getCell(currentXY)
 
         if (viewModel.selectedEntity != null
@@ -167,7 +167,7 @@ class MainPresenter internal constructor(
         view.fillEntityName(description.name)
     }
 
-    private fun selectEntity(entity: com.silentgames.silent_planet.logic.ecs.entity.unit.Unit) {
+    private fun selectEntity(entity: Unit) {
         updateEntityState(entity)
         viewModel.selectedEntity = entity
     }
@@ -200,13 +200,26 @@ class MainPresenter internal constructor(
         cellType.getComponent<Description>()?.let { showDescription(it) }
     }
 
-    private fun tryMove(unit: com.silentgames.silent_planet.logic.ecs.entity.unit.Unit, targetPosition: Axis) {
+    private fun tryMove(unit: Unit, targetPosition: Axis) {
         view.enableButton(false)
         unit.addComponent(TargetPosition(targetPosition))
         viewModel.engine.processSystems(unit)
         if (!viewModel.engine.gameState.moveSuccess) {
             viewModel.selectedEntity = null
             select(targetPosition)
+        }
+    }
+
+    private fun List<Unit>.extractTransports(): List<Unit> {
+        val onBoardEntities = mutableListOf<Unit>()
+        forEach {
+            val transport = it.getComponent<Transport>()
+            if (transport != null) {
+                onBoardEntities.addAll(transport.unitsOnBoard)
+            }
+        }
+        return this.toMutableList().apply {
+            addAll(onBoardEntities)
         }
     }
 
@@ -253,13 +266,13 @@ class MainPresenter internal constructor(
 //        }
     }
 
-    private fun getCrystal(gameMatrixHelper: GameMatrixHelper): GameMatrixHelper {
-        val cellType = gameMatrixHelper.gameMatrixCellByXY.cellType
-
-        if (cellType.crystals > 0) {
-            gameMatrixHelper.selectedEntity?.apply { crystals++ }
-            cellType.apply { crystals-- }
-        }
-        return gameMatrixHelper
-    }
+//    private fun getCrystal(gameMatrixHelper: GameMatrixHelper): GameMatrixHelper {
+//        val cellType = gameMatrixHelper.gameMatrixCellByXY.cellType
+//
+//        if (cellType.crystals > 0) {
+//            gameMatrixHelper.selectedEntity?.apply { crystals++ }
+//            cellType.apply { crystals-- }
+//        }
+//        return gameMatrixHelper
+//    }
 }

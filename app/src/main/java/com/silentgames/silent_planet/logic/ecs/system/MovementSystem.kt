@@ -14,13 +14,13 @@ import com.silentgames.silent_planet.utils.notNull
 class MovementSystem : System {
 
     override fun execute(gameState: GameState, unit: Unit) {
-        notNull(
+        gameState.moveSuccess = notNull(
                 unit.getComponent(),
                 unit.getComponent(),
                 unit,
                 gameState,
                 ::move
-        )
+        ) ?: false
     }
 
     private fun move(
@@ -28,7 +28,7 @@ class MovementSystem : System {
             position: Position,
             unit: Unit,
             gameState: GameState
-    ) {
+    ): Boolean {
         val targetCell = gameState.getCell(targetPosition.axis)
         val targetUnit = gameState.getUnit(targetPosition.axis)
         if (isMoveAtDistance(targetPosition.axis, position.currentPosition)) {
@@ -39,16 +39,14 @@ class MovementSystem : System {
             ) {
                 gameState.moveUnit(unit, targetPosition.axis)
                 unit.removeComponent(targetPosition)
-                gameState.moveSuccess = true
-                return
+                return true
             } else if (targetCell != null && canMove(unit.getComponent(), targetCell.getComponent())) {
                 gameState.moveUnit(unit, targetPosition.axis)
                 unit.removeComponent(targetPosition)
-                gameState.moveSuccess = true
-                return
+                return true
             }
         }
-        gameState.moveSuccess = false
+        return false
     }
 
     private fun isTargetUnitFromAllyFraction(
