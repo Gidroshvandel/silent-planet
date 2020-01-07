@@ -4,7 +4,9 @@ import com.silentgames.silent_planet.dialog.EntityData
 import com.silentgames.silent_planet.logic.TurnHandler
 import com.silentgames.silent_planet.logic.ecs.Engine
 import com.silentgames.silent_planet.logic.ecs.component.*
+import com.silentgames.silent_planet.logic.ecs.component.event.AddCrystalEvent
 import com.silentgames.silent_planet.logic.ecs.entity.Entity
+import com.silentgames.silent_planet.logic.ecs.system.CrystalSystem
 import com.silentgames.silent_planet.logic.ecs.system.DeathSystem
 import com.silentgames.silent_planet.logic.ecs.system.ExploreSystem
 import com.silentgames.silent_planet.logic.ecs.system.MovementSystem
@@ -30,13 +32,21 @@ class MainPresenter internal constructor(
     }
 
     override fun onActionButtonClick() {
-//        viewModel.gameMatrixHelper = getCrystal(viewModel.gameMatrixHelper)
-//        if (!crystalsOverZero()) {
-//            view.enableButton(false)
-//        }
-//        viewModel.selectedEntity?.let {
-//            view.setImageCrystalText(it.crystals.toString())
-//        }
+        val entity = viewModel.selectedEntity
+        if (entity != null) {
+            entity.addComponent(AddCrystalEvent())
+            viewModel.engine.processSystems(entity)
+
+            entity.getComponent<Position>()?.currentPosition?.let {
+                if (!crystalsOverZero(it)) {
+                    view.enableButton(false)
+                }
+            }
+
+            entity.getComponent<Crystal>()?.let {
+                view.setImageCrystalText(it.count.toString())
+            }
+        }
     }
 
     override fun onEntityDialogElementSelect(entityData: EntityData) {
@@ -72,6 +82,7 @@ class MainPresenter internal constructor(
             viewModel.engine.addSystem(MovementSystem())
             viewModel.engine.addSystem(ExploreSystem())
             viewModel.engine.addSystem(DeathSystem())
+            viewModel.engine.addSystem(CrystalSystem())
 
             TurnHandler.start(Humans)
 //            Aliens.isPlayable = true

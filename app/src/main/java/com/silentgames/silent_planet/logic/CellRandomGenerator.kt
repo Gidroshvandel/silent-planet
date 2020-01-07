@@ -79,9 +79,10 @@ class CellRandomGenerator(val context: Context) {
                 } else {
                     count++
                     listCells.add(
-                            com.silentgames.silent_planet.logic.ecs.entity.cell.DeathCell(
+                            com.silentgames.silent_planet.logic.ecs.entity.cell.crystal.CrystalCell(
                                     context,
-                                    Axis(x, y)
+                                    Axis(x, y),
+                                    com.silentgames.silent_planet.logic.ecs.entity.cell.crystal.CrystalsEnum.THREE
                             )
                     )
 //                    Cell(randomCellTypeList[count].getCellType(Axis(x, y)))
