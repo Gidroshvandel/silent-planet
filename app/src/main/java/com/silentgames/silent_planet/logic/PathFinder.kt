@@ -1,9 +1,7 @@
 package com.silentgames.silent_planet.logic
 
 import com.silentgames.silent_planet.model.*
-import com.silentgames.silent_planet.model.cells.Arrow.Arrow
 import com.silentgames.silent_planet.model.entities.EntityType
-import com.silentgames.silent_planet.model.entities.ground.Player
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -83,13 +81,14 @@ private fun estimateDistance(node: Node, goalNode: Node): Int =
 
 // Where can we get from here?
 private fun GameMatrix.getAdjacentNodes(node: Node, entity: EntityType): List<Node> {
-    val cell = this.getCell(node.position)
-    return if (cell.cellType.isVisible && cell.cellType is Arrow && entity is Player) {
-        val destination = cell.cellType.getDestination(this, entity.fraction.fractionsType)
-        if (destination != null) listOf(Node(destination, cost = Int.MAX_VALUE)) else listOf()
-    } else {
-        this.getAvailableMoveDistancePositionList(node.position, entity).map { Node(it, cost = Int.MAX_VALUE) }
-    }
+//    val cell = this.getCell(node.position)
+//    return if (cell.cellType.isVisible && cell.cellType is Arrow && entity is Player) {
+//        val destination = cell.cellType.getDestination(this, entity.fraction.fractionsType)
+//        if (destination != null) listOf(Node(destination, cost = Int.MAX_VALUE)) else listOf()
+//    } else {
+//        this.getAvailableMoveDistancePositionList(node.position, entity).map { Node(it, cost = Int.MAX_VALUE) }
+//    }
+    return emptyList()
 }
 
 fun GameMatrix.getAvailableMoveDistancePositionList(position: Axis, entity: EntityType) =
