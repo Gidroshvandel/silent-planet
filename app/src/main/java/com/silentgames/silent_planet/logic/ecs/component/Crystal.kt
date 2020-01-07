@@ -5,6 +5,10 @@ class Crystal(count: Int = 0) : ComponentEquals() {
     var count: Int = count
         private set
 
+    fun addCrystals(count: Int) {
+        this.count += count
+    }
+
     fun increment() {
         count++
     }
@@ -14,6 +18,12 @@ class Crystal(count: Int = 0) : ComponentEquals() {
         if (count < 0) {
             count = 0
         }
+    }
+
+    fun getAll(): Int {
+        val getCrystals = count
+        count = 0
+        return getCrystals
     }
 
 }
