@@ -9,7 +9,8 @@ import com.silentgames.silent_planet.model.Axis
 class GameState(
         val cellMap: MutableList<Cell>,
         val unitMap: MutableList<Unit>,
-        var moveSuccess: Boolean = false
+        var moveSuccess: Boolean = false,
+        var moveAgain: Boolean = false
 ) {
 
     fun getUnit(id: Long) = unitMap.find { it.id == id }
@@ -26,8 +27,12 @@ class GameState(
     fun moveUnit(fromPosition: Axis, toPosition: Axis) {
         val unit = getUnit(fromPosition)
         if (unit != null) {
-            unit.getComponent<Position>()?.currentPosition = toPosition
+            moveUnit(unit, toPosition)
         }
+    }
+
+    fun moveUnit(unit: Unit, toPosition: Axis) {
+        unit.getComponent<Position>()?.currentPosition = toPosition
     }
 
     private fun <T : Entity> List<T>.getByPosition(axis: Axis) =

@@ -6,10 +6,7 @@ import com.silentgames.silent_planet.logic.ecs.Engine
 import com.silentgames.silent_planet.logic.ecs.component.*
 import com.silentgames.silent_planet.logic.ecs.component.event.AddCrystalEvent
 import com.silentgames.silent_planet.logic.ecs.entity.Entity
-import com.silentgames.silent_planet.logic.ecs.system.CrystalSystem
-import com.silentgames.silent_planet.logic.ecs.system.DeathSystem
-import com.silentgames.silent_planet.logic.ecs.system.ExploreSystem
-import com.silentgames.silent_planet.logic.ecs.system.MovementSystem
+import com.silentgames.silent_planet.logic.ecs.system.*
 import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.GameMatrixHelper
 import com.silentgames.silent_planet.model.fractions.factionType.Humans
@@ -81,8 +78,12 @@ class MainPresenter internal constructor(
 
             viewModel.engine.addSystem(MovementSystem())
             viewModel.engine.addSystem(ExploreSystem())
+            viewModel.engine.addSystem(ArrowSystem())
             viewModel.engine.addSystem(DeathSystem())
             viewModel.engine.addSystem(CrystalSystem())
+            viewModel.engine.addSystem(TeleportSystem())
+            viewModel.engine.addSystem(ExploreSystem())
+            viewModel.engine.addSystem(TransportSystem())
 
             TurnHandler.start(Humans)
 //            Aliens.isPlayable = true
@@ -197,7 +198,7 @@ class MainPresenter internal constructor(
         cellType.getComponent<Description>()?.let { showDescription(it) }
     }
 
-    private fun tryMove(entity: Entity, targetPosition: Axis) {
+    private fun tryMove(unit: com.silentgames.silent_planet.logic.ecs.entity.unit.Unit, targetPosition: Axis) {
         view.enableButton(false)
 
         viewModel.selectedEntity?.addComponent(TargetPosition(targetPosition))
@@ -205,11 +206,11 @@ class MainPresenter internal constructor(
 
         if (viewModel.engine.gameState.moveSuccess) {
             eventCount = 0
-            doEvent(entity) {
+            doEvent(unit) {
                 view.drawBattleGround(viewModel.engine.gameState) {
                     launch {
                         //                        TurnHandler.turnCount()
-                        updateEntityState(entity)
+                        updateEntityState(unit)
                     }
                 }
             }
@@ -281,15 +282,15 @@ class MainPresenter internal constructor(
 
     private var eventCount = 0
 
-    private fun doEvent(entity: Entity, onUpdateComplete: () -> Unit) {
+    private fun doEvent(unit: com.silentgames.silent_planet.logic.ecs.entity.unit.Unit, onUpdateComplete: () -> Unit) {
         view.drawBattleGround(viewModel.engine.gameState) {
-            onUpdateComplete.invoke()
-            //            if (viewModel.engine.gameState.doEvent(entity) && eventCount < 20) {
-//                eventCount++
-//                doEvent(entity, onUpdateComplete)
-//            } else {
-//                onUpdateComplete.invoke()
-//            }
+            if (viewModel.engine.gameState.moveAgain && eventCount < 20) {
+                viewModel.engine.processSystems(unit)
+                eventCount++
+                doEvent(unit, onUpdateComplete)
+            } else {
+                onUpdateComplete.invoke()
+            }
         }
     }
 

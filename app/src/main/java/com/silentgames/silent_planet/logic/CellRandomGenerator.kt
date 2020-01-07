@@ -1,16 +1,15 @@
 package com.silentgames.silent_planet.logic
 
 import android.content.Context
+import com.silentgames.silent_planet.logic.ecs.entity.cell.Cell
+import com.silentgames.silent_planet.logic.ecs.entity.cell.DeathCell
+import com.silentgames.silent_planet.logic.ecs.entity.cell.EmptyCell
+import com.silentgames.silent_planet.logic.ecs.entity.cell.SpaceCell
+import com.silentgames.silent_planet.logic.ecs.entity.cell.arrow.ArrowGreenCell
+import com.silentgames.silent_planet.logic.ecs.entity.cell.arrow.ArrowRedCell
+import com.silentgames.silent_planet.logic.ecs.entity.cell.crystal.CrystalCell
+import com.silentgames.silent_planet.logic.ecs.entity.cell.crystal.CrystalsEnum
 import com.silentgames.silent_planet.model.Axis
-import com.silentgames.silent_planet.model.Cell
-import com.silentgames.silent_planet.model.cells.Arrow.ArrowGreen
-import com.silentgames.silent_planet.model.cells.Arrow.ArrowRed
-import com.silentgames.silent_planet.model.cells.CellType
-import com.silentgames.silent_planet.model.cells.Crystal.Crystal
-import com.silentgames.silent_planet.model.cells.Crystal.CrystalsEnum
-import com.silentgames.silent_planet.model.cells.DeadCell
-import com.silentgames.silent_planet.model.cells.EmptyCell
-import com.silentgames.silent_planet.model.cells.SpaceCell
 import com.silentgames.silent_planet.utils.BitmapEditor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -23,7 +22,7 @@ class CellRandomGenerator(val context: Context) {
 
     suspend fun generateBattleGround(
             cellGeneratorParams: CellGeneratorParams = CellGeneratorParams()
-    ): Array<Array<Cell>> = withContext(Dispatchers.Default) {
+    ): List<Cell> = withContext(Dispatchers.Default) {
         randomList.clear()
         randomList.addAll(cellGeneratorParams.getRandomEntityList())
 
@@ -37,41 +36,13 @@ class CellRandomGenerator(val context: Context) {
         randomCellTypeList.shuffle()
         var count = -1
 
-        return@withContext Array(hCountOfCells) { x ->
-            Array(vCountOfCells) { y ->
-                if (x == 0 || x == hCountOfCells - 1 || y == 0 || y == vCountOfCells - 1) {
-                    Cell(SpaceCell(context, Axis(x, y)))
-                } else {
-                    count++
-                    Cell(randomCellTypeList[count].getCellType(Axis(x, y)))
-                }
-            }
-        }
-    }
+        val listCells = mutableListOf<Cell>()
 
-    suspend fun generateNewBattleGround(
-            cellGeneratorParams: CellGeneratorParams = CellGeneratorParams()
-    ): List<com.silentgames.silent_planet.logic.ecs.entity.cell.Cell> = withContext(Dispatchers.Default) {
-        randomList.clear()
-        randomList.addAll(cellGeneratorParams.getRandomEntityList())
-
-        val vCountOfCells = Constants.verticalCountOfCells
-        val hCountOfCells = Constants.horizontalCountOfCells
-
-        val randomCellTypeList = MutableList(Constants.countOfGroundCells) {
-            randomizeCell()
-        }
-
-        randomCellTypeList.shuffle()
-        var count = -1
-
-        val listCells = mutableListOf<com.silentgames.silent_planet.logic.ecs.entity.cell.Cell>()
-
-        for (x in 0..hCountOfCells) {
-            for (y in 0..vCountOfCells) {
+        for (x in 0 until hCountOfCells) {
+            for (y in 0 until vCountOfCells) {
                 if (x == 0 || x == hCountOfCells - 1 || y == 0 || y == vCountOfCells - 1) {
                     listCells.add(
-                            com.silentgames.silent_planet.logic.ecs.entity.cell.SpaceCell(
+                            SpaceCell(
                                     context,
                                     Axis(x, y)
                             )
@@ -79,13 +50,8 @@ class CellRandomGenerator(val context: Context) {
                 } else {
                     count++
                     listCells.add(
-                            com.silentgames.silent_planet.logic.ecs.entity.cell.crystal.CrystalCell(
-                                    context,
-                                    Axis(x, y),
-                                    com.silentgames.silent_planet.logic.ecs.entity.cell.crystal.CrystalsEnum.THREE
-                            )
+                            randomCellTypeList[count].getCellType(Axis(x, y))
                     )
-//                    Cell(randomCellTypeList[count].getCellType(Axis(x, y)))
                 }
             }
         }
@@ -94,14 +60,14 @@ class CellRandomGenerator(val context: Context) {
     }
 
 
-    private fun RandomCellType.getCellType(axis: Axis): CellType {
+    private fun RandomCellType.getCellType(axis: Axis): Cell {
         return when (this) {
-            RandomCellType.DEATH -> DeadCell(context, axis)
-            RandomCellType.GREEN_ARROW -> ArrowGreen(context, axis).rotate(BitmapEditor.RotateAngle.randomAngle())
-            RandomCellType.RED_ARROW -> ArrowRed(context, axis).rotate(BitmapEditor.RotateAngle.randomAngle())
-            RandomCellType.CRYSTAL_ONE -> Crystal(context, axis, CrystalsEnum.ONE)
-            RandomCellType.CRYSTAL_TWO -> Crystal(context, axis, CrystalsEnum.TWO)
-            RandomCellType.CRYSTAL_THREE -> Crystal(context, axis, CrystalsEnum.THREE)
+            RandomCellType.DEATH -> DeathCell(context, axis)
+            RandomCellType.GREEN_ARROW -> ArrowGreenCell(context, axis, BitmapEditor.RotateAngle.randomAngle())
+            RandomCellType.RED_ARROW -> ArrowRedCell(context, axis, BitmapEditor.RotateAngle.randomAngle())
+            RandomCellType.CRYSTAL_ONE -> CrystalCell(context, axis, CrystalsEnum.ONE)
+            RandomCellType.CRYSTAL_TWO -> CrystalCell(context, axis, CrystalsEnum.TWO)
+            RandomCellType.CRYSTAL_THREE -> CrystalCell(context, axis, CrystalsEnum.THREE)
             RandomCellType.EMPTY -> EmptyCell(context, axis)
         }
     }

@@ -6,6 +6,7 @@ import com.silentgames.silent_planet.logic.ecs.component.MovingMode
 import com.silentgames.silent_planet.logic.ecs.component.Position
 import com.silentgames.silent_planet.logic.ecs.component.Texture
 import com.silentgames.silent_planet.logic.ecs.entity.Entity
+import com.silentgames.silent_planet.model.fractions.FractionsType
 
 class Unit(
         val context: Context,
@@ -22,6 +23,7 @@ class Unit(
         addComponent(texture)
         addComponent(MovingMode.WALK)
         addComponent(MovingMode.FLY)
+        addComponent(FractionsType.ALIEN)
         addComponent(Description("Первопроходец", "Что-то тут есть"))
     }
 

@@ -16,6 +16,8 @@ open class Entity {
         return components.filterIsInstance<T>().firstOrNull()
     }
 
+    inline fun <reified T : Component> hasComponent(): Boolean = getComponent<T>() != null
+
     fun addComponent(component: Component) {
         if (localComponents.contains(component)) {
             localComponents.remove(component)

@@ -5,7 +5,6 @@ import com.silentgames.silent_planet.logic.ecs.component.MovingMode
 import com.silentgames.silent_planet.logic.ecs.component.Position
 import com.silentgames.silent_planet.logic.ecs.component.TargetPosition
 import com.silentgames.silent_planet.logic.ecs.component.Transport
-import com.silentgames.silent_planet.logic.ecs.entity.Entity
 import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
 import com.silentgames.silent_planet.logic.getAvailableMoveDistancePositionList
 import com.silentgames.silent_planet.model.Axis
@@ -38,21 +37,16 @@ class MovementSystem : System {
                     && unit.getComponent<Transport>() == null
                     && isTargetUnitFromAllyFraction(targetUnit.getComponent(), unit.getComponent())
             ) {
-                gameState.moveOnBoard(unit, transport)
+                gameState.moveUnit(unit, targetPosition.axis)
                 gameState.moveSuccess = true
                 return
             } else if (targetCell != null && canMove(unit.getComponent(), targetCell.getComponent())) {
-                gameState.moveUnit(position.currentPosition, targetPosition.axis)
+                gameState.moveUnit(unit, targetPosition.axis)
                 gameState.moveSuccess = true
                 return
             }
         }
         gameState.moveSuccess = false
-    }
-
-    private fun GameState.moveOnBoard(entity: Entity, targetTransport: Transport) {
-        this.unitMap.remove(entity)
-        targetTransport.addOnBoard(entity)
     }
 
     private fun isTargetUnitFromAllyFraction(

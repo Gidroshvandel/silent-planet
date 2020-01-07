@@ -3,7 +3,6 @@ package com.silentgames.silent_planet.mvp.main
 import android.content.Context
 import com.silentgames.silent_planet.R
 import com.silentgames.silent_planet.logic.CellRandomGenerator
-import com.silentgames.silent_planet.logic.EntityRandomGenerator
 import com.silentgames.silent_planet.logic.ecs.GameState
 import com.silentgames.silent_planet.logic.ecs.component.Position
 import com.silentgames.silent_planet.logic.ecs.component.Texture
@@ -20,14 +19,8 @@ import java.util.*
  */
 class MainModel(val context: Context) {
 
-    suspend fun generateBattleGround(): Array<Array<Cell>> {
-        val gameMatrix = CellRandomGenerator(context).generateBattleGround()
-        EntityRandomGenerator(context).spawnShips(gameMatrix)
-        return gameMatrix
-    }
-
     suspend fun generateNewBattleGround(): GameState {
-        val cells = CellRandomGenerator(context).generateNewBattleGround()
+        val cells = CellRandomGenerator(context).generateBattleGround()
 //        EntityRandomGenerator(context).spawnShips(gameMatrix)
         return GameState(
                 cells.toMutableList(),
