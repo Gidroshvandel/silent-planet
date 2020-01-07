@@ -39,15 +39,20 @@ class ArrowSystem : System {
             unit.addComponent(Teleport(target))
             unit.removeComponent(TargetPosition::class.java)
         } else {
-            //todo move to ship
+            val capitalShipPosition = gameState.unitMap.findCapitalShip(unitFractionsType)?.currentPosition
+            capitalShipPosition?.let {
+                unit.addComponent(Teleport(it))
+                unit.removeComponent(TargetPosition::class.java)
+            }
         }
     }
 
+    private fun List<Unit>.findCapitalShip(unitFractionsType: FractionsType) =
+            find { it.hasComponent<CapitalShip>() && it.getComponent<FractionsType>() == unitFractionsType }?.getComponent<Position>()
+
     private fun GameState.isCyclicMove(destination: Axis, unitPosition: Axis, previousPosition: Axis): Boolean {
-//        val previousCell = this.getCell(previousPosition)?.getComponent<Arrow>()
         val destinationCell = this.getCell(destination)?.getComponent<Arrow>()
         val target = destinationCell?.calculateTargetPosition(destination)
-//        val previous = previousCell?.calculateTargetPosition(previousPosition)
         return target == unitPosition && destination == previousPosition
     }
 
