@@ -8,6 +8,7 @@ import com.silentgames.silent_planet.logic.ecs.component.Description
 import com.silentgames.silent_planet.logic.ecs.component.MovingMode
 import com.silentgames.silent_planet.logic.ecs.component.Position
 import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
+import com.silentgames.silent_planet.model.fractions.FractionsType
 import com.silentgames.silent_planet.utils.notNull
 
 class DeathSystem : System {
@@ -27,8 +28,8 @@ class DeathSystem : System {
     private fun death(death: Death, unit: Unit) {
         if (death.unit == null) {
             death.unit = unit
-            unit.removeComponent(MovingMode.WALK)
-            unit.removeComponent(MovingMode.FLY)
+            unit.removeComponent(MovingMode::class.java)
+            unit.removeComponent(FractionsType::class.java)
             unit.getComponent<Description>()?.let {
                 unit.addComponent(it.makeDeathDescription(unit.context))
             }

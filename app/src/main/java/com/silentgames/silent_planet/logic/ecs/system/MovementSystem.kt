@@ -1,10 +1,7 @@
 package com.silentgames.silent_planet.logic.ecs.system
 
 import com.silentgames.silent_planet.logic.ecs.GameState
-import com.silentgames.silent_planet.logic.ecs.component.MovingMode
-import com.silentgames.silent_planet.logic.ecs.component.Position
-import com.silentgames.silent_planet.logic.ecs.component.TargetPosition
-import com.silentgames.silent_planet.logic.ecs.component.Transport
+import com.silentgames.silent_planet.logic.ecs.component.*
 import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
 import com.silentgames.silent_planet.logic.getAvailableMoveDistancePositionList
 import com.silentgames.silent_planet.model.Axis
@@ -14,13 +11,17 @@ import com.silentgames.silent_planet.utils.notNull
 class MovementSystem : System {
 
     override fun execute(gameState: GameState, unit: Unit) {
-        gameState.moveSuccess = notNull(
-                unit.getComponent(),
-                unit.getComponent(),
-                unit,
-                gameState,
-                ::move
-        ) ?: false
+        gameState.moveSuccess = if (unit.hasComponent<Teleport>()) {
+            false
+        } else {
+            notNull(
+                    unit.getComponent(),
+                    unit.getComponent(),
+                    unit,
+                    gameState,
+                    ::move
+            ) ?: false
+        }
     }
 
     private fun move(

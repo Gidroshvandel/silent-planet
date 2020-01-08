@@ -10,27 +10,35 @@ open class Entity {
     internal val components: Set<Component>
         get() = localComponents
 
-    private val localComponents: MutableSet<Component> = mutableSetOf()
+    private var localComponents: Set<Component> = setOf()
 
     inline fun <reified T : Component> getComponent(): T? {
         return components.filterIsInstance<T>().firstOrNull()
     }
 
+    inline fun <reified T : Component> getMandatoryComponent(): T {
+        return components.filterIsInstance<T>().first()
+    }
+
     inline fun <reified T : Component> hasComponent(): Boolean = getComponent<T>() != null
 
     fun addComponent(component: Component) {
-        if (localComponents.contains(component)) {
-            localComponents.remove(component)
+        if (components.contains(component)) {
+            removeComponent(component)
         }
-        localComponents.add(component)
+        localComponents = localComponents.toMutableSet().apply {
+            add(component)
+        }
     }
 
     fun removeComponent(component: Component) {
-        localComponents.remove(component)
+        localComponents = localComponents.toMutableSet().apply {
+            remove(component)
+        }
     }
 
     fun <T : Component> removeComponent(clazz: Class<T>) {
-        localComponents.filterIsInstance(clazz).firstOrNull()?.let {
+        components.filterIsInstance(clazz).firstOrNull()?.let {
             removeComponent(it)
         }
     }

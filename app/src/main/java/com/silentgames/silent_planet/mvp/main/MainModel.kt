@@ -17,8 +17,8 @@ import java.util.*
 class MainModel(val context: Context, private val surfaceView: SurfaceGameView) {
 
     suspend fun generateNewBattleGround(): GameState = GameState(
-            CellRandomGenerator(context).generateBattleGround().toMutableList(),
-            EntityRandomGenerator(context).generateShips().toMutableList()
+            CellRandomGenerator(context).generateBattleGround(),
+            EntityRandomGenerator(context).generateShips()
     )
 
     fun getRenderSystem(onSceneUpdate: () -> kotlin.Unit) = RenderSystem(surfaceView, onSceneUpdate)

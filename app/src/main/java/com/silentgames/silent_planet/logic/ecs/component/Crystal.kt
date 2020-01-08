@@ -26,4 +26,9 @@ class Crystal(count: Int = 0) : ComponentEquals() {
         return getCrystals
     }
 
+    fun getCount(count: Int): Int {
+        this.count = this.count - count
+        return count
+    }
+
 }

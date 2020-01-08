@@ -8,10 +8,10 @@ import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
 class TransportSystem : System {
 
     override fun execute(gameState: GameState, unit: Unit) {
+        gameState.removeUnitsFromTransport()
         unit.getComponent<Position>()?.let {
             gameState.moveAllUnitsOnTransport(it)
         }
-        gameState.removeUnitsFromTransport()
     }
 
     private fun GameState.removeUnitsFromTransport() {
@@ -37,7 +37,7 @@ class TransportSystem : System {
     }
 
     private fun GameState.moveAllUnitsOnTransport(unit: Unit, targetTransport: Transport) {
-        this.unitMap.remove(unit)
+        this.removeUnit(unit)
         targetTransport.addOnBoard(unit)
     }
 

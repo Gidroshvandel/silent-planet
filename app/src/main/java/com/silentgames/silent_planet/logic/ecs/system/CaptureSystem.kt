@@ -18,9 +18,11 @@ class CaptureSystem : System {
         )
     }
 
-    private fun capture(targetPosition: TargetPosition, unitFractionsType: FractionsType, unit: Unit, gameState: GameState) {
-        val enemyUnits = gameState.getUnits(targetPosition.axis).filterNot {
-            it.getComponent<FractionsType>() == unitFractionsType
+    private fun capture(position: Position, unitFractionsType: FractionsType, unit: Unit, gameState: GameState) {
+        val enemyUnits = gameState.getUnits(position.currentPosition).filterNot {
+            val fractionsType = it.getComponent<FractionsType>()
+            fractionsType == null
+                    || fractionsType == unitFractionsType
                     || it.hasComponent<Transport>()
                     || it.hasComponent<CapitalShip>()
         }

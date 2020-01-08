@@ -5,8 +5,10 @@ import com.silentgames.silent_planet.logic.TurnHandler
 import com.silentgames.silent_planet.logic.ecs.Engine
 import com.silentgames.silent_planet.logic.ecs.component.*
 import com.silentgames.silent_planet.logic.ecs.component.event.AddCrystalEvent
+import com.silentgames.silent_planet.logic.ecs.component.event.BuyBackEvent
 import com.silentgames.silent_planet.logic.ecs.entity.Entity
 import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
+import com.silentgames.silent_planet.logic.ecs.extractTransports
 import com.silentgames.silent_planet.logic.ecs.system.*
 import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.fractions.factionType.Humans
@@ -57,16 +59,10 @@ class MainPresenter internal constructor(
     }
 
     override fun onCapturedPlayerClick(entityData: EntityData) {
-//        viewModel.gameMatrixHelper.gameMatrix.buyBack(
-//                player,
-//                {
-//                    view.showPlayerBuybackSuccessMessage(player.name)
-//                    checkToWin()
-//                },
-//                {
-//                    view.showPlayerBuybackFailureMessage(it)
-//                }
-//        )
+        viewModel.engine.gameState.unitMap.extractTransports().find { it.id == entityData.id }?.let { unit ->
+            unit.addComponent(BuyBackEvent())
+            viewModel.engine.processSystems(unit)
+        }
     }
 
     @InternalCoroutinesApi
@@ -76,10 +72,19 @@ class MainPresenter internal constructor(
                     model.generateNewBattleGround()
             )
 
-            viewModel.engine.addSystem(CaptureSystem())
+            viewModel.engine.addSystem(BuyBackSystem(
+                    {
+                        view.showPlayerBuybackSuccessMessage(it)
+                    },
+                    {
+                        view.showPlayerBuybackFailureMessage(it)
+                    }
+            ))
+
             viewModel.engine.addSystem(ArrowSystem())
-            viewModel.engine.addSystem(TeleportSystem())
             viewModel.engine.addSystem(MovementSystem())
+            viewModel.engine.addSystem(CaptureSystem())
+            viewModel.engine.addSystem(TeleportSystem())
             viewModel.engine.addSystem(ExploreSystem())
             viewModel.engine.addSystem(DeathSystem())
             viewModel.engine.addSystem(CrystalSystem())
@@ -222,19 +227,6 @@ class MainPresenter internal constructor(
         if (!viewModel.engine.gameState.moveSuccess) {
             viewModel.selectedEntity = null
             select(targetPosition)
-        }
-    }
-
-    private fun List<Unit>.extractTransports(): List<Unit> {
-        val onBoardEntities = mutableListOf<Unit>()
-        forEach {
-            val transport = it.getComponent<Transport>()
-            if (transport != null) {
-                onBoardEntities.addAll(transport.unitsOnBoard)
-            }
-        }
-        return this.toMutableList().apply {
-            addAll(onBoardEntities)
         }
     }
 

@@ -43,6 +43,7 @@ class EntityRandomGenerator(val context: Context) {
             RobotShip(context, axis).apply {
                 addComponent(
                         Transport(
+                                this.getMandatoryComponent(),
                                 mutableListOf(
                                         RobotPlayer(context, context.getString(R.string.robot_player_name_one), axis),
                                         RobotPlayer(context, context.getString(R.string.robot_player_name_two), axis),
@@ -56,6 +57,7 @@ class EntityRandomGenerator(val context: Context) {
             AlienShip(context, axis).apply {
                 addComponent(
                         Transport(
+                                this.getMandatoryComponent(),
                                 mutableListOf(
                                         AlienPlayer(context, context.getString(R.string.alien_player_name_one), axis),
                                         AlienPlayer(context, context.getString(R.string.alien_player_name_two), axis),
@@ -69,6 +71,7 @@ class EntityRandomGenerator(val context: Context) {
             PirateShip(context, axis).apply {
                 addComponent(
                         Transport(
+                                this.getMandatoryComponent(),
                                 mutableListOf(
                                         PiratePlayer(context, context.getString(R.string.pirate_player_name_one), axis),
                                         PiratePlayer(context, context.getString(R.string.pirate_player_name_two), axis),
@@ -82,6 +85,7 @@ class EntityRandomGenerator(val context: Context) {
             HumanShip(context, axis).apply {
                 addComponent(
                         Transport(
+                                this.getMandatoryComponent(),
                                 mutableListOf(
                                         HumanPlayer(context, context.getString(R.string.human_player_name_one), axis),
                                         HumanPlayer(context, context.getString(R.string.human_player_name_two), axis),
