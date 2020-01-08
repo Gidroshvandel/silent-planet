@@ -8,6 +8,7 @@ import com.silentgames.silent_planet.logic.ecs.system.RenderSystem
 import com.silentgames.silent_planet.model.Cell
 import com.silentgames.silent_planet.model.entities.ground.Player
 import com.silentgames.silent_planet.model.entities.space.SpaceShip
+import com.silentgames.silent_planet.model.fractions.FractionsType
 import com.silentgames.silent_planet.view.SurfaceGameView
 import java.util.*
 
@@ -16,9 +17,10 @@ import java.util.*
  */
 class MainModel(val context: Context, private val surfaceView: SurfaceGameView) {
 
-    suspend fun generateNewBattleGround(): GameState = GameState(
+    suspend fun generateNewBattleGround(firstTurnFraction: FractionsType): GameState = GameState(
             CellRandomGenerator(context).generateBattleGround(),
-            EntityRandomGenerator(context).generateShips()
+            EntityRandomGenerator(context).generateShips(),
+            firstTurnFraction
     )
 
     fun getRenderSystem(onSceneUpdate: () -> kotlin.Unit) = RenderSystem(surfaceView, onSceneUpdate)

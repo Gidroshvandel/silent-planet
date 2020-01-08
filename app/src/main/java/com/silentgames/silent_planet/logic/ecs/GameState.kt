@@ -12,8 +12,11 @@ import com.silentgames.silent_planet.model.fractions.FractionsType
 class GameState(
         cellList: List<Cell>,
         unitList: List<Unit>,
+        firstTurnFraction: FractionsType,
         var moveSuccess: Boolean = false
 ) {
+
+    val turn: Turn = Turn(firstTurnFraction)
 
     val cellMap: List<Cell> get() = mutableCellList.toList()
     val unitMap: List<Unit> get() = mutableUnitList.toList()

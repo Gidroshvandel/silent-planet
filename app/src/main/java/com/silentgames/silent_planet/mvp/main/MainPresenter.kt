@@ -1,7 +1,6 @@
 package com.silentgames.silent_planet.mvp.main
 
 import com.silentgames.silent_planet.dialog.EntityData
-import com.silentgames.silent_planet.logic.TurnHandler
 import com.silentgames.silent_planet.logic.ecs.Engine
 import com.silentgames.silent_planet.logic.ecs.component.*
 import com.silentgames.silent_planet.logic.ecs.component.event.AddCrystalEvent
@@ -13,7 +12,6 @@ import com.silentgames.silent_planet.logic.ecs.system.*
 import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.fractions.FractionsType.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collect
 
 /**
  * Created by gidroshvandel on 21.06.17.
@@ -69,7 +67,7 @@ class MainPresenter internal constructor(
     override fun onCreate() {
         launch {
             viewModel.engine = Engine(
-                    model.generateNewBattleGround()
+                    model.generateNewBattleGround(HUMAN)
             )
 
             viewModel.engine.addSystem(BuyBackSystem(
@@ -110,7 +108,11 @@ class MainPresenter internal constructor(
                         viewModel.selectedEntity?.let { updateEntityState(it) }
                     }
             )
-            viewModel.engine.addSystem(TurnSystem(HUMAN))
+            viewModel.engine.addSystem(
+                    TurnSystem {
+                        view.selectCurrentFraction(it)
+                    }
+            )
 
             viewModel.engine.processSystems()
 
@@ -119,13 +121,7 @@ class MainPresenter internal constructor(
             view.changePirateCristalCount(0)
             view.changeRobotCristalCount(0)
 
-            view.selectCurrentFraction(TurnHandler.fractionType)
-
             view.enableButton(false)
-
-            TurnHandler.getFlow().collect {
-                view.selectCurrentFraction(it)
-            }
 
         }
     }
