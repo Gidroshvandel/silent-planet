@@ -39,7 +39,7 @@ class SurfaceGameView(
 
     private var toDrawLayerList = mutableListOf<Pair<LayerType, Layer>>()
 
-    private var onSceneChanged: (() -> Unit)? = null
+    private var onSceneUpdated: ((Boolean) -> Unit)? = null
 
     init {
         holder.addCallback(this)
@@ -60,8 +60,8 @@ class SurfaceGameView(
         }
     }
 
-    fun updateLayer(layerType: LayerType, layer: Layer, onUpdateComplete: () -> Unit) {
-        onSceneChanged = onUpdateComplete
+    fun updateLayer(layerType: LayerType, layer: Layer, onUpdateComplete: (Boolean) -> Unit) {
+        onSceneUpdated = onUpdateComplete
         val scene = this.scene
         if (scene != null) {
             scene.setLayer(layerType.id, layer)
@@ -101,7 +101,7 @@ class SurfaceGameView(
         }
         drawer = DrawerTask(holder, scene!!) {
             this.post {
-                onSceneChanged?.invoke()
+                onSceneUpdated?.invoke(it)
             }
         }
         timer = Timer().apply {

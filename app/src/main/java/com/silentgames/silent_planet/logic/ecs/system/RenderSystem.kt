@@ -22,19 +22,26 @@ class RenderSystem(private val surfaceView: SurfaceGameView, private val onScene
     }
 
     override fun execute(gameState: GameState) {
+        engine?.processing = true
         render(gameState) {
+            engine?.processing = false
             onSceneUpdate.invoke()
         }
     }
 
     override fun execute(gameState: GameState, unit: Unit) {
+        engine?.processing = true
         render(gameState) {
+            if (it) {
+                engine?.forceProcessSystem(unit)
+            } else {
+                engine?.processing = false
+            }
             onSceneUpdate.invoke()
-            engine?.processSystems(unit)
         }
     }
 
-    private fun render(gameState: GameState, onUpdateComplete: () -> kotlin.Unit) {
+    private fun render(gameState: GameState, onUpdateComplete: (Boolean) -> kotlin.Unit) {
         val backgroundLayer = Layer()
         val entityLayer = Layer()
         val horizontalCountOfCells = Constants.horizontalCountOfCells

@@ -36,7 +36,7 @@ class Scene(
     }
 
     fun setLayer(i: Int, layer: Layer) {
-//        updated = true
+        updated = true
         if (i < layers.size) {
             layers[i] = layer
         }
@@ -68,7 +68,9 @@ class Scene(
                 }
                 if (dataSize == updatedLayerCount) {
                     this.updated = false
-                    onUpdated.invoke(somethingChange || updated)
+                    if (somethingChange || updated) {
+                        onUpdated.invoke(somethingChange)
+                    }
                 }
             }
         }

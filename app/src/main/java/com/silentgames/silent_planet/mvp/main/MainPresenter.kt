@@ -111,6 +111,7 @@ class MainPresenter internal constructor(
                         viewModel.selectedEntity?.let { updateEntityState(it) }
                     }
             )
+            viewModel.engine.addSystem(TurnSystem())
 
             viewModel.engine.processSystems()
 

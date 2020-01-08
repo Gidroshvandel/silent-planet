@@ -8,7 +8,7 @@ import java.util.*
 class DrawerTask(
         private val holder: SurfaceHolder,
         private val scene: Scene,
-        private val onSceneChanged: (() -> Unit)
+        private val onSceneUpdated: ((Boolean) -> Unit)
 ) : TimerTask() {
 
     override fun run() {
@@ -30,9 +30,7 @@ class DrawerTask(
                 }
             }
             scene.update {
-                if (it) {
-                    onSceneChanged.invoke()
-                }
+                onSceneUpdated.invoke(it)
             }
         } catch (e: Exception) {
 

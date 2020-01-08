@@ -1,5 +1,6 @@
 package com.silentgames.silent_planet.logic.ecs.system
 
+import com.silentgames.silent_planet.logic.TurnHandler
 import com.silentgames.silent_planet.logic.ecs.GameState
 import com.silentgames.silent_planet.logic.ecs.component.*
 import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
@@ -11,7 +12,9 @@ import com.silentgames.silent_planet.utils.notNull
 class MovementSystem : System {
 
     override fun execute(gameState: GameState, unit: Unit) {
-        gameState.moveSuccess = if (unit.hasComponent<Teleport>()) {
+        gameState.moveSuccess = if (unit.hasComponent<Teleport>()
+                || unit.getComponent<FractionsType>() != TurnHandler.fractionType
+        ) {
             false
         } else {
             notNull(
