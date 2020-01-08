@@ -11,6 +11,7 @@ import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
 import com.silentgames.silent_planet.logic.ecs.extractTransports
 import com.silentgames.silent_planet.logic.ecs.system.*
 import com.silentgames.silent_planet.model.Axis
+import com.silentgames.silent_planet.model.fractions.FractionsType.*
 import com.silentgames.silent_planet.model.fractions.factionType.Humans
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
@@ -90,10 +91,24 @@ class MainPresenter internal constructor(
             viewModel.engine.addSystem(CrystalSystem())
             viewModel.engine.addSystem(TransportSystem())
             viewModel.engine.addSystem(
+                    WinSystem(
+                            3,
+                            { fractionsType, crystals ->
+                                when (fractionsType) {
+                                    ALIEN -> view.changeAlienCristalCount(crystals)
+                                    HUMAN -> view.changeHumanCristalCount(crystals)
+                                    PIRATE -> view.changePirateCristalCount(crystals)
+                                    ROBOT -> view.changeRobotCristalCount(crystals)
+                                }
+                            },
+                            {
+                                view.showToast("WIN " + it.name)
+                            }
+                    )
+            )
+            viewModel.engine.addSystem(
                     model.getRenderSystem {
-                        launch {
-                            viewModel.selectedEntity?.let { updateEntityState(it) }
-                        }
+                        viewModel.selectedEntity?.let { updateEntityState(it) }
                     }
             )
 
@@ -110,8 +125,6 @@ class MainPresenter internal constructor(
             view.changePirateCristalCount(0)
             view.changeRobotCristalCount(0)
 
-//            view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix) {}
-//            view.drawBattleGround(viewModel.engine.gameState) {}
             view.selectCurrentFraction(TurnHandler.fractionType)
 
             view.enableButton(false)
@@ -122,7 +135,7 @@ class MainPresenter internal constructor(
 
             TurnHandler.getFlow().collect {
                 view.selectCurrentFraction(it.fractionsType)
-                checkToWin()
+//                checkToWin()
                 if (!it.isPlayable) {
 //                    tryMoveAi(TurnHandler.fractionType)
                 }
@@ -249,37 +262,4 @@ class MainPresenter internal constructor(
 //        }
 //    }
 
-    private fun checkToWin() {
-//        val alienCrystals = viewModel.gameMatrixHelper.alienShip.crystals
-//        val pirateCrystals = viewModel.gameMatrixHelper.pirateShip.crystals
-//        val humanCrystals = viewModel.gameMatrixHelper.humanShip.crystals
-//        val robotCrystals = viewModel.gameMatrixHelper.robotShip.crystals
-//        view.changeRobotCristalCount(robotCrystals)
-//        view.changePirateCristalCount(pirateCrystals)
-//        view.changeHumanCristalCount(humanCrystals)
-//        view.changeAlienCristalCount(alienCrystals)
-//
-//        if (alienCrystals >= Constants.countCrystalsToWin) {
-//            view.showToast("WIN ALIEN")
-//        }
-//        if (pirateCrystals >= Constants.countCrystalsToWin) {
-//            view.showToast("WIN PIRATE")
-//        }
-//        if (humanCrystals >= Constants.countCrystalsToWin) {
-//            view.showToast("WIN HUMAN")
-//        }
-//        if (robotCrystals >= Constants.countCrystalsToWin) {
-//            view.showToast("WIN ROBOT")
-//        }
-    }
-
-//    private fun getCrystal(gameMatrixHelper: GameMatrixHelper): GameMatrixHelper {
-//        val cellType = gameMatrixHelper.gameMatrixCellByXY.cellType
-//
-//        if (cellType.crystals > 0) {
-//            gameMatrixHelper.selectedEntity?.apply { crystals++ }
-//            cellType.apply { crystals-- }
-//        }
-//        return gameMatrixHelper
-//    }
 }

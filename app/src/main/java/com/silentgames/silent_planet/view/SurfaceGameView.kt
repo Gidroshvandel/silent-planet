@@ -100,7 +100,9 @@ class SurfaceGameView(
             holder.unlockCanvasAndPost(canvas)
         }
         drawer = DrawerTask(holder, scene!!) {
-            onSceneChanged?.invoke()
+            this.post {
+                onSceneChanged?.invoke()
+            }
         }
         timer = Timer().apply {
             scheduleAtFixedRate(drawer, 0, 40)

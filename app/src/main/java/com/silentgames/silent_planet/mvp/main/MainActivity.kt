@@ -138,7 +138,7 @@ class MainActivity : Activity(), MainContract.View, Callback {
 //    }
 
     override fun showToast(text: String) {
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, text, Toast.LENGTH_LONG).show()
     }
 
     override fun showObjectIcon(bitmap: Bitmap) {
