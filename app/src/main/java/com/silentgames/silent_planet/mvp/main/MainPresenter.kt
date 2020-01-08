@@ -12,7 +12,6 @@ import com.silentgames.silent_planet.logic.ecs.extractTransports
 import com.silentgames.silent_planet.logic.ecs.system.*
 import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.fractions.FractionsType.*
-import com.silentgames.silent_planet.model.fractions.factionType.Humans
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 
@@ -111,15 +110,9 @@ class MainPresenter internal constructor(
                         viewModel.selectedEntity?.let { updateEntityState(it) }
                     }
             )
-            viewModel.engine.addSystem(TurnSystem())
+            viewModel.engine.addSystem(TurnSystem(HUMAN))
 
             viewModel.engine.processSystems()
-
-            TurnHandler.start(Humans)
-//            Aliens.isPlayable = true
-//            Humans.isPlayable = true
-//            Pirates.isPlayable = true
-//            Robots.isPlayable = true
 
             view.changeAlienCristalCount(0)
             view.changeHumanCristalCount(0)
@@ -130,16 +123,8 @@ class MainPresenter internal constructor(
 
             view.enableButton(false)
 
-            if (!TurnHandler.getCurrentFraction().isPlayable) {
-//                tryMoveAi(TurnHandler.fractionType)
-            }
-
             TurnHandler.getFlow().collect {
-                view.selectCurrentFraction(it.fractionsType)
-//                checkToWin()
-                if (!it.isPlayable) {
-//                    tryMoveAi(TurnHandler.fractionType)
-                }
+                view.selectCurrentFraction(it)
             }
 
         }
