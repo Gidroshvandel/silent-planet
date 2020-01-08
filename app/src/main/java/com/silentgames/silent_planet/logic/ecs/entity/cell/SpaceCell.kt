@@ -17,7 +17,7 @@ class SpaceCell(
         position: Axis
 ) : Cell(
         Position(position),
-        Description(context.getString(R.string.empty_cell_name), context.getString(R.string.empty_cell_description)),
+        Description(context.getString(R.string.space_cell_name), context.getString(R.string.space_cell_description)),
         Texture(BitmapEditor.getCellBitmap(context, R.drawable.space_texture))
 ) {
     init {
