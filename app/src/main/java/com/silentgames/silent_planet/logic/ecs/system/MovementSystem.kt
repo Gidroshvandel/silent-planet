@@ -2,6 +2,7 @@ package com.silentgames.silent_planet.logic.ecs.system
 
 import com.silentgames.silent_planet.logic.ecs.GameState
 import com.silentgames.silent_planet.logic.ecs.component.*
+import com.silentgames.silent_planet.logic.ecs.entity.cell.Cell
 import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
 import com.silentgames.silent_planet.logic.getAvailableMoveDistancePositionList
 import com.silentgames.silent_planet.model.Axis
@@ -21,35 +22,44 @@ class MovementSystem : System {
                     unit.getComponent(),
                     unit,
                     gameState,
-                    ::move
+                    ::isCanMove
             ) ?: false
+        }
+        if (gameState.moveSuccess) {
+            notNull(
+                    unit.getComponent(),
+                    unit,
+                    gameState,
+                    ::move
+            )
         }
     }
 
     private fun move(
             targetPosition: TargetPosition,
+            unit: Unit,
+            gameState: GameState
+    ) {
+        gameState.moveUnit(unit, targetPosition.axis)
+        unit.removeComponent(targetPosition)
+    }
+
+    private fun isCanMove(
+            targetPosition: TargetPosition,
             position: Position,
             unit: Unit,
             gameState: GameState
-    ): Boolean {
-        val targetCell = gameState.getCell(targetPosition.axis)
-        val targetUnit = gameState.getUnit(targetPosition.axis)
-        if (isMoveAtDistance(targetPosition.axis, position.currentPosition)) {
-            val transport = targetUnit?.getComponent<Transport>()
-            if (transport != null
-                    && unit.getComponent<Transport>() == null
-                    && isTargetUnitFromAllyFraction(targetUnit.getComponent(), unit.getComponent())
-            ) {
-                gameState.moveUnit(unit, targetPosition.axis)
-                unit.removeComponent(targetPosition)
-                return true
-            } else if (targetCell != null && canMove(unit.getComponent(), targetCell.getComponent())) {
-                gameState.moveUnit(unit, targetPosition.axis)
-                unit.removeComponent(targetPosition)
-                return true
-            }
-        }
-        return false
+    ): Boolean = isMoveAtDistance(targetPosition.axis, position.currentPosition)
+            && (isCanMoveToAllyTransport(unit, gameState.getUnit(targetPosition.axis))
+            || isCanMoveToCell(gameState.getCell(targetPosition.axis), unit))
+
+    private fun isCanMoveToCell(targetCell: Cell?, unit: Unit) = targetCell != null && canMove(unit.getComponent(), targetCell.getComponent())
+
+    private fun isCanMoveToAllyTransport(unit: Unit, targetUnit: Unit?): Boolean {
+        val transport = targetUnit?.getComponent<Transport>()
+        return (transport != null
+                && unit.getComponent<Transport>() == null
+                && isTargetUnitFromAllyFraction(targetUnit.getComponent(), unit.getComponent()))
     }
 
     private fun isTargetUnitFromAllyFraction(
