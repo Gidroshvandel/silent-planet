@@ -1,12 +1,21 @@
 package com.silentgames.silent_planet.logic
 
-import com.silentgames.silent_planet.model.*
-import com.silentgames.silent_planet.model.entities.EntityType
+import com.silentgames.silent_planet.logic.ecs.GameState
+import com.silentgames.silent_planet.logic.ecs.component.Arrow
+import com.silentgames.silent_planet.logic.ecs.component.Description
+import com.silentgames.silent_planet.logic.ecs.component.Hide
+import com.silentgames.silent_planet.logic.ecs.component.Position
+import com.silentgames.silent_planet.logic.ecs.entity.cell.Cell
+import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
+import com.silentgames.silent_planet.logic.ecs.system.ArrowSystem
+import com.silentgames.silent_planet.logic.ecs.system.MovementSystem
+import com.silentgames.silent_planet.model.Axis
+import com.silentgames.silent_planet.model.fractions.FractionsType
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-fun GameMatrix.findPath(position: Axis, goal: Axis, entity: EntityType): List<Axis> {
-    println("START(${entity.name})-----------------------------")
+fun GameState.findPath(position: Axis, goal: Axis, unit: Unit): List<Axis> {
+    println("START(${unit.getComponent<Description>()?.name})-----------------------------")
     val startPosition = Node(position, cost = 0)
     val goalNode = Node(goal)
     val reachable = mutableListOf(startPosition)
@@ -23,7 +32,7 @@ fun GameMatrix.findPath(position: Axis, goal: Axis, entity: EntityType): List<Ax
             reachable.remove(node)
             explored.add(node)
 
-            val newReachable = this.getAdjacentNodes(node, entity) - explored
+            val newReachable = this.getAdjacentNodes(node, unit) - explored
             newReachable.forEach { adjacent ->
                 if (node.cost + 1 < adjacent.cost) {
                     adjacent.previous = node
@@ -80,27 +89,41 @@ private fun estimateDistance(node: Node, goalNode: Node): Int =
                 + (node.position.y - goalNode.position.y).toFloat().pow(2)).toInt()
 
 // Where can we get from here?
-private fun GameMatrix.getAdjacentNodes(node: Node, entity: EntityType): List<Node> {
-//    val cell = this.getCell(node.position)
-//    return if (cell.cellType.isVisible && cell.cellType is Arrow && entity is Player) {
-//        val destination = cell.cellType.getDestination(this, entity.fraction.fractionsType)
-//        if (destination != null) listOf(Node(destination, cost = Int.MAX_VALUE)) else listOf()
-//    } else {
-//        this.getAvailableMoveDistancePositionList(node.position, entity).map { Node(it, cost = Int.MAX_VALUE) }
-//    }
-    return emptyList()
+private fun GameState.getAdjacentNodes(node: Node, unit: Unit): List<Node> {
+    val cell = this.getCell(node.position)
+    val arrow = cell?.getComponent<Arrow>()
+    return if (cell != null && !cell.hasComponent<Hide>() && arrow != null) {
+        val destination = getDestination(arrow, unit)
+        if (destination != null) listOf(Node(destination, cost = Int.MAX_VALUE)) else listOf()
+    } else {
+        this.getAvailableMoveDistancePositionList(node.position, unit).map { Node(it, cost = Int.MAX_VALUE) }
+    }
 }
 
-fun GameMatrix.getAvailableMoveDistancePositionList(position: Axis, entity: EntityType) =
-        getAvailableMoveDistancePositionList(position).filter { canMoveEntity(it, entity) }
+fun GameState.getDestination(arrow: Arrow, unit: Unit): Axis? {
+    val unitPosition = unit.getComponent<Position>()
+    val unitFractionsType = unit.getComponent<FractionsType>()
+    return if (unitPosition != null && unitFractionsType != null) {
+        ArrowSystem().getCorrectTarget(this, arrow, unitPosition, unitFractionsType)
+    } else {
+        null
+    }
+}
 
-fun GameMatrix.findPathToCell(playerPosition: EntityPosition<EntityType>, event: (Cell) -> Boolean): List<Axis> {
-    val startPosition = Node(playerPosition.position, cost = 0)
+fun GameState.getAvailableMoveDistancePositionList(position: Axis, unit: Unit) =
+        getAvailableMoveDistancePositionList(position).filter {
+            MovementSystem().isCanMove(it, position, unit, this)
+        }
+
+fun GameState.findPathToCell(unit: Unit, event: (Cell) -> Boolean): List<Axis> {
+    val position = unit.getComponent<Position>()?.currentPosition ?: return emptyList()
+    val startPosition = Node(position, cost = 0)
     val reachable = mutableListOf(startPosition)
     val explored = mutableListOf<Node>()
     while (reachable.isNotEmpty()) {
         val node = reachable.minBy { it.cost } ?: return listOf()
-        if (event(this.getCell(node.position))) {
+        val cell = this.getCell(node.position)
+        if (cell != null && event(cell)) {
             val result = buildPath(node).toMutableList()
             result.remove(startPosition.position)
             return result
@@ -108,7 +131,7 @@ fun GameMatrix.findPathToCell(playerPosition: EntityPosition<EntityType>, event:
             reachable.remove(node)
             explored.add(node)
 
-            val newReachable = this.getAdjacentNodes(node, playerPosition.entity) - explored
+            val newReachable = this.getAdjacentNodes(node, unit) - explored
             newReachable.forEach { adjacent ->
                 if (node.cost + 1 < adjacent.cost) {
                     adjacent.previous = node

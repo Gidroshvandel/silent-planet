@@ -18,8 +18,8 @@ class MovementSystem : System {
             false
         } else {
             notNull(
-                    unit.getComponent(),
-                    unit.getComponent(),
+                    unit.getComponent<TargetPosition>()?.axis,
+                    unit.getComponent<Position>()?.currentPosition,
                     unit,
                     gameState,
                     ::isCanMove
@@ -44,14 +44,14 @@ class MovementSystem : System {
         unit.removeComponent(targetPosition)
     }
 
-    private fun isCanMove(
-            targetPosition: TargetPosition,
-            position: Position,
+    fun isCanMove(
+            targetPosition: Axis,
+            currentPosition: Axis,
             unit: Unit,
             gameState: GameState
-    ): Boolean = isMoveAtDistance(targetPosition.axis, position.currentPosition)
-            && (isCanMoveToAllyTransport(unit, gameState.getUnit(targetPosition.axis))
-            || isCanMoveToCell(gameState.getCell(targetPosition.axis), unit))
+    ): Boolean = isMoveAtDistance(targetPosition, currentPosition)
+            && (isCanMoveToAllyTransport(unit, gameState.getUnit(targetPosition))
+            || isCanMoveToCell(gameState.getCell(targetPosition), unit))
 
     private fun isCanMoveToCell(targetCell: Cell?, unit: Unit) = targetCell != null && canMove(unit.getComponent(), targetCell.getComponent())
 

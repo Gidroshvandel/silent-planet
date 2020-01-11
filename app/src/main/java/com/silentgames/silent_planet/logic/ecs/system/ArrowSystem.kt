@@ -33,7 +33,7 @@ class ArrowSystem : System {
             unit: Unit,
             gameState: GameState
     ) {
-        val correctTarget = gameState.getCorrectTarget(arrow, unitPosition, unitFractionsType)
+        val correctTarget = getCorrectTarget(gameState, arrow, unitPosition, unitFractionsType)
         if (correctTarget != null) {
             unit.addComponent(Teleport())
             unit.addComponent(TargetPosition(correctTarget))
@@ -46,10 +46,10 @@ class ArrowSystem : System {
         }
     }
 
-    private fun GameState.getCorrectTarget(arrow: Arrow, unitPosition: Position, unitFractionsType: FractionsType): Axis? {
+    fun getCorrectTarget(gameState: GameState, arrow: Arrow, unitPosition: Position, unitFractionsType: FractionsType): Axis? {
         val target = arrow.calculateTargetPosition(unitPosition.currentPosition)
-        return if (isDestinationCorrect(target, unitFractionsType)
-                && !isCyclicMove(target, unitPosition.currentPosition, unitPosition.oldPosition)) {
+        return if (gameState.isDestinationCorrect(target, unitFractionsType)
+                && !gameState.isCyclicMove(target, unitPosition.currentPosition, unitPosition.oldPosition)) {
             target
         } else {
             null

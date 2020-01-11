@@ -66,13 +66,14 @@ private fun SpaceShip.getFirstPlayerFromShip(): Player? =
         this.playersOnBord.firstOrNull { it.fraction.fractionsType == this.fraction.fractionsType }
 
 private fun GameMatrix.tryReturnToShip(player: EntityPosition<Player>): Boolean {
-    val spaceShip = this.getShipPosition(player.entity.fraction.fractionsType)
-    val path = this.findPath(player.position, spaceShip.position, player.entity)
-    return if (path.isNotEmpty()) {
-        this.tryMovePlayer(path.last(), player.entity)
-    } else {
-        false
-    }
+//    val spaceShip = this.getShipPosition(player.entity.fraction.fractionsType)
+//    val path = this.findPath(player.position, spaceShip.position, player.entity)
+//    return if (path.isNotEmpty()) {
+//        this.tryMovePlayer(path.last(), player.entity)
+//    } else {
+//        false
+//    }
+    return false
 }
 
 private fun GameMatrix.tryFindCrystals(playerPosition: EntityPosition<Player>): Boolean {
@@ -85,42 +86,43 @@ private fun GameMatrix.tryFindCrystals(playerPosition: EntityPosition<Player>): 
 }
 
 private fun GameMatrix.chooseCellToMove(playerPosition: EntityPosition<Player>): Cell? {
-    val cellsAtMoveDistance = this.getCellsAtMoveDistance(playerPosition.position).getCanMoveCells()
-    val visibleCells = cellsAtMoveDistance.getVisibleCells()
-    return (if (visibleCells.isNotEmpty()) {
-        val cellsWithCrystals = visibleCells.getCellsWithCrystals()
-        if (cellsWithCrystals.isNotEmpty()) {
-            cellsWithCrystals
-        } else {
-            val path = this.findPathToCell(playerPosition) { !it.cellType.isVisible && it.cellType.isCanMove }
-            if (path.isNotEmpty()) {
-                playerPosition.entity.goal = path.first()
-                null
-            } else {
-                cellsAtMoveDistance
-            }
-        }
-    } else {
-        cellsAtMoveDistance
-    })?.random()
+//    val cellsAtMoveDistance = this.getCellsAtMoveDistance(playerPosition.position).getCanMoveCells()
+//    val visibleCells = cellsAtMoveDistance.getVisibleCells()
+//    return (if (visibleCells.isNotEmpty()) {
+//        val cellsWithCrystals = visibleCells.getCellsWithCrystals()
+//        if (cellsWithCrystals.isNotEmpty()) {
+//            cellsWithCrystals
+//        } else {
+//            val path = this.findPathToCell(playerPosition) { !it.cellType.isVisible && it.cellType.isCanMove }
+//            if (path.isNotEmpty()) {
+//                playerPosition.entity.goal = path.first()
+//                null
+//            } else {
+//                cellsAtMoveDistance
+//            }
+//        }
+//    } else {
+//        cellsAtMoveDistance
+//    })?.random()
+    return null
 }
 
 private fun GameMatrix.moveToGoal(playerPosition: EntityPosition<Player>): Boolean {
-    val goal = playerPosition.entity.goal
-    if (goal != null) {
-        val path = this.findPath(playerPosition.position, goal, playerPosition.entity)
-        if (path.isNotEmpty()) {
-            if (path.last() == goal) {
-                playerPosition.entity.goal = null
-            }
-            return if (this.tryMovePlayer(path.last(), playerPosition.entity)) {
-                true
-            } else {
-                playerPosition.entity.goal = null
-                false
-            }
-        }
-    }
+//    val goal = playerPosition.entity.goal
+//    if (goal != null) {
+//        val path = this.findPath(playerPosition.position, goal, playerPosition.entity)
+//        if (path.isNotEmpty()) {
+//            if (path.last() == goal) {
+//                playerPosition.entity.goal = null
+//            }
+//            return if (this.tryMovePlayer(path.last(), playerPosition.entity)) {
+//                true
+//            } else {
+//                playerPosition.entity.goal = null
+//                false
+//            }
+//        }
+//    }
     return false
 }
 
