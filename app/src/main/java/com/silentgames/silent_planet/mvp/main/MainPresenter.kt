@@ -89,6 +89,7 @@ class MainPresenter internal constructor(
             viewModel.engine.addSystem(GoalSystem())
             viewModel.engine.addSystem(ArrowSystem())
             viewModel.engine.addSystem(MovementSystem())
+            viewModel.engine.addSystem(TeleportSystem())
             viewModel.engine.addSystem(CaptureSystem())
             viewModel.engine.addSystem(TeleportSystem())
             viewModel.engine.addSystem(ExploreSystem())
@@ -118,6 +119,7 @@ class MainPresenter internal constructor(
             )
 
             val aiFractionList = listOf(HUMAN, ALIEN, PIRATE, ROBOT)
+//            val aiFractionList = listOf<FractionsType>()
 
             viewModel.engine.addSystem(
                     TurnSystem {

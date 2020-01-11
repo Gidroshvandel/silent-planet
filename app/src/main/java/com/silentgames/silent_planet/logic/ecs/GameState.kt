@@ -1,9 +1,6 @@
 package com.silentgames.silent_planet.logic.ecs
 
-import com.silentgames.silent_planet.logic.ecs.component.CapitalShip
-import com.silentgames.silent_planet.logic.ecs.component.Position
-import com.silentgames.silent_planet.logic.ecs.component.Transport
-import com.silentgames.silent_planet.logic.ecs.component.TurnToMove
+import com.silentgames.silent_planet.logic.ecs.component.*
 import com.silentgames.silent_planet.logic.ecs.entity.Entity
 import com.silentgames.silent_planet.logic.ecs.entity.cell.Cell
 import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
@@ -60,12 +57,14 @@ class GameState(
         mutableUnitList.remove(unit)
     }
 
-    fun makeCurrentFractionTurnUnitsActive() {
-        makeUnitsActive(turn.currentTurnFraction)
+    fun makeCurrentFractionTurnUnitsCanTurn() {
+        makeUnitsCanTurn(turn.currentTurnFraction)
     }
 
-    private fun makeUnitsActive(fractionsType: FractionsType) {
-        unitMap.extractTransports().filter { it.getComponent<FractionsType>() == fractionsType }.forEach {
+    private fun makeUnitsCanTurn(fractionsType: FractionsType) {
+        unitMap.extractTransports().filter {
+            it.getComponent<FractionsType>() == fractionsType && it.hasComponent<Active>()
+        }.forEach {
             it.addComponent(TurnToMove())
         }
     }

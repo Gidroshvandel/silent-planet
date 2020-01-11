@@ -41,6 +41,7 @@ class CaptureSystem : System {
             getCapitalShipPosition(enemyFractionsType)?.currentPosition?.let { shipPosition ->
                 unit.addComponent(Teleport())
                 unit.addComponent(TargetPosition(shipPosition))
+                unit.removeComponent(Active::class.java)
                 enemyUnits.forEach {
                     it.addComponent(Teleport())
                     it.addComponent(TargetPosition(shipPosition))
@@ -54,6 +55,7 @@ class CaptureSystem : System {
         getCapitalShipPosition(unitFractionsType)?.currentPosition?.let {
             enemy.addComponent(Teleport())
             enemy.addComponent(TargetPosition(it))
+            enemy.removeComponent(Active::class.java)
             unit.addComponent(Teleport())
             unit.addComponent(TargetPosition(it))
         }

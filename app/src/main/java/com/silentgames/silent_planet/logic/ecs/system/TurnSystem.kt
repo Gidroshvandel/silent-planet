@@ -17,9 +17,9 @@ class TurnSystem(private val onTurnChanged: (FractionsType) -> kotlin.Unit) : Sy
 
     override fun onEngineAttach(engine: Engine) {
         engine.onProcessingChanged = { processing ->
-            if (!processing && !engine.gameState.hasActiveUnits()) {
+            if (!processing && !engine.gameState.hasCanTurnUnits()) {
                 turn?.turnCount()
-                engine.gameState.makeCurrentFractionTurnUnitsActive()
+                engine.gameState.makeCurrentFractionTurnUnitsCanTurn()
                 turn?.currentTurnFraction?.let { onTurnChanged.invoke(it) }
             }
         }
@@ -41,7 +41,7 @@ class TurnSystem(private val onTurnChanged: (FractionsType) -> kotlin.Unit) : Sy
         unit.getComponent<FractionsType>()?.let { nextTurn(it, gameState) }
     }
 
-    private fun GameState.hasActiveUnits() =
+    private fun GameState.hasCanTurnUnits() =
             unitMap.extractTransports().find { it.hasComponent<TurnToMove>() } != null
 
     private fun nextTurn(fractionsType: FractionsType, gameState: GameState) {

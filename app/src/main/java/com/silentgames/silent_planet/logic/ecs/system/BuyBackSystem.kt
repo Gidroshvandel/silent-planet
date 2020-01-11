@@ -48,6 +48,7 @@ class BuyBackSystem(
             }
             unit.removeComponent(capture)
             unit.addComponent(Teleport())
+            unit.addComponent(Active())
             unit.addComponent(TargetPosition(unitCapitalShip.getComponent<Position>()!!.currentPosition))
             onSuccess.invoke(unit.getComponent<Description>()?.name ?: "")
         } else {
