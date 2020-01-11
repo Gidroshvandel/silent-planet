@@ -9,8 +9,8 @@ import com.silentgames.silent_planet.R
 import com.silentgames.silent_planet.dialog.BottomSheetMenu
 import com.silentgames.silent_planet.dialog.EntityData
 import com.silentgames.silent_planet.logic.Constants
-import com.silentgames.silent_planet.model.Axis
-import com.silentgames.silent_planet.model.fractions.FractionsType
+import com.silentgames.silent_planet.logic.ecs.Axis
+import com.silentgames.silent_planet.logic.ecs.component.FractionsType
 import com.silentgames.silent_planet.view.Callback
 import kotlinx.android.synthetic.main.activity_main.*
 

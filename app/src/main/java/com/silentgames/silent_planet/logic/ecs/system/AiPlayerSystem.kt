@@ -1,13 +1,12 @@
 package com.silentgames.silent_planet.logic.ecs.system
 
+import com.silentgames.silent_planet.logic.ecs.Axis
 import com.silentgames.silent_planet.logic.ecs.GameState
 import com.silentgames.silent_planet.logic.ecs.component.*
 import com.silentgames.silent_planet.logic.ecs.component.event.AddCrystalEvent
 import com.silentgames.silent_planet.logic.ecs.entity.cell.Cell
 import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
 import com.silentgames.silent_planet.logic.findPathToCell
-import com.silentgames.silent_planet.model.Axis
-import com.silentgames.silent_planet.model.fractions.FractionsType
 
 class AiPlayerSystem() : System {
 

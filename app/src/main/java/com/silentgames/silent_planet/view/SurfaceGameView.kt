@@ -11,7 +11,7 @@ import com.silentgames.silent_planet.engine.base.DrawerTask
 import com.silentgames.silent_planet.engine.base.Layer
 import com.silentgames.silent_planet.engine.base.Scene
 import com.silentgames.silent_planet.logic.Constants
-import com.silentgames.silent_planet.model.Axis
+import com.silentgames.silent_planet.logic.ecs.Axis
 import java.util.*
 import kotlin.math.max
 import kotlin.math.min

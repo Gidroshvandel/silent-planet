@@ -1,17 +1,13 @@
 package com.silentgames.silent_planet.logic
 
+import com.silentgames.silent_planet.logic.ecs.Axis
 import com.silentgames.silent_planet.logic.ecs.GameState
-import com.silentgames.silent_planet.logic.ecs.component.Arrow
-import com.silentgames.silent_planet.logic.ecs.component.Description
-import com.silentgames.silent_planet.logic.ecs.component.Hide
-import com.silentgames.silent_planet.logic.ecs.component.Position
+import com.silentgames.silent_planet.logic.ecs.component.*
 import com.silentgames.silent_planet.logic.ecs.entity.cell.Cell
 import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
 import com.silentgames.silent_planet.logic.ecs.system.ArrowSystem
 import com.silentgames.silent_planet.logic.ecs.system.MovementSystem
 import com.silentgames.silent_planet.logic.ecs.system.getAvailableMoveDistancePositionList
-import com.silentgames.silent_planet.model.Axis
-import com.silentgames.silent_planet.model.fractions.FractionsType
 import kotlin.math.pow
 import kotlin.math.sqrt
 

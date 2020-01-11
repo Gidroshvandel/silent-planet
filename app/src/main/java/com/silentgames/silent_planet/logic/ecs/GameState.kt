@@ -4,8 +4,6 @@ import com.silentgames.silent_planet.logic.ecs.component.*
 import com.silentgames.silent_planet.logic.ecs.entity.Entity
 import com.silentgames.silent_planet.logic.ecs.entity.cell.Cell
 import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
-import com.silentgames.silent_planet.model.Axis
-import com.silentgames.silent_planet.model.fractions.FractionsType
 
 class GameState(
         cellList: List<Cell>,

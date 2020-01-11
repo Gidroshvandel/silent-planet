@@ -1,10 +1,9 @@
 package com.silentgames.silent_planet.logic.ecs.entity.unit.space
 
 import android.content.Context
+import com.silentgames.silent_planet.logic.ecs.Axis
 import com.silentgames.silent_planet.logic.ecs.component.*
 import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
-import com.silentgames.silent_planet.model.Axis
-import com.silentgames.silent_planet.model.fractions.FractionsType
 
 /**
  * Created by gidroshvandel on 07.07.16.

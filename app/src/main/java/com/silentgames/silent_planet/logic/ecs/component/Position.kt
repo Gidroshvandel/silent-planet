@@ -1,6 +1,6 @@
 package com.silentgames.silent_planet.logic.ecs.component
 
-import com.silentgames.silent_planet.model.Axis
+import com.silentgames.silent_planet.logic.ecs.Axis
 
 class Position(axis: Axis) : ComponentEquals() {
 

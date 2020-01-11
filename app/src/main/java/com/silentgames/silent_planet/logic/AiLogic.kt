@@ -2,9 +2,9 @@ package com.silentgames.silent_planet.logic
 
 import com.silentgames.silent_planet.logic.ecs.GameState
 import com.silentgames.silent_planet.logic.ecs.component.Active
+import com.silentgames.silent_planet.logic.ecs.component.FractionsType
 import com.silentgames.silent_planet.logic.ecs.component.Transport
 import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
-import com.silentgames.silent_planet.model.fractions.FractionsType
 
 fun GameState.choosePlayerToMove(fractionsType: FractionsType): Unit? {
     val capitalShip = this.getCapitalShip(fractionsType)

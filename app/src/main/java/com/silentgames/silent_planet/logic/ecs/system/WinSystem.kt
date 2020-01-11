@@ -2,8 +2,8 @@ package com.silentgames.silent_planet.logic.ecs.system
 
 import com.silentgames.silent_planet.logic.ecs.GameState
 import com.silentgames.silent_planet.logic.ecs.component.Crystal
+import com.silentgames.silent_planet.logic.ecs.component.FractionsType
 import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
-import com.silentgames.silent_planet.model.fractions.FractionsType
 
 class WinSystem(
         private val crystalsToWin: Int,

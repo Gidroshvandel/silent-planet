@@ -2,8 +2,8 @@ package com.silentgames.silent_planet.logic.ecs.entity.cell.arrow
 
 import android.content.Context
 import com.silentgames.silent_planet.R
+import com.silentgames.silent_planet.logic.ecs.Axis
 import com.silentgames.silent_planet.logic.ecs.component.ArrowMode
-import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.utils.BitmapEditor
 
 /**

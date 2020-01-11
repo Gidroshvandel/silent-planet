@@ -1,6 +1,6 @@
 package com.silentgames.silent_planet.logic.ecs
 
-import com.silentgames.silent_planet.model.fractions.FractionsType
+import com.silentgames.silent_planet.logic.ecs.component.FractionsType
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.BroadcastChannel

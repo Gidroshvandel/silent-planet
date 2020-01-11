@@ -2,13 +2,13 @@ package com.silentgames.silent_planet.logic
 
 import android.content.Context
 import com.silentgames.silent_planet.R
+import com.silentgames.silent_planet.logic.ecs.Axis
 import com.silentgames.silent_planet.logic.ecs.component.Transport
 import com.silentgames.silent_planet.logic.ecs.entity.unit.ground.AlienPlayer
 import com.silentgames.silent_planet.logic.ecs.entity.unit.ground.HumanPlayer
 import com.silentgames.silent_planet.logic.ecs.entity.unit.ground.PiratePlayer
 import com.silentgames.silent_planet.logic.ecs.entity.unit.ground.RobotPlayer
 import com.silentgames.silent_planet.logic.ecs.entity.unit.space.*
-import com.silentgames.silent_planet.model.Axis
 import java.util.*
 
 class EntityRandomGenerator(val context: Context) {

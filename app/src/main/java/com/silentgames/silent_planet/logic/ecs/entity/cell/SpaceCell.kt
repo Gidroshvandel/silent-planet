@@ -2,11 +2,11 @@ package com.silentgames.silent_planet.logic.ecs.entity.cell
 
 import android.content.Context
 import com.silentgames.silent_planet.R
+import com.silentgames.silent_planet.logic.ecs.Axis
 import com.silentgames.silent_planet.logic.ecs.component.Description
 import com.silentgames.silent_planet.logic.ecs.component.MovingMode
 import com.silentgames.silent_planet.logic.ecs.component.Position
 import com.silentgames.silent_planet.logic.ecs.component.Texture
-import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.utils.BitmapEditor
 
 /**

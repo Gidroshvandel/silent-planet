@@ -3,7 +3,6 @@ package com.silentgames.silent_planet.logic.ecs.entity.unit
 import android.content.Context
 import com.silentgames.silent_planet.logic.ecs.component.*
 import com.silentgames.silent_planet.logic.ecs.entity.Entity
-import com.silentgames.silent_planet.model.fractions.FractionsType
 
 abstract class Unit(
         val context: Context,

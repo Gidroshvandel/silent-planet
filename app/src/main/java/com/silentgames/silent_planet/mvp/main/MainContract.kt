@@ -2,8 +2,8 @@ package com.silentgames.silent_planet.mvp.main
 
 import android.graphics.Bitmap
 import com.silentgames.silent_planet.dialog.EntityData
-import com.silentgames.silent_planet.model.Axis
-import com.silentgames.silent_planet.model.fractions.FractionsType
+import com.silentgames.silent_planet.logic.ecs.Axis
+import com.silentgames.silent_planet.logic.ecs.component.FractionsType
 import com.silentgames.silent_planet.mvp.BasePresenter
 
 interface MainContract {

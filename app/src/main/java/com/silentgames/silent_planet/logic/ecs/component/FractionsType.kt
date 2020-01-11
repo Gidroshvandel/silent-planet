@@ -1,6 +1,4 @@
-package com.silentgames.silent_planet.model.fractions
-
-import com.silentgames.silent_planet.logic.ecs.component.Component
+package com.silentgames.silent_planet.logic.ecs.component
 
 /**
  * Created by gidroshvandel on 26.09.16.

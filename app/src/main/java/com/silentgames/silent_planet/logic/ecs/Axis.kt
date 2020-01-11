@@ -1,4 +1,4 @@
-package com.silentgames.silent_planet.model
+package com.silentgames.silent_planet.logic.ecs
 
 data class Axis(val x: Int, val y: Int) {
 

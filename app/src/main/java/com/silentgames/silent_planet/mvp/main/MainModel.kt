@@ -4,8 +4,8 @@ import android.content.Context
 import com.silentgames.silent_planet.logic.CellRandomGenerator
 import com.silentgames.silent_planet.logic.EntityRandomGenerator
 import com.silentgames.silent_planet.logic.ecs.GameState
+import com.silentgames.silent_planet.logic.ecs.component.FractionsType
 import com.silentgames.silent_planet.logic.ecs.system.RenderSystem
-import com.silentgames.silent_planet.model.fractions.FractionsType
 import com.silentgames.silent_planet.view.SurfaceGameView
 
 /**

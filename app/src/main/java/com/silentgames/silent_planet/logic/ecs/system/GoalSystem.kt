@@ -1,12 +1,12 @@
 package com.silentgames.silent_planet.logic.ecs.system
 
+import com.silentgames.silent_planet.logic.ecs.Axis
 import com.silentgames.silent_planet.logic.ecs.GameState
 import com.silentgames.silent_planet.logic.ecs.component.Goal
 import com.silentgames.silent_planet.logic.ecs.component.Position
 import com.silentgames.silent_planet.logic.ecs.component.TargetPosition
 import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
 import com.silentgames.silent_planet.logic.findPath
-import com.silentgames.silent_planet.model.Axis
 
 class GoalSystem : System {
 

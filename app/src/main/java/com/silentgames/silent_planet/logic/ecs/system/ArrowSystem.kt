@@ -1,13 +1,12 @@
 package com.silentgames.silent_planet.logic.ecs.system
 
 import com.silentgames.silent_planet.logic.Constants
+import com.silentgames.silent_planet.logic.ecs.Axis
 import com.silentgames.silent_planet.logic.ecs.GameState
 import com.silentgames.silent_planet.logic.ecs.component.*
 import com.silentgames.silent_planet.logic.ecs.component.ArrowMode.DIRECT
 import com.silentgames.silent_planet.logic.ecs.component.ArrowMode.SLANTING
 import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
-import com.silentgames.silent_planet.model.Axis
-import com.silentgames.silent_planet.model.fractions.FractionsType
 import com.silentgames.silent_planet.utils.BitmapEditor
 import com.silentgames.silent_planet.utils.notNull
 

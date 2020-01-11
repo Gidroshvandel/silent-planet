@@ -1,6 +1,7 @@
 package com.silentgames.silent_planet.logic.ecs.system
 
 import com.silentgames.silent_planet.logic.Constants
+import com.silentgames.silent_planet.logic.ecs.Axis
 import com.silentgames.silent_planet.logic.ecs.GameState
 import com.silentgames.silent_planet.logic.ecs.component.Crystal
 import com.silentgames.silent_planet.logic.ecs.component.Hide
@@ -8,7 +9,6 @@ import com.silentgames.silent_planet.logic.ecs.component.Position
 import com.silentgames.silent_planet.logic.ecs.entity.Entity
 import com.silentgames.silent_planet.logic.ecs.entity.cell.Cell
 import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
-import com.silentgames.silent_planet.model.Axis
 
 fun GameState.getCurrentUnitCell(unit: Unit, cellExist: (cell: Cell, position: Axis) -> kotlin.Unit) {
     val position = unit.getComponent<Position>()?.currentPosition

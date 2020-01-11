@@ -1,6 +1,7 @@
 package com.silentgames.silent_planet.logic
 
 import android.content.Context
+import com.silentgames.silent_planet.logic.ecs.Axis
 import com.silentgames.silent_planet.logic.ecs.entity.cell.Cell
 import com.silentgames.silent_planet.logic.ecs.entity.cell.DeathCell
 import com.silentgames.silent_planet.logic.ecs.entity.cell.EmptyCell
@@ -9,7 +10,6 @@ import com.silentgames.silent_planet.logic.ecs.entity.cell.arrow.ArrowGreenCell
 import com.silentgames.silent_planet.logic.ecs.entity.cell.arrow.ArrowRedCell
 import com.silentgames.silent_planet.logic.ecs.entity.cell.crystal.CrystalCell
 import com.silentgames.silent_planet.logic.ecs.entity.cell.crystal.CrystalsEnum
-import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.utils.BitmapEditor
 import java.util.*
 

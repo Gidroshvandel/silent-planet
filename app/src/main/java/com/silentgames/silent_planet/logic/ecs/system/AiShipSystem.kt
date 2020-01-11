@@ -1,13 +1,13 @@
 package com.silentgames.silent_planet.logic.ecs.system
 
+import com.silentgames.silent_planet.logic.ecs.Axis
 import com.silentgames.silent_planet.logic.ecs.GameState
 import com.silentgames.silent_planet.logic.ecs.component.ArtificialIntelligence
+import com.silentgames.silent_planet.logic.ecs.component.FractionsType
 import com.silentgames.silent_planet.logic.ecs.component.MovingMode
 import com.silentgames.silent_planet.logic.ecs.component.TargetPosition
 import com.silentgames.silent_planet.logic.ecs.entity.cell.Cell
 import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
-import com.silentgames.silent_planet.model.Axis
-import com.silentgames.silent_planet.model.fractions.FractionsType
 
 class AiShipSystem : System {
 

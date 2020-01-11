@@ -5,6 +5,7 @@ import com.silentgames.silent_planet.engine.EngineAxis
 import com.silentgames.silent_planet.engine.Entity
 import com.silentgames.silent_planet.engine.base.Layer
 import com.silentgames.silent_planet.logic.Constants
+import com.silentgames.silent_planet.logic.ecs.Axis
 import com.silentgames.silent_planet.logic.ecs.Engine
 import com.silentgames.silent_planet.logic.ecs.GameState
 import com.silentgames.silent_planet.logic.ecs.component.Position
@@ -12,7 +13,6 @@ import com.silentgames.silent_planet.logic.ecs.component.Texture
 import com.silentgames.silent_planet.logic.ecs.component.Transport
 import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
 import com.silentgames.silent_planet.logic.ecs.extractTransports
-import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.view.SurfaceGameView
 
 class RenderSystem(private val surfaceView: SurfaceGameView, private val onSceneUpdate: () -> kotlin.Unit) : System {
