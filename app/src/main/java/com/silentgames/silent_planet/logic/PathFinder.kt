@@ -93,21 +93,17 @@ private fun GameState.getAdjacentNodes(node: Node, unit: Unit): List<Node> {
     val cell = this.getCell(node.position)
     val arrow = cell?.getComponent<Arrow>()
     return if (cell != null && !cell.hasComponent<Hide>() && arrow != null) {
-        val destination = getDestination(arrow, unit)
+        val destination = getDestination(arrow, unit, cell)
         if (destination != null) listOf(Node(destination, cost = Int.MAX_VALUE)) else listOf()
     } else {
         this.getAvailableMoveDistancePositionList(node.position, unit).map { Node(it, cost = Int.MAX_VALUE) }
     }
 }
 
-fun GameState.getDestination(arrow: Arrow, unit: Unit): Axis? {
-    val unitPosition = unit.getComponent<Position>()
-    val unitFractionsType = unit.getComponent<FractionsType>()
-    return if (unitPosition != null && unitFractionsType != null) {
-        ArrowSystem().getCorrectTarget(this, arrow, unitPosition, unitFractionsType)
-    } else {
-        null
-    }
+fun GameState.getDestination(arrow: Arrow, unit: Unit, cell: Cell): Axis? {
+    val cellPosition = cell.getComponent<Position>() ?: return null
+    val unitFractionsType = unit.getComponent<FractionsType>() ?: return null
+    return ArrowSystem().getCorrectTarget(this, arrow, cellPosition, unitFractionsType)
 }
 
 fun GameState.getAvailableMoveDistancePositionList(position: Axis, unit: Unit) =

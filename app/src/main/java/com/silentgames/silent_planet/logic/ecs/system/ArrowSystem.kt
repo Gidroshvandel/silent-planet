@@ -46,10 +46,10 @@ class ArrowSystem : System {
         }
     }
 
-    fun getCorrectTarget(gameState: GameState, arrow: Arrow, unitPosition: Position, unitFractionsType: FractionsType): Axis? {
-        val target = arrow.calculateTargetPosition(unitPosition.currentPosition)
+    fun getCorrectTarget(gameState: GameState, arrow: Arrow, arrowCellPosition: Position, unitFractionsType: FractionsType): Axis? {
+        val target = arrow.calculateTargetPosition(arrowCellPosition.currentPosition)
         return if (gameState.isDestinationCorrect(target, unitFractionsType)
-                && !gameState.isCyclicMove(target, unitPosition.currentPosition, unitPosition.oldPosition)) {
+                && !gameState.isCyclicMove(target, arrowCellPosition.currentPosition, arrowCellPosition.oldPosition)) {
             target
         } else {
             null
@@ -63,7 +63,7 @@ class ArrowSystem : System {
     }
 
     private fun GameState.isDestinationCorrect(destination: Axis, fractionsType: FractionsType): Boolean =
-            (destination.inGameBorders() && destination.inGroundBorders()
+            (destination.inGroundBorders()
                     || destination.inGameBorders() && isTransportBelongFraction(destination, fractionsType))
 
     private fun GameState.isTransportBelongFraction(target: Axis, fractionsType: FractionsType): Boolean {
