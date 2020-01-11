@@ -14,6 +14,8 @@ class MovementSystem : System {
     override fun execute(gameState: GameState, unit: Unit) {
         gameState.moveSuccess = if (unit.hasComponent<Teleport>()
                 || unit.getComponent<FractionsType>() != gameState.turn.currentTurnFraction
+                || !unit.hasComponent<TurnToMove>()
+                || !unit.hasComponent<Active>()
         ) {
             false
         } else {

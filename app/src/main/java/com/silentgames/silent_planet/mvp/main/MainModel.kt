@@ -17,7 +17,7 @@ import java.util.*
  */
 class MainModel(val context: Context, private val surfaceView: SurfaceGameView) {
 
-    suspend fun generateNewBattleGround(firstTurnFraction: FractionsType): GameState = GameState(
+    fun generateNewBattleGround(firstTurnFraction: FractionsType): GameState = GameState(
             CellRandomGenerator(context).generateBattleGround(),
             EntityRandomGenerator(context).generateShips(),
             firstTurnFraction

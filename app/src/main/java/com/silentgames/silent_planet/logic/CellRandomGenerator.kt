@@ -11,8 +11,6 @@ import com.silentgames.silent_planet.logic.ecs.entity.cell.crystal.CrystalCell
 import com.silentgames.silent_planet.logic.ecs.entity.cell.crystal.CrystalsEnum
 import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.utils.BitmapEditor
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.util.*
 
 class CellRandomGenerator(val context: Context) {
@@ -20,9 +18,9 @@ class CellRandomGenerator(val context: Context) {
     private val random = Random()
     private val randomList = mutableListOf<RandomEntity>()
 
-    suspend fun generateBattleGround(
+    fun generateBattleGround(
             cellGeneratorParams: CellGeneratorParams = CellGeneratorParams()
-    ): List<Cell> = withContext(Dispatchers.Default) {
+    ): List<Cell> {
         randomList.clear()
         randomList.addAll(cellGeneratorParams.getRandomEntityList())
 
@@ -56,7 +54,7 @@ class CellRandomGenerator(val context: Context) {
             }
         }
 
-        return@withContext listCells
+        return listCells
     }
 
 

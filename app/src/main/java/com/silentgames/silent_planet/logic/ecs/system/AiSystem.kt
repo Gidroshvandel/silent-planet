@@ -1,10 +1,7 @@
 package com.silentgames.silent_planet.logic.ecs.system
 
 import com.silentgames.silent_planet.logic.ecs.GameState
-import com.silentgames.silent_planet.logic.ecs.component.ArtificialIntelligence
-import com.silentgames.silent_planet.logic.ecs.component.Goal
-import com.silentgames.silent_planet.logic.ecs.component.MovingMode
-import com.silentgames.silent_planet.logic.ecs.component.TargetPosition
+import com.silentgames.silent_planet.logic.ecs.component.*
 import com.silentgames.silent_planet.logic.ecs.component.event.AddCrystalEvent
 import com.silentgames.silent_planet.logic.ecs.entity.cell.Cell
 import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
@@ -13,7 +10,24 @@ import com.silentgames.silent_planet.logic.getAvailableMoveDistancePositionList
 import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.fractions.FractionsType
 
-class AiSystem : System {
+class AiSystem() : System {
+
+    fun GameState.choosePlayerToMove(fractionsType: FractionsType): Unit? {
+        val capitalShip = this.getCapitalShip(fractionsType)
+        val list = this.unitMap.filter { it.getComponent<FractionsType>() == fractionsType }
+        val playerOnGround = list.firstOrNull()
+        if (playerOnGround != null) {
+            return playerOnGround
+        } else {
+            capitalShip?.getComponent<Transport>()?.getFirstPlayerFromTransport(fractionsType)?.let {
+                return it
+            }
+        }
+        return null
+    }
+
+    private fun Transport.getFirstPlayerFromTransport(fractionsType: FractionsType): Unit? =
+            this.unitsOnBoard.firstOrNull { it.getComponent<FractionsType>() == fractionsType }
 
     override fun execute(gameState: GameState, unit: Unit) {
         if (unit.hasComponent<ArtificialIntelligence>()) {
@@ -23,25 +37,34 @@ class AiSystem : System {
 
     private fun process(unit: Unit, gameState: GameState) {
         gameState.getCurrentUnitCell(unit) { cell ->
-            when {
-                cell.getCrystalsCount() > 0 -> {
-                    unit.addComponent(AddCrystalEvent(cell.getCrystalsCount()))
-                    gameState.getSpaceShipPosition(unit)?.let {
-                        unit.addComponent(Goal(it))
+            val goal = unit.getComponent<Goal>()
+            val goalCell = goal?.axis?.let { gameState.getCell(it) }
+            if ((goalCell == null || !goalCell.isActualGoal()) && (goalCell != null || goal == null)) {
+                unit.removeComponent(Goal::class.java)
+                when {
+                    cell.getCrystalsCount() > 0 -> {
+                        unit.addComponent(AddCrystalEvent(cell.getCrystalsCount()))
+                        gameState.getSpaceShipPosition(unit)?.let {
+                            unit.addComponent(Goal(it))
+                        }
                     }
-                }
-                unit.getCrystalsCount() > 0 -> {
-                    gameState.getSpaceShipPosition(unit)?.let {
-                        unit.addComponent(Goal(it))
+                    unit.getCrystalsCount() > 0 -> {
+                        gameState.getSpaceShipPosition(unit)?.let {
+                            unit.addComponent(Goal(it))
+                        }
                     }
-                }
-                else -> {
-                    gameState.chooseCellToMove(unit)?.let {
-                        unit.addComponent(TargetPosition(it))
+                    else -> {
+                        gameState.chooseCellToMove(unit)?.let {
+                            unit.addComponent(TargetPosition(it))
+                        }
                     }
                 }
             }
         }
+    }
+
+    private fun Cell.isActualGoal(): Boolean {
+        return (isVisible() && getComponent<Crystal>()?.count ?: 0 > 0 || isHide())
     }
 
     private fun GameState.getSpaceShipPosition(unit: Unit): Axis? {

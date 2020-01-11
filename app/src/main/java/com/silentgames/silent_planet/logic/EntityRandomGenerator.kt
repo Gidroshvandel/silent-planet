@@ -9,14 +9,11 @@ import com.silentgames.silent_planet.logic.ecs.entity.unit.ground.PiratePlayer
 import com.silentgames.silent_planet.logic.ecs.entity.unit.ground.RobotPlayer
 import com.silentgames.silent_planet.logic.ecs.entity.unit.space.*
 import com.silentgames.silent_planet.model.Axis
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.util.*
 
 class EntityRandomGenerator(val context: Context) {
 
-    suspend fun generateShips(): List<SpaceShip> =
-        withContext(Dispatchers.Default) {
+    fun generateShips(): List<SpaceShip> {
             val axisList = BoardSide.values().toList().shuffled().map {
                 val borderInset = 1
                 when (it) {
@@ -31,7 +28,7 @@ class EntityRandomGenerator(val context: Context) {
                 }
             }
 
-            return@withContext listOf(
+        return listOf(
                     spawnHumans(axisList[0]),
                     spawnPirates(axisList[1]),
                     spawnRobots(axisList[2]),

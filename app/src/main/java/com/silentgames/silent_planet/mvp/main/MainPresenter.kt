@@ -2,6 +2,7 @@ package com.silentgames.silent_planet.mvp.main
 
 import com.silentgames.silent_planet.dialog.EntityData
 import com.silentgames.silent_planet.logic.Constants
+import com.silentgames.silent_planet.logic.choosePlayerToMove
 import com.silentgames.silent_planet.logic.ecs.Engine
 import com.silentgames.silent_planet.logic.ecs.component.*
 import com.silentgames.silent_planet.logic.ecs.component.event.AddCrystalEvent
@@ -23,7 +24,7 @@ class MainPresenter internal constructor(
         private val view: MainContract.View,
         private val viewModel: MainViewModel,
         private val model: MainModel
-) : MainContract.Presenter, CoroutineScope by MainScope() {
+) : MainContract.Presenter {
 
     override fun onSingleTapConfirmed(axis: Axis) {
         select(axis)
@@ -66,10 +67,13 @@ class MainPresenter internal constructor(
 
     @InternalCoroutinesApi
     override fun onCreate() {
-        launch {
-            viewModel.engine = Engine(
-                    model.generateNewBattleGround(HUMAN)
-            )
+        val scope = CoroutineScope(Dispatchers.Main)
+        scope.launch {
+            withContext(Dispatchers.Default) {
+                viewModel.engine = Engine(
+                        model.generateNewBattleGround(HUMAN)
+                )
+            }
 
             viewModel.engine.addSystem(BuyBackSystem(
                     {
@@ -80,10 +84,10 @@ class MainPresenter internal constructor(
                     }
             ))
 
-            viewModel.engine.addSystem(ArrowSystem())
             viewModel.engine.addSystem(AiSystem())
             viewModel.engine.addSystem(AddCrystalSystem())
             viewModel.engine.addSystem(GoalSystem())
+            viewModel.engine.addSystem(ArrowSystem())
             viewModel.engine.addSystem(MovementSystem())
             viewModel.engine.addSystem(CaptureSystem())
             viewModel.engine.addSystem(TeleportSystem())
@@ -112,9 +116,18 @@ class MainPresenter internal constructor(
                         viewModel.selectedEntity?.let { updateEntityState(it) }
                     }
             )
+
+            val aiFractionList = listOf(HUMAN, ALIEN, PIRATE, ROBOT)
+
             viewModel.engine.addSystem(
                     TurnSystem {
                         view.selectCurrentFraction(it)
+
+                        if (aiFractionList.contains(it)) {
+                            val unit = viewModel.engine.gameState.choosePlayerToMove(it)
+                            unit?.addComponent(ArtificialIntelligence())
+                            unit?.let { viewModel.engine.processSystems(it) }
+                        }
                     }
             )
 

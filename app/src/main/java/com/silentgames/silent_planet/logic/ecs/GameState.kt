@@ -3,6 +3,7 @@ package com.silentgames.silent_planet.logic.ecs
 import com.silentgames.silent_planet.logic.ecs.component.CapitalShip
 import com.silentgames.silent_planet.logic.ecs.component.Position
 import com.silentgames.silent_planet.logic.ecs.component.Transport
+import com.silentgames.silent_planet.logic.ecs.component.TurnToMove
 import com.silentgames.silent_planet.logic.ecs.entity.Entity
 import com.silentgames.silent_planet.logic.ecs.entity.cell.Cell
 import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
@@ -57,6 +58,16 @@ class GameState(
 
     fun removeUnit(unit: Unit) {
         mutableUnitList.remove(unit)
+    }
+
+    fun makeCurrentFractionTurnUnitsActive() {
+        makeUnitsActive(turn.currentTurnFraction)
+    }
+
+    private fun makeUnitsActive(fractionsType: FractionsType) {
+        unitMap.extractTransports().filter { it.getComponent<FractionsType>() == fractionsType }.forEach {
+            it.addComponent(TurnToMove())
+        }
     }
 
     private fun <T : Entity> List<T>.getByPosition(axis: Axis) =
