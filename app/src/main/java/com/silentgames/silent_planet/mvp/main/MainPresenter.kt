@@ -13,7 +13,9 @@ import com.silentgames.silent_planet.logic.ecs.extractTransports
 import com.silentgames.silent_planet.logic.ecs.system.*
 import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.fractions.FractionsType.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.InternalCoroutinesApi
 
 /**
  * Created by gidroshvandel on 21.06.17.
@@ -67,13 +69,13 @@ class MainPresenter internal constructor(
 
     @InternalCoroutinesApi
     override fun onCreate() {
-        val scope = CoroutineScope(Dispatchers.Main)
-        scope.launch {
-            withContext(Dispatchers.Default) {
+//        val scope = CoroutineScope(Dispatchers.Main)
+//        scope.launch {
+//            withContext(Dispatchers.Default) {
                 viewModel.engine = Engine(
                         model.generateNewBattleGround(HUMAN)
                 )
-            }
+//            }
 
             viewModel.engine.addSystem(BuyBackSystem(
                     {
@@ -143,7 +145,7 @@ class MainPresenter internal constructor(
 
             view.enableButton(false)
 
-        }
+//        }
     }
 
     private fun select(currentXY: Axis) {
