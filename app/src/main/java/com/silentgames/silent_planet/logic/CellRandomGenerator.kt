@@ -2,7 +2,7 @@ package com.silentgames.silent_planet.logic
 
 import android.content.Context
 import com.silentgames.silent_planet.logic.ecs.Axis
-import com.silentgames.silent_planet.logic.ecs.entity.cell.Cell
+import com.silentgames.silent_planet.logic.ecs.entity.cell.CellEcs
 import com.silentgames.silent_planet.logic.ecs.entity.cell.DeathCell
 import com.silentgames.silent_planet.logic.ecs.entity.cell.EmptyCell
 import com.silentgames.silent_planet.logic.ecs.entity.cell.SpaceCell
@@ -20,7 +20,7 @@ class CellRandomGenerator(val context: Context) {
 
     fun generateBattleGround(
             cellGeneratorParams: CellGeneratorParams = CellGeneratorParams()
-    ): List<Cell> {
+    ): List<CellEcs> {
         randomList.clear()
         randomList.addAll(cellGeneratorParams.getRandomEntityList())
 
@@ -34,7 +34,7 @@ class CellRandomGenerator(val context: Context) {
         randomCellTypeList.shuffle()
         var count = -1
 
-        val listCells = mutableListOf<Cell>()
+        val listCells = mutableListOf<CellEcs>()
 
         for (x in 0 until hCountOfCells) {
             for (y in 0 until vCountOfCells) {
@@ -58,7 +58,7 @@ class CellRandomGenerator(val context: Context) {
     }
 
 
-    private fun RandomCellType.getCellType(axis: Axis): Cell {
+    private fun RandomCellType.getCellType(axis: Axis): CellEcs {
         return when (this) {
             RandomCellType.DEATH -> DeathCell(context, axis)
             RandomCellType.GREEN_ARROW -> ArrowGreenCell(context, axis, BitmapEditor.RotateAngle.randomAngle())

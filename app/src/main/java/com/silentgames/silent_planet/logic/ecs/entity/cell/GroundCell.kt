@@ -9,7 +9,7 @@ abstract class GroundCell(
         context: Context,
         position: Position,
         hide: Hide
-) : Cell(
+) : CellEcs(
         position,
         Description(context.getString(R.string.unknown_cell_name), context.getString(R.string.unknown_cell_description)),
         Texture(BitmapEditor.getCellBitmap(context, R.drawable.planet_background))

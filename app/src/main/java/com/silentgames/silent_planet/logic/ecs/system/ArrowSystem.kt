@@ -6,13 +6,13 @@ import com.silentgames.silent_planet.logic.ecs.GameState
 import com.silentgames.silent_planet.logic.ecs.component.*
 import com.silentgames.silent_planet.logic.ecs.component.ArrowMode.DIRECT
 import com.silentgames.silent_planet.logic.ecs.component.ArrowMode.SLANTING
-import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
+import com.silentgames.silent_planet.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.silent_planet.utils.BitmapEditor
 import com.silentgames.silent_planet.utils.notNull
 
 class ArrowSystem : System {
 
-    override fun execute(gameState: GameState, unit: Unit) {
+    override fun execute(gameState: GameState, unit: UnitEcs) {
         gameState.getCurrentUnitCell(unit) { cell ->
             notNull(
                     cell.getComponent(),
@@ -29,7 +29,7 @@ class ArrowSystem : System {
             arrow: Arrow,
             unitPosition: Position,
             unitFractionsType: FractionsType,
-            unit: Unit,
+            unit: UnitEcs,
             gameState: GameState
     ) {
         val correctTarget = getCorrectTarget(gameState, arrow, unitPosition, unitFractionsType)

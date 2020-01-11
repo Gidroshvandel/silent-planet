@@ -3,13 +3,13 @@ package com.silentgames.silent_planet.logic.ecs.entity.cell
 import com.silentgames.silent_planet.logic.ecs.component.Description
 import com.silentgames.silent_planet.logic.ecs.component.Position
 import com.silentgames.silent_planet.logic.ecs.component.Texture
-import com.silentgames.silent_planet.logic.ecs.entity.Entity
+import com.silentgames.silent_planet.logic.ecs.entity.EntityEcs
 
-abstract class Cell(
+abstract class CellEcs(
         position: Position,
         description: Description,
         texture: Texture
-) : Entity() {
+) : EntityEcs() {
 
     init {
         addComponent(position)

@@ -2,7 +2,7 @@ package com.silentgames.silent_planet.logic.ecs.entity
 
 import com.silentgames.silent_planet.logic.ecs.component.Component
 
-open class Entity {
+open class EntityEcs {
 
     val id = EntityIdGenerator.generateId()
 
@@ -44,7 +44,7 @@ open class Entity {
     }
 
     override fun equals(other: Any?): Boolean {
-        return if (other is Entity) {
+        return if (other is EntityEcs) {
             other.id == id
         } else {
             super.equals(other)

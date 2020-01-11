@@ -4,11 +4,11 @@ import com.silentgames.silent_planet.logic.ecs.GameState
 import com.silentgames.silent_planet.logic.ecs.component.CapitalShip
 import com.silentgames.silent_planet.logic.ecs.component.Crystal
 import com.silentgames.silent_planet.logic.ecs.component.Position
-import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
+import com.silentgames.silent_planet.logic.ecs.entity.unit.UnitEcs
 
 class PutCrystalToCapitalShipSystem : System {
 
-    override fun execute(gameState: GameState, unit: Unit) {
+    override fun execute(gameState: GameState, unit: UnitEcs) {
         unit.getComponent<Position>()?.let {
             gameState.putCrystalsToCapitalShip(it)
         }

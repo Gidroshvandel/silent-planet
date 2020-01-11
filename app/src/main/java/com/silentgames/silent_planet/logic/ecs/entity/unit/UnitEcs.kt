@@ -2,16 +2,16 @@ package com.silentgames.silent_planet.logic.ecs.entity.unit
 
 import android.content.Context
 import com.silentgames.silent_planet.logic.ecs.component.*
-import com.silentgames.silent_planet.logic.ecs.entity.Entity
+import com.silentgames.silent_planet.logic.ecs.entity.EntityEcs
 
-abstract class Unit(
+abstract class UnitEcs(
         val context: Context,
         position: Position,
         texture: Texture,
         movingMode: MovingMode,
         fractionsType: FractionsType,
         description: Description
-) : Entity() {
+) : EntityEcs() {
 
     init {
         addComponent(Active())

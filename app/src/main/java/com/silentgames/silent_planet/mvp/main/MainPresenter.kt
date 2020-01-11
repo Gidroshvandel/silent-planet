@@ -4,13 +4,13 @@ import com.silentgames.silent_planet.dialog.EntityData
 import com.silentgames.silent_planet.logic.Constants
 import com.silentgames.silent_planet.logic.choosePlayerToMove
 import com.silentgames.silent_planet.logic.ecs.Axis
-import com.silentgames.silent_planet.logic.ecs.Engine
+import com.silentgames.silent_planet.logic.ecs.EngineEcs
 import com.silentgames.silent_planet.logic.ecs.component.*
 import com.silentgames.silent_planet.logic.ecs.component.FractionsType.*
 import com.silentgames.silent_planet.logic.ecs.component.event.AddCrystalEvent
 import com.silentgames.silent_planet.logic.ecs.component.event.BuyBackEvent
-import com.silentgames.silent_planet.logic.ecs.entity.Entity
-import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
+import com.silentgames.silent_planet.logic.ecs.entity.EntityEcs
+import com.silentgames.silent_planet.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.silent_planet.logic.ecs.extractTransports
 import com.silentgames.silent_planet.logic.ecs.system.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -72,7 +72,7 @@ class MainPresenter internal constructor(
 //        val scope = CoroutineScope(Dispatchers.Main)
 //        scope.launch {
 //            withContext(Dispatchers.Default) {
-                viewModel.engine = Engine(
+        viewModel.engine = EngineEcs(
                         model.generateNewBattleGround(HUMAN)
                 )
 //            }
@@ -174,10 +174,10 @@ class MainPresenter internal constructor(
         }
     }
 
-    private fun List<Entity>.map() =
+    private fun List<EntityEcs>.map() =
             map { it.toEntityData() }.toMutableList()
 
-    private fun Entity.toEntityData(): EntityData {
+    private fun EntityEcs.toEntityData(): EntityData {
         val texture = this.getComponent<Texture>()?.bitmap
         val description = this.getComponent<Description>()
 
@@ -204,12 +204,12 @@ class MainPresenter internal constructor(
         view.fillEntityName(description.name)
     }
 
-    private fun selectEntity(entity: Unit) {
+    private fun selectEntity(entity: UnitEcs) {
         updateEntityState(entity)
         viewModel.selectedEntity = entity
     }
 
-    private fun updateEntityState(unit: Unit) {
+    private fun updateEntityState(unit: UnitEcs) {
         val position = unit.getComponent<Position>()?.currentPosition
         val crystals = unit.getComponent<Crystal>()?.count ?: 0
         view.setImageCrystalText(crystals.toString())
@@ -225,7 +225,7 @@ class MainPresenter internal constructor(
     private fun crystalsOverZero(position: Axis): Boolean =
             viewModel.engine.gameState.getCell(position)?.getComponent<Crystal>()?.count ?: 0 > 0
 
-    private fun selectCell(cellType: Entity) {
+    private fun selectCell(cellType: EntityEcs) {
         val crystals = cellType.getComponent<Crystal>()?.count ?: 0
         val isVisible = cellType.getComponent<Hide>() == null
         view.enableButton(false)
@@ -237,7 +237,7 @@ class MainPresenter internal constructor(
         cellType.getComponent<Description>()?.let { showDescription(it) }
     }
 
-    private fun tryMove(unit: Unit, targetPosition: Axis) {
+    private fun tryMove(unit: UnitEcs, targetPosition: Axis) {
         view.enableButton(false)
         unit.addComponent(TargetPosition(targetPosition))
         viewModel.engine.processSystems(unit)

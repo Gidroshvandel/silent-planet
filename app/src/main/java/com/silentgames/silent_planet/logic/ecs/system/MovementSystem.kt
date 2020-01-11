@@ -3,13 +3,13 @@ package com.silentgames.silent_planet.logic.ecs.system
 import com.silentgames.silent_planet.logic.ecs.Axis
 import com.silentgames.silent_planet.logic.ecs.GameState
 import com.silentgames.silent_planet.logic.ecs.component.*
-import com.silentgames.silent_planet.logic.ecs.entity.cell.Cell
-import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
+import com.silentgames.silent_planet.logic.ecs.entity.cell.CellEcs
+import com.silentgames.silent_planet.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.silent_planet.utils.notNull
 
 class MovementSystem : System {
 
-    override fun execute(gameState: GameState, unit: Unit) {
+    override fun execute(gameState: GameState, unit: UnitEcs) {
         gameState.moveSuccess = if (unit.hasComponent<Teleport>()
                 || unit.getComponent<FractionsType>() != gameState.turn.currentTurnFraction
                 || !unit.hasComponent<TurnToMove>()
@@ -37,7 +37,7 @@ class MovementSystem : System {
 
     private fun move(
             targetPosition: TargetPosition,
-            unit: Unit,
+            unit: UnitEcs,
             gameState: GameState
     ) {
         gameState.moveUnit(unit, targetPosition.axis)
@@ -47,15 +47,15 @@ class MovementSystem : System {
     fun isCanMove(
             targetPosition: Axis,
             currentPosition: Axis,
-            unit: Unit,
+            unit: UnitEcs,
             gameState: GameState
     ): Boolean = isMoveAtDistance(targetPosition, currentPosition)
             && (isCanMoveToAllyTransport(unit, gameState.getUnit(targetPosition))
             || isCanMoveToCell(gameState.getCell(targetPosition), unit))
 
-    private fun isCanMoveToCell(targetCell: Cell?, unit: Unit) = targetCell != null && canMove(unit.getComponent(), targetCell.getComponent())
+    private fun isCanMoveToCell(targetCell: CellEcs?, unit: UnitEcs) = targetCell != null && canMove(unit.getComponent(), targetCell.getComponent())
 
-    private fun isCanMoveToAllyTransport(unit: Unit, targetUnit: Unit?): Boolean {
+    private fun isCanMoveToAllyTransport(unit: UnitEcs, targetUnit: UnitEcs?): Boolean {
         val transport = targetUnit?.getComponent<Transport>()
         return (transport != null
                 && unit.getComponent<Transport>() == null

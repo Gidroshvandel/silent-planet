@@ -5,12 +5,12 @@ import com.silentgames.silent_planet.R
 import com.silentgames.silent_planet.logic.ecs.GameState
 import com.silentgames.silent_planet.logic.ecs.component.*
 import com.silentgames.silent_planet.logic.ecs.component.FractionsType
-import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
+import com.silentgames.silent_planet.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.silent_planet.utils.notNull
 
 class DeathSystem : System {
 
-    override fun execute(gameState: GameState, unit: Unit) {
+    override fun execute(gameState: GameState, unit: UnitEcs) {
         val position = unit.getComponent<Position>()?.currentPosition
         if (position != null) {
             val cell = gameState.getCell(position)
@@ -22,7 +22,7 @@ class DeathSystem : System {
         }
     }
 
-    private fun death(death: Death, unit: Unit) {
+    private fun death(death: Death, unit: UnitEcs) {
         if (death.unit == null) {
             death.unit = unit
             unit.removeComponent(MovingMode::class.java)

@@ -15,7 +15,7 @@ import com.silentgames.silent_planet.utils.BitmapEditor
 class SpaceCell(
         context: Context,
         position: Axis
-) : Cell(
+) : CellEcs(
         Position(position),
         Description(context.getString(R.string.space_cell_name), context.getString(R.string.space_cell_description)),
         Texture(BitmapEditor.getCellBitmap(context, R.drawable.space_texture))

@@ -3,15 +3,15 @@ package com.silentgames.silent_planet.logic.ecs.system
 import com.silentgames.silent_planet.logic.ecs.GameState
 import com.silentgames.silent_planet.logic.ecs.component.Crystal
 import com.silentgames.silent_planet.logic.ecs.component.FractionsType
-import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
+import com.silentgames.silent_planet.logic.ecs.entity.unit.UnitEcs
 
 class WinSystem(
         private val crystalsToWin: Int,
-        private val crystals: (FractionsType, crystals: Int) -> kotlin.Unit,
-        private val onWin: (FractionsType) -> kotlin.Unit
+        private val crystals: (FractionsType, crystals: Int) -> Unit,
+        private val onWin: (FractionsType) -> Unit
 ) : System {
 
-    override fun execute(gameState: GameState, unit: Unit) {
+    override fun execute(gameState: GameState, unit: UnitEcs) {
         checkWin(gameState)
     }
 

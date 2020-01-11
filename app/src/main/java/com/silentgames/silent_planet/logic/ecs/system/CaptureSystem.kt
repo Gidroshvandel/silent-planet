@@ -2,12 +2,12 @@ package com.silentgames.silent_planet.logic.ecs.system
 
 import com.silentgames.silent_planet.logic.ecs.GameState
 import com.silentgames.silent_planet.logic.ecs.component.*
-import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
+import com.silentgames.silent_planet.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.silent_planet.utils.notNull
 
 class CaptureSystem : System {
 
-    override fun execute(gameState: GameState, unit: Unit) {
+    override fun execute(gameState: GameState, unit: UnitEcs) {
         notNull(
                 unit.getComponent(),
                 unit.getComponent(),
@@ -17,7 +17,7 @@ class CaptureSystem : System {
         )
     }
 
-    private fun capture(position: Position, unitFractionsType: FractionsType, unit: Unit, gameState: GameState) {
+    private fun capture(position: Position, unitFractionsType: FractionsType, unit: UnitEcs, gameState: GameState) {
         val enemyUnits = gameState.getUnits(position.currentPosition).filterNot {
             val fractionsType = it.getComponent<FractionsType>()
             fractionsType == null
@@ -34,7 +34,7 @@ class CaptureSystem : System {
         }
     }
 
-    private fun GameState.captureUnitByEnemy(unit: Unit, enemyUnits: List<Unit>) {
+    private fun GameState.captureUnitByEnemy(unit: UnitEcs, enemyUnits: List<UnitEcs>) {
         enemyUnits.first().getComponent<FractionsType>()?.let { enemyFractionsType ->
             unit.addComponent(Capture(enemyFractionsType))
             getCapitalShipPosition(enemyFractionsType)?.currentPosition?.let { shipPosition ->
@@ -49,7 +49,7 @@ class CaptureSystem : System {
         }
     }
 
-    private fun GameState.captureEnemyByUnit(enemy: Unit, unit: Unit, unitFractionsType: FractionsType) {
+    private fun GameState.captureEnemyByUnit(enemy: UnitEcs, unit: UnitEcs, unitFractionsType: FractionsType) {
         enemy.addComponent(Capture(unitFractionsType))
         getCapitalShipPosition(unitFractionsType)?.currentPosition?.let {
             enemy.addComponent(Teleport())

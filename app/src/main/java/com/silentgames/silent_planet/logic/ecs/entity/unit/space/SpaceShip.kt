@@ -3,7 +3,7 @@ package com.silentgames.silent_planet.logic.ecs.entity.unit.space
 import android.content.Context
 import com.silentgames.silent_planet.logic.ecs.Axis
 import com.silentgames.silent_planet.logic.ecs.component.*
-import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
+import com.silentgames.silent_planet.logic.ecs.entity.unit.UnitEcs
 
 /**
  * Created by gidroshvandel on 07.07.16.
@@ -14,7 +14,7 @@ abstract class SpaceShip(
         texture: Texture,
         fractionsType: FractionsType,
         description: Description
-) : Unit(
+) : UnitEcs(
         context,
         Position(position),
         texture,

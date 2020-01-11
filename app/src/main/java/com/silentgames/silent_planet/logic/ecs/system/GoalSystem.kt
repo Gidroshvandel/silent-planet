@@ -5,12 +5,12 @@ import com.silentgames.silent_planet.logic.ecs.GameState
 import com.silentgames.silent_planet.logic.ecs.component.Goal
 import com.silentgames.silent_planet.logic.ecs.component.Position
 import com.silentgames.silent_planet.logic.ecs.component.TargetPosition
-import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
+import com.silentgames.silent_planet.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.silent_planet.logic.findPath
 
 class GoalSystem : System {
 
-    override fun execute(gameState: GameState, unit: Unit) {
+    override fun execute(gameState: GameState, unit: UnitEcs) {
         val goal = unit.getComponent<Goal>()
         val nextAxisToGoal = goal?.axis?.let { gameState.getNextAxisToGoal(unit, goal.axis) }
         if (nextAxisToGoal != null) {
@@ -18,7 +18,7 @@ class GoalSystem : System {
         }
     }
 
-    private fun GameState.getNextAxisToGoal(unit: Unit, goalTarget: Axis): Axis? {
+    private fun GameState.getNextAxisToGoal(unit: UnitEcs, goalTarget: Axis): Axis? {
         val position = unit.getComponent<Position>()?.currentPosition ?: return null
         val path = this.findPath(position, goalTarget, unit)
         if (path.isNotEmpty()) {

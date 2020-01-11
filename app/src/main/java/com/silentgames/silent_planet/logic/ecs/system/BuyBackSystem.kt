@@ -3,15 +3,15 @@ package com.silentgames.silent_planet.logic.ecs.system
 import com.silentgames.silent_planet.logic.ecs.GameState
 import com.silentgames.silent_planet.logic.ecs.component.*
 import com.silentgames.silent_planet.logic.ecs.component.event.BuyBackEvent
-import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
+import com.silentgames.silent_planet.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.silent_planet.utils.notNull
 
 class BuyBackSystem(
-        private val onSuccess: (name: String) -> kotlin.Unit,
-        private val onFailure: (missingAmount: Int) -> kotlin.Unit
+        private val onSuccess: (name: String) -> Unit,
+        private val onFailure: (missingAmount: Int) -> Unit
 ) : System {
 
-    override fun execute(gameState: GameState, unit: Unit) {
+    override fun execute(gameState: GameState, unit: UnitEcs) {
         unit.getComponent<BuyBackEvent>()?.let {
             notNull(
                     unit.getComponent(),
@@ -27,7 +27,7 @@ class BuyBackSystem(
     private fun buyBack(
             capture: Capture,
             unitFractionsType: FractionsType,
-            unit: Unit,
+            unit: UnitEcs,
             gameState: GameState
     ) {
         val unitCapitalShip = gameState.getCapitalShip(unitFractionsType)

@@ -6,12 +6,12 @@ import com.silentgames.silent_planet.logic.ecs.component.ArtificialIntelligence
 import com.silentgames.silent_planet.logic.ecs.component.FractionsType
 import com.silentgames.silent_planet.logic.ecs.component.MovingMode
 import com.silentgames.silent_planet.logic.ecs.component.TargetPosition
-import com.silentgames.silent_planet.logic.ecs.entity.cell.Cell
-import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
+import com.silentgames.silent_planet.logic.ecs.entity.cell.CellEcs
+import com.silentgames.silent_planet.logic.ecs.entity.unit.UnitEcs
 
 class AiShipSystem : System {
 
-    override fun execute(gameState: GameState, unit: Unit) {
+    override fun execute(gameState: GameState, unit: UnitEcs) {
         if (!unit.hasComponent<TargetPosition>() && unit.hasComponent<ArtificialIntelligence>()) {
             unit.getComponent<FractionsType>()?.let { fractionsType ->
                 val capitalShip = gameState.getCapitalShip(fractionsType)
@@ -22,7 +22,7 @@ class AiShipSystem : System {
         }
     }
 
-    fun Unit.getMoveShipPosition(gameState: GameState): Axis? {
+    fun UnitEcs.getMoveShipPosition(gameState: GameState): Axis? {
         val shipPosition = getCurrentPosition() ?: return null
         val cellsAtMoveDistance = gameState.getCellsAtMoveDistance(shipPosition).getCanMoveCells(this)
         return if (cellsAtMoveDistance.isNotEmpty()) {
@@ -32,7 +32,7 @@ class AiShipSystem : System {
         }
     }
 
-    private fun List<Cell>.getCanMoveCells(unit: Unit) = filter {
+    private fun List<CellEcs>.getCanMoveCells(unit: UnitEcs) = filter {
         unit.getComponent<MovingMode>() == it.getComponent<MovingMode>()
     }
 

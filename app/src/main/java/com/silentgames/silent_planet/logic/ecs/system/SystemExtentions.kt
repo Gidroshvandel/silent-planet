@@ -6,31 +6,31 @@ import com.silentgames.silent_planet.logic.ecs.GameState
 import com.silentgames.silent_planet.logic.ecs.component.Crystal
 import com.silentgames.silent_planet.logic.ecs.component.Hide
 import com.silentgames.silent_planet.logic.ecs.component.Position
-import com.silentgames.silent_planet.logic.ecs.entity.Entity
-import com.silentgames.silent_planet.logic.ecs.entity.cell.Cell
-import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
+import com.silentgames.silent_planet.logic.ecs.entity.EntityEcs
+import com.silentgames.silent_planet.logic.ecs.entity.cell.CellEcs
+import com.silentgames.silent_planet.logic.ecs.entity.unit.UnitEcs
 
-fun GameState.getCurrentUnitCell(unit: Unit, cellExist: (cell: Cell, position: Axis) -> kotlin.Unit) {
+fun GameState.getCurrentUnitCell(unit: UnitEcs, cellExist: (cell: CellEcs, position: Axis) -> Unit) {
     val position = unit.getComponent<Position>()?.currentPosition
     if (position != null) {
         getCell(position)?.let { cellExist.invoke(it, position) }
     }
 }
 
-fun GameState.getCurrentUnitCell(unit: Unit, cellExist: (cell: Cell) -> kotlin.Unit) {
+fun GameState.getCurrentUnitCell(unit: UnitEcs, cellExist: (cell: CellEcs) -> Unit) {
     val position = unit.getComponent<Position>()?.currentPosition
     if (position != null) {
         getCell(position)?.let { cellExist.invoke(it) }
     }
 }
 
-fun Cell.isVisible() = !isHide()
+fun CellEcs.isVisible() = !isHide()
 
-fun Cell.isHide() = hasComponent<Hide>()
+fun CellEcs.isHide() = hasComponent<Hide>()
 
-fun Entity.getCrystalsCount() = getComponent<Crystal>()?.count ?: 0
+fun EntityEcs.getCrystalsCount() = getComponent<Crystal>()?.count ?: 0
 
-fun Entity.getCurrentPosition() = getComponent<Position>()?.currentPosition
+fun EntityEcs.getCurrentPosition() = getComponent<Position>()?.currentPosition
 
 fun GameState.getCellsAtMoveDistance(position: Axis) =
         getAvailableMoveDistancePositionList(position).mapNotNull { this.getCell(it) }

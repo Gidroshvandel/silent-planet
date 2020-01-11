@@ -3,15 +3,15 @@ package com.silentgames.silent_planet.logic
 import com.silentgames.silent_planet.logic.ecs.Axis
 import com.silentgames.silent_planet.logic.ecs.GameState
 import com.silentgames.silent_planet.logic.ecs.component.*
-import com.silentgames.silent_planet.logic.ecs.entity.cell.Cell
-import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
+import com.silentgames.silent_planet.logic.ecs.entity.cell.CellEcs
+import com.silentgames.silent_planet.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.silent_planet.logic.ecs.system.ArrowSystem
 import com.silentgames.silent_planet.logic.ecs.system.MovementSystem
 import com.silentgames.silent_planet.logic.ecs.system.getAvailableMoveDistancePositionList
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-fun GameState.findPath(position: Axis, goal: Axis, unit: Unit): List<Axis> {
+fun GameState.findPath(position: Axis, goal: Axis, unit: UnitEcs): List<Axis> {
     println("START(${unit.getComponent<Description>()?.name})-----------------------------")
     val startPosition = Node(position, cost = 0)
     val goalNode = Node(goal)
@@ -86,7 +86,7 @@ private fun estimateDistance(node: Node, goalNode: Node): Int =
                 + (node.position.y - goalNode.position.y).toFloat().pow(2)).toInt()
 
 // Where can we get from here?
-private fun GameState.getAdjacentNodes(node: Node, unit: Unit): List<Node> {
+private fun GameState.getAdjacentNodes(node: Node, unit: UnitEcs): List<Node> {
     val cell = this.getCell(node.position)
     val arrow = cell?.getComponent<Arrow>()
     return if (cell != null && !cell.hasComponent<Hide>() && arrow != null) {
@@ -97,18 +97,18 @@ private fun GameState.getAdjacentNodes(node: Node, unit: Unit): List<Node> {
     }
 }
 
-fun GameState.getDestination(arrow: Arrow, unit: Unit, cell: Cell): Axis? {
+fun GameState.getDestination(arrow: Arrow, unit: UnitEcs, cell: CellEcs): Axis? {
     val cellPosition = cell.getComponent<Position>() ?: return null
     val unitFractionsType = unit.getComponent<FractionsType>() ?: return null
     return ArrowSystem().getCorrectTarget(this, arrow, cellPosition, unitFractionsType)
 }
 
-fun GameState.getAvailableMoveDistancePositionList(position: Axis, unit: Unit) =
+fun GameState.getAvailableMoveDistancePositionList(position: Axis, unit: UnitEcs) =
         getAvailableMoveDistancePositionList(position).filter {
             MovementSystem().isCanMove(it, position, unit, this)
         }
 
-fun GameState.findPathToCell(unit: Unit, event: (Cell) -> Boolean): List<Axis> {
+fun GameState.findPathToCell(unit: UnitEcs, event: (CellEcs) -> Boolean): List<Axis> {
     val position = unit.getComponent<Position>()?.currentPosition ?: return emptyList()
     val startPosition = Node(position, cost = 0)
     val reachable = mutableListOf(startPosition)

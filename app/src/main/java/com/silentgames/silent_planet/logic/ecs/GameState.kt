@@ -1,24 +1,24 @@
 package com.silentgames.silent_planet.logic.ecs
 
 import com.silentgames.silent_planet.logic.ecs.component.*
-import com.silentgames.silent_planet.logic.ecs.entity.Entity
-import com.silentgames.silent_planet.logic.ecs.entity.cell.Cell
-import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
+import com.silentgames.silent_planet.logic.ecs.entity.EntityEcs
+import com.silentgames.silent_planet.logic.ecs.entity.cell.CellEcs
+import com.silentgames.silent_planet.logic.ecs.entity.unit.UnitEcs
 
 class GameState(
-        cellList: List<Cell>,
-        unitList: List<Unit>,
+        cellList: List<CellEcs>,
+        unitList: List<UnitEcs>,
         firstTurnFraction: FractionsType,
         var moveSuccess: Boolean = false
 ) {
 
     val turn: Turn = Turn(firstTurnFraction)
 
-    val cellMap: List<Cell> get() = mutableCellList.toList()
-    val unitMap: List<Unit> get() = mutableUnitList.toList()
+    val cellMap: List<CellEcs> get() = mutableCellList.toList()
+    val unitMap: List<UnitEcs> get() = mutableUnitList.toList()
 
-    private val mutableCellList: MutableList<Cell> = cellList.toMutableList()
-    private val mutableUnitList: MutableList<Unit> = unitList.toMutableList()
+    private val mutableCellList: MutableList<CellEcs> = cellList.toMutableList()
+    private val mutableUnitList: MutableList<UnitEcs> = unitList.toMutableList()
 
     fun getUnit(id: Long) = unitMap.find { it.id == id }
 
@@ -44,14 +44,14 @@ class GameState(
         }
     }
 
-    fun moveUnit(unit: Unit, toPosition: Axis) {
+    fun moveUnit(unit: UnitEcs, toPosition: Axis) {
         if (!unitMap.contains(unit)) {
             mutableUnitList.add(unit)
         }
         unit.getComponent<Position>()?.currentPosition = toPosition
     }
 
-    fun removeUnit(unit: Unit) {
+    fun removeUnit(unit: UnitEcs) {
         mutableUnitList.remove(unit)
     }
 
@@ -67,16 +67,16 @@ class GameState(
         }
     }
 
-    private fun <T : Entity> List<T>.getByPosition(axis: Axis) =
+    private fun <T : EntityEcs> List<T>.getByPosition(axis: Axis) =
             find { it.getComponent<Position>()?.currentPosition == axis }
 
-    private fun List<Unit>.findCapitalShip(unitFractionsType: FractionsType) =
+    private fun List<UnitEcs>.findCapitalShip(unitFractionsType: FractionsType) =
             find { it.hasComponent<CapitalShip>() && it.getComponent<FractionsType>() == unitFractionsType }
 
 }
 
-fun List<Unit>.extractTransports(): List<Unit> {
-    val onBoardEntities = mutableListOf<Unit>()
+fun List<UnitEcs>.extractTransports(): List<UnitEcs> {
+    val onBoardEntities = mutableListOf<UnitEcs>()
     forEach {
         val transport = it.getComponent<Transport>()
         if (transport != null) {

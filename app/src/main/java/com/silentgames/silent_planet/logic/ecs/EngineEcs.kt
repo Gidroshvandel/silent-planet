@@ -1,13 +1,13 @@
 package com.silentgames.silent_planet.logic.ecs
 
-import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
+import com.silentgames.silent_planet.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.silent_planet.logic.ecs.system.System
 
-class Engine(val gameState: GameState) {
+class EngineEcs(val gameState: GameState) {
 
     private val systems = mutableListOf<System>()
 
-    var onProcessingChanged: ((Boolean) -> kotlin.Unit)? = null
+    var onProcessingChanged: ((Boolean) -> Unit)? = null
 
     var processing = false
         set(value) {
@@ -28,13 +28,13 @@ class Engine(val gameState: GameState) {
         }
     }
 
-    fun processSystems(entity: Unit) {
+    fun processSystems(entity: UnitEcs) {
         if (!processing) {
             forceProcessSystem(entity)
         }
     }
 
-    fun forceProcessSystem(entity: Unit) {
+    fun forceProcessSystem(entity: UnitEcs) {
         systems.forEach {
             it.execute(gameState, entity)
         }

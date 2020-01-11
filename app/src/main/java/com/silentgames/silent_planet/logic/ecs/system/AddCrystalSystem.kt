@@ -4,17 +4,17 @@ import com.silentgames.silent_planet.logic.ecs.GameState
 import com.silentgames.silent_planet.logic.ecs.component.Crystal
 import com.silentgames.silent_planet.logic.ecs.component.Position
 import com.silentgames.silent_planet.logic.ecs.component.event.AddCrystalEvent
-import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
+import com.silentgames.silent_planet.logic.ecs.entity.unit.UnitEcs
 
 class AddCrystalSystem : System {
 
-    override fun execute(gameState: GameState, unit: Unit) {
+    override fun execute(gameState: GameState, unit: UnitEcs) {
         unit.getComponent<AddCrystalEvent>()?.let {
             gameState.processedCrystalAddEvent(it, unit)
         }
     }
 
-    private fun GameState.processedCrystalAddEvent(addCrystalEvent: AddCrystalEvent, unit: Unit) {
+    private fun GameState.processedCrystalAddEvent(addCrystalEvent: AddCrystalEvent, unit: UnitEcs) {
         val position = unit.getComponent<Position>()?.currentPosition
         if (position != null) {
             val crystal = getCell(position)?.getComponent<Crystal>()
@@ -25,7 +25,7 @@ class AddCrystalSystem : System {
         }
     }
 
-    private fun Unit.addCrystal(addCrystalEvent: AddCrystalEvent) {
+    private fun UnitEcs.addCrystal(addCrystalEvent: AddCrystalEvent) {
         val unitCrystal = getComponent<Crystal>()
         if (unitCrystal == null) {
             addComponent(Crystal(addCrystalEvent.crystals))

@@ -6,20 +6,20 @@ import com.silentgames.silent_planet.engine.Entity
 import com.silentgames.silent_planet.engine.base.Layer
 import com.silentgames.silent_planet.logic.Constants
 import com.silentgames.silent_planet.logic.ecs.Axis
-import com.silentgames.silent_planet.logic.ecs.Engine
+import com.silentgames.silent_planet.logic.ecs.EngineEcs
 import com.silentgames.silent_planet.logic.ecs.GameState
 import com.silentgames.silent_planet.logic.ecs.component.Position
 import com.silentgames.silent_planet.logic.ecs.component.Texture
 import com.silentgames.silent_planet.logic.ecs.component.Transport
-import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
+import com.silentgames.silent_planet.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.silent_planet.logic.ecs.extractTransports
 import com.silentgames.silent_planet.view.SurfaceGameView
 
-class RenderSystem(private val surfaceView: SurfaceGameView, private val onSceneUpdate: () -> kotlin.Unit) : System {
+class RenderSystem(private val surfaceView: SurfaceGameView, private val onSceneUpdate: () -> Unit) : System {
 
-    private var engine: Engine? = null
+    private var engine: EngineEcs? = null
 
-    override fun onEngineAttach(engine: Engine) {
+    override fun onEngineAttach(engine: EngineEcs) {
         this.engine = engine
     }
 
@@ -31,7 +31,7 @@ class RenderSystem(private val surfaceView: SurfaceGameView, private val onScene
         }
     }
 
-    override fun execute(gameState: GameState, unit: Unit) {
+    override fun execute(gameState: GameState, unit: UnitEcs) {
         engine?.processing = true
         render(gameState) {
             if (it) {
@@ -43,7 +43,7 @@ class RenderSystem(private val surfaceView: SurfaceGameView, private val onScene
         }
     }
 
-    private fun render(gameState: GameState, onUpdateComplete: (Boolean) -> kotlin.Unit) {
+    private fun render(gameState: GameState, onUpdateComplete: (Boolean) -> Unit) {
         val backgroundLayer = Layer()
         val entityLayer = Layer()
         val horizontalCountOfCells = Constants.horizontalCountOfCells
@@ -76,7 +76,7 @@ class RenderSystem(private val surfaceView: SurfaceGameView, private val onScene
         surfaceView.updateLayer(SurfaceGameView.LayerType.ENTITY, entityLayer, onUpdateComplete)
     }
 
-    private fun Unit.toDrawEntity(): Entity? {
+    private fun UnitEcs.toDrawEntity(): Entity? {
         val texture = this.getComponent<Texture>()?.bitmap ?: return null
         val position = this.getComponent<Position>() ?: return null
         return Entity(
