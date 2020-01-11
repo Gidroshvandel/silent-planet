@@ -84,9 +84,10 @@ class MainPresenter internal constructor(
                     }
             ))
 
-            viewModel.engine.addSystem(AiSystem())
+            viewModel.engine.addSystem(AiPlayerSystem())
             viewModel.engine.addSystem(AddCrystalSystem())
             viewModel.engine.addSystem(GoalSystem())
+            viewModel.engine.addSystem(AiShipSystem())
             viewModel.engine.addSystem(ArrowSystem())
             viewModel.engine.addSystem(MovementSystem())
             viewModel.engine.addSystem(TeleportSystem())

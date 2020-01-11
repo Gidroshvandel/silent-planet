@@ -6,11 +6,10 @@ import com.silentgames.silent_planet.logic.ecs.component.event.AddCrystalEvent
 import com.silentgames.silent_planet.logic.ecs.entity.cell.Cell
 import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
 import com.silentgames.silent_planet.logic.findPathToCell
-import com.silentgames.silent_planet.logic.getAvailableMoveDistancePositionList
 import com.silentgames.silent_planet.model.Axis
 import com.silentgames.silent_planet.model.fractions.FractionsType
 
-class AiSystem() : System {
+class AiPlayerSystem() : System {
 
     fun GameState.choosePlayerToMove(fractionsType: FractionsType): Unit? {
         val capitalShip = this.getCapitalShip(fractionsType)
@@ -93,9 +92,6 @@ class AiSystem() : System {
             cellsAtMoveDistance
         })?.random()?.getCurrentPosition()
     }
-
-    private fun GameState.getCellsAtMoveDistance(position: Axis) =
-            getAvailableMoveDistancePositionList(position).mapNotNull { this.getCell(it) }
 
     private fun List<Cell>.getCanMoveCells() = filter { it.getComponent<MovingMode>() == MovingMode.WALK }
 

@@ -7,6 +7,7 @@ import com.silentgames.silent_planet.logic.ecs.component.Position
 import com.silentgames.silent_planet.logic.ecs.entity.Entity
 import com.silentgames.silent_planet.logic.ecs.entity.cell.Cell
 import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
+import com.silentgames.silent_planet.logic.getAvailableMoveDistancePositionList
 import com.silentgames.silent_planet.model.Axis
 
 fun GameState.getCurrentUnitCell(unit: Unit, cellExist: (cell: Cell, position: Axis) -> kotlin.Unit) {
@@ -30,3 +31,6 @@ fun Cell.isHide() = hasComponent<Hide>()
 fun Entity.getCrystalsCount() = getComponent<Crystal>()?.count ?: 0
 
 fun Entity.getCurrentPosition() = getComponent<Position>()?.currentPosition
+
+fun GameState.getCellsAtMoveDistance(position: Axis) =
+        getAvailableMoveDistancePositionList(position).mapNotNull { this.getCell(it) }

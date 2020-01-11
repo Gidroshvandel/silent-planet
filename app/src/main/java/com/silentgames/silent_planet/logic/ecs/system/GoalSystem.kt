@@ -1,7 +1,6 @@
 package com.silentgames.silent_planet.logic.ecs.system
 
 import com.silentgames.silent_planet.logic.ecs.GameState
-import com.silentgames.silent_planet.logic.ecs.component.ArtificialIntelligence
 import com.silentgames.silent_planet.logic.ecs.component.Goal
 import com.silentgames.silent_planet.logic.ecs.component.Position
 import com.silentgames.silent_planet.logic.ecs.component.TargetPosition
@@ -16,7 +15,6 @@ class GoalSystem : System {
         val nextAxisToGoal = goal?.axis?.let { gameState.getNextAxisToGoal(unit, goal.axis) }
         if (nextAxisToGoal != null) {
             unit.addComponent(TargetPosition(nextAxisToGoal))
-            unit.removeComponent(ArtificialIntelligence::class.java)
         }
     }
 
