@@ -7,7 +7,6 @@ import com.silentgames.silent_planet.logic.ecs.component.Description
 import com.silentgames.silent_planet.logic.ecs.component.MovingMode
 import com.silentgames.silent_planet.logic.ecs.component.Position
 import com.silentgames.silent_planet.logic.ecs.component.Texture
-import com.silentgames.silent_planet.utils.BitmapEditor
 
 /**
  * Created by gidroshvandel on 07.07.16.
@@ -18,7 +17,7 @@ class SpaceCell(
 ) : CellEcs(
         Position(position),
         Description(context.getString(R.string.space_cell_name), context.getString(R.string.space_cell_description)),
-        Texture(BitmapEditor.getCellBitmap(context, R.drawable.space_texture))
+        Texture(R.drawable.space_texture)
 ) {
     init {
         addComponent(MovingMode.FLY)

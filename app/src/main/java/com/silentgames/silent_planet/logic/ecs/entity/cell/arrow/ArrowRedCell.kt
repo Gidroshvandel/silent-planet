@@ -20,6 +20,6 @@ class ArrowRedCell(
         rotateAngle,
         ArrowMode.DIRECT,
         3,
-        BitmapEditor.rotateBitmap(rotateAngle, BitmapEditor.getCellBitmap(context, R.drawable.arow_red_cell)),
+        R.drawable.arow_red_cell,
         context.getString(R.string.arrow_red_cell_description)
 )

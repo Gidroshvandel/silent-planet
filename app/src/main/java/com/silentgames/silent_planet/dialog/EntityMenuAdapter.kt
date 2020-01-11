@@ -1,6 +1,6 @@
 package com.silentgames.silent_planet.dialog
 
-import android.graphics.Bitmap
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.View.inflate
@@ -67,7 +67,9 @@ class EntityMenuAdapter(
         private val tvCrystalCount: TextView = itemView.findViewById(R.id.tv_crystal_count)
 
         fun update(entity: EntityData, onClick: (EntityData) -> Unit) {
-            ivEntityIcon.setImageBitmap(entity.texture)
+            ContextCompat.getDrawable(itemView.context, entity.texture)?.let {
+                ivEntityIcon.setImageDrawable(it)
+            }
             tvEntityName.text = entity.name
             tvDescription.text = entity.description
             tvCrystalCount.text = entity.crystalCount
@@ -83,7 +85,9 @@ class EntityMenuAdapter(
         private val tvCrystalCount: TextView = itemView.findViewById(R.id.tv_crystal_count)
 
         fun update(entity: EntityData, onClick: (EntityData) -> Unit) {
-            ivEntityIcon.setImageBitmap(entity.texture)
+            ContextCompat.getDrawable(itemView.context, entity.texture)?.let {
+                ivEntityIcon.setImageDrawable(it)
+            }
             tvEntityName.text = entity.name
             tvDescription.text = entity.description
             tvCrystalCount.text = entity.crystalCount
@@ -100,7 +104,7 @@ class EntityMenuAdapter(
 
 class EntityData(
         val id: Long,
-        val texture: Bitmap,
+        val texture: Int,
         val name: String,
         val description: String,
         val crystalCount: String,

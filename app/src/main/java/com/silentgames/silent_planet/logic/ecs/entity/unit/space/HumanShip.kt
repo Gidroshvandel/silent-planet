@@ -6,7 +6,6 @@ import com.silentgames.silent_planet.logic.ecs.Axis
 import com.silentgames.silent_planet.logic.ecs.component.Description
 import com.silentgames.silent_planet.logic.ecs.component.FractionsType
 import com.silentgames.silent_planet.logic.ecs.component.Texture
-import com.silentgames.silent_planet.utils.BitmapEditor
 
 class HumanShip(
         context: Context,
@@ -14,7 +13,7 @@ class HumanShip(
 ) : SpaceShip(
         context,
         position,
-        Texture(BitmapEditor.getEntityBitmap(context, R.drawable.human_space_ship)),
+        Texture(R.drawable.human_space_ship),
         FractionsType.HUMAN,
         Description(
                 context.getString(R.string.human_ship_name),

@@ -1,7 +1,6 @@
 package com.silentgames.silent_planet.mvp.main
 
 import android.app.Activity
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.widget.Toast
@@ -141,9 +140,8 @@ class MainActivity : Activity(), MainContract.View, Callback {
         Toast.makeText(this, text, Toast.LENGTH_LONG).show()
     }
 
-    override fun showObjectIcon(bitmap: Bitmap) {
-        select_object_icon.setImageBitmap(bitmap)
-
+    override fun showObjectIcon(bitmap: Int) {
+        select_object_icon.setImageDrawable(ContextCompat.getDrawable(this, bitmap))
     }
 
     override fun onSingleTapConfirmed(axis: Axis) {

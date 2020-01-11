@@ -1,6 +1,5 @@
 package com.silentgames.silent_planet.mvp.main
 
-import android.graphics.Bitmap
 import com.silentgames.silent_planet.dialog.EntityData
 import com.silentgames.silent_planet.logic.ecs.Axis
 import com.silentgames.silent_planet.logic.ecs.component.FractionsType
@@ -15,7 +14,7 @@ interface MainContract {
 
         fun fillDescription(text: String)
 
-        fun showObjectIcon(bitmap: Bitmap)
+        fun showObjectIcon(bitmap: Int)
 
         fun enableButton(isEnabled: Boolean)
 

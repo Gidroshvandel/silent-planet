@@ -13,15 +13,11 @@ import com.silentgames.silent_planet.logic.ecs.entity.EntityEcs
 import com.silentgames.silent_planet.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.silent_planet.logic.ecs.extractTransports
 import com.silentgames.silent_planet.logic.ecs.system.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
 
 /**
  * Created by gidroshvandel on 21.06.17.
  */
-@ExperimentalCoroutinesApi
-@FlowPreview
 class MainPresenter internal constructor(
         private val view: MainContract.View,
         private val viewModel: MainViewModel,
@@ -178,7 +174,7 @@ class MainPresenter internal constructor(
             map { it.toEntityData() }.toMutableList()
 
     private fun EntityEcs.toEntityData(): EntityData {
-        val texture = this.getComponent<Texture>()?.bitmap
+        val texture = this.getComponent<Texture>()?.bitmapId
         val description = this.getComponent<Description>()
 
         val captured = this.getComponent<Capture>() != null
@@ -218,7 +214,7 @@ class MainPresenter internal constructor(
         } else {
             view.enableButton(false)
         }
-        unit.getComponent<Texture>()?.bitmap?.let { view.showObjectIcon(it) }
+        unit.getComponent<Texture>()?.bitmapId?.let { view.showObjectIcon(it) }
         unit.getComponent<Description>()?.let { showDescription(it) }
     }
 
@@ -232,7 +228,7 @@ class MainPresenter internal constructor(
         if (isVisible) {
             view.setImageCrystalText(crystals.toString())
         }
-        cellType.getComponent<Texture>()?.bitmap?.let { view.showObjectIcon(it) }
+        cellType.getComponent<Texture>()?.bitmapId?.let { view.showObjectIcon(it) }
         viewModel.selectedEntity = null
         cellType.getComponent<Description>()?.let { showDescription(it) }
     }

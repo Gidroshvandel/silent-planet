@@ -19,6 +19,6 @@ class ArrowGreenCell(
         rotateAngle,
         ArrowMode.SLANTING,
         1,
-        BitmapEditor.rotateBitmap(rotateAngle, BitmapEditor.getCellBitmap(context, R.drawable.arrow_green_cell)),
+        R.drawable.arrow_green_cell,
         context.getString(R.string.arrow_green_cell_description)
 )

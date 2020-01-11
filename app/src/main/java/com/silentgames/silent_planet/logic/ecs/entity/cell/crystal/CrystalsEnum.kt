@@ -1,27 +1,21 @@
 package com.silentgames.silent_planet.logic.ecs.entity.cell.crystal
 
-import android.content.Context
-import android.graphics.Bitmap
 import com.silentgames.silent_planet.R
-import com.silentgames.silent_planet.utils.BitmapEditor
 import java.util.*
 
 enum class CrystalsEnum(val crystalsCount: Int) {
 
     ONE(1) {
-        override fun getImage(context: Context) =
-                BitmapEditor.getCellBitmap(context, R.drawable.one_crystal)
+        override fun getImageId(): Int = R.drawable.one_crystal
     },
     TWO(2) {
-        override fun getImage(context: Context) =
-                BitmapEditor.getCellBitmap(context, R.drawable.two_crystals)
+        override fun getImageId(): Int = R.drawable.two_crystals
     },
     THREE(3) {
-        override fun getImage(context: Context) =
-                BitmapEditor.getCellBitmap(context, R.drawable.three_crystals)
+        override fun getImageId(): Int = R.drawable.three_crystals
     };
 
-    abstract fun getImage(context: Context): Bitmap
+    abstract fun getImageId(): Int
 
     companion object {
         private val values = mutableListOf(*values())

@@ -21,7 +21,7 @@ class CrystalCell(
         context,
         Position(position),
         Hide(
-                crystalType.getImage(context),
+                crystalType.getImageId(),
                 Description(
                         context.getString(R.string.crystal_cell_name),
                         context.getString(R.string.crystal_cell_description, crystalType.crystalsCount)

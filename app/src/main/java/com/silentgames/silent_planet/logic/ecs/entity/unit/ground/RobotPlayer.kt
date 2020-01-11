@@ -6,7 +6,6 @@ import com.silentgames.silent_planet.logic.ecs.Axis
 import com.silentgames.silent_planet.logic.ecs.component.Description
 import com.silentgames.silent_planet.logic.ecs.component.FractionsType
 import com.silentgames.silent_planet.logic.ecs.component.Texture
-import com.silentgames.silent_planet.utils.BitmapEditor
 
 /**
  * Created by gidroshvandel on 24.09.16.
@@ -18,7 +17,7 @@ class RobotPlayer(
 ) : Player(
         context,
         position,
-        Texture(BitmapEditor.getEntityBitmap(context, R.drawable.robot)),
+        Texture(R.drawable.robot),
         FractionsType.ROBOT,
         Description(
                 name,

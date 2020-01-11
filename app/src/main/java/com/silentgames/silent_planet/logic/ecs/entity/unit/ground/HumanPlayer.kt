@@ -6,7 +6,6 @@ import com.silentgames.silent_planet.logic.ecs.Axis
 import com.silentgames.silent_planet.logic.ecs.component.Description
 import com.silentgames.silent_planet.logic.ecs.component.FractionsType
 import com.silentgames.silent_planet.logic.ecs.component.Texture
-import com.silentgames.silent_planet.utils.BitmapEditor
 
 /**
  * Created by gidroshvandel on 24.09.16.
@@ -18,7 +17,7 @@ class HumanPlayer(
 ) : Player(
         context,
         position,
-        Texture(BitmapEditor.getEntityBitmap(context, R.drawable.human_spaceman)),
+        Texture(R.drawable.human_spaceman),
         FractionsType.HUMAN,
         Description(
                 name,

@@ -1,7 +1,6 @@
 package com.silentgames.silent_planet.logic.ecs.entity.cell.arrow
 
 import android.content.Context
-import android.graphics.Bitmap
 import com.silentgames.silent_planet.R
 import com.silentgames.silent_planet.logic.ecs.Axis
 import com.silentgames.silent_planet.logic.ecs.component.*
@@ -17,7 +16,7 @@ abstract class ArrowCell(
         rotateAngle: BitmapEditor.RotateAngle,
         arrowMode: ArrowMode,
         distance: Int,
-        texture: Bitmap,
+        texture: Int,
         description: String = ""
 ) : GroundCell(
         context,
