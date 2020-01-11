@@ -1,22 +1,22 @@
 package com.silentgames.silent_planet.logic
 
+import com.silentgames.silent_planet.logic.ecs.GameState
+import com.silentgames.silent_planet.logic.ecs.component.Transport
+import com.silentgames.silent_planet.logic.ecs.entity.unit.Unit
 import com.silentgames.silent_planet.model.*
 import com.silentgames.silent_planet.model.entities.EntityType
 import com.silentgames.silent_planet.model.entities.ground.Player
-import com.silentgames.silent_planet.model.entities.space.SpaceShip
 import com.silentgames.silent_planet.model.fractions.FractionsType
 
-fun GameMatrix.choosePlayerToMove(fractionsType: FractionsType): EntityPosition<Player>? {
-    val spaceShip = this.getShipPosition(fractionsType)
-    val list = this.getCellListByFraction(fractionsType)
-    val playerOnGroundCell = list.getPlayerListCell().getWithActivePlayer().firstOrNull()
-    val playerOnGround = playerOnGroundCell?.entityType?.getActive()?.getPlayer()
-    if (playerOnGroundCell != null && playerOnGround != null) {
-        return EntityPosition(playerOnGround, playerOnGroundCell.cellType.position)
+fun GameState.choosePlayerToMove(fractionsType: FractionsType): Unit? {
+    val capitalShip = this.getCapitalShip(fractionsType)
+    val list = this.unitMap.filter { it.getComponent<FractionsType>() == fractionsType }
+    val playerOnGround = list.firstOrNull()
+    if (playerOnGround != null) {
+        return playerOnGround
     } else {
-        val playerFromShip = spaceShip.entity.getFirstPlayerFromShip()
-        if (playerFromShip != null) {
-            return EntityPosition(playerFromShip, spaceShip.position)
+        capitalShip?.getComponent<Transport>()?.getFirstPlayerFromTransport(fractionsType)?.let {
+            return it
         }
     }
     return null
@@ -62,8 +62,8 @@ private fun EntityType.isGoalActual(matrix: GameMatrix): Boolean {
     }
 }
 
-private fun SpaceShip.getFirstPlayerFromShip(): Player? =
-        this.playersOnBord.firstOrNull { it.fraction.fractionsType == this.fraction.fractionsType }
+private fun Transport.getFirstPlayerFromTransport(fractionsType: FractionsType): Unit? =
+        this.unitsOnBoard.firstOrNull { it.getComponent<FractionsType>() == fractionsType }
 
 private fun GameMatrix.tryReturnToShip(player: EntityPosition<Player>): Boolean {
 //    val spaceShip = this.getShipPosition(player.entity.fraction.fractionsType)

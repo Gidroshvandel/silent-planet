@@ -1,6 +1,7 @@
 package com.silentgames.silent_planet.mvp.main
 
 import com.silentgames.silent_planet.dialog.EntityData
+import com.silentgames.silent_planet.logic.Constants
 import com.silentgames.silent_planet.logic.ecs.Engine
 import com.silentgames.silent_planet.logic.ecs.component.*
 import com.silentgames.silent_planet.logic.ecs.component.event.AddCrystalEvent
@@ -80,16 +81,19 @@ class MainPresenter internal constructor(
             ))
 
             viewModel.engine.addSystem(ArrowSystem())
+            viewModel.engine.addSystem(AiSystem())
+            viewModel.engine.addSystem(AddCrystalSystem())
+            viewModel.engine.addSystem(GoalSystem())
             viewModel.engine.addSystem(MovementSystem())
             viewModel.engine.addSystem(CaptureSystem())
             viewModel.engine.addSystem(TeleportSystem())
             viewModel.engine.addSystem(ExploreSystem())
             viewModel.engine.addSystem(DeathSystem())
-            viewModel.engine.addSystem(CrystalSystem())
+            viewModel.engine.addSystem(PutCrystalToCapitalShipSystem())
             viewModel.engine.addSystem(TransportSystem())
             viewModel.engine.addSystem(
                     WinSystem(
-                            3,
+                            Constants.countCrystalsToWin,
                             { fractionsType, crystals ->
                                 when (fractionsType) {
                                     ALIEN -> view.changeAlienCristalCount(crystals)
