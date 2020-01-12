@@ -2,6 +2,7 @@ package com.silentgames.silent_planet.logic
 
 import android.content.Context
 import com.silentgames.silent_planet.logic.ecs.Axis
+import com.silentgames.silent_planet.logic.ecs.component.RotateAngle
 import com.silentgames.silent_planet.logic.ecs.entity.cell.CellEcs
 import com.silentgames.silent_planet.logic.ecs.entity.cell.DeathCell
 import com.silentgames.silent_planet.logic.ecs.entity.cell.EmptyCell
@@ -10,7 +11,6 @@ import com.silentgames.silent_planet.logic.ecs.entity.cell.arrow.ArrowGreenCell
 import com.silentgames.silent_planet.logic.ecs.entity.cell.arrow.ArrowRedCell
 import com.silentgames.silent_planet.logic.ecs.entity.cell.crystal.CrystalCell
 import com.silentgames.silent_planet.logic.ecs.entity.cell.crystal.CrystalsEnum
-import com.silentgames.silent_planet.utils.BitmapEditor
 import java.util.*
 
 class CellRandomGenerator(val context: Context) {
@@ -61,8 +61,8 @@ class CellRandomGenerator(val context: Context) {
     private fun RandomCellType.getCellType(axis: Axis): CellEcs {
         return when (this) {
             RandomCellType.DEATH -> DeathCell(context, axis)
-            RandomCellType.GREEN_ARROW -> ArrowGreenCell(context, axis, BitmapEditor.RotateAngle.randomAngle())
-            RandomCellType.RED_ARROW -> ArrowRedCell(context, axis, BitmapEditor.RotateAngle.randomAngle())
+            RandomCellType.GREEN_ARROW -> ArrowGreenCell(context, axis, RotateAngle.randomAngle())
+            RandomCellType.RED_ARROW -> ArrowRedCell(context, axis, RotateAngle.randomAngle())
             RandomCellType.CRYSTAL_ONE -> CrystalCell(context, axis, CrystalsEnum.ONE)
             RandomCellType.CRYSTAL_TWO -> CrystalCell(context, axis, CrystalsEnum.TWO)
             RandomCellType.CRYSTAL_THREE -> CrystalCell(context, axis, CrystalsEnum.THREE)

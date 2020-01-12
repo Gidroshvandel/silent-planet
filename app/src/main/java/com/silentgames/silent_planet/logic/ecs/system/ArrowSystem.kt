@@ -6,8 +6,8 @@ import com.silentgames.silent_planet.logic.ecs.GameState
 import com.silentgames.silent_planet.logic.ecs.component.*
 import com.silentgames.silent_planet.logic.ecs.component.ArrowMode.DIRECT
 import com.silentgames.silent_planet.logic.ecs.component.ArrowMode.SLANTING
+import com.silentgames.silent_planet.logic.ecs.component.RotateAngle
 import com.silentgames.silent_planet.logic.ecs.entity.unit.UnitEcs
-import com.silentgames.silent_planet.utils.BitmapEditor
 import com.silentgames.silent_planet.utils.notNull
 
 class ArrowSystem : System {
@@ -90,27 +90,27 @@ class ArrowSystem : System {
                 SLANTING -> rotateAngle.calculateSlantingTargetPosition(position, distance)
             }
 
-    private fun BitmapEditor.RotateAngle.calculateSlantingTargetPosition(position: Axis, distance: Int): Axis =
+    private fun RotateAngle.calculateSlantingTargetPosition(position: Axis, distance: Int): Axis =
             when (this) {
-                BitmapEditor.RotateAngle.DEGREES0 -> {
+                RotateAngle.DEGREES0 -> {
                     Axis(
                             position.x + distance,
                             position.y - distance
                     )
                 }
-                BitmapEditor.RotateAngle.DEGREES90 -> {
+                RotateAngle.DEGREES90 -> {
                     Axis(
                             position.x + distance,
                             position.y + distance
                     )
                 }
-                BitmapEditor.RotateAngle.DEGREES180 -> {
+                RotateAngle.DEGREES180 -> {
                     Axis(
                             position.x - distance,
                             position.y + distance
                     )
                 }
-                BitmapEditor.RotateAngle.DEGREES270 -> {
+                RotateAngle.DEGREES270 -> {
                     Axis(
                             position.x - distance,
                             position.y - distance
@@ -118,27 +118,27 @@ class ArrowSystem : System {
                 }
             }
 
-    private fun BitmapEditor.RotateAngle.calculateDirectTargetPosition(position: Axis, distance: Int): Axis =
+    private fun RotateAngle.calculateDirectTargetPosition(position: Axis, distance: Int): Axis =
             when (this) {
-                BitmapEditor.RotateAngle.DEGREES0 -> {
+                RotateAngle.DEGREES0 -> {
                     Axis(
                             position.x,
                             position.y - distance
                     )
                 }
-                BitmapEditor.RotateAngle.DEGREES90 -> {
+                RotateAngle.DEGREES90 -> {
                     Axis(
                             position.x + distance,
                             position.y
                     )
                 }
-                BitmapEditor.RotateAngle.DEGREES180 -> {
+                RotateAngle.DEGREES180 -> {
                     Axis(
                             position.x,
                             position.y + distance
                     )
                 }
-                BitmapEditor.RotateAngle.DEGREES270 -> {
+                RotateAngle.DEGREES270 -> {
                     Axis(
                             position.x - distance,
                             position.y
