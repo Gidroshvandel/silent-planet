@@ -1,12 +1,5 @@
 package com.silentgames.silent_planet.utils
 
-//fun compareEntityByPosition(e1: Entity, e2: Entity): Int {
-//    val mapper = ComponentMapper.getFor(PositionComponent::class.java)
-//    val z1 = mapper[e1]?.z?:0f
-//    val z2 = mapper[e2]?.z?:0f
-//    return z1.compareTo(z2)
-//}
-
 fun <T1, T2, T3> notNull(t1: T1?, t2: T2?, body: (T1, T2) -> T3): T3? =
         if (t1 != null && t2 != null)
             body(t1, t2)
