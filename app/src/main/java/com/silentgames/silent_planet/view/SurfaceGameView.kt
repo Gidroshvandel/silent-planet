@@ -8,6 +8,7 @@ import com.silentgames.core.logic.Constants
 import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.silent_planet.customListeners.CustomGestureListener
 import com.silentgames.silent_planet.customListeners.CustomScaleGestureListener
+import com.silentgames.silent_planet.engine.EngineAxis
 import com.silentgames.silent_planet.engine.GridLayer
 import com.silentgames.silent_planet.engine.base.DrawerTask
 import com.silentgames.silent_planet.engine.base.Layer
@@ -123,16 +124,16 @@ class SurfaceGameView(
         scene?.let {
             //не даем канвасу показать края по горизонтали
             if (it.scrollAxis.x + distanceX < it.width.toScale() && it.scrollAxis.x + distanceX > 0) {
-                scene?.scrollAxis = Axis((it.scrollAxis.x + distanceX).toInt(), it.scrollAxis.y)
+                scene?.scrollAxis = EngineAxis((it.scrollAxis.x + distanceX), it.scrollAxis.y)
             }
             //не даем канвасу показать края по вертикали
             if (it.scrollAxis.y + distanceY < it.height.toScale() && it.scrollAxis.y + distanceY > 0) {
-                scene?.scrollAxis = Axis(it.scrollAxis.x, (it.scrollAxis.y + distanceY).toInt())
+                scene?.scrollAxis = EngineAxis(it.scrollAxis.x, (it.scrollAxis.y + distanceY))
             }
         }
     }
 
-    private fun Int.toScale(): Int = (this * (mScaleFactor - 1)).toInt()
+    private fun Int.toScale(): Float = (this * (mScaleFactor - 1))
 
     override fun onScale() {
         val scaleFactor = scaleGestureDetector.scaleFactor//получаем значение зума относительно предыдущего состояния
@@ -148,17 +149,17 @@ class SurfaceGameView(
                 //по умолчанию после зума канвас отскролит в левый верхний угол. Скролим канвас так, чтобы на экране оставалась обасть канваса, над которой был
                 //жест зума
                 //Для получения данной формулы достаточно школьных знаний математики (декартовы координаты).
-                var scrollX = ((scrollX + focusX) * scaleFactor - focusX).toInt()
+                var scrollX = ((scrollX + focusX) * scaleFactor - focusX)
                 scrollX = min(
-                        it.scrollAxis.x + max(scrollX, 0),
+                        it.scrollAxis.x + max(scrollX, 0f),
                         it.width.toScale()
                 )
-                var scrollY = ((scrollY + focusY) * scaleFactor - focusY).toInt()
+                var scrollY = ((scrollY + focusY) * scaleFactor - focusY)
                 scrollY = min(
-                        it.scrollAxis.y + max(scrollY, 0),
+                        it.scrollAxis.y + max(scrollY, 0f),
                         it.height.toScale()
                 )
-                it.scrollAxis = Axis(scrollX, scrollY)
+                it.scrollAxis = EngineAxis(scrollX, scrollY)
             }
         }
     }
