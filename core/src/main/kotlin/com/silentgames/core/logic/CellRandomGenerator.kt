@@ -48,8 +48,7 @@ class CellRandomGenerator {
                 } else {
                     count++
                     listCells.add(
-                            DeathCell(Axis(x, y))
-//                            randomCellTypeList[count].getCellType(Axis(x, y))
+                            randomCellTypeList[count].getCellType(Axis(x, y))
                     )
                 }
             }
