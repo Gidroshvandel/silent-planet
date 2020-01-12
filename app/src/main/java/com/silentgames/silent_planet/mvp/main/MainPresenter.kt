@@ -79,6 +79,7 @@ class MainPresenter internal constructor(
 
                     if (aiFractionList.contains(it)) {
                         val unit = viewModel.engine.gameState.choosePlayerToMove(it)
+                                ?: viewModel.engine.gameState.getCapitalShip(it)
                         unit?.addComponent(ArtificialIntelligence())
                         unit?.let { viewModel.engine.processSystems(it) }
                     }

@@ -28,7 +28,7 @@ class AiPlayerSystem() : System {
             this.unitsOnBoard.firstOrNull { it.getComponent<FractionsType>() == fractionsType }
 
     override fun execute(gameState: GameState, unit: UnitEcs) {
-        if (unit.hasComponent<ArtificialIntelligence>()) {
+        if (unit.hasComponent<ArtificialIntelligence>() && !unit.hasComponent<CapitalShip>()) {
             process(unit, gameState)
         }
     }
