@@ -44,6 +44,9 @@ class GameState(
         }
     }
 
+    fun getAllFractionUnits(fractionsType: FractionsType): List<UnitEcs> =
+            unitMap.extractTransports().filter { it.getComponent<FractionsType>() == fractionsType }
+
     fun moveUnit(unit: UnitEcs, toPosition: Axis) {
         if (!unitMap.contains(unit)) {
             mutableUnitList.add(unit)
@@ -61,7 +64,7 @@ class GameState(
 
     private fun makeUnitsCanTurn(fractionsType: FractionsType) {
         unitMap.extractTransports().filter {
-            it.getComponent<FractionsType>() == fractionsType && it.hasComponent<Active>()
+            it.getComponent<FractionsType>() == fractionsType
         }.forEach {
             it.addComponent(TurnToMove())
         }

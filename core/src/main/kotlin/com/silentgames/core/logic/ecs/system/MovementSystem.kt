@@ -10,7 +10,7 @@ import com.silentgames.core.utils.notNull
 class MovementSystem : System {
 
     override fun execute(gameState: GameState, unit: UnitEcs) {
-        gameState.moveSuccess = if (unit.hasComponent<Teleport>()
+        val moveSuccess = if (unit.hasComponent<Teleport>()
                 || unit.getComponent<FractionsType>() != gameState.turn.currentTurnFraction
                 || !unit.hasComponent<TurnToMove>()
                 || !unit.hasComponent<Active>()
@@ -25,13 +25,16 @@ class MovementSystem : System {
                     ::isCanMove
             ) ?: false
         }
-        if (gameState.moveSuccess) {
+        if (moveSuccess) {
+            unit.addComponent(MovedSuccess())
             notNull(
                     unit.getComponent(),
                     unit,
                     gameState,
                     ::move
             )
+        } else {
+            unit.removeComponent(MovedSuccess::class.java)
         }
     }
 
