@@ -6,16 +6,16 @@ import java.util.*
 enum class CrystalsEnum(val crystalsCount: Int) {
 
     ONE(1) {
-        override fun getImageId(): String = "one_crystal"
+        override fun getImageName(): String = "one_crystal.png"
     },
     TWO(2) {
-        override fun getImageId(): String = "two_crystals"
+        override fun getImageName(): String = "two_crystals.png"
     },
     THREE(3) {
-        override fun getImageId(): String = "three_crystals"
+        override fun getImageName(): String = "three_crystals.png"
     };
 
-    abstract fun getImageId(): String
+    abstract fun getImageName(): String
 
     companion object {
         private val values = mutableListOf(*values())

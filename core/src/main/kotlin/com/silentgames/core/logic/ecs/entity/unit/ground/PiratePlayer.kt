@@ -12,10 +12,11 @@ import com.silentgames.core.logic.ecs.component.Texture
  */
 class PiratePlayer(
         name: String,
-        position: Axis
+        position: Axis,
+        imageName: String = "pirate.png"
 ) : Player(
         position,
-        Texture("pirate"),
+        Texture(imageName),
         FractionsType.PIRATE,
         Description(
                 name,

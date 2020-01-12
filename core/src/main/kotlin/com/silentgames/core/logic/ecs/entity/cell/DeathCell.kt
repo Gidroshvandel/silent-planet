@@ -9,12 +9,12 @@ import com.silentgames.core.logic.ecs.component.Hide
 import com.silentgames.core.logic.ecs.component.Position
 
 class DeathCell(
-
-        position: Axis
+        position: Axis,
+        imageName: String = "dead_cell.png"
 ) : GroundCell(
         Position(position),
         Hide(
-                "dead_cell",
+                imageName,
                 Description(Strings.death_cell_name.getString(), Strings.death_cell_description.getString())
         )
 ) {

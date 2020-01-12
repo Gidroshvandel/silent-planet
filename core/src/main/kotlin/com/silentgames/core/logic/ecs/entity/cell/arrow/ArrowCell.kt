@@ -14,12 +14,12 @@ abstract class ArrowCell(
         rotateAngle: RotateAngle,
         arrowMode: ArrowMode,
         distance: Int,
-        texture: String,
+        imageName: String,
         description: String = ""
 ) : GroundCell(
         Position(position),
         Hide(
-                texture,
+                imageName,
                 Description(Strings.arrow_cell_name.getString(), description)
         )
 ) {

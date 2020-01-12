@@ -23,7 +23,7 @@ class ExploreSystem : System {
     }
 
     private fun makeCellExplored(hide: Hide, cell: CellEcs) {
-        cell.addComponent(Texture(hide.bitmapToShow))
+        cell.addComponent(Texture(hide.imageToShow))
         cell.addComponent(hide.descriptionToShow)
         cell.removeComponent(hide)
     }

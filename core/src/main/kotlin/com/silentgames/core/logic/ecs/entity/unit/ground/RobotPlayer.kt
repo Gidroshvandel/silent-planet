@@ -11,12 +11,12 @@ import com.silentgames.core.logic.ecs.component.Texture
  * Created by gidroshvandel on 24.09.16.
  */
 class RobotPlayer(
-
         name: String,
-        position: Axis
+        position: Axis,
+        imageName: String = "robot.png"
 ) : Player(
         position,
-        Texture("robot"),
+        Texture(imageName),
         FractionsType.ROBOT,
         Description(
                 name,

@@ -11,12 +11,12 @@ import com.silentgames.core.logic.ecs.component.Texture
  * Created by gidroshvandel on 24.09.16.
  */
 class HumanPlayer(
-
         name: String,
-        position: Axis
+        position: Axis,
+        imageName: String = "human_spaceman.png"
 ) : Player(
         position,
-        Texture("human_spaceman"),
+        Texture(imageName),
         FractionsType.HUMAN,
         Description(
                 name,

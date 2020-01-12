@@ -14,13 +14,13 @@ import com.silentgames.core.logic.ecs.entity.cell.GroundCell
  */
 
 class CrystalCell(
-
         position: Axis,
-        crystalType: CrystalsEnum
+        crystalType: CrystalsEnum,
+        imageName: String = crystalType.getImageName()
 ) : GroundCell(
         Position(position),
         Hide(
-                crystalType.getImageId(),
+                imageName,
                 Description(
                         Strings.crystal_cell_name.getString(),
                         Strings.crystal_cell_description.getString(crystalType.crystalsCount)

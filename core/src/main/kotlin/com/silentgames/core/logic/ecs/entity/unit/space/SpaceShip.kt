@@ -14,7 +14,6 @@ abstract class SpaceShip(
         fractionsType: FractionsType,
         description: Description
 ) : UnitEcs(
-
         Position(position),
         texture,
         MovingMode.FLY,

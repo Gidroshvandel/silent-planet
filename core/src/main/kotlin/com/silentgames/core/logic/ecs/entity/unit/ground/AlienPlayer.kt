@@ -12,10 +12,11 @@ import com.silentgames.core.logic.ecs.component.Texture
  */
 class AlienPlayer(
         name: String,
-        position: Axis
+        position: Axis,
+        imageName: String = "alien.png"
 ) : Player(
         position,
-        Texture("alien"),
+        Texture(imageName),
         FractionsType.ALIEN,
         Description(
                 name,

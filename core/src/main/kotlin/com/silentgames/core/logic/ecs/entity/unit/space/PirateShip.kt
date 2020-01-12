@@ -8,12 +8,11 @@ import com.silentgames.core.logic.ecs.component.FractionsType
 import com.silentgames.core.logic.ecs.component.Texture
 
 class PirateShip(
-
-        position: Axis
+        position: Axis,
+        imageName: String = "pirate_space_ship.png"
 ) : SpaceShip(
-
         position,
-        Texture("pirate_space_ship"),
+        Texture(imageName),
         FractionsType.PIRATE,
         Description(
                 Strings.pirate_ship_name.getString(),

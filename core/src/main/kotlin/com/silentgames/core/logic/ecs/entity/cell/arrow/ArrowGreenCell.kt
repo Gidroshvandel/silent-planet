@@ -11,12 +11,13 @@ import com.silentgames.core.logic.ecs.component.RotateAngle
  */
 class ArrowGreenCell(
         position: Axis,
-        rotateAngle: RotateAngle
+        rotateAngle: RotateAngle,
+        imageName: String = "arrow_green_cell.png"
 ) : ArrowCell(
         position,
         rotateAngle,
         ArrowMode.SLANTING,
         1,
-        "arrow_green_cell",
+        imageName,
         Strings.arrow_green_cell_description.getString()
 )
