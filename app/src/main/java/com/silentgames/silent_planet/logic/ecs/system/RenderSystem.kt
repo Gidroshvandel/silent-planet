@@ -1,7 +1,6 @@
 package com.silentgames.silent_planet.logic.ecs.system
 
-import android.graphics.Bitmap
-import android.util.SparseArray
+import com.silentgames.silent_planet.engine.ArrowBackground
 import com.silentgames.silent_planet.engine.Background
 import com.silentgames.silent_planet.engine.EngineAxis
 import com.silentgames.silent_planet.engine.Entity
@@ -17,51 +16,11 @@ import com.silentgames.silent_planet.logic.ecs.component.Transport
 import com.silentgames.silent_planet.logic.ecs.entity.cell.CellEcs
 import com.silentgames.silent_planet.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.silent_planet.logic.ecs.extractTransports
-import com.silentgames.silent_planet.utils.BitmapEditor
 import com.silentgames.silent_planet.view.SurfaceGameView
 
 class RenderSystem(private val surfaceView: SurfaceGameView, private val onSceneUpdate: () -> Unit) : System {
 
     private var engine: EngineEcs? = null
-
-    private var bitmapCache: SparseArray<Bitmap> = SparseArray()
-
-    private fun getById(id: Int, initBitmap: (id: Int) -> Bitmap): Bitmap {
-        val bitmapCache = bitmapCache.get(id)
-        return if (bitmapCache != null) {
-            bitmapCache
-        } else {
-            val bitmap = initBitmap(id)
-            this.bitmapCache.put(id, bitmap)
-            bitmap
-        }
-    }
-
-    private fun CellEcs.getBitmap(): Bitmap? {
-        val texture = this.getComponent<Texture>()
-        if (texture != null) {
-            val bitmap = getById(texture.bitmapId) {
-                BitmapEditor.getCellBitmap(surfaceView.context, it)
-            }
-            val arrow = this.getComponent<Arrow>()
-            return if (arrow != null) {
-                BitmapEditor.rotateBitmap(arrow.rotateAngle, bitmap)
-            } else {
-                bitmap
-            }
-        }
-        return null
-    }
-
-    private fun UnitEcs.getBitmap(): Bitmap? {
-        val texture = this.getComponent<Texture>()
-        if (texture != null) {
-            return getById(texture.bitmapId) {
-                BitmapEditor.getEntityBitmap(surfaceView.context, it)
-            }
-        }
-        return null
-    }
 
     override fun onEngineAttach(engine: EngineEcs) {
         this.engine = engine
@@ -94,10 +53,9 @@ class RenderSystem(private val surfaceView: SurfaceGameView, private val onScene
         val verticalCountOfCells = Constants.verticalCountOfCells
         for (x in 0 until horizontalCountOfCells) {
             for (y in 0 until verticalCountOfCells) {
-                backgroundLayer.add(Background(
-                        EngineAxis(x.toFloat(), y.toFloat()),
-                        gameState.getCell(Axis(x, y))?.getBitmap()!!
-                ))
+                gameState.getCell(Axis(x, y))?.toDrawBackground()?.let {
+                    backgroundLayer.add(it)
+                }
 
                 val transport = gameState.getUnits(Axis(x, y)).firstOrNull { it.hasComponent<Transport>() }
 
@@ -120,13 +78,34 @@ class RenderSystem(private val surfaceView: SurfaceGameView, private val onScene
         surfaceView.updateLayer(SurfaceGameView.LayerType.ENTITY, entityLayer, onUpdateComplete)
     }
 
+    private fun CellEcs.toDrawBackground(): Background? {
+        val arrow = getComponent<Arrow>()
+        val textureId = getComponent<Texture>()?.bitmapId ?: return null
+        val position = this.getCurrentPosition() ?: return null
+        return if (arrow != null && isVisible()) {
+            ArrowBackground(
+                    surfaceView.context,
+                    position.toEngineAxis(),
+                    textureId,
+                    arrow.rotateAngle
+            )
+        } else {
+            Background(
+                    surfaceView.context,
+                    position.toEngineAxis(),
+                    textureId
+            )
+        }
+    }
+
     private fun UnitEcs.toDrawEntity(): Entity? {
-        val texture = this.getBitmap() ?: return null
+        val textureId = this.getComponent<Texture>()?.bitmapId ?: return null
         val position = this.getComponent<Position>() ?: return null
         return Entity(
+                surfaceView.context,
                 this.id.toString(),
                 position.currentPosition.toEngineAxis(),
-                texture
+                textureId
         ).apply {
             if (!position.moved && position.oldPosition != position.currentPosition) {
                 position.moved = true

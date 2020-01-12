@@ -1,5 +1,6 @@
 package com.silentgames.silent_planet.engine
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
@@ -9,10 +10,11 @@ import kotlin.math.max
 import kotlin.math.min
 
 class Entity(
+        context: Context,
         val id: String,
         axis: EngineAxis,
-        bmp: Bitmap
-) : Sprite(axis, bmp) {
+        bmpResourceId: Int
+) : Sprite(context, axis, bmpResourceId) {
 
     private var speed = 0.2
 
@@ -21,17 +23,19 @@ class Entity(
     var isMove = false
 
     override fun draw(canvas: Canvas, paint: Paint) {
+        val size = ((canvas.width / Constants.verticalCountOfCells) * 0.7).toFloat()
+        val bitmap = getResizedBitmap(size, size)
         val x = cellCenterNumeratorSquare(
                 axis.x,
                 canvas.width,
-                bmp
+                bitmap
         )
         val y = cellCenterNumeratorSquare(
                 axis.y,
                 canvas.height,
-                bmp
+                bitmap
         )
-        canvas.drawBitmap(bmp, x, y, paint)
+        canvas.drawBitmap(bitmap, x, y, paint)
     }
 
     private fun cellCenterNumeratorSquare(cell: Float, viewSize: Int, bitmap: Bitmap): Float {

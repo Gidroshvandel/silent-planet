@@ -1,28 +1,32 @@
 package com.silentgames.silent_planet.engine
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import com.silentgames.silent_planet.engine.base.Sprite
 import com.silentgames.silent_planet.logic.Constants
 
-class Background(
+open class Background(
+        context: Context,
         axis: EngineAxis,
-        bmp: Bitmap
-) : Sprite(axis, bmp) {
+        bmpId: Int
+) : Sprite(context, axis, bmpId) {
 
     override fun draw(canvas: Canvas, paint: Paint) {
+        val size = (canvas.width / Constants.verticalCountOfCells).toFloat()
+        val bitmap = getResizedBitmap(size, size)
         val x = cellCenterNumeratorSquare(
                 axis.x,
                 canvas.width,
-                bmp
+                bitmap
         )
         val y = cellCenterNumeratorSquare(
                 axis.y,
                 canvas.height,
-                bmp
+                bitmap
         )
-        canvas.drawBitmap(bmp, x, y, paint)
+        canvas.drawBitmap(bitmap, x, y, paint)
     }
 
     private fun cellCenterNumeratorSquare(cell: Float, viewSize: Int, bitmap: Bitmap): Float {
