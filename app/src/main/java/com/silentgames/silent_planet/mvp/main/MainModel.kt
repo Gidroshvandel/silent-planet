@@ -1,11 +1,11 @@
 package com.silentgames.silent_planet.mvp.main
 
 import android.content.Context
-import com.silentgames.silent_planet.logic.CellRandomGenerator
-import com.silentgames.silent_planet.logic.EntityRandomGenerator
-import com.silentgames.silent_planet.logic.ecs.GameState
-import com.silentgames.silent_planet.logic.ecs.component.FractionsType
-import com.silentgames.silent_planet.logic.ecs.system.RenderSystem
+import com.silentgames.core.logic.CellRandomGenerator
+import com.silentgames.core.logic.EntityRandomGenerator
+import com.silentgames.core.logic.ecs.GameState
+import com.silentgames.core.logic.ecs.component.FractionsType
+import com.silentgames.silent_planet.logic.RenderSystem
 import com.silentgames.silent_planet.view.SurfaceGameView
 
 /**
@@ -14,8 +14,8 @@ import com.silentgames.silent_planet.view.SurfaceGameView
 class MainModel(val context: Context, private val surfaceView: SurfaceGameView) {
 
     fun generateNewBattleGround(firstTurnFraction: FractionsType): GameState = GameState(
-            CellRandomGenerator(context).generateBattleGround(),
-            EntityRandomGenerator(context).generateShips(),
+            CellRandomGenerator().generateBattleGround(),
+            EntityRandomGenerator().generateShips(),
             firstTurnFraction
     )
 

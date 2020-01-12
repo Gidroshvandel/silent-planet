@@ -2,8 +2,8 @@ package com.silentgames.silent_planet.engine
 
 import android.graphics.Canvas
 import android.graphics.Paint
+import com.silentgames.core.logic.Constants
 import com.silentgames.silent_planet.engine.base.Basic
-import com.silentgames.silent_planet.logic.Constants
 
 class Grid : Basic() {
     private fun paintSettings(paint: Paint) {

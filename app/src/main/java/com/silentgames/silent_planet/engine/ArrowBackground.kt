@@ -3,16 +3,16 @@ package com.silentgames.silent_planet.engine
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Matrix
-import com.silentgames.silent_planet.logic.ecs.component.RotateAngle
+import com.silentgames.core.logic.ecs.component.RotateAngle
 
 class ArrowBackground(
         context: Context,
         axis: EngineAxis,
-        bmpId: Int,
+        bmpId: String,
         private val rotateAngle: RotateAngle
 ) : Background(context, axis, bmpId) {
 
-    override fun initBitmap(bmpResourceId: Int): Bitmap {
+    override fun initBitmap(bmpResourceId: String): Bitmap {
         return super.initBitmap(bmpResourceId).rotateBitmap(rotateAngle)
     }
 

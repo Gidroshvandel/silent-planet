@@ -1,8 +1,8 @@
 package com.silentgames.silent_planet.mvp.main
 
+import com.silentgames.core.logic.ecs.Axis
+import com.silentgames.core.logic.ecs.component.FractionsType
 import com.silentgames.silent_planet.dialog.EntityData
-import com.silentgames.silent_planet.logic.ecs.Axis
-import com.silentgames.silent_planet.logic.ecs.component.FractionsType
 import com.silentgames.silent_planet.mvp.BasePresenter
 
 interface MainContract {
@@ -14,7 +14,7 @@ interface MainContract {
 
         fun fillDescription(text: String)
 
-        fun showObjectIcon(bitmap: Int)
+        fun showObjectIcon(bitmap: String)
 
         fun enableButton(isEnabled: Boolean)
 

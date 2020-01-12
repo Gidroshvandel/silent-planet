@@ -1,6 +1,5 @@
 package com.silentgames.silent_planet.dialog
 
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.View.inflate
@@ -9,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.silentgames.silent_planet.R
 import com.silentgames.silent_planet.dialog.EntityMenuAdapter.ElementType.*
+import com.silentgames.silent_planet.engine.TextureLoader
 
 class EntityMenuAdapter(
         entityList: MutableList<EntityData>,
@@ -67,9 +67,7 @@ class EntityMenuAdapter(
         private val tvCrystalCount: TextView = itemView.findViewById(R.id.tv_crystal_count)
 
         fun update(entity: EntityData, onClick: (EntityData) -> Unit) {
-            ContextCompat.getDrawable(itemView.context, entity.texture)?.let {
-                ivEntityIcon.setImageDrawable(it)
-            }
+            ivEntityIcon.setImageBitmap(TextureLoader.load(itemView.context, entity.texture))
             tvEntityName.text = entity.name
             tvDescription.text = entity.description
             tvCrystalCount.text = entity.crystalCount
@@ -85,9 +83,7 @@ class EntityMenuAdapter(
         private val tvCrystalCount: TextView = itemView.findViewById(R.id.tv_crystal_count)
 
         fun update(entity: EntityData, onClick: (EntityData) -> Unit) {
-            ContextCompat.getDrawable(itemView.context, entity.texture)?.let {
-                ivEntityIcon.setImageDrawable(it)
-            }
+            ivEntityIcon.setImageBitmap(TextureLoader.load(itemView.context, entity.texture))
             tvEntityName.text = entity.name
             tvDescription.text = entity.description
             tvCrystalCount.text = entity.crystalCount
@@ -104,7 +100,7 @@ class EntityMenuAdapter(
 
 class EntityData(
         val id: Long,
-        val texture: Int,
+        val texture: String,
         val name: String,
         val description: String,
         val crystalCount: String,

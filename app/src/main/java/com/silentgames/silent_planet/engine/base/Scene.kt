@@ -1,7 +1,6 @@
 package com.silentgames.silent_planet.engine.base
 
-import com.silentgames.silent_planet.logic.ecs.Axis
-
+import com.silentgames.core.logic.ecs.Axis
 
 class Scene(
         /**
@@ -23,6 +22,7 @@ class Scene(
     private var updated = false
 
     var mScaleFactor = 1f
+    //todo refactor to EngineAxis
     var scrollAxis = Axis(0, 0)
 
     private var orient: Int = ORIENTATION_VERT

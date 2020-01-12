@@ -2,14 +2,14 @@ package com.silentgames.silent_planet.engine.base
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import com.silentgames.silent_planet.engine.BitmapBuffer
 import com.silentgames.silent_planet.engine.EngineAxis
+import com.silentgames.silent_planet.engine.TextureLoader
 
 abstract class Sprite(val context: Context,
                       axis: EngineAxis,
-                      private val bmpResourceId: Int) : Basic() {
+                      private val bmpResourceId: String) : Basic() {
 
     var axis: EngineAxis = axis
         set(value) {
@@ -18,8 +18,8 @@ abstract class Sprite(val context: Context,
 
     private var resized = false
 
-    protected open fun initBitmap(bmpResourceId: Int): Bitmap =
-            BitmapFactory.decodeResource(context.resources, bmpResourceId)
+    protected open fun initBitmap(bmpResourceId: String): Bitmap =
+            TextureLoader.load(context, bmpResourceId)
 
     protected open fun getBitmap(): Bitmap {
         val bitmapCache = BitmapBuffer.get(getBitmapId())
@@ -54,6 +54,6 @@ abstract class Sprite(val context: Context,
         return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
     }
 
-    protected open fun getBitmapId(): Int = bmpResourceId
+    protected open fun getBitmapId(): Int = bmpResourceId.hashCode()
 
 }

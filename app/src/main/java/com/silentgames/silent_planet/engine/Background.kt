@@ -4,13 +4,13 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
+import com.silentgames.core.logic.Constants
 import com.silentgames.silent_planet.engine.base.Sprite
-import com.silentgames.silent_planet.logic.Constants
 
 open class Background(
         context: Context,
         axis: EngineAxis,
-        bmpId: Int
+        bmpId: String
 ) : Sprite(context, axis, bmpId) {
 
     override fun draw(canvas: Canvas, paint: Paint) {

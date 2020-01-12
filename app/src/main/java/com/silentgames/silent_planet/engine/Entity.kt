@@ -4,8 +4,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
+import com.silentgames.core.logic.Constants
 import com.silentgames.silent_planet.engine.base.Sprite
-import com.silentgames.silent_planet.logic.Constants
 import kotlin.math.max
 import kotlin.math.min
 
@@ -13,7 +13,7 @@ class Entity(
         context: Context,
         val id: String,
         axis: EngineAxis,
-        bmpResourceId: Int
+        bmpResourceId: String
 ) : Sprite(context, axis, bmpResourceId) {
 
     private var speed = 0.2

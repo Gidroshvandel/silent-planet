@@ -4,14 +4,14 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.*
+import com.silentgames.core.logic.Constants
+import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.silent_planet.customListeners.CustomGestureListener
 import com.silentgames.silent_planet.customListeners.CustomScaleGestureListener
 import com.silentgames.silent_planet.engine.GridLayer
 import com.silentgames.silent_planet.engine.base.DrawerTask
 import com.silentgames.silent_planet.engine.base.Layer
 import com.silentgames.silent_planet.engine.base.Scene
-import com.silentgames.silent_planet.logic.Constants
-import com.silentgames.silent_planet.logic.ecs.Axis
 import java.util.*
 import kotlin.math.max
 import kotlin.math.min

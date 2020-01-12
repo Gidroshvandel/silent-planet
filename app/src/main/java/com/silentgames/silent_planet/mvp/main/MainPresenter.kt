@@ -1,18 +1,17 @@
 package com.silentgames.silent_planet.mvp.main
 
+import com.silentgames.core.logic.Constants
+import com.silentgames.core.logic.choosePlayerToMove
+import com.silentgames.core.logic.ecs.Axis
+import com.silentgames.core.logic.ecs.EngineEcs
+import com.silentgames.core.logic.ecs.component.*
+import com.silentgames.core.logic.ecs.component.event.AddCrystalEvent
+import com.silentgames.core.logic.ecs.component.event.BuyBackEvent
+import com.silentgames.core.logic.ecs.entity.EntityEcs
+import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
+import com.silentgames.core.logic.ecs.extractTransports
+import com.silentgames.core.logic.ecs.system.*
 import com.silentgames.silent_planet.dialog.EntityData
-import com.silentgames.silent_planet.logic.Constants
-import com.silentgames.silent_planet.logic.choosePlayerToMove
-import com.silentgames.silent_planet.logic.ecs.Axis
-import com.silentgames.silent_planet.logic.ecs.EngineEcs
-import com.silentgames.silent_planet.logic.ecs.component.*
-import com.silentgames.silent_planet.logic.ecs.component.FractionsType.*
-import com.silentgames.silent_planet.logic.ecs.component.event.AddCrystalEvent
-import com.silentgames.silent_planet.logic.ecs.component.event.BuyBackEvent
-import com.silentgames.silent_planet.logic.ecs.entity.EntityEcs
-import com.silentgames.silent_planet.logic.ecs.entity.unit.UnitEcs
-import com.silentgames.silent_planet.logic.ecs.extractTransports
-import com.silentgames.silent_planet.logic.ecs.system.*
 import kotlinx.coroutines.InternalCoroutinesApi
 
 /**
@@ -69,7 +68,7 @@ class MainPresenter internal constructor(
 //        scope.launch {
 //            withContext(Dispatchers.Default) {
         viewModel.engine = EngineEcs(
-                        model.generateNewBattleGround(HUMAN)
+                model.generateNewBattleGround(FractionsType.HUMAN)
                 )
 //            }
 
@@ -100,10 +99,10 @@ class MainPresenter internal constructor(
                             Constants.countCrystalsToWin,
                             { fractionsType, crystals ->
                                 when (fractionsType) {
-                                    ALIEN -> view.changeAlienCristalCount(crystals)
-                                    HUMAN -> view.changeHumanCristalCount(crystals)
-                                    PIRATE -> view.changePirateCristalCount(crystals)
-                                    ROBOT -> view.changeRobotCristalCount(crystals)
+                                    FractionsType.ALIEN -> view.changeAlienCristalCount(crystals)
+                                    FractionsType.HUMAN -> view.changeHumanCristalCount(crystals)
+                                    FractionsType.PIRATE -> view.changePirateCristalCount(crystals)
+                                    FractionsType.ROBOT -> view.changeRobotCristalCount(crystals)
                                 }
                             },
                             {
@@ -117,7 +116,7 @@ class MainPresenter internal constructor(
                     }
             )
 
-            val aiFractionList = listOf(HUMAN, ALIEN, PIRATE, ROBOT)
+        val aiFractionList = listOf(FractionsType.HUMAN, FractionsType.ALIEN, FractionsType.PIRATE, FractionsType.ROBOT)
 //            val aiFractionList = listOf<FractionsType>()
 
             viewModel.engine.addSystem(
@@ -174,7 +173,7 @@ class MainPresenter internal constructor(
             map { it.toEntityData() }.toMutableList()
 
     private fun EntityEcs.toEntityData(): EntityData {
-        val texture = this.getComponent<Texture>()?.bitmapId
+        val texture = this.getComponent<Texture>()?.bitmapName
         val description = this.getComponent<Description>()
 
         val captured = this.getComponent<Capture>() != null
@@ -214,7 +213,7 @@ class MainPresenter internal constructor(
         } else {
             view.enableButton(false)
         }
-        unit.getComponent<Texture>()?.bitmapId?.let { view.showObjectIcon(it) }
+        unit.getComponent<Texture>()?.bitmapName?.let { view.showObjectIcon(it) }
         unit.getComponent<Description>()?.let { showDescription(it) }
     }
 
@@ -228,7 +227,7 @@ class MainPresenter internal constructor(
         if (isVisible) {
             view.setImageCrystalText(crystals.toString())
         }
-        cellType.getComponent<Texture>()?.bitmapId?.let { view.showObjectIcon(it) }
+        cellType.getComponent<Texture>()?.bitmapName?.let { view.showObjectIcon(it) }
         viewModel.selectedEntity = null
         cellType.getComponent<Description>()?.let { showDescription(it) }
     }
