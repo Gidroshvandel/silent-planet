@@ -3,8 +3,10 @@ package com.silentgames.core.logic.ecs.system
 
 import com.silentgames.core.Strings
 import com.silentgames.core.logic.ecs.GameState
-import com.silentgames.core.logic.ecs.component.*
-import com.silentgames.core.logic.ecs.component.FractionsType
+import com.silentgames.core.logic.ecs.component.Active
+import com.silentgames.core.logic.ecs.component.Death
+import com.silentgames.core.logic.ecs.component.Description
+import com.silentgames.core.logic.ecs.component.Position
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.utils.notNull
 
@@ -25,8 +27,6 @@ class DeathSystem : System {
     private fun death(death: Death, unit: UnitEcs) {
         if (death.unit == null) {
             death.unit = unit
-            unit.removeComponent(MovingMode::class.java)
-            unit.removeComponent(FractionsType::class.java)
             unit.removeComponent(Active::class.java)
             unit.getComponent<Description>()?.let {
                 unit.addComponent(it.makeDeathDescription())

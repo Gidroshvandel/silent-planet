@@ -69,11 +69,6 @@ class MainPresenter internal constructor(
                         }
                 )
         )
-        viewModel.engine.addSystem(
-                model.getRenderSystem {
-                    viewModel.selectedEntity?.let { updateEntityState(it) }
-                }
-        )
 
         val aiFractionList = listOf(FractionsType.HUMAN, FractionsType.ALIEN, FractionsType.PIRATE, FractionsType.ROBOT)
 //            val aiFractionList = listOf<FractionsType>()
@@ -85,8 +80,13 @@ class MainPresenter internal constructor(
                     if (aiFractionList.contains(it)) {
                         val unit = viewModel.engine.gameState.choosePlayerToMove(it)
                         unit?.addComponent(ArtificialIntelligence())
-                        unit?.let { viewModel.engine.forceProcessSystem(it) }
+                        unit?.let { viewModel.engine.processSystems(it) }
                     }
+                }
+        )
+        viewModel.engine.addSystem(
+                model.getRenderSystem {
+                    viewModel.selectedEntity?.let { updateEntityState(it) }
                 }
         )
 
