@@ -4,13 +4,14 @@ import com.silentgames.core.logic.ecs.component.*
 import com.silentgames.core.logic.ecs.entity.EntityEcs
 import com.silentgames.core.logic.ecs.entity.cell.CellEcs
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
+import java.io.Serializable
 
 class GameState(
         cellList: List<CellEcs>,
         unitList: List<UnitEcs>,
         firstTurnFraction: FractionsType,
         var moveSuccess: Boolean = false
-) {
+) : Serializable {
 
     val turn: Turn = Turn(firstTurnFraction)
 

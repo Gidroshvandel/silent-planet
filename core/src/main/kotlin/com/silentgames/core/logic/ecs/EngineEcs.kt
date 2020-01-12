@@ -40,4 +40,10 @@ class EngineEcs(val gameState: GameState) {
         }
     }
 
+    fun stop() {
+        processing = true
+        systems.clear()
+        processing = false
+    }
+
 }

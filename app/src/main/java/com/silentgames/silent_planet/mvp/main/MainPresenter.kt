@@ -4,6 +4,7 @@ import com.silentgames.core.logic.Constants
 import com.silentgames.core.logic.choosePlayerToMove
 import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.EngineEcs
+import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.*
 import com.silentgames.core.logic.ecs.component.event.AddCrystalEvent
 import com.silentgames.core.logic.ecs.component.event.BuyBackEvent
@@ -19,6 +20,7 @@ import kotlinx.coroutines.InternalCoroutinesApi
  */
 class MainPresenter internal constructor(
         private val view: MainContract.View,
+        private val gameState: GameState?,
         private val viewModel: MainViewModel,
         private val model: MainModel
 ) : MainContract.Presenter {
@@ -26,7 +28,7 @@ class MainPresenter internal constructor(
     @InternalCoroutinesApi
     override fun onCreate() {
         viewModel.engine = EngineEcs(
-                model.generateNewBattleGround(FractionsType.HUMAN)
+                gameState ?: model.generateNewBattleGround(FractionsType.HUMAN)
         )
 
         viewModel.engine.addSystem(BuyBackSystem(
@@ -236,4 +238,8 @@ class MainPresenter internal constructor(
         }
     }
 
+    override fun saveInstanceState(onSave: (GameState) -> Unit) {
+        viewModel.engine.stop()
+        onSave(viewModel.engine.gameState)
+    }
 }

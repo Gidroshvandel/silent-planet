@@ -6,6 +6,7 @@ import android.support.v4.content.ContextCompat
 import android.widget.Toast
 import com.silentgames.core.logic.Constants
 import com.silentgames.core.logic.ecs.Axis
+import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.FractionsType
 import com.silentgames.silent_planet.R
 import com.silentgames.silent_planet.dialog.BottomSheetMenu
@@ -16,13 +17,20 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : Activity(), MainContract.View, Callback {
 
+    private val SAVED_GAME_STATE = "SAVED_GAME_STATE"
+
     private lateinit var presenter: MainContract.Presenter
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        presenter = MainPresenter(this, MainViewModel(), MainModel(surface_view))
+        presenter = MainPresenter(
+                this,
+                savedInstanceState?.getSerializable(SAVED_GAME_STATE) as? GameState,
+                MainViewModel(),
+                MainModel(surface_view)
+        )
 
         initUi()
 
@@ -138,4 +146,13 @@ class MainActivity : Activity(), MainContract.View, Callback {
     override fun showPlayerBuybackFailureMessage(missingAmount: Int) {
         Toast.makeText(this, getString(R.string.player_buyback_failure, missingAmount), Toast.LENGTH_SHORT).show()
     }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        presenter.saveInstanceState {
+            outState?.putSerializable(SAVED_GAME_STATE, it)
+        }
+        super.onSaveInstanceState(outState)
+    }
+
+
 }

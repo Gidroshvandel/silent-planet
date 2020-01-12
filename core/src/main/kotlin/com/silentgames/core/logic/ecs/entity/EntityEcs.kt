@@ -1,8 +1,9 @@
 package com.silentgames.core.logic.ecs.entity
 
 import com.silentgames.core.logic.ecs.component.Component
+import java.io.Serializable
 
-open class EntityEcs {
+open class EntityEcs : Serializable {
 
     val id = EntityIdGenerator.generateId()
 

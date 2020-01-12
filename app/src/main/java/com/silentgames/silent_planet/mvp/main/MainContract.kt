@@ -1,6 +1,7 @@
 package com.silentgames.silent_planet.mvp.main
 
 import com.silentgames.core.logic.ecs.Axis
+import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.FractionsType
 import com.silentgames.silent_planet.dialog.EntityData
 import com.silentgames.silent_planet.mvp.BasePresenter
@@ -47,6 +48,8 @@ interface MainContract {
         fun onEntityDialogElementSelect(entityData: EntityData)
 
         fun onCapturedPlayerClick(entityData: EntityData)
+
+        fun saveInstanceState(onSave: (GameState) -> Unit)
 
     }
 }

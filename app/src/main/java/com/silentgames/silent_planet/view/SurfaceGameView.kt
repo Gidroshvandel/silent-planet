@@ -165,7 +165,11 @@ class SurfaceGameView(
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, widthMeasureSpec)
+        if (MeasureSpec.getMode(widthMeasureSpec) == MeasureSpec.AT_MOST) {
+            super.onMeasure(heightMeasureSpec, heightMeasureSpec)
+        } else {
+            super.onMeasure(widthMeasureSpec, widthMeasureSpec)
+        }
     }
 
     enum class LayerType(val id: Int) {
