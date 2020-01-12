@@ -5,63 +5,64 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/space_texture"
-    android:orientation="vertical">
+    android:orientation="horizontal">
+
+    <com.silentgames.silent_planet.view.SurfaceGameView
+        android:id="@+id/surface_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:fillViewport="true" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/tv_humans"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/view_padding_small"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/text_s"
-            tools:text="@string/humans" />
+            android:gravity="center"
+            android:orientation="horizontal">
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/tv_pirates"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/view_padding_small"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/text_s"
-            tools:text="@string/pirates" />
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/tv_humans"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/view_padding_small"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_s"
+                tools:text="@string/humans" />
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/tv_robots"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/view_padding_small"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/text_s"
-            tools:text="@string/robots" />
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/tv_pirates"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/view_padding_small"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_s"
+                tools:text="@string/pirates" />
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/tv_aliens"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/view_padding_small"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/text_s"
-            tools:text="@string/aliens" />
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/tv_robots"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/view_padding_small"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_s"
+                tools:text="@string/robots" />
 
-    </LinearLayout>
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/tv_aliens"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/view_padding_small"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_s"
+                tools:text="@string/aliens" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.silentgames.silent_planet.view.SurfaceGameView
-            android:id="@+id/surface_view"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:fillViewport="true" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
