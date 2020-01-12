@@ -23,7 +23,10 @@ class AiShipSystem : System {
 
     private fun UnitEcs.getMoveShipPosition(gameState: GameState): Axis? {
         val shipPosition = getCurrentPosition() ?: return null
-        val cellsAtMoveDistance = gameState.getCellsAtMoveDistance(shipPosition).getCanMoveCells(this)
+        val cellsAtMoveDistance = gameState.getCellsAtMoveDistance(shipPosition).getCanMoveCells(this).filter {
+            val position = it.getCurrentPosition()
+            position != null && gameState.getUnit(position) == null
+        }
         return if (cellsAtMoveDistance.isNotEmpty()) {
             cellsAtMoveDistance.random().getCurrentPosition()
         } else {
@@ -34,6 +37,5 @@ class AiShipSystem : System {
     private fun List<CellEcs>.getCanMoveCells(unit: UnitEcs) = filter {
         unit.getComponent<MovingMode>() == it.getComponent<MovingMode>()
     }
-
 
 }

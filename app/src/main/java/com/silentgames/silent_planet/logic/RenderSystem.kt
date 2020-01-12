@@ -64,7 +64,10 @@ class RenderSystem(private val surfaceView: SurfaceGameView, private val onScene
 
                 val entityToDraw = gameState.getUnits(Axis(x, y)).extractTransports().firstOrNull {
                     val position = it.getComponent<Position>()
-                    position != null && !position.moved && position.currentPosition != position.oldPosition
+                    position != null
+                            && !position.moved
+                            && position.currentPosition != position.oldPosition
+                            && !it.hasComponent<Transport>()
                 } ?: gameState.getUnits(Axis(x, y)).firstOrNull { !it.hasComponent<Transport>() }
 
                 entityToDraw?.toDrawEntity()?.let {
