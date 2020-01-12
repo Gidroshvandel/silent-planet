@@ -23,8 +23,109 @@ class MainPresenter internal constructor(
         private val model: MainModel
 ) : MainContract.Presenter {
 
+    @InternalCoroutinesApi
+    override fun onCreate() {
+        viewModel.engine = EngineEcs(
+                model.generateNewBattleGround(FractionsType.HUMAN)
+        )
+
+        viewModel.engine.addSystem(BuyBackSystem(
+                {
+                    view.showPlayerBuybackSuccessMessage(it)
+                },
+                {
+                    view.showPlayerBuybackFailureMessage(it)
+                }
+        ))
+
+        viewModel.engine.addSystem(AiPlayerSystem())
+        viewModel.engine.addSystem(AddCrystalSystem())
+        viewModel.engine.addSystem(GoalSystem())
+        viewModel.engine.addSystem(AiShipSystem())
+        viewModel.engine.addSystem(ArrowSystem())
+        viewModel.engine.addSystem(MovementSystem())
+        viewModel.engine.addSystem(TeleportSystem())
+        viewModel.engine.addSystem(CaptureSystem())
+        viewModel.engine.addSystem(TeleportSystem())
+        viewModel.engine.addSystem(ExploreSystem())
+        viewModel.engine.addSystem(DeathSystem())
+        viewModel.engine.addSystem(PutCrystalToCapitalShipSystem())
+        viewModel.engine.addSystem(TransportSystem())
+        viewModel.engine.addSystem(
+                WinSystem(
+                        Constants.countCrystalsToWin,
+                        { fractionsType, crystals ->
+                            when (fractionsType) {
+                                FractionsType.ALIEN -> view.changeAlienCristalCount(crystals)
+                                FractionsType.HUMAN -> view.changeHumanCristalCount(crystals)
+                                FractionsType.PIRATE -> view.changePirateCristalCount(crystals)
+                                FractionsType.ROBOT -> view.changeRobotCristalCount(crystals)
+                            }
+                        },
+                        {
+                            view.showToast("WIN " + it.name)
+                        }
+                )
+        )
+        viewModel.engine.addSystem(
+                model.getRenderSystem {
+                    viewModel.selectedEntity?.let { updateEntityState(it) }
+                }
+        )
+
+        val aiFractionList = listOf(FractionsType.HUMAN, FractionsType.ALIEN, FractionsType.PIRATE, FractionsType.ROBOT)
+//            val aiFractionList = listOf<FractionsType>()
+
+        viewModel.engine.addSystem(
+                TurnSystem {
+                    view.selectCurrentFraction(it)
+
+                    if (aiFractionList.contains(it)) {
+                        val unit = viewModel.engine.gameState.choosePlayerToMove(it)
+                        unit?.addComponent(ArtificialIntelligence())
+                        unit?.let { viewModel.engine.processSystems(it) }
+                    }
+                }
+        )
+
+        viewModel.engine.processSystems()
+
+        view.changeAlienCristalCount(0)
+        view.changeHumanCristalCount(0)
+        view.changePirateCristalCount(0)
+        view.changeRobotCristalCount(0)
+
+        view.enableButton(false)
+    }
+
     override fun onSingleTapConfirmed(axis: Axis) {
         select(axis)
+    }
+
+    private fun select(currentXY: Axis) {
+        val entities = viewModel.engine.gameState.getUnits(currentXY).extractTransports()
+        val cellType = viewModel.engine.gameState.getCell(currentXY)
+
+        if (viewModel.selectedEntity != null
+                && viewModel.selectedEntity?.getComponent<Position>()?.currentPosition != currentXY
+        ) {
+            tryMove(viewModel.selectedEntity!!, currentXY)
+        } else {
+            if (viewModel.selectedEntity == null
+                    && entities.isNotEmpty()) {
+                if (entities.size > 1) {
+                    view.showEntityMenuDialog(entities.map(), cellType?.toEntityData()!!)
+                } else {
+                    selectEntity(entities.first())
+                }
+            } else {
+                if (entities.size > 1) {
+                    view.showEntityMenuDialog(entities.map(), cellType?.toEntityData()!!)
+                } else {
+                    cellType?.let { selectCell(it) }
+                }
+            }
+        }
     }
 
     override fun onActionButtonClick() {
@@ -59,113 +160,6 @@ class MainPresenter internal constructor(
         viewModel.engine.gameState.unitMap.extractTransports().find { it.id == entityData.id }?.let { unit ->
             unit.addComponent(BuyBackEvent())
             viewModel.engine.processSystems(unit)
-        }
-    }
-
-    @InternalCoroutinesApi
-    override fun onCreate() {
-//        val scope = CoroutineScope(Dispatchers.Main)
-//        scope.launch {
-//            withContext(Dispatchers.Default) {
-        viewModel.engine = EngineEcs(
-                model.generateNewBattleGround(FractionsType.HUMAN)
-                )
-//            }
-
-            viewModel.engine.addSystem(BuyBackSystem(
-                    {
-                        view.showPlayerBuybackSuccessMessage(it)
-                    },
-                    {
-                        view.showPlayerBuybackFailureMessage(it)
-                    }
-            ))
-
-            viewModel.engine.addSystem(AiPlayerSystem())
-            viewModel.engine.addSystem(AddCrystalSystem())
-            viewModel.engine.addSystem(GoalSystem())
-            viewModel.engine.addSystem(AiShipSystem())
-            viewModel.engine.addSystem(ArrowSystem())
-            viewModel.engine.addSystem(MovementSystem())
-            viewModel.engine.addSystem(TeleportSystem())
-            viewModel.engine.addSystem(CaptureSystem())
-            viewModel.engine.addSystem(TeleportSystem())
-            viewModel.engine.addSystem(ExploreSystem())
-            viewModel.engine.addSystem(DeathSystem())
-            viewModel.engine.addSystem(PutCrystalToCapitalShipSystem())
-            viewModel.engine.addSystem(TransportSystem())
-            viewModel.engine.addSystem(
-                    WinSystem(
-                            Constants.countCrystalsToWin,
-                            { fractionsType, crystals ->
-                                when (fractionsType) {
-                                    FractionsType.ALIEN -> view.changeAlienCristalCount(crystals)
-                                    FractionsType.HUMAN -> view.changeHumanCristalCount(crystals)
-                                    FractionsType.PIRATE -> view.changePirateCristalCount(crystals)
-                                    FractionsType.ROBOT -> view.changeRobotCristalCount(crystals)
-                                }
-                            },
-                            {
-                                view.showToast("WIN " + it.name)
-                            }
-                    )
-            )
-            viewModel.engine.addSystem(
-                    model.getRenderSystem {
-                        viewModel.selectedEntity?.let { updateEntityState(it) }
-                    }
-            )
-
-        val aiFractionList = listOf(FractionsType.HUMAN, FractionsType.ALIEN, FractionsType.PIRATE, FractionsType.ROBOT)
-//            val aiFractionList = listOf<FractionsType>()
-
-            viewModel.engine.addSystem(
-                    TurnSystem {
-                        view.selectCurrentFraction(it)
-
-                        if (aiFractionList.contains(it)) {
-                            val unit = viewModel.engine.gameState.choosePlayerToMove(it)
-                            unit?.addComponent(ArtificialIntelligence())
-                            unit?.let { viewModel.engine.processSystems(it) }
-                        }
-                    }
-            )
-
-            viewModel.engine.processSystems()
-
-            view.changeAlienCristalCount(0)
-            view.changeHumanCristalCount(0)
-            view.changePirateCristalCount(0)
-            view.changeRobotCristalCount(0)
-
-            view.enableButton(false)
-
-//        }
-    }
-
-    private fun select(currentXY: Axis) {
-        val entities = viewModel.engine.gameState.getUnits(currentXY).extractTransports()
-        val cellType = viewModel.engine.gameState.getCell(currentXY)
-
-        if (viewModel.selectedEntity != null
-                && viewModel.selectedEntity?.getComponent<Position>()?.currentPosition != currentXY
-        ) {
-            tryMove(viewModel.selectedEntity!!, currentXY)
-        } else {
-            if (viewModel.selectedEntity == null
-                    && entities.isNotEmpty()) {
-                if (entities.size > 1) {
-                    view.showEntityMenuDialog(entities.map(), cellType?.toEntityData()!!)
-                } else {
-                    selectEntity(entities.first())
-                }
-            } else {
-                if (entities.size > 1) {
-                    view.showEntityMenuDialog(entities.map(), cellType?.toEntityData()!!)
-                } else {
-                    cellType?.let { selectCell(it) }
-                }
-            }
         }
     }
 
@@ -241,24 +235,5 @@ class MainPresenter internal constructor(
             select(targetPosition)
         }
     }
-
-//    private fun tryMoveAi(fractionsType: FractionsType) {
-//        val player = viewModel.gameMatrixHelper.gameMatrix.choosePlayerToMove(fractionsType)
-//        view.enableButton(false)
-//        if (player != null && viewModel.gameMatrixHelper.gameMatrix.moveAi(player)) {
-//            eventCount = 0
-//            doEvent(player.entity) {
-//                view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix) {
-//                    TurnHandler.turnCount()
-//                }
-//            }
-//        } else if (viewModel.gameMatrixHelper.gameMatrix.moveAiShip(fractionsType)) {
-//            view.drawBattleGround(viewModel.gameMatrixHelper.gameMatrix) {
-//                TurnHandler.turnCount()
-//            }
-//        } else {
-//            TurnHandler.turnCount()
-//        }
-//    }
 
 }

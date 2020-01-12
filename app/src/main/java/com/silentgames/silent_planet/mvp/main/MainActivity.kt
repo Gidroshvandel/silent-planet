@@ -22,7 +22,7 @@ class MainActivity : Activity(), MainContract.View, Callback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        presenter = MainPresenter(this, MainViewModel(), MainModel(this, surface_view))
+        presenter = MainPresenter(this, MainViewModel(), MainModel(surface_view))
 
         initUi()
 
@@ -101,41 +101,6 @@ class MainActivity : Activity(), MainContract.View, Callback {
     override fun setImageCrystalText(text: String) {
         image_crystal_text.text = text
     }
-
-//    private var oldGameMatrix: GameMatrix? = null
-
-//    override fun drawBattleGround(gameMatrix: GameMatrix, onUpdateComplete: () -> Unit) {
-//        val sceneLayers = GameMatrixMover(oldGameMatrix, gameMatrix).convertToSceneLayers()
-//        oldGameMatrix = gameMatrix.copy()
-//        surface_view.updateLayer(SurfaceGameView.LayerType.BACKGROUND, sceneLayers.background)
-//        surface_view.updateLayer(SurfaceGameView.LayerType.ENTITY, sceneLayers.entity, onUpdateComplete)
-//    }
-
-//    override fun drawBattleGround(gameState: GameState, onUpdateComplete: () -> Unit) {
-//        val backgroundLayer = Layer()
-//        val entityLayer = Layer()
-//        val horizontalCountOfCells = Constants.horizontalCountOfCells
-//        val verticalCountOfCells = Constants.verticalCountOfCells
-//        for (x in 0 until horizontalCountOfCells) {
-//            for (y in 0 until verticalCountOfCells) {
-//                backgroundLayer.add(Background(
-//                        EngineAxis(x.toFloat(), y.toFloat()),
-//                        gameState.getCell(Axis(x, y))?.getComponent<Texture>()?.bitmap!!
-//                ))
-//                val entity = gameState.getUnit(Axis(x, y))?.getComponent<Texture>()?.bitmap
-//                if (entity != null) {
-////                    val entity = gameMatrix[x][y].entityType.first()
-//                    entityLayer.add(Entity(
-//                            "111",
-//                            EngineAxis(x.toFloat(), y.toFloat()),
-//                            entity
-//                    ))
-//                }
-//            }
-//        }
-//        surface_view.updateLayer(SurfaceGameView.LayerType.BACKGROUND, backgroundLayer)
-//        surface_view.updateLayer(SurfaceGameView.LayerType.ENTITY, entityLayer, onUpdateComplete)
-//    }
 
     override fun showToast(text: String) {
         Toast.makeText(this, text, Toast.LENGTH_LONG).show()
