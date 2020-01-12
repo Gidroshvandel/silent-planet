@@ -2,7 +2,6 @@ package com.silentgames.core.logic.ecs.system
 
 import com.silentgames.core.logic.ecs.EngineEcs
 import com.silentgames.core.logic.ecs.GameState
-import com.silentgames.core.logic.ecs.Turn
 import com.silentgames.core.logic.ecs.component.Active
 import com.silentgames.core.logic.ecs.component.FractionsType
 import com.silentgames.core.logic.ecs.component.MovedSuccess
@@ -14,16 +13,14 @@ class TurnSystem(private val onTurnChanged: (FractionsType) -> Unit) : System {
 
     private var firstInit = true
 
-    private var currentFractionsType: FractionsType? = null
-    private var turn: Turn? = null
-
     override fun onEngineAttach(engine: EngineEcs) {
+        engine.gameState.makeCurrentFractionTurnUnitsCanTurn()
         engine.onProcessingChanged = { processing ->
             if (!processing && engine.gameState.isTurnEnd()) {
                 engine.gameState.endTurn()
-                turn?.turnCount()
+                engine.gameState.turn.turnCount()
                 engine.gameState.makeCurrentFractionTurnUnitsCanTurn()
-                turn?.currentTurnFraction?.let { onTurnChanged.invoke(it) }
+                engine.gameState.turn.currentTurnFraction.let { onTurnChanged.invoke(it) }
             }
         }
     }
@@ -37,7 +34,7 @@ class TurnSystem(private val onTurnChanged: (FractionsType) -> Unit) : System {
     override fun execute(gameState: GameState) {
         if (firstInit) {
             firstInit = false
-            gameState.turn.currentTurnFraction.let { onTurnChanged.invoke(it) }
+            onTurnChanged.invoke(gameState.turn.currentTurnFraction)
         }
     }
 
@@ -45,17 +42,11 @@ class TurnSystem(private val onTurnChanged: (FractionsType) -> Unit) : System {
         if (unit.hasComponent<MovedSuccess>()) {
             unit.removeComponent(TurnToMove::class.java)
         }
-        unit.getComponent<FractionsType>()?.let { nextTurn(it, gameState) }
     }
 
     private fun GameState.isTurnEnd() =
             getAllFractionUnits(turn.currentTurnFraction).find {
                 it.hasComponent<Active>() && !it.hasComponent<TurnToMove>()
             } != null
-
-    private fun nextTurn(fractionsType: FractionsType, gameState: GameState) {
-        currentFractionsType = fractionsType
-        turn = gameState.turn
-    }
 
 }
