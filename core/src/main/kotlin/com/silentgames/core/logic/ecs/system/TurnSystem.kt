@@ -4,7 +4,6 @@ import com.silentgames.core.logic.ecs.EngineEcs
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.*
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
-import com.silentgames.core.logic.ecs.extractTransports
 
 class TurnSystem(private val onTurnChanged: (FractionsType) -> Unit) : UnitSystem() {
 
@@ -14,7 +13,7 @@ class TurnSystem(private val onTurnChanged: (FractionsType) -> Unit) : UnitSyste
     }
 
     private fun GameState.endTurn() {
-        unitMap.extractTransports().forEach {
+        unitMap.forEach {
             it.removeComponent(TurnToMove::class.java)
             it.removeComponent(TurnEnd::class.java)
         }
@@ -22,7 +21,7 @@ class TurnSystem(private val onTurnChanged: (FractionsType) -> Unit) : UnitSyste
 
     override fun execute(gameState: GameState) {
         super.execute(gameState)
-        if (!gameState.turn.canTurn && gameState.unitMap.extractTransports().find { it.hasComponent<Moving>() } == null) {
+        if (!gameState.turn.canTurn && gameState.unitMap.find { it.hasComponent<Moving>() } == null) {
             gameState.endTurn()
             gameState.turn.turnCount()
             gameState.makeCurrentFractionTurnUnitsCanTurn()

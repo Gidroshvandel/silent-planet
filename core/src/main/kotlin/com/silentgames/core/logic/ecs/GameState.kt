@@ -46,7 +46,7 @@ class GameState(
     }
 
     fun getAllFractionUnits(fractionsType: FractionsType): List<UnitEcs> =
-            unitMap.extractTransports().filter { it.getComponent<FractionsType>() == fractionsType }
+            unitMap.filter { it.getComponent<FractionsType>() == fractionsType }
 
     fun moveUnit(unit: UnitEcs, toPosition: Axis) {
         if (!unitMap.contains(unit)) {
@@ -65,7 +65,7 @@ class GameState(
     }
 
     private fun makeUnitsCanTurn(fractionsType: FractionsType) {
-        unitMap.extractTransports().filter {
+        unitMap.filter {
             it.getComponent<FractionsType>() == fractionsType
         }.forEach {
             it.addComponent(TurnToMove())
@@ -78,17 +78,4 @@ class GameState(
     private fun List<UnitEcs>.findCapitalShip(unitFractionsType: FractionsType) =
             find { it.hasComponent<CapitalShip>() && it.getComponent<FractionsType>() == unitFractionsType }
 
-}
-
-fun List<UnitEcs>.extractTransports(): List<UnitEcs> {
-    val onBoardEntities = mutableListOf<UnitEcs>()
-    forEach {
-        val transport = it.getComponent<Transport>()
-        if (transport != null) {
-            onBoardEntities.addAll(transport.unitsOnBoard)
-        }
-    }
-    return this.toMutableList().apply {
-        addAll(onBoardEntities)
-    }
 }

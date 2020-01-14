@@ -7,7 +7,6 @@ import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.*
 import com.silentgames.core.logic.ecs.entity.cell.CellEcs
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
-import com.silentgames.core.logic.ecs.extractTransports
 import com.silentgames.core.logic.ecs.system.UnitSystem
 import com.silentgames.core.logic.ecs.system.getCurrentPosition
 import com.silentgames.core.logic.ecs.system.isVisible
@@ -56,7 +55,7 @@ class RenderSystem(private val surfaceView: SurfaceGameView, private val onScene
 
                 val transport = gameState.getUnits(Axis(x, y)).firstOrNull { it.hasComponent<Transport>() }
 
-                val entityToDraw = gameState.getUnits(Axis(x, y)).extractTransports().firstOrNull {
+                val entityToDraw = gameState.getUnits(Axis(x, y)).firstOrNull {
                     val position = it.getComponent<Position>()
                     position != null
                             && !position.moved

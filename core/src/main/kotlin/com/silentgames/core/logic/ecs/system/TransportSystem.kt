@@ -31,14 +31,9 @@ class TransportSystem : UnitSystem() {
         if (transport != null) {
             val units = allCellUnits.filterNot { it.hasComponent<Transport>() }
             units.forEach {
-                this.moveAllUnitsOnTransport(it, transport)
+                transport.addOnBoard(it)
             }
         }
-    }
-
-    private fun GameState.moveAllUnitsOnTransport(unit: UnitEcs, targetTransport: Transport) {
-        this.removeUnit(unit)
-        targetTransport.addOnBoard(unit)
     }
 
 }

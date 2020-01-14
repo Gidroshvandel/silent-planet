@@ -14,7 +14,7 @@ class MainModel(private val surfaceView: SurfaceGameView) {
 
     fun generateNewBattleGround(firstTurnFraction: FractionsType): GameState = GameState(
             CellRandomGenerator().generateBattleGround(),
-            EntityRandomGenerator().generateShips(),
+            EntityRandomGenerator().generateUnits(),
             firstTurnFraction
     )
 

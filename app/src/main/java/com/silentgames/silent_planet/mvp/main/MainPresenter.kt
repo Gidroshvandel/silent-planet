@@ -9,7 +9,6 @@ import com.silentgames.core.logic.ecs.component.event.AddCrystalEvent
 import com.silentgames.core.logic.ecs.component.event.BuyBackEvent
 import com.silentgames.core.logic.ecs.entity.EntityEcs
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
-import com.silentgames.core.logic.ecs.extractTransports
 import com.silentgames.core.logic.ecs.system.*
 import com.silentgames.silent_planet.dialog.EntityData
 
@@ -93,7 +92,7 @@ class MainPresenter internal constructor(
     }
 
     private fun select(currentXY: Axis) {
-        val entities = viewModel.engine.gameState.getUnits(currentXY).extractTransports()
+        val entities = viewModel.engine.gameState.getUnits(currentXY)
         val cellType = viewModel.engine.gameState.getCell(currentXY)
 
         if (viewModel.selectedEntity != null
@@ -136,7 +135,7 @@ class MainPresenter internal constructor(
     }
 
     override fun onEntityDialogElementSelect(entityData: EntityData) {
-        val entity = viewModel.engine.gameState.unitMap.extractTransports().find { it.id == entityData.id }
+        val entity = viewModel.engine.gameState.unitMap.find { it.id == entityData.id }
         val cell = viewModel.engine.gameState.getCell(entityData.id)
         if (entity != null) {
             selectEntity(entity)
@@ -146,8 +145,7 @@ class MainPresenter internal constructor(
     }
 
     override fun onCapturedPlayerClick(entityData: EntityData) {
-        viewModel.engine.gameState.unitMap.extractTransports()
-                .find { it.id == entityData.id }?.addComponent(BuyBackEvent())
+        viewModel.engine.gameState.unitMap.find { it.id == entityData.id }?.addComponent(BuyBackEvent())
     }
 
     private fun List<EntityEcs>.map() =

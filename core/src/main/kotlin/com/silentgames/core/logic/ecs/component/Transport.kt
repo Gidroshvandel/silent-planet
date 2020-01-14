@@ -2,7 +2,7 @@ package com.silentgames.core.logic.ecs.component
 
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 
-class Transport(position: Position, unitsOnBoard: List<UnitEcs>) : ComponentEquals() {
+class Transport(position: Position, unitsOnBoard: List<UnitEcs> = listOf()) : ComponentEquals() {
 
     val unitsOnBoard: List<UnitEcs> get() = mutableUnitsOnBoard.toList()
     private val mutableUnitsOnBoard: MutableList<UnitEcs> = unitsOnBoard.toMutableList()
