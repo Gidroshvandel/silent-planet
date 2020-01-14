@@ -7,7 +7,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     api "com.badlogicgames.gdx:gdx:$gdxVersion"
 
-    implementation project(":core")
+    implementation project(path: ":core", configuration: "default")
 }
 
 sourceSets.main.java.srcDirs = [ "src/" ]
