@@ -7,6 +7,7 @@ buildscript {
         roboVMVersion = '2.3.8'
         ashleyVersion = '1.7.3'
         ktxVersion = '1.9.10-b3'
+        roboVMGradleVersion = "2.3.8"
     }
     repositories {
         jcenter()
@@ -19,6 +20,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.mobidevelop.robovm:robovm-gradle-plugin:$roboVMGradleVersion"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -32,6 +34,20 @@ allprojects {
             url 'https://maven.google.com/'
             name 'Google'
         }
+    }
+}
+
+project(":ios") {
+    apply plugin: "java-library"
+    apply plugin: 'robovm'
+
+    dependencies {
+        implementation "com.mobidevelop.robovm:robovm-rt:${roboVMVersion}"
+        implementation "com.mobidevelop.robovm:robovm-cocoatouch:${roboVMVersion}"
+        implementation project(":graphic")
+        implementation "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
+        implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
+        implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     }
 }
 
