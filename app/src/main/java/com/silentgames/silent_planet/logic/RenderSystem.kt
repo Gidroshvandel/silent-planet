@@ -4,14 +4,11 @@ import com.silentgames.core.logic.Constants
 import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.EngineEcs
 import com.silentgames.core.logic.ecs.GameState
-import com.silentgames.core.logic.ecs.component.Arrow
-import com.silentgames.core.logic.ecs.component.Position
-import com.silentgames.core.logic.ecs.component.Texture
-import com.silentgames.core.logic.ecs.component.Transport
+import com.silentgames.core.logic.ecs.component.*
 import com.silentgames.core.logic.ecs.entity.cell.CellEcs
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.logic.ecs.extractTransports
-import com.silentgames.core.logic.ecs.system.System
+import com.silentgames.core.logic.ecs.system.UnitSystem
 import com.silentgames.core.logic.ecs.system.getCurrentPosition
 import com.silentgames.core.logic.ecs.system.isVisible
 import com.silentgames.silent_planet.engine.ArrowBackground
@@ -21,7 +18,7 @@ import com.silentgames.silent_planet.engine.Entity
 import com.silentgames.silent_planet.engine.base.Layer
 import com.silentgames.silent_planet.view.SurfaceGameView
 
-class RenderSystem(private val surfaceView: SurfaceGameView, private val onSceneUpdate: () -> Unit) : System {
+class RenderSystem(private val surfaceView: SurfaceGameView, private val onSceneUpdate: () -> Unit) : UnitSystem() {
 
     private var engine: EngineEcs? = null
 
@@ -30,23 +27,20 @@ class RenderSystem(private val surfaceView: SurfaceGameView, private val onScene
     }
 
     override fun execute(gameState: GameState) {
+        super.execute(gameState)
         engine?.processing = true
         render(gameState) {
-            engine?.processing = false
-            onSceneUpdate.invoke()
+            if (it)
+                engine?.processing = false
+            else {
+                onSceneUpdate.invoke()
+                engine?.processSystems()
+            }
         }
     }
 
     override fun execute(gameState: GameState, unit: UnitEcs) {
-        engine?.processing = true
-        render(gameState) {
-            if (it) {
-                engine?.forceProcessSystem(unit)
-            } else {
-                engine?.processing = false
-            }
-            onSceneUpdate.invoke()
-        }
+        unit.removeComponent(Moving::class.java)
     }
 
     private fun render(gameState: GameState, onUpdateComplete: (Boolean) -> Unit) {

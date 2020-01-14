@@ -5,7 +5,7 @@ import com.silentgames.core.logic.ecs.component.*
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.utils.notNull
 
-class CaptureSystem : System {
+class CaptureSystem : UnitSystem() {
 
     override fun execute(gameState: GameState, unit: UnitEcs) {
         notNull(

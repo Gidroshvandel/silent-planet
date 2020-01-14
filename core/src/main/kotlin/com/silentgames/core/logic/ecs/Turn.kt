@@ -9,6 +9,10 @@ class Turn(firstTurnFraction: FractionsType) {
 
     private var turnCount: Int = 0
     var currentTurnFraction: FractionsType = firstTurnFraction
+        private set
+
+    var canTurn: Boolean = true
+        private set
 
     //    @ExperimentalCoroutinesApi
     fun turnCount() {
@@ -23,6 +27,11 @@ class Turn(firstTurnFraction: FractionsType) {
 
     private fun nextPlayer() {
         currentTurnFraction = currentTurnFraction.next()
+        canTurn = true
+    }
+
+    fun endTurn() {
+        canTurn = false
     }
 
 }

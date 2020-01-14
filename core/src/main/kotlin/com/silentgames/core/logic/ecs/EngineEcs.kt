@@ -1,6 +1,5 @@
 package com.silentgames.core.logic.ecs
 
-import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.logic.ecs.system.System
 
 class EngineEcs(val gameState: GameState) {
@@ -25,18 +24,6 @@ class EngineEcs(val gameState: GameState) {
             systems.forEach {
                 it.execute(gameState)
             }
-        }
-    }
-
-    fun processSystems(entity: UnitEcs) {
-        if (!processing) {
-            forceProcessSystem(entity)
-        }
-    }
-
-    fun forceProcessSystem(entity: UnitEcs) {
-        systems.forEach {
-            it.execute(gameState, entity)
         }
     }
 

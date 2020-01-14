@@ -52,6 +52,7 @@ class GameState(
         if (!unitMap.contains(unit)) {
             mutableUnitList.add(unit)
         }
+        unit.addComponent(Moving())
         unit.getComponent<Position>()?.currentPosition = toPosition
     }
 

@@ -7,7 +7,7 @@ import com.silentgames.core.logic.ecs.entity.cell.CellEcs
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.utils.notNull
 
-class MovementSystem : System {
+class MovementSystem : UnitSystem() {
 
     override fun execute(gameState: GameState, unit: UnitEcs) {
         val moveSuccess = if (unit.hasComponent<Teleport>()

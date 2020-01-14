@@ -8,7 +8,7 @@ import com.silentgames.core.logic.ecs.component.TargetPosition
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.logic.findPath
 
-class GoalSystem : System {
+class GoalSystem : UnitSystem() {
 
     override fun execute(gameState: GameState, unit: UnitEcs) {
         val goal = unit.getComponent<Goal>()

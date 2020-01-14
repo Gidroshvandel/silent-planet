@@ -6,7 +6,7 @@ import com.silentgames.core.logic.ecs.component.Crystal
 import com.silentgames.core.logic.ecs.component.Position
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 
-class PutCrystalToCapitalShipSystem : System {
+class PutCrystalToCapitalShipSystem : UnitSystem() {
 
     override fun execute(gameState: GameState, unit: UnitEcs) {
         unit.getComponent<Position>()?.let {

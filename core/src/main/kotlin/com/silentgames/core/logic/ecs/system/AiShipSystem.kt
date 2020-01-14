@@ -9,10 +9,10 @@ import com.silentgames.core.logic.ecs.component.TargetPosition
 import com.silentgames.core.logic.ecs.entity.cell.CellEcs
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 
-class AiShipSystem : System {
+class AiShipSystem : UnitSystem() {
 
     override fun execute(gameState: GameState, unit: UnitEcs) {
-        if (!unit.hasComponent<TargetPosition>()
+        if (gameState.turn.canTurn && !unit.hasComponent<TargetPosition>()
                 && unit.hasComponent<ArtificialIntelligence>()
                 && unit.hasComponent<CapitalShip>()) {
             unit.getMoveShipPosition(gameState)?.let {

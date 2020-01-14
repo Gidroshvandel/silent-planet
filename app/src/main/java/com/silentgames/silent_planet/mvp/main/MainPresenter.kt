@@ -1,7 +1,6 @@
 package com.silentgames.silent_planet.mvp.main
 
 import com.silentgames.core.logic.Constants
-import com.silentgames.core.logic.choosePlayerToMove
 import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.EngineEcs
 import com.silentgames.core.logic.ecs.GameState
@@ -13,7 +12,6 @@ import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.logic.ecs.extractTransports
 import com.silentgames.core.logic.ecs.system.*
 import com.silentgames.silent_planet.dialog.EntityData
-import kotlinx.coroutines.InternalCoroutinesApi
 
 /**
  * Created by gidroshvandel on 21.06.17.
@@ -25,7 +23,6 @@ class MainPresenter internal constructor(
         private val model: MainModel
 ) : MainContract.Presenter {
 
-    @InternalCoroutinesApi
     override fun onCreate() {
         viewModel.engine = EngineEcs(
                 gameState ?: model.generateNewBattleGround(FractionsType.HUMAN)
@@ -40,15 +37,15 @@ class MainPresenter internal constructor(
                 }
         ))
 
-        viewModel.engine.addSystem(AiPlayerSystem())
+        viewModel.engine.addSystem(AiPlayerSystem(listOf(FractionsType.HUMAN, FractionsType.ALIEN, FractionsType.PIRATE, FractionsType.ROBOT)))
         viewModel.engine.addSystem(AddCrystalSystem())
         viewModel.engine.addSystem(GoalSystem())
         viewModel.engine.addSystem(AiShipSystem())
         viewModel.engine.addSystem(ArrowSystem())
         viewModel.engine.addSystem(MovementSystem())
         viewModel.engine.addSystem(TeleportSystem())
-        viewModel.engine.addSystem(CaptureSystem())
-        viewModel.engine.addSystem(TeleportSystem())
+//        viewModel.engine.addSystem(CaptureSystem())
+//        viewModel.engine.addSystem(TeleportSystem())
         viewModel.engine.addSystem(ExploreSystem())
         viewModel.engine.addSystem(DeathSystem())
         viewModel.engine.addSystem(PutCrystalToCapitalShipSystem())
@@ -70,19 +67,9 @@ class MainPresenter internal constructor(
                 )
         )
 
-        val aiFractionList = listOf(FractionsType.HUMAN, FractionsType.ALIEN, FractionsType.PIRATE, FractionsType.ROBOT)
-//            val aiFractionList = listOf<FractionsType>()
-
         viewModel.engine.addSystem(
                 TurnSystem {
                     view.selectCurrentFraction(it)
-
-                    if (aiFractionList.contains(it)) {
-                        val unit = viewModel.engine.gameState.choosePlayerToMove(it)
-                                ?: viewModel.engine.gameState.getCapitalShip(it)
-                        unit?.addComponent(ArtificialIntelligence())
-                        unit?.let { viewModel.engine.processSystems(it) }
-                    }
                 }
         )
         viewModel.engine.addSystem(
@@ -135,7 +122,6 @@ class MainPresenter internal constructor(
         val entity = viewModel.selectedEntity
         if (entity != null) {
             entity.addComponent(AddCrystalEvent())
-            viewModel.engine.processSystems(entity)
 
             entity.getComponent<Position>()?.currentPosition?.let {
                 if (!crystalsOverZero(it)) {
@@ -160,10 +146,8 @@ class MainPresenter internal constructor(
     }
 
     override fun onCapturedPlayerClick(entityData: EntityData) {
-        viewModel.engine.gameState.unitMap.extractTransports().find { it.id == entityData.id }?.let { unit ->
-            unit.addComponent(BuyBackEvent())
-            viewModel.engine.processSystems(unit)
-        }
+        viewModel.engine.gameState.unitMap.extractTransports()
+                .find { it.id == entityData.id }?.addComponent(BuyBackEvent())
     }
 
     private fun List<EntityEcs>.map() =
@@ -232,7 +216,6 @@ class MainPresenter internal constructor(
     private fun tryMove(unit: UnitEcs, targetPosition: Axis) {
         view.enableButton(false)
         unit.addComponent(TargetPosition(targetPosition))
-        viewModel.engine.processSystems(unit)
         if (!viewModel.engine.gameState.moveSuccess) {
             viewModel.selectedEntity = null
             select(targetPosition)

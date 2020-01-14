@@ -10,7 +10,7 @@ import com.silentgames.core.logic.ecs.component.RotateAngle
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.utils.notNull
 
-class ArrowSystem : System {
+class ArrowSystem : UnitSystem() {
 
     override fun execute(gameState: GameState, unit: UnitEcs) {
         gameState.getCurrentUnitCell(unit) { cell ->

@@ -8,7 +8,7 @@ import com.silentgames.core.logic.ecs.entity.cell.CellEcs
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.utils.notNull
 
-class ExploreSystem : System {
+class ExploreSystem : UnitSystem() {
 
     override fun execute(gameState: GameState, unit: UnitEcs) {
         val position = unit.getComponent<Position>()?.currentPosition

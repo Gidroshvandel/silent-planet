@@ -6,7 +6,7 @@ import com.silentgames.core.logic.ecs.component.Position
 import com.silentgames.core.logic.ecs.component.event.AddCrystalEvent
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 
-class AddCrystalSystem : System {
+class AddCrystalSystem : UnitSystem() {
 
     override fun execute(gameState: GameState, unit: UnitEcs) {
         unit.getComponent<AddCrystalEvent>()?.let {

@@ -5,7 +5,7 @@ import com.silentgames.core.logic.ecs.component.Position
 import com.silentgames.core.logic.ecs.component.Transport
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 
-class TransportSystem : System {
+class TransportSystem : UnitSystem() {
 
     override fun execute(gameState: GameState, unit: UnitEcs) {
         gameState.removeUnitsFromTransport()

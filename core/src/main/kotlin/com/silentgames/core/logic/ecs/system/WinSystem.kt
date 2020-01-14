@@ -9,7 +9,7 @@ class WinSystem(
         private val crystalsToWin: Int,
         private val crystals: (FractionsType, crystals: Int) -> Unit,
         private val onWin: (FractionsType) -> Unit
-) : System {
+) : UnitSystem() {
 
     override fun execute(gameState: GameState, unit: UnitEcs) {
         checkWin(gameState)

@@ -16,7 +16,7 @@ class DrawerTask(
         try {
             canvas = holder.lockCanvas()
 
-            canvas.translate(-scene.scrollAxis.x.toFloat(), -scene.scrollAxis.y.toFloat())
+            canvas.translate(-scene.scrollAxis.x, -scene.scrollAxis.y)
             canvas.scale(
                     scene.mScaleFactor,
                     scene.mScaleFactor
@@ -30,8 +30,9 @@ class DrawerTask(
                 }
             }
             scene.update {
-                onSceneUpdated.invoke(it)
+                onSceneUpdated.invoke(true)
             }
+            onSceneUpdated.invoke(false)
         } catch (e: Exception) {
 
         } finally {

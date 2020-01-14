@@ -9,7 +9,7 @@ import com.silentgames.core.utils.notNull
 class BuyBackSystem(
         private val onSuccess: (name: String) -> Unit,
         private val onFailure: (missingAmount: Int) -> Unit
-) : System {
+) : UnitSystem() {
 
     override fun execute(gameState: GameState, unit: UnitEcs) {
         unit.getComponent<BuyBackEvent>()?.let {

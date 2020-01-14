@@ -10,7 +10,7 @@ import com.silentgames.core.logic.ecs.component.Position
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.utils.notNull
 
-class DeathSystem : System {
+class DeathSystem : UnitSystem() {
 
     override fun execute(gameState: GameState, unit: UnitEcs) {
         val position = unit.getComponent<Position>()?.currentPosition
