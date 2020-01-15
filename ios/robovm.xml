@@ -8,9 +8,6 @@
     <resources>
         <resource>
             <directory>../android/assets</directory>
-            <includes>
-                <include>data/**</include>
-            </includes>
             <skipPngCrush>true</skipPngCrush>
         </resource>
     </resources>

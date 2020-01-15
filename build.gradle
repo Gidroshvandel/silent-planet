@@ -10,11 +10,11 @@ buildscript {
         roboVMGradleVersion = "2.3.8"
     }
     repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         jcenter()
-        maven {
-            url 'https://maven.google.com/'
-            name 'Google'
-        }
         google()
     }
     dependencies {
@@ -28,17 +28,16 @@ buildscript {
 
 allprojects {
     repositories {
-        jcenter()
+        mavenLocal()
         mavenCentral()
-        maven {
-            url 'https://maven.google.com/'
-            name 'Google'
-        }
+        google()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
     }
 }
 
 project(":ios") {
-    apply plugin: "java-library"
+    apply plugin: "java"
     apply plugin: 'robovm'
 
     dependencies {
@@ -48,6 +47,11 @@ project(":ios") {
         implementation "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
         implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
         implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    }
+
+    repositories {
+        mavenCentral()
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     }
 }
 
