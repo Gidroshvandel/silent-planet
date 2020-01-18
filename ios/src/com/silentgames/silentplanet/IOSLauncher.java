@@ -2,7 +2,7 @@ package com.silentgames.silentplanet;
 
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
-import com.silentgames.graphic.SilentPlanetGame;
+import com.silentgames.graphic.mvp.main.SilentPlanetGame;
 
 import org.robovm.apple.foundation.NSAutoreleasePool;
 import org.robovm.apple.uikit.UIApplication;

@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.silentgames.graphic.SilentPlanetGame;
+import com.silentgames.graphic.mvp.main.SilentPlanetGame;
 
 public class AndroidLauncher extends AndroidApplication {
     @Override
