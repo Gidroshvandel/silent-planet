@@ -20,6 +20,9 @@ enum class Strings(private var string: String) {
     crystal_cell_name("Кристалы"),
     crystal_cell_description("Кристалов %d"),
 
+    tornado_cell_name("Смерчь"),
+    tornado_cell_description("Торнадо переносит на ближайщий угол"),
+
     arrow_cell_name("Стрела"),
 
     arrow_green_cell_description("Зелёная стрела перемещает на 1 клетку"),
