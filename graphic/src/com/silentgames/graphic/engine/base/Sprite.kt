@@ -15,8 +15,11 @@ abstract class Sprite(axis: EngineAxis,
 
     private var resized = false
 
-    protected open fun initBitmap(bmpResourceId: String): Sprite =
-            Sprite(Texture(bmpResourceId))
+    protected open fun initBitmap(bmpResourceId: String): Sprite {
+        return Sprite(Texture(bmpResourceId)).apply {
+            flip(false, true)
+        }
+    }
 
     protected open fun getBitmap(): Sprite {
         val bitmapCache = BitmapBuffer.get(getBitmapId())
@@ -29,7 +32,7 @@ abstract class Sprite(axis: EngineAxis,
         }
     }
 
-    protected fun getResizedBitmap(width: Float, height: Float): Sprite {
+    protected open fun getResizedBitmap(width: Float, height: Float): Sprite {
         val bitmap = getBitmap()
         return if (resized) {
             bitmap

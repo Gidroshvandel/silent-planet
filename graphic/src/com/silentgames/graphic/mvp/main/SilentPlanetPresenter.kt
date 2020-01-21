@@ -6,6 +6,7 @@ import com.silentgames.core.logic.ecs.EngineEcs
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.*
 import com.silentgames.core.logic.ecs.component.event.AddCrystalEvent
+import com.silentgames.core.logic.ecs.component.event.BuyBackEvent
 import com.silentgames.core.logic.ecs.entity.EntityEcs
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.logic.ecs.system.*
@@ -72,7 +73,8 @@ class SilentPlanetPresenter internal constructor(
         )
         viewModel.engine.addSystem(
                 model.getRenderSystem {
-                    viewModel.selectedEntity?.let { updateEntityState(it) }
+                    select(it)
+//                    viewModel.selectedEntity?.let { updateEntityState(it) }
                 }
         )
 
@@ -93,10 +95,6 @@ class SilentPlanetPresenter internal constructor(
             viewModel.engine.processSystems()
     }
 
-    override fun onSingleTapConfirmed(axis: Axis) {
-        select(axis)
-    }
-
     private fun select(currentXY: Axis) {
         val entities = viewModel.engine.gameState.getUnits(currentXY)
         val cellType = viewModel.engine.gameState.getCell(currentXY)
@@ -109,13 +107,13 @@ class SilentPlanetPresenter internal constructor(
             if (viewModel.selectedEntity == null
                     && entities.isNotEmpty()) {
                 if (entities.size > 1) {
-//                    view.showEntityMenuDialog(entities.map(), cellType?.toEntityData()!!)
+                    view.showEntityMenuDialog(entities.map(), cellType?.toEntityData()!!)
                 } else {
                     selectEntity(entities.first())
                 }
             } else {
                 if (entities.size > 1) {
-//                    view.showEntityMenuDialog(entities.map(), cellType?.toEntityData()!!)
+                    view.showEntityMenuDialog(entities.map(), cellType?.toEntityData()!!)
                 } else {
                     cellType?.let { selectCell(it) }
                 }
@@ -140,44 +138,44 @@ class SilentPlanetPresenter internal constructor(
         }
     }
 
-//    override fun onEntityDialogElementSelect(entityData: EntityData) {
-//        val entity = viewModel.engine.gameState.unitMap.find { it.id == entityData.id }
-//        val cell = viewModel.engine.gameState.getCell(entityData.id)
-//        if (entity != null) {
-//            selectEntity(entity)
-//        } else if (cell != null) {
-//            selectCell(cell)
-//        }
-//    }
+    override fun onEntityDialogElementSelect(entityData: EntityData) {
+        val entity = viewModel.engine.gameState.unitMap.find { it.id == entityData.id }
+        val cell = viewModel.engine.gameState.getCell(entityData.id)
+        if (entity != null) {
+            selectEntity(entity)
+        } else if (cell != null) {
+            selectCell(cell)
+        }
+    }
 
-//    override fun onCapturedPlayerClick(entityData: EntityData) {
-//        viewModel.engine.gameState.unitMap.find { it.id == entityData.id }?.addComponent(BuyBackEvent())
-//    }
+    override fun onCapturedPlayerClick(entityData: EntityData) {
+        viewModel.engine.gameState.unitMap.find { it.id == entityData.id }?.addComponent(BuyBackEvent())
+    }
 
-//    private fun List<EntityEcs>.map() =
-//            map { it.toEntityData() }.toMutableList()
+    private fun List<EntityEcs>.map() =
+            map { it.toEntityData() }.toMutableList()
 
-//    private fun EntityEcs.toEntityData(): EntityData {
-//        val texture = this.getComponent<Texture>()?.bitmapName
-//        val description = this.getComponent<Description>()
-//
-//        val captured = this.getComponent<Capture>() != null
-//
-//        val crystal = if (captured) {
-//            this.getComponent<Capture>()?.buybackPrice ?: 0
-//        } else {
-//            this.getComponent<Crystal>()?.count ?: 0
-//        }
-//
-//        return EntityData(
-//                id,
-//                texture!!,
-//                description?.name ?: "",
-//                description?.description ?: "",
-//                crystal.toString(),
-//                captured
-//        )
-//    }
+    private fun EntityEcs.toEntityData(): EntityData {
+        val texture = this.getComponent<Texture>()?.bitmapName
+        val description = this.getComponent<Description>()
+
+        val captured = this.getComponent<Capture>() != null
+
+        val crystal = if (captured) {
+            this.getComponent<Capture>()?.buybackPrice ?: 0
+        } else {
+            this.getComponent<Crystal>()?.count ?: 0
+        }
+
+        return EntityData(
+                id,
+                texture!!,
+                description?.name ?: "",
+                description?.description ?: "",
+                crystal.toString(),
+                captured
+        )
+    }
 
     private fun showDescription(description: Description) {
         view.fillDescription(description.description)

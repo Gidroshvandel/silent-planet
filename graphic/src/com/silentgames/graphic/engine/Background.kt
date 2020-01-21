@@ -23,7 +23,6 @@ open class Background(
                 height,
                 sprite
         )
-
         sprite.setPosition(x, y)
         sprite.draw(batch)
     }

@@ -2,22 +2,20 @@ package com.silentgames.graphic.mvp.main
 
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.math.Rectangle
-import com.badlogic.gdx.utils.viewport.FitViewport
-import com.silentgames.core.logic.CellRandomGenerator
-import com.silentgames.core.logic.EntityRandomGenerator
-import com.silentgames.core.logic.ecs.GameState
+import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.badlogic.gdx.utils.Scaling
 import com.silentgames.core.logic.ecs.component.FractionsType
-import com.silentgames.graphic.InputMouse
+import com.silentgames.graphic.AppViewport
+
 
 class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
 
     private lateinit var presenter: SilentPlanetContract.Presenter
 
-    private val screenRect = Rectangle(0f, 0f, WIDTH * 2, HEIGHT * 2)
-    private val viewPort = FitViewport(WIDTH, HEIGHT)
+    private val viewPort = AppViewport(Scaling.fillY, WIDTH, HEIGHT)
     private val camera by lazy(viewPort::getCamera)
 
     override fun create() {
@@ -26,7 +24,7 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
                 this,
                 null,
                 SilentPlanetViewModel(),
-                SilentPlanetModel(camera)
+                SilentPlanetModel(viewPort)
         )
 
         initUi()
@@ -35,11 +33,15 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
     }
 
     private fun initUi() {
+
+        AssetManager().load("ui/uiskin.json", TextureAtlas::class.java)
+
         (camera as? OrthographicCamera)?.zoom = 1f
+        (camera as? OrthographicCamera)?.setToOrtho(true)
         camera.position.x = WIDTH / 2f
         camera.position.y = HEIGHT / 2f
 
-        Gdx.input.inputProcessor = InputMouse()
+//        Gdx.input.inputProcessor = InputMouse()
     }
 
     override fun render() {
@@ -51,19 +53,13 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
     override fun resize(width: Int, height: Int) {
         super.resize(width, height)
         viewPort.update(width, height)
-        screenRect.width = viewPort.worldWidth
-        screenRect.height = viewPort.worldHeight
+//        screenRect.width = viewPort.worldWidth
+//        screenRect.height = viewPort.worldHeight
     }
 
     override fun dispose() {
 //        engine.dispose()
     }
-
-    fun generateNewBattleGround(firstTurnFraction: FractionsType): GameState = GameState(
-            CellRandomGenerator().generateBattleGround(),
-            EntityRandomGenerator().generateUnits(),
-            firstTurnFraction
-    )
 
     companion object {
         const val WIDTH = 640f
@@ -86,6 +82,20 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
     }
 
     override fun setImageCrystalText(text: String) {
+    }
+
+    override fun showEntityMenuDialog(entityList: MutableList<EntityData>, currentCell: EntityData) {
+//        val state = Stage()
+//        Gdx.input.inputProcessor = state
+//        val skin = Skin(Gdx.files.internal("ui/uiskin.json"))
+//
+//        object : Dialog("Заголвоок", skin) {
+//            init {
+//                text("rly exit");
+//                button("yes", "goodbye");
+//                button("no", "glad you stay");
+//            }
+//        }.show(state)
     }
 
     override fun changeAlienCristalCount(crystals: Int) {

@@ -1,6 +1,5 @@
 package com.silentgames.graphic.mvp.main
 
-import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.FractionsType
 import com.silentgames.graphic.mvp.BasePresenter
@@ -20,7 +19,7 @@ interface SilentPlanetContract {
 
         fun setImageCrystalText(text: String)
 
-//        fun showEntityMenuDialog(entityList: MutableList<EntityData>, currentCell: EntityData)
+        fun showEntityMenuDialog(entityList: MutableList<EntityData>, currentCell: EntityData)
 
         fun changeAlienCristalCount(crystals: Int)
 
@@ -40,13 +39,11 @@ interface SilentPlanetContract {
 
     interface Presenter : BasePresenter {
 
-        fun onSingleTapConfirmed(axis: Axis)
-
         fun onActionButtonClick()
 
-//        fun onEntityDialogElementSelect(entityData: EntityData)
+        fun onEntityDialogElementSelect(entityData: EntityData)
 
-//        fun onCapturedPlayerClick(entityData: EntityData)
+        fun onCapturedPlayerClick(entityData: EntityData)
 
         fun saveInstanceState(onSave: (GameState) -> Unit)
 
