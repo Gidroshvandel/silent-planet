@@ -38,10 +38,10 @@ class Hud {
     private val list = List<String>(skin)
     private val scrollPane = ScrollPane(list)
 
-    private val humansLabel = Label(getCrystalTitle(Strings.humans.getString(), 0), uiSkin, "small")
-    private val piratesLabel = Label(getCrystalTitle(Strings.pirates.getString(), 0), uiSkin, "small")
-    private val robotsLabel = Label(getCrystalTitle(Strings.robots.getString(), 0), uiSkin, "small")
-    private val aliensLabel = Label(getCrystalTitle(Strings.aliens.getString(), 0), uiSkin, "small")
+    private val humansLabel = Label(getCrystalTitle(Strings.humans.getString(), 0), uiSkin)
+    private val piratesLabel = Label(getCrystalTitle(Strings.pirates.getString(), 0), uiSkin)
+    private val robotsLabel = Label(getCrystalTitle(Strings.robots.getString(), 0), uiSkin)
+    private val aliensLabel = Label(getCrystalTitle(Strings.aliens.getString(), 0), uiSkin)
 
     init {
         stage.addActor(stageLayout.right().top().apply {
@@ -110,7 +110,7 @@ class Hud {
     }
 
     private fun Label.setColor(color: Color) {
-        this.style = LabelStyle(uiSkin.getFont(Font.SMALL.fontName), uiSkin.getColor(color.colorName))
+        this.style = LabelStyle(uiSkin.getFont(Font.REGULAR.fontName), uiSkin.getColor(color.colorName))
     }
 
     enum class Color(val colorName: String) {

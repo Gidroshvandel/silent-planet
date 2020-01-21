@@ -1,5 +1,6 @@
 package com.silentgames.graphic
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetDescriptor
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.assets.loaders.SkinLoader
@@ -12,12 +13,11 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.ObjectMap
-import com.silentgames.graphic.mvp.main.SilentPlanetGame.Companion.HEIGHT
-import com.silentgames.graphic.mvp.main.SilentPlanetGame.Companion.WIDTH
+import kotlin.math.min
 
 class Assets {
 
-    val manager: AssetManager = AssetManager()
+    private val manager: AssetManager = AssetManager()
 
     private val fontChars = "абвгдежзийклмнопрстуфхцчшщъыьэюяabcdefghijklmnopqrstuvwxyzАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+±=()*&.;:,{}\"´`'<>"
     private val skinResources = ObjectMap<String, Any>()
@@ -98,7 +98,7 @@ class Assets {
     }
 
     private fun loadDefaultFonts() {
-        val dimension: Int = Math.min(WIDTH, HEIGHT).toInt()
+        val dimension: Int = min(Gdx.graphics.width, Gdx.graphics.height)
 
         val smallFont = FreetypeFontLoader.FreeTypeFontLoaderParameter()
         smallFont.fontFileName = "fonts/Roboto-Bold.ttf"
