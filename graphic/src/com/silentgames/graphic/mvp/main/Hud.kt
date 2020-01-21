@@ -7,59 +7,62 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.*
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
 import com.badlogic.gdx.scenes.scene2d.ui.List
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable
-import com.badlogic.gdx.utils.viewport.Viewport
+import com.silentgames.core.Strings
 import com.silentgames.core.logic.Constants
+import com.silentgames.core.logic.ecs.component.FractionsType
+import com.silentgames.core.logic.ecs.component.FractionsType.*
+import com.silentgames.graphic.Assets
 import com.silentgames.graphic.mvp.InputMultiplexer
+import com.silentgames.graphic.mvp.main.Hud.Color.RED
+import com.silentgames.graphic.mvp.main.Hud.Color.WHITE
 
-class Hud(val viewport: Viewport) {
+class Hud {
 
     val stage = Stage()
 
-    var image: Image = Image()
+    private var image: Image = Image()
 
     fun dispose() {
         stage.dispose()
     }
 
-    val stageLayout = Table()
+    private val stageLayout = Table()
 
-    val atlas = TextureAtlas(Gdx.files.internal("ui/uiskin.atlas"))
-    val skin = Skin(Gdx.files.internal("ui/uiskin.json"), atlas)
-    val list = List<String>(skin).apply {
-        //        setItems(*listOf("YES", "YES").toTypedArray())
-    }
-    val scrollPane = ScrollPane(list)
+    private val uiSkin = Assets().uiSkin
+
+    private val atlas = TextureAtlas(Gdx.files.internal("ui/uiskin.atlas"))
+    private val skin = Skin(Gdx.files.internal("ui/uiskin.json"), atlas)
+    private val list = List<String>(skin)
+    private val scrollPane = ScrollPane(list)
+
+    private val humansLabel = Label(getCrystalTitle(Strings.humans.getString(), 0), uiSkin)
+    private val piratesLabel = Label(getCrystalTitle(Strings.pirates.getString(), 0), uiSkin)
+    private val robotsLabel = Label(getCrystalTitle(Strings.robots.getString(), 0), uiSkin)
+    private val aliensLabel = Label(getCrystalTitle(Strings.aliens.getString(), 0), uiSkin)
 
     init {
-//        val strings = arrayOfNulls<String>(200)
-//        var i = 0
-//        var k = 0
-//        while (i < strings.size) {
-//            strings[k++] = "String: $i"
-//            i++
-//        }
-//        list.setItems(*strings)
-//        scrollPane.setBounds(0, 0, gameWidth, gameHeight + 100);
-//        scrollPane.setSmoothScrolling(false);
-//        scrollPane.setPosition(gameWidth / 2 - scrollPane.getWidth() / 4,
-//                gameHeight / 2 - scrollPane.getHeight() / 4);
-        stage.addActor(stageLayout.apply {
-            // добавление таблицы в сцену
+        stage.addActor(stageLayout.right().top().apply {
+            row().let {
+                add(humansLabel)
+                add(piratesLabel)
+                add(robotsLabel)
+                add(aliensLabel)
+            }.top().right()
             debugAll() // Включаем дебаг для всех элементов таблицы
             setFillParent(true) // Указываем что таблица принимает размеры родителя
-            padLeft(viewport.screenHeight.toFloat())
             row().let {
-                //                add(Image(Texture("dead_cell.png"))).top().right()
-//                add(GameActor(viewport))
-//                add(Image(Texture("dead_cell.png")))
                 add(image).top()
                 add(scrollPane).top()
-//                add(Image(Texture("dead_cell.png"))).fill()
             }
         })
         InputMultiplexer.addProcessor(stage)
+    }
+
+    private fun getCrystalTitle(fractionName: String, currentCrystals: Int): String {
+        return Strings.crystal_count.getString(fractionName, currentCrystals, Constants.countCrystalsToWin)
     }
 
     fun update(entityList: kotlin.collections.List<EntityData>, onClick: (EntityData) -> Unit) {
@@ -82,6 +85,43 @@ class Hud(val viewport: Viewport) {
         sprite.setSize(size, size)
 
         image.drawable = SpriteDrawable(sprite)
+    }
+
+    fun changeFractionCrystalOnBoard(fractionsType: FractionsType, count: Int) {
+        when (fractionsType) {
+            ALIEN -> aliensLabel.setText(getCrystalTitle(Strings.aliens.getString(), count))
+            HUMAN -> humansLabel.setText(getCrystalTitle(Strings.humans.getString(), count))
+            PIRATE -> piratesLabel.setText(getCrystalTitle(Strings.pirates.getString(), count))
+            ROBOT -> robotsLabel.setText(getCrystalTitle(Strings.robots.getString(), count))
+        }
+    }
+
+    fun selectFraction(fractionsType: FractionsType) {
+        aliensLabel.setColor(WHITE)
+        humansLabel.setColor(WHITE)
+        piratesLabel.setColor(WHITE)
+        robotsLabel.setColor(WHITE)
+        when (fractionsType) {
+            ALIEN -> aliensLabel.setColor(RED)
+            HUMAN -> humansLabel.setColor(RED)
+            PIRATE -> piratesLabel.setColor(RED)
+            ROBOT -> robotsLabel.setColor(RED)
+        }
+    }
+
+    private fun Label.setColor(color: Color) {
+        this.style = LabelStyle(uiSkin.getFont(Font.REGULAR.fontName), uiSkin.getColor(color.colorName))
+    }
+
+    enum class Color(val colorName: String) {
+        WHITE("white"),
+        RED("red")
+    }
+
+    enum class Font(val fontName: String) {
+        SMALL("small-font"),
+        LARGE("large-font"),
+        REGULAR("regular-font")
     }
 
 }

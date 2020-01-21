@@ -46,6 +46,7 @@ project(":ios") {
         implementation project(path: ":graphic", configuration: "default")
         implementation "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
         implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
+        implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-ios"
         implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     }
 

@@ -2,6 +2,13 @@ package com.silentgames.core
 
 enum class Strings(private var string: String) {
 
+    aliens("Инопланетяне"),
+    pirates("Пираты"),
+    humans("Земляне"),
+    robots("Роботы"),
+
+    crystal_count("%s\n%d/%d"),
+
     dead_player("Мёртв"),
     dead_player_description("Ещё один труп на холодной планете"),
 

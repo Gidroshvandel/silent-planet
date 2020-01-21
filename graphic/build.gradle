@@ -12,6 +12,7 @@ dependencies {
     implementation "io.github.libktx:ktx-scene2d:$ktxVersion"
     implementation "io.github.libktx:ktx-style:$ktxVersion"
     api "com.badlogicgames.gdx:gdx:$gdxVersion"
+    implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
 
     implementation project(path: ":core", configuration: "default")
 }
