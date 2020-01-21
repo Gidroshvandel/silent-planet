@@ -9,7 +9,7 @@ import com.silentgames.core.logic.ecs.entity.cell.CellEcs
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.logic.findPathToCell
 
-class AiPlayerSystem(private val aiFractionList: List<FractionsType>) : UnitSystem() {
+class AiPlayerSystem(private val aiFractionList: List<FractionsType> = listOf()) : UnitSystem() {
 
 //    fun GameState.choosePlayerToMove(fractionsType: FractionsType): UnitEcs? {
 //        val capitalShip = this.getCapitalShip(fractionsType)

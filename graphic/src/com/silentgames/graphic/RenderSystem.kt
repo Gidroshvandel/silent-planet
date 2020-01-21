@@ -1,6 +1,5 @@
 package com.silentgames.graphic
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.silentgames.core.logic.Constants
 import com.silentgames.core.logic.ecs.Axis
@@ -15,6 +14,7 @@ import com.silentgames.core.logic.ecs.system.isVisible
 import com.silentgames.graphic.engine.*
 import com.silentgames.graphic.engine.base.Layer
 import com.silentgames.graphic.engine.base.Scene
+import com.silentgames.graphic.mvp.InputMultiplexer
 
 class RenderSystem(private val viewport: AppViewport, private val batch: Batch, private val onClick: (Axis) -> Unit) : UnitSystem() {
 
@@ -24,7 +24,7 @@ class RenderSystem(private val viewport: AppViewport, private val batch: Batch, 
 
     private var engine: EngineEcs? = null
 
-    private val width get() = viewport.worldWidth.toInt()
+    private val width get() = viewport.worldHeight.toInt()
     private val height get() = viewport.worldHeight.toInt()
 
     override fun onEngineAttach(engine: EngineEcs) {
@@ -34,15 +34,17 @@ class RenderSystem(private val viewport: AppViewport, private val batch: Batch, 
     }
 
     private fun initClick() {
-        Gdx.input.inputProcessor = InputMouse { axis ->
+        InputMultiplexer.addProcessor(InputMouse { axis ->
             scene?.let {
                 val eventX = (axis.x + (it.scrollAxis.x)) / mScaleFactor
                 val eventY = (axis.y + (it.scrollAxis.y)) / mScaleFactor
                 val x = ((Constants.horizontalCountOfCells) * eventX / viewport.screenWidth).toInt()
                 val y = ((Constants.verticalCountOfCells) * eventY / viewport.screenHeight).toInt()
-                onClick(Axis(x, y))
+                if (x < Constants.horizontalCountOfCells && y < Constants.verticalCountOfCells) {
+                    onClick(Axis(x, y))
+                }
             }
-        }
+        })
     }
 
     override fun execute(gameState: GameState) {
@@ -55,6 +57,8 @@ class RenderSystem(private val viewport: AppViewport, private val batch: Batch, 
 
         viewport.camera.update()
         batch.projectionMatrix = viewport.camera.combined
+
+        viewport.apply()
         batch.begin()
 
 //        batch.draw(com.badlogic.gdx.graphics.Texture("space_texture.jpg"), 0f, 0f, camera.viewportWidth, camera.viewportHeight)
