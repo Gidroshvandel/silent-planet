@@ -3,10 +3,7 @@ package com.silentgames.core.logic
 
 import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.component.RotateAngle
-import com.silentgames.core.logic.ecs.entity.cell.CellEcs
-import com.silentgames.core.logic.ecs.entity.cell.DeathCell
-import com.silentgames.core.logic.ecs.entity.cell.EmptyCell
-import com.silentgames.core.logic.ecs.entity.cell.SpaceCell
+import com.silentgames.core.logic.ecs.entity.cell.*
 import com.silentgames.core.logic.ecs.entity.cell.arrow.ArrowGreenCell
 import com.silentgames.core.logic.ecs.entity.cell.arrow.ArrowRedCell
 import com.silentgames.core.logic.ecs.entity.cell.crystal.CrystalCell
@@ -67,6 +64,7 @@ class CellRandomGenerator {
             RandomCellType.CRYSTAL_TWO -> CrystalCell(axis, CrystalsEnum.TWO)
             RandomCellType.CRYSTAL_THREE -> CrystalCell(axis, CrystalsEnum.THREE)
             RandomCellType.EMPTY -> EmptyCell(axis)
+            RandomCellType.TORNADO -> TornadoCell(axis)
         }
     }
 
@@ -101,7 +99,8 @@ class CellGeneratorParams(
         private val redArrowCellCount: Int = 20,
         private val crystalOneCellCount: Int = 10,
         private val crystalTwoCellCount: Int = 5,
-        private val crystalThreeCellCount: Int = 5
+        private val crystalThreeCellCount: Int = 5,
+        private val tornadoCellCount: Int = 4
 ) {
     private val emptyCount: Int = Constants.countOfGroundCells - (
             deathCellCount +
@@ -109,7 +108,8 @@ class CellGeneratorParams(
                     redArrowCellCount +
                     crystalOneCellCount +
                     crystalTwoCellCount +
-                    crystalThreeCellCount)
+                    crystalThreeCellCount +
+                    tornadoCellCount)
 
     fun getRandomEntityList() = listOf(
             RandomEntity(RandomCellType.DEATH, deathCellCount),
@@ -118,7 +118,8 @@ class CellGeneratorParams(
             RandomEntity(RandomCellType.CRYSTAL_ONE, crystalOneCellCount),
             RandomEntity(RandomCellType.CRYSTAL_TWO, crystalTwoCellCount),
             RandomEntity(RandomCellType.CRYSTAL_THREE, crystalThreeCellCount),
-            RandomEntity(RandomCellType.EMPTY, emptyCount)
+            RandomEntity(RandomCellType.EMPTY, emptyCount),
+            RandomEntity(RandomCellType.TORNADO, tornadoCellCount)
     )
 }
 
@@ -140,5 +141,6 @@ enum class RandomCellType {
     CRYSTAL_ONE,
     CRYSTAL_TWO,
     CRYSTAL_THREE,
-    EMPTY
+    EMPTY,
+    TORNADO
 }
