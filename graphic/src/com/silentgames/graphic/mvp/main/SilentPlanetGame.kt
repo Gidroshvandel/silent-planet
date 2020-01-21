@@ -18,7 +18,7 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
     private val viewPort = AppViewport(Scaling.fillY, WIDTH, HEIGHT)
     private val camera by lazy(viewPort::getCamera)
 
-    val hud by lazy { Hud(viewPort) }
+    private val hud by lazy { Hud() }
 
     override fun create() {
 
@@ -35,15 +35,11 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
     }
 
     private fun initUi() {
-
         AssetManager().load("ui/uiskin.json", TextureAtlas::class.java)
-
         (camera as? OrthographicCamera)?.zoom = 1f
         (camera as? OrthographicCamera)?.setToOrtho(true)
         camera.position.x = WIDTH / 2f
         camera.position.y = HEIGHT / 2f
-
-//        Gdx.input.inputProcessor = InputMouse()
     }
 
     override fun render() {
@@ -64,9 +60,6 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
 
 
         hud.stage.viewport.update(width, height)
-
-//        screenRect.width = viewPort.worldWidth
-//        screenRect.height = viewPort.worldHeight
     }
 
     override fun dispose() {
@@ -101,32 +94,26 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
         hud.update(entityList) {
             presenter.onEntityDialogElementSelect(it)
         }
-//        val state = Stage()
-//        Gdx.input.inputProcessor = state
-//        val skin = Skin(Gdx.files.internal("ui/uiskin.json"))
-//
-//        object : Dialog("Заголвоок", skin) {
-//            init {
-//                text("rly exit");
-//                button("yes", "goodbye");
-//                button("no", "glad you stay");
-//            }
-//        }.show(state)
     }
 
     override fun changeAlienCristalCount(crystals: Int) {
+        hud.changeFractionCrystalOnBoard(FractionsType.ALIEN, crystals)
     }
 
     override fun changeHumanCristalCount(crystals: Int) {
+        hud.changeFractionCrystalOnBoard(FractionsType.HUMAN, crystals)
     }
 
     override fun changePirateCristalCount(crystals: Int) {
+        hud.changeFractionCrystalOnBoard(FractionsType.PIRATE, crystals)
     }
 
     override fun changeRobotCristalCount(crystals: Int) {
+        hud.changeFractionCrystalOnBoard(FractionsType.ROBOT, crystals)
     }
 
     override fun selectCurrentFraction(fractionType: FractionsType) {
+        hud.selectFraction(fractionType)
     }
 
     override fun showPlayerBuybackSuccessMessage(name: String) {
