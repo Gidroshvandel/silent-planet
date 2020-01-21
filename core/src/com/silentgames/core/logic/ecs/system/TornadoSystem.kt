@@ -32,12 +32,16 @@ class TornadoSystem : UnitSystem() {
     }
 
     private fun tornado(gameState: GameState, fractionsType: FractionsType, position: Axis, unit: UnitEcs) {
-        val isAnglePosition = values().toList().map { it.axis }.contains(position)
-        val axis = if (isAnglePosition) gameState.getCapitalShip(fractionsType)?.getCurrentPosition() else this.contains(position)
+        val axis = this.getTarget(gameState, fractionsType, position)
         if (axis != null) {
             unit.addComponent(Teleport())
             unit.addComponent(TargetPosition(axis))
         }
+    }
+
+    fun getTarget(gameState: GameState, fractionsType: FractionsType, position: Axis): Axis? {
+        val isAnglePosition = values().toList().map { it.axis }.contains(position)
+        return if (isAnglePosition) gameState.getCapitalShip(fractionsType)?.getCurrentPosition() else this.contains(position)
     }
 
     private fun contains(position: Axis): Axis? {
