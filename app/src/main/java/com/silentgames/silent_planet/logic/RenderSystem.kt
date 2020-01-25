@@ -39,7 +39,7 @@ class RenderSystem(private val surfaceView: SurfaceGameView, private val onScene
     }
 
     override fun execute(gameState: GameState, unit: UnitEcs) {
-        unit.removeComponent(Moving::class.java)
+        unit.removeComponent<Moving>()
     }
 
     private fun render(gameState: GameState, onUpdateComplete: (Boolean) -> Unit) {

@@ -148,9 +148,9 @@ class MainActivity : Activity(), MainContract.View, Callback {
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
-        presenter.saveInstanceState {
-            outState?.putSerializable(SAVED_GAME_STATE, it)
-        }
+//        presenter.saveInstanceState {
+//            outState?.putSerializable(SAVED_GAME_STATE, it)
+//        }
         super.onSaveInstanceState(outState)
     }
 
