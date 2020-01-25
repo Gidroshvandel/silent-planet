@@ -1,6 +1,6 @@
 package com.silentgames.core
 
-import dev.simplx.KotlinFormatter
+import com.silentgames.core.utils.format
 
 enum class Strings(private var string: String) {
 
@@ -56,6 +56,6 @@ enum class Strings(private var string: String) {
     alien_ship_name("Лиира"),
     alien_ship_description("Космический корабль загадочной рассы");
 
-    fun getString(vararg args: Any?): String = KotlinFormatter.format(string, *args)
+    fun getString(vararg args: Any?): String = format(string, *args)
 
 }

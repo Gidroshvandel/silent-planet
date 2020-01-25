@@ -1,4 +1,4 @@
-package com.jetbrains.handson.mpp.mobile
+package com.silentgames.core.utils
 
 import platform.UIKit.UIDevice
 
@@ -7,3 +7,7 @@ import platform.UIKit.UIDevice
 //            " " +
 //            UIDevice.currentDevice.systemVersion
 //}
+
+actual fun format(string: String, vararg args: Any?): String {
+ return ""
+}
