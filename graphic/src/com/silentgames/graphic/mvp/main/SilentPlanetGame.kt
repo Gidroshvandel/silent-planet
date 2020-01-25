@@ -49,7 +49,6 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
         presenter.onRender()
 
-
         hud.stage.viewport.apply(true)
 
         hud.stage.act()
@@ -63,6 +62,9 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
         hud.update(height)
 
         hud.stage.viewport.update(width, height, true)
+
+        hud.stage.act()
+        hud.stage.draw()
     }
 
     override fun dispose() {

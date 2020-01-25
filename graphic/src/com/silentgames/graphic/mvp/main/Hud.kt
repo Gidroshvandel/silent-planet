@@ -51,16 +51,18 @@ class Hud {
                     debugAll()
                     add().size(Gdx.graphics.height.toFloat(), Gdx.graphics.height.toFloat())
                     add(table.apply {
+                        pad(20f)
                         add(Table().apply {
                             debugAll()
+                            setFillParent(true)
                             row().let {
-                                add(humansLabel)
-                                add(piratesLabel)
-                                add(robotsLabel)
-                                add(aliensLabel)
+                                add(humansLabel).pad(5f)
+                                add(piratesLabel).pad(5f)
+                                add(robotsLabel).pad(5f)
+                                add(aliensLabel).pad(5f)
                             }
-                        })
-                    }).expand().top().right()
+                        }).colspan(3).expand()
+                    }).expand().center().top()
                 }
         )
         table.debugAll()
@@ -70,18 +72,15 @@ class Hud {
     fun addWidget(entityData: EntityData) {
         table.apply {
             row().apply {
-                add(Table().apply {
-                    debugAll()
-                    row().apply {
-                        add(Image().apply { setTexture(entityData.texture) })
-                        add(Label(entityData.description, uiSkin))
-                        add(Image().apply { setTexture("crystal.png") }).center()
-                    }
-                    row().apply {
-                        add(Label(entityData.name, uiSkin))
-                    }
-                })
-            }
+                add(Image().apply { setTexture(entityData.texture) })
+                add(Label(entityData.description, uiSkin).apply {
+                    setWrap(true)
+                }).width(150f);
+                add(Image().apply { setTexture("crystal.png") }).space(5f).center()
+            }.expand()
+            row().apply {
+                add(Label(entityData.name, uiSkin))
+            }.expand()
         }
     }
 
@@ -91,7 +90,7 @@ class Hud {
     }
 
     private fun Image.setTexture(path: String) {
-        val size = (Gdx.graphics.height / Constants.verticalCountOfCells).toFloat()
+        val size = (SilentPlanetGame.HEIGHT / Constants.verticalCountOfCells)
         val sprite = Sprite(Texture(path))
         sprite.setSize(size, size)
         this.drawable = SpriteDrawable(sprite)
