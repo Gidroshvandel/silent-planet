@@ -15,7 +15,7 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
 
     private lateinit var presenter: SilentPlanetContract.Presenter
 
-    private val viewPort = AppViewport(Scaling.fillY, WIDTH, HEIGHT)
+    private val viewPort = AppViewport(Scaling.fillY, HEIGHT, HEIGHT)
     private val camera by lazy(viewPort::getCamera)
 
     private val hud by lazy { Hud() }
@@ -35,10 +35,12 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
     }
 
     private fun initUi() {
+//        Gdx.graphics.setFullscreenMode(Gdx.graphics.displayMode)
+
         AssetManager().load("ui/uiskin.json", TextureAtlas::class.java)
         (camera as? OrthographicCamera)?.zoom = 1f
         (camera as? OrthographicCamera)?.setToOrtho(true)
-        camera.position.x = WIDTH / 2f
+        camera.position.x = HEIGHT / 2f
         camera.position.y = HEIGHT / 2f
     }
 
@@ -58,6 +60,8 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
         super.resize(width, height)
         viewPort.update(width, height)
 
+        hud.update(height)
+
         hud.stage.viewport.update(width, height, true)
     }
 
@@ -67,7 +71,7 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
 
     companion object {
         const val WIDTH = 640f
-        const val HEIGHT = 640f
+        const val HEIGHT = 480f
     }
 
     override fun showEntityInfo(entity: EntityData) {

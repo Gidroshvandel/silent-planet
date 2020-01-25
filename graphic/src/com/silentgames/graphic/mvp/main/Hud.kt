@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
 import com.badlogic.gdx.scenes.scene2d.ui.List
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable
+import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.silentgames.core.Strings
 import com.silentgames.core.logic.Constants
 import com.silentgames.core.logic.ecs.component.FractionsType
@@ -21,7 +22,7 @@ import com.silentgames.graphic.mvp.main.Hud.Color.WHITE
 
 class Hud {
 
-    val stage = Stage()
+    val stage = Stage(ScreenViewport())
 
     fun dispose() {
         stage.dispose()
@@ -41,12 +42,14 @@ class Hud {
     private val robotsLabel = Label(getCrystalTitle(Strings.robots.getString(), 0), uiSkin)
     private val aliensLabel = Label(getCrystalTitle(Strings.aliens.getString(), 0), uiSkin)
 
+    private val tableGen = Table()
+
     init {
         stage.addActor(
-                Table().apply {
+                tableGen.apply {
                     setFillParent(true)
                     debugAll()
-                    add().minWidth(Gdx.graphics.height.toFloat()).minHeight(Gdx.graphics.height.toFloat()).maxHeight(Gdx.graphics.height.toFloat()).maxWidth(Gdx.graphics.height.toFloat())
+                    add().size(Gdx.graphics.height.toFloat(), Gdx.graphics.height.toFloat())
                     add(table.apply {
                         add(Table().apply {
                             debugAll()
@@ -57,7 +60,7 @@ class Hud {
                                 add(aliensLabel)
                             }
                         })
-                    }).top().right()
+                    }).expand().top().right()
                 }
         )
         table.debugAll()
@@ -80,6 +83,11 @@ class Hud {
                 })
             }
         }
+    }
+
+    fun update(height: Int) {
+        val heightCell = height.toFloat()
+        tableGen.cells.first().size(heightCell, heightCell)
     }
 
     private fun Image.setTexture(path: String) {
