@@ -46,6 +46,7 @@ class SilentPlanetPresenter internal constructor(
         viewModel.engine.addSystem(TornadoSystem())
         viewModel.engine.addSystem(MovementSystem())
         viewModel.engine.addSystem(TeleportSystem())
+        viewModel.engine.addSystem(SavePathSystem())
 //        viewModel.engine.addSystem(CaptureSystem())
 //        viewModel.engine.addSystem(TeleportSystem())
         viewModel.engine.addSystem(ExploreSystem())
