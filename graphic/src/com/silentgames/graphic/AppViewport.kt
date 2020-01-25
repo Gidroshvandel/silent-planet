@@ -47,7 +47,7 @@ class AppViewport @JvmOverloads constructor(var scaling: Scaling, worldWidth: Fl
         // Center.
         setScreenBounds(
                 0,
-                (screenHeight - viewportHeight) / 2,
+                0,
                 viewportWidth,
                 viewportHeight
         )

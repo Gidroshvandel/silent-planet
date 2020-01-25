@@ -135,9 +135,7 @@ class SilentPlanetPresenter internal constructor(
                 }
             }
 
-            entity.getComponent<Crystal>()?.let {
-                view.setImageCrystalText(it.count.toString())
-            }
+            view.showEntityInfo(entity.toEntityData())
         }
     }
 
@@ -164,10 +162,10 @@ class SilentPlanetPresenter internal constructor(
 
         val captured = this.getComponent<Capture>() != null
 
-        val crystal = if (captured) {
-            this.getComponent<Capture>()?.buybackPrice ?: 0
-        } else {
-            this.getComponent<Crystal>()?.count ?: 0
+        val crystal = when {
+            this.hasComponent<Hide>() -> 0
+            captured -> this.getComponent<Capture>()?.buybackPrice ?: 0
+            else -> this.getComponent<Crystal>()?.count ?: 0
         }
 
         return EntityData(
@@ -180,11 +178,6 @@ class SilentPlanetPresenter internal constructor(
         )
     }
 
-    private fun showDescription(description: Description) {
-        view.fillDescription(description.description)
-        view.fillEntityName(description.name)
-    }
-
     private fun selectEntity(entity: UnitEcs) {
         updateEntityState(entity)
         viewModel.selectedEntity = entity
@@ -192,30 +185,21 @@ class SilentPlanetPresenter internal constructor(
 
     private fun updateEntityState(unit: UnitEcs) {
         val position = unit.getComponent<Position>()?.currentPosition
-        val crystals = unit.getComponent<Crystal>()?.count ?: 0
-        view.setImageCrystalText(crystals.toString())
         if (position != null && crystalsOverZero(position)) {
             view.enableButton(true)
         } else {
             view.enableButton(false)
         }
-        unit.getComponent<Texture>()?.bitmapName?.let { view.showObjectIcon(it) }
-        unit.getComponent<Description>()?.let { showDescription(it) }
+        view.showEntityInfo(unit.toEntityData())
     }
 
     private fun crystalsOverZero(position: Axis): Boolean =
             viewModel.engine.gameState.getCell(position)?.getComponent<Crystal>()?.count ?: 0 > 0
 
     private fun selectCell(cellType: EntityEcs) {
-        val crystals = cellType.getComponent<Crystal>()?.count ?: 0
-        val isVisible = cellType.getComponent<Hide>() == null
         view.enableButton(false)
-        if (isVisible) {
-            view.setImageCrystalText(crystals.toString())
-        }
-        cellType.getComponent<Texture>()?.bitmapName?.let { view.showObjectIcon(it) }
         viewModel.selectedEntity = null
-        cellType.getComponent<Description>()?.let { showDescription(it) }
+        view.showEntityInfo(cellType.toEntityData())
     }
 
     private fun tryMove(unit: UnitEcs, targetPosition: Axis) {

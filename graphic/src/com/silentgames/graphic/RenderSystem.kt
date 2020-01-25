@@ -1,6 +1,7 @@
 package com.silentgames.graphic
 
 import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.utils.viewport.Viewport
 import com.silentgames.core.logic.Constants
 import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.EngineEcs
@@ -16,7 +17,7 @@ import com.silentgames.graphic.engine.base.Layer
 import com.silentgames.graphic.engine.base.Scene
 import com.silentgames.graphic.mvp.InputMultiplexer
 
-class RenderSystem(private val viewport: AppViewport, private val batch: Batch, private val onClick: (Axis) -> Unit) : UnitSystem() {
+class RenderSystem(private val viewport: Viewport, private val batch: Batch, private val onClick: (Axis) -> Unit) : UnitSystem() {
 
     private val mScaleFactor: Int = 1
 

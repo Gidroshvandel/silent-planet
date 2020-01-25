@@ -58,8 +58,7 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
         super.resize(width, height)
         viewPort.update(width, height)
 
-
-        hud.stage.viewport.update(width, height)
+        hud.stage.viewport.update(width, height, true)
     }
 
     override fun dispose() {
@@ -71,23 +70,14 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
         const val HEIGHT = 640f
     }
 
+    override fun showEntityInfo(entity: EntityData) {
+        hud.addWidget(entity)
+    }
+
     override fun showToast(text: String) {
     }
 
-    override fun fillEntityName(text: String) {
-    }
-
-    override fun fillDescription(text: String) {
-    }
-
-    override fun showObjectIcon(bitmap: String) {
-        hud.updateImage(bitmap)
-    }
-
     override fun enableButton(isEnabled: Boolean) {
-    }
-
-    override fun setImageCrystalText(text: String) {
     }
 
     override fun showEntityMenuDialog(entityList: MutableList<EntityData>, currentCell: EntityData) {

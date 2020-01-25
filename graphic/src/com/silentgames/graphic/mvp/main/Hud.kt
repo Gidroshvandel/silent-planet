@@ -23,19 +23,17 @@ class Hud {
 
     val stage = Stage()
 
-    private var image: Image = Image()
-
     fun dispose() {
         stage.dispose()
     }
 
-    private val stageLayout = Table()
+    private val table = Table()
 
     private val uiSkin = Assets().uiSkin
 
     private val atlas = TextureAtlas(Gdx.files.internal("ui/uiskin.atlas"))
-    private val skin = Skin(Gdx.files.internal("ui/uiskin.json"), atlas)
-    private val list = List<String>(skin)
+    private val testSkin = Skin(Gdx.files.internal("ui/uiskin.json"), atlas)
+    private val list = List<String>(testSkin)
     private val scrollPane = ScrollPane(list)
 
     private val humansLabel = Label(getCrystalTitle(Strings.humans.getString(), 0), uiSkin)
@@ -44,21 +42,51 @@ class Hud {
     private val aliensLabel = Label(getCrystalTitle(Strings.aliens.getString(), 0), uiSkin)
 
     init {
-        stage.addActor(stageLayout.right().top().apply {
-            row().let {
-                add(humansLabel)
-                add(piratesLabel)
-                add(robotsLabel)
-                add(aliensLabel)
-            }.top().right()
-            debugAll() // Включаем дебаг для всех элементов таблицы
-            setFillParent(true) // Указываем что таблица принимает размеры родителя
-            row().let {
-                add(image).top()
-                add(scrollPane).top()
-            }
-        })
+        stage.addActor(
+                Table().apply {
+                    setFillParent(true)
+                    debugAll()
+                    add().minWidth(Gdx.graphics.height.toFloat()).minHeight(Gdx.graphics.height.toFloat()).maxHeight(Gdx.graphics.height.toFloat()).maxWidth(Gdx.graphics.height.toFloat())
+                    add(table.apply {
+                        add(Table().apply {
+                            debugAll()
+                            row().let {
+                                add(humansLabel)
+                                add(piratesLabel)
+                                add(robotsLabel)
+                                add(aliensLabel)
+                            }
+                        })
+                    }).top().right()
+                }
+        )
+        table.debugAll()
         InputMultiplexer.addProcessor(stage)
+    }
+
+    fun addWidget(entityData: EntityData) {
+        table.apply {
+            row().apply {
+                add(Table().apply {
+                    debugAll()
+                    row().apply {
+                        add(Image().apply { setTexture(entityData.texture) })
+                        add(Label(entityData.description, uiSkin))
+                        add(Image().apply { setTexture("crystal.png") }).center()
+                    }
+                    row().apply {
+                        add(Label(entityData.name, uiSkin))
+                    }
+                })
+            }
+        }
+    }
+
+    private fun Image.setTexture(path: String) {
+        val size = (Gdx.graphics.height / Constants.verticalCountOfCells).toFloat()
+        val sprite = Sprite(Texture(path))
+        sprite.setSize(size, size)
+        this.drawable = SpriteDrawable(sprite)
     }
 
     private fun getCrystalTitle(fractionName: String, currentCrystals: Int): String {
@@ -74,17 +102,6 @@ class Hud {
             return@addListener false
         }
         scrollPane.invalidateHierarchy()
-    }
-
-    fun updateImage(imagePath: String) {
-
-        val size = (Gdx.graphics.height / Constants.verticalCountOfCells).toFloat()
-
-        val sprite = Sprite(Texture(imagePath))
-
-        sprite.setSize(size, size)
-
-        image.drawable = SpriteDrawable(sprite)
     }
 
     fun changeFractionCrystalOnBoard(fractionsType: FractionsType, count: Int) {
