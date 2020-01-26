@@ -1,14 +1,11 @@
 package com.silentgames.graphic.mvp.main
 
 import com.badlogic.gdx.ApplicationAdapter
-import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.assets.AssetManager
-import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.utils.Scaling
 import com.silentgames.core.logic.ecs.component.FractionsType
 import com.silentgames.graphic.AppViewport
+import com.silentgames.graphic.Assets
 
 
 class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
@@ -18,7 +15,9 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
     private val viewPort = AppViewport(Scaling.fillY, HEIGHT, HEIGHT)
     private val camera by lazy(viewPort::getCamera)
 
-    private val hud by lazy { Hud(viewPort) }
+    private val assets by lazy { Assets() }
+
+    private val hud by lazy { Hud(viewPort, assets) }
 
     override fun create() {
 
@@ -37,7 +36,6 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
     private fun initUi() {
 //        Gdx.graphics.setFullscreenMode(Gdx.graphics.displayMode)
 
-        AssetManager().load("ui/uiskin.json", TextureAtlas::class.java)
         (camera as? OrthographicCamera)?.zoom = 1f
         (camera as? OrthographicCamera)?.setToOrtho(true)
         camera.position.x = HEIGHT / 2f
@@ -45,12 +43,12 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
     }
 
     override fun render() {
-        Gdx.gl.glClearColor(0.5f, 0f, 0.2f, 1f)
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+
         presenter.onRender()
 
         hud.stage.viewport.apply(true)
 
+        hud.drawBackground()
         hud.stage.act()
         hud.stage.draw()
     }

@@ -1,5 +1,5 @@
 {
-  "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
+  "LabelStyle": {
     "default": {
       "font": "regular-font"
     },
@@ -8,10 +8,6 @@
     },
     "small": {
       "font": "small-font"
-    },
-    "pane-caption": {
-      "font": "large-font",
-      "fontColor": "color-mongoose"
     }
   },
   "Color": {

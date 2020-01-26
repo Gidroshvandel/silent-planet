@@ -1,15 +1,16 @@
 package com.silentgames.graphic.mvp.main
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.NinePatch
 import com.badlogic.gdx.graphics.g2d.Sprite
-import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
-import com.badlogic.gdx.scenes.scene2d.ui.List
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.viewport.Viewport
@@ -21,8 +22,15 @@ import com.silentgames.graphic.Assets
 import com.silentgames.graphic.mvp.InputMultiplexer
 import com.silentgames.graphic.mvp.main.Hud.Color.RED
 import com.silentgames.graphic.mvp.main.Hud.Color.WHITE
+import ktx.style.get
 
-class Hud(gameViewport: Viewport) {
+class Hud(gameViewport: Viewport, assets: Assets) {
+
+    private val uiSkin by lazy { assets.uiSkin }
+
+    private val roundedWindow by lazy { NinePatchDrawable(uiSkin.get<NinePatch>("ui/rounded_window")) }
+    private val customWindow by lazy { NinePatchDrawable(uiSkin.get<NinePatch>("ui/custom_window")) }
+    private val background by lazy { uiSkin.get<Sprite>("space_texture") }
 
     val stage = Stage(
             object : Viewport() {
@@ -47,44 +55,53 @@ class Hud(gameViewport: Viewport) {
 
     private val table = Table()
 
-    private val uiSkin = Assets().uiSkin
-
-    private val atlas = TextureAtlas(Gdx.files.internal("ui/uiskin.atlas"))
-    private val testSkin = Skin(Gdx.files.internal("ui/uiskin.json"), atlas)
-    private val list = List<String>(testSkin)
-    private val scrollPane = ScrollPane(list)
-
     private val humansLabel = createLabel(getCrystalTitle(Strings.humans.getString(), 0))
     private val piratesLabel = createLabel(getCrystalTitle(Strings.pirates.getString(), 0))
     private val robotsLabel = createLabel(getCrystalTitle(Strings.robots.getString(), 0))
     private val aliensLabel = createLabel(getCrystalTitle(Strings.aliens.getString(), 0))
 
     private fun createLabel(text: String) =
-            Label(text, uiSkin).apply {
+            Label(text, uiSkin, "large").apply {
                 setAlignment(Align.center)
             }
+
+    private fun Table.addWithPadding(actor: Actor, padding: Float, background: Drawable): Cell<Table> =
+            add(actor.addPadding(padding).addWindowBackground(background)).grow().height(actor.height + padding)
+
+    private fun Actor.addPadding(padding: Float = 0f): Table =
+            Table().also { table ->
+                table.add(this).grow().pad(padding)
+            }
+
+
+    private fun Table.addWindowBackground(background: Drawable): Table = apply {
+        this.background = background
+    }
 
     init {
         stage.addActor(
                 Table().apply {
                     setFillParent(true)
-                    pad(20f)
+                    pad(20f, 20f, 0f, 20f)
                     this.top()
-                    defaults()
                     add(Table().apply {
-                        debugAll()
                         row().expandX().let {
-                            add(humansLabel).pad(5f)
-                            add(piratesLabel).pad(5f)
-                            add(robotsLabel).pad(5f)
-                            add(aliensLabel).pad(5f)
+                            addWithPadding(humansLabel, 4f, roundedWindow).pad(1f)
+                            addWithPadding(piratesLabel, 4f, roundedWindow).pad(1f)
+                            addWithPadding(robotsLabel, 4f, roundedWindow).pad(1f)
+                            addWithPadding(aliensLabel, 4f, roundedWindow).pad(1f)
                         }
                     }).growX()
                     row().grow()
                     add(ScrollPane(table))
                 })
-        table.debugAll()
         InputMultiplexer.addProcessor(stage)
+    }
+
+    fun drawBackground() {
+        stage.batch.begin()
+        stage.batch.draw(background, 0f, 0f, stage.viewport.worldWidth, stage.viewport.worldHeight)
+        stage.batch.end()
     }
 
     fun addWidget(entityData: EntityData) {
@@ -93,12 +110,15 @@ class Hud(gameViewport: Viewport) {
 
     private fun Table.addWidget(entityData: EntityData) {
         this.apply {
-            row().expandX().center()
             add(Table().also {
                 it.row()
                 it.add(Image().apply { setTexture(entityData.texture) }).pad(5f)
                 it.row()
-                it.add(Label(entityData.name, uiSkin)).pad(5f)
+                it.add(
+                        Label(entityData.name, uiSkin).also { label ->
+                            label.setAlignment(Align.center)
+                        }
+                ).pad(5f)
             }).space(5f)
             add(
                     Label(entityData.description, uiSkin).also {
@@ -120,12 +140,13 @@ class Hud(gameViewport: Viewport) {
         return Strings.crystal_count.getString(fractionName, currentCrystals, Constants.countCrystalsToWin)
     }
 
-    fun update(entityList: kotlin.collections.List<EntityData>, onClick: (EntityData) -> Unit) {
+    fun update(entityList: List<EntityData>, onClick: (EntityData) -> Unit) {
         table.clear()
         entityList.forEach { entityData ->
             table.row().growX()
             table.add(Table().apply {
-                debugAll()
+                background = customWindow
+                pad(15f, 35f, 15f, 45f)
                 addWidget(entityData)
                 addListener { event ->
                     if (event is InputEvent && event.type == InputEvent.Type.touchDown) {
@@ -161,7 +182,9 @@ class Hud(gameViewport: Viewport) {
     }
 
     private fun Label.setColor(color: Color) {
-        this.style = LabelStyle(uiSkin.getFont(Font.REGULAR.fontName), uiSkin.getColor(color.colorName))
+        this.style = LabelStyle(uiSkin.getFont(Font.REGULAR.fontName), uiSkin.getColor(color.colorName)).also {
+            it.background = this.style.background
+        }
     }
 
     enum class Color(val colorName: String) {
