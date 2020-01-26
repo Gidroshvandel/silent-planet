@@ -1,6 +1,7 @@
 package com.silentgames.graphic.mvp.main
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
@@ -10,7 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
 import com.badlogic.gdx.scenes.scene2d.ui.List
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable
-import com.badlogic.gdx.utils.viewport.ScreenViewport
+import com.badlogic.gdx.utils.Align
+import com.badlogic.gdx.utils.viewport.Viewport
 import com.silentgames.core.Strings
 import com.silentgames.core.logic.Constants
 import com.silentgames.core.logic.ecs.component.FractionsType
@@ -20,9 +22,24 @@ import com.silentgames.graphic.mvp.InputMultiplexer
 import com.silentgames.graphic.mvp.main.Hud.Color.RED
 import com.silentgames.graphic.mvp.main.Hud.Color.WHITE
 
-class Hud {
+class Hud(gameViewport: Viewport) {
 
-    val stage = Stage(ScreenViewport())
+    val stage = Stage(
+            object : Viewport() {
+
+                init {
+                    camera = OrthographicCamera()
+                }
+
+                override fun update(screenWidth: Int, screenHeight: Int, centerCamera: Boolean) {
+                    val freeSpaceWidth = screenWidth - gameViewport.screenWidth
+
+                    setScreenBounds(gameViewport.screenWidth, 0, freeSpaceWidth, screenHeight)
+                    setWorldSize(freeSpaceWidth.toFloat(), screenHeight.toFloat())
+                    apply(centerCamera)
+                }
+            }
+    )
 
     fun dispose() {
         stage.dispose()
@@ -37,56 +54,55 @@ class Hud {
     private val list = List<String>(testSkin)
     private val scrollPane = ScrollPane(list)
 
-    private val humansLabel = Label(getCrystalTitle(Strings.humans.getString(), 0), uiSkin)
-    private val piratesLabel = Label(getCrystalTitle(Strings.pirates.getString(), 0), uiSkin)
-    private val robotsLabel = Label(getCrystalTitle(Strings.robots.getString(), 0), uiSkin)
-    private val aliensLabel = Label(getCrystalTitle(Strings.aliens.getString(), 0), uiSkin)
+    private val humansLabel = createLabel(getCrystalTitle(Strings.humans.getString(), 0))
+    private val piratesLabel = createLabel(getCrystalTitle(Strings.pirates.getString(), 0))
+    private val robotsLabel = createLabel(getCrystalTitle(Strings.robots.getString(), 0))
+    private val aliensLabel = createLabel(getCrystalTitle(Strings.aliens.getString(), 0))
 
-    private val tableGen = Table()
+    private fun createLabel(text: String) =
+            Label(text, uiSkin).apply {
+                setAlignment(Align.center)
+            }
 
     init {
         stage.addActor(
-                tableGen.apply {
+                Table().apply {
                     setFillParent(true)
-                    debugAll()
-                    add().size(Gdx.graphics.height.toFloat(), Gdx.graphics.height.toFloat())
-                    add(table.apply {
-                        pad(20f)
-                        add(Table().apply {
-                            debugAll()
-                            setFillParent(true)
-                            row().let {
-                                add(humansLabel).pad(5f)
-                                add(piratesLabel).pad(5f)
-                                add(robotsLabel).pad(5f)
-                                add(aliensLabel).pad(5f)
-                            }
-                        }).colspan(3).expand()
-                    }).expand().center().top()
-                }
-        )
+                    pad(20f)
+                    this.top()
+                    defaults()
+                    add(Table().apply {
+                        debugAll()
+                        row().expandX().let {
+                            add(humansLabel).pad(5f)
+                            add(piratesLabel).pad(5f)
+                            add(robotsLabel).pad(5f)
+                            add(aliensLabel).pad(5f)
+                        }
+                    }).growX()
+                    row().grow()
+                    add(table)
+                })
         table.debugAll()
         InputMultiplexer.addProcessor(stage)
     }
 
     fun addWidget(entityData: EntityData) {
         table.apply {
-            row().apply {
-                add(Image().apply { setTexture(entityData.texture) })
-                add(Label(entityData.description, uiSkin).apply {
-                    setWrap(true)
-                }).width(150f);
-                add(Image().apply { setTexture("crystal.png") }).space(5f).center()
-            }.expand()
-            row().apply {
-                add(Label(entityData.name, uiSkin))
-            }.expand()
+            row().expandX().center()
+            add(Table().also {
+                it.row()
+                it.add(Image().apply { setTexture(entityData.texture) }).pad(5f)
+                it.row()
+                it.add(Label(entityData.name, uiSkin)).pad(5f)
+            }).space(5f)
+            add(
+                    Label(entityData.description, uiSkin).also {
+                        it.setWrap(true)
+                        it.setAlignment(Align.center)
+                    }).prefWidth(150f).growX().space(5f)
+            add(Image().apply { setTexture("crystal.png") }).space(5f).center()
         }
-    }
-
-    fun update(height: Int) {
-        val heightCell = height.toFloat()
-        tableGen.cells.first().size(heightCell, heightCell)
     }
 
     private fun Image.setTexture(path: String) {

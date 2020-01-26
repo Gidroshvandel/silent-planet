@@ -18,7 +18,7 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
     private val viewPort = AppViewport(Scaling.fillY, HEIGHT, HEIGHT)
     private val camera by lazy(viewPort::getCamera)
 
-    private val hud by lazy { Hud() }
+    private val hud by lazy { Hud(viewPort) }
 
     override fun create() {
 
@@ -58,8 +58,6 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
     override fun resize(width: Int, height: Int) {
         super.resize(width, height)
         viewPort.update(width, height)
-
-        hud.update(height)
 
         hud.stage.viewport.update(width, height, true)
 
