@@ -9,17 +9,11 @@ interface SilentPlanetContract {
 
         fun showToast(text: String)
 
-        fun fillEntityName(text: String)
-
-        fun fillDescription(text: String)
-
-        fun showObjectIcon(bitmap: String)
+        fun showEntityInfo(entity: EntityData)
 
         fun enableButton(isEnabled: Boolean)
 
-        fun setImageCrystalText(text: String)
-
-        fun showEntityMenuDialog(entityList: MutableList<EntityData>, currentCell: EntityData)
+        fun showEntityMenuDialog(dataList: MutableList<EntityData>)
 
         fun changeAlienCristalCount(crystals: Int)
 
