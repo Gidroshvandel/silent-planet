@@ -13,7 +13,7 @@ interface SilentPlanetContract {
 
         fun enableButton(isEnabled: Boolean)
 
-        fun showEntityMenuDialog(entityList: MutableList<EntityData>, currentCell: EntityData)
+        fun showEntityMenuDialog(dataList: MutableList<EntityData>)
 
         fun changeAlienCristalCount(crystals: Int)
 

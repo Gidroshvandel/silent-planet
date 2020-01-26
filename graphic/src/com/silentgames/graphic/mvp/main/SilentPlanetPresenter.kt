@@ -102,22 +102,21 @@ class SilentPlanetPresenter internal constructor(
     private fun select(currentXY: Axis) {
         val entities = viewModel.engine.gameState.getUnits(currentXY)
         val cellType = viewModel.engine.gameState.getCell(currentXY)
+        val selectedEntity = viewModel.selectedEntity
 
-        if (viewModel.selectedEntity != null
-                && viewModel.selectedEntity?.getComponent<Position>()?.currentPosition != currentXY
+        if (selectedEntity != null
+                && selectedEntity.getComponent<Position>()?.currentPosition != currentXY
         ) {
-            tryMove(viewModel.selectedEntity!!, currentXY)
+            tryMove(selectedEntity, currentXY)
         } else {
-            if (viewModel.selectedEntity == null
-                    && entities.isNotEmpty()) {
-                if (entities.size > 1) {
-                    view.showEntityMenuDialog(entities.map(), cellType?.toEntityData()!!)
-                } else {
-                    selectEntity(entities.first())
-                }
+            if (entities.size > 1) {
+                val listToShow: MutableList<EntityEcs> = entities.toMutableList()
+                cellType?.let { listToShow.add(it) }
+                view.showEntityMenuDialog(listToShow.map())
             } else {
-                if (entities.size > 1) {
-                    view.showEntityMenuDialog(entities.map(), cellType?.toEntityData()!!)
+                if (selectedEntity == null
+                        && entities.isNotEmpty()) {
+                    selectEntity(entities.first())
                 } else {
                     cellType?.let { selectCell(it) }
                 }
@@ -171,7 +170,7 @@ class SilentPlanetPresenter internal constructor(
 
         return EntityData(
                 id,
-                texture!!,
+                texture ?: "",
                 description?.name ?: "",
                 description?.description ?: "",
                 crystal.toString(),

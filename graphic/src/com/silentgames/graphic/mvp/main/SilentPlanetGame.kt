@@ -84,8 +84,8 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
     override fun enableButton(isEnabled: Boolean) {
     }
 
-    override fun showEntityMenuDialog(entityList: MutableList<EntityData>, currentCell: EntityData) {
-        hud.update(entityList) {
+    override fun showEntityMenuDialog(dataList: MutableList<EntityData>) {
+        hud.update(dataList) {
             presenter.onEntityDialogElementSelect(it)
         }
     }
