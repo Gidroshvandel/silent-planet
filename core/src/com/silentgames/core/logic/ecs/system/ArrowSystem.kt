@@ -47,18 +47,7 @@ class ArrowSystem : UnitSystem() {
 
     fun getCorrectTarget(gameState: GameState, arrow: Arrow, arrowCellPosition: Position, unitFractionsType: FractionsType): Axis? {
         val target = arrow.calculateTargetPosition(arrowCellPosition.currentPosition)
-        return if (gameState.isDestinationCorrect(target, unitFractionsType)
-                && !gameState.isCyclicMove(target, arrowCellPosition.currentPosition, arrowCellPosition.oldPosition)) {
-            target
-        } else {
-            null
-        }
-    }
-
-    private fun GameState.isCyclicMove(destination: Axis, unitPosition: Axis, previousPosition: Axis): Boolean {
-        val destinationCell = this.getCell(destination)?.getComponent<Arrow>()
-        val target = destinationCell?.calculateTargetPosition(destination)
-        return target == unitPosition && destination == previousPosition
+        return if (gameState.isDestinationCorrect(target, unitFractionsType)) target else null
     }
 
     private fun GameState.isDestinationCorrect(destination: Axis, fractionsType: FractionsType): Boolean =
