@@ -81,14 +81,18 @@ class Hud(gameViewport: Viewport) {
                         }
                     }).growX()
                     row().grow()
-                    add(table)
+                    add(ScrollPane(table))
                 })
         table.debugAll()
         InputMultiplexer.addProcessor(stage)
     }
 
     fun addWidget(entityData: EntityData) {
-        table.apply {
+        update(listOf(entityData)) {}
+    }
+
+    private fun Table.addWidget(entityData: EntityData) {
+        this.apply {
             row().expandX().center()
             add(Table().also {
                 it.row()
@@ -117,14 +121,21 @@ class Hud(gameViewport: Viewport) {
     }
 
     fun update(entityList: kotlin.collections.List<EntityData>, onClick: (EntityData) -> Unit) {
-        list.setItems(*entityList.map { it.name }.toTypedArray())
-        list.addListener { event ->
-            if (event is InputEvent && event.type == InputEvent.Type.touchDown) {
-                entityList.find { it.name == list.selected }?.let(onClick)
-            }
-            return@addListener false
+        table.clear()
+        entityList.forEach { entityData ->
+            table.row().growX()
+            table.add(Table().apply {
+                debugAll()
+                addWidget(entityData)
+                addListener { event ->
+                    if (event is InputEvent && event.type == InputEvent.Type.touchDown) {
+                        onClick(entityData)
+                        return@addListener true
+                    }
+                    return@addListener false
+                }
+            })
         }
-        scrollPane.invalidateHierarchy()
     }
 
     fun changeFractionCrystalOnBoard(fractionsType: FractionsType, count: Int) {
