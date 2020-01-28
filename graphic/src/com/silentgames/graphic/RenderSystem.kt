@@ -17,6 +17,7 @@ import com.silentgames.core.logic.ecs.system.isVisible
 import com.silentgames.graphic.engine.*
 import com.silentgames.graphic.engine.base.Layer
 import com.silentgames.graphic.engine.base.Scene
+import com.silentgames.graphic.engine.base.Sprite
 import com.silentgames.graphic.mvp.InputMultiplexer
 
 class RenderSystem(
@@ -104,28 +105,35 @@ class RenderSystem(
                     backgroundLayer.add(it)
                 }
 
-                val transport = gameState.getUnits(Axis(x, y)).firstOrNull { it.hasComponent<Transport>() }
+                val transport = gameState.getUnits(Axis(x, y)).firstOrNull { it.hasComponent<Transport>() }?.toDrawEntity()
+                val entityToDraw = gameState.getUnitToDraw(Axis(x, y))?.toDrawEntity()
 
-                val entityToDraw = gameState.getUnits(Axis(x, y)).firstOrNull {
-                    val position = it.getComponent<Position>()
-                    position != null
-                            && !position.moved
-                            && position.currentPosition != position.oldPosition
-                            && !it.hasComponent<Transport>()
-                } ?: gameState.getUnits(Axis(x, y)).firstOrNull { !it.hasComponent<Transport>() }
-
-                entityToDraw?.toDrawEntity()?.let {
-                    entityLayer.add(it)
+                if (transport != null) {
+                    transport.first.addOn(entityLayer)
+                    if (entityToDraw != null && entityToDraw.second) {
+                        entityToDraw.first.addOn(entityLayer)
+                    }
+                } else {
+                    entityToDraw?.first?.addOn(entityLayer)
                 }
-                transport?.toDrawEntity()?.let {
-                    entityLayer.add(it)
-                }
-
 
             }
         }
         scene?.setLayer(0, backgroundLayer)
         scene?.setLayer(2, entityLayer)
+    }
+
+    private fun GameState.getUnitToDraw(axis: Axis) =
+            this.getUnits(axis).firstOrNull {
+                val position = it.getComponent<Position>()
+                position != null
+                        && !position.moved
+                        && position.currentPosition != position.oldPosition
+                        && !it.hasComponent<Transport>()
+            } ?: this.getUnits(axis).firstOrNull { !it.hasComponent<Transport>() }
+
+    private fun Sprite.addOn(layer: Layer) {
+        layer.add(this)
     }
 
     private fun CellEcs.toDrawBackground(): Background? {
@@ -148,10 +156,11 @@ class RenderSystem(
         }
     }
 
-    private fun UnitEcs.toDrawEntity(): Entity? {
+    private fun UnitEcs.toDrawEntity(): Pair<Entity, Boolean>? {
         val textureId = this.getComponent<Texture>()?.bitmapName ?: return null
         val position = this.getComponent<Position>() ?: return null
-        return Entity(
+        var isMoved = false
+        val entity = Entity(
                 this.id.toString(),
                 position.currentPosition.toEngineAxis(),
                 textureId,
@@ -159,12 +168,14 @@ class RenderSystem(
         ).apply {
             if (!position.moved && position.oldPosition != position.currentPosition) {
                 position.moved = true
+                isMoved = true
                 move(
                         position.oldPosition.toEngineAxis(),
                         position.currentPosition.toEngineAxis()
                 )
             }
         }
+        return Pair(entity, isMoved)
     }
 
     private fun Axis.toEngineAxis(): EngineAxis = EngineAxis(x.toFloat(), y.toFloat())
