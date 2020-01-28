@@ -30,8 +30,7 @@ class Hud(gameViewport: Viewport, private val assets: Assets) {
 
     private val uiSkin by lazy { assets.uiSkin }
 
-    private val roundedWindow by lazy { NinePatchDrawable(uiSkin.get<NinePatch>("ui/rounded_window")) }
-    private val customWindow by lazy { NinePatchDrawable(uiSkin.get<NinePatch>("ui/custom_window")) }
+    private val roundedWindow by lazy { NinePatchDrawable(uiSkin.get<NinePatch>("ui/rounded_window_blue")) }
     private val background by lazy { uiSkin.get<Sprite>("space_texture") }
 
     val stage = Stage(
@@ -68,13 +67,14 @@ class Hud(gameViewport: Viewport, private val assets: Assets) {
             }
 
     private fun Table.addWithPadding(actor: Actor, padding: Float, background: Drawable): Cell<Table> =
-            add(actor.addPadding(padding).addWindowBackground(background)).grow().height(actor.height + padding)
+            add(actor.addPadding(padding).addWindowBackground(background))
+                    .grow()
+                    .height(actor.height + padding * 2)
 
     private fun Actor.addPadding(padding: Float = 0f): Table =
             Table().also { table ->
                 table.add(this).grow().pad(padding)
             }
-
 
     private fun Table.addWindowBackground(background: Drawable): Table = apply {
         this.background = background
@@ -148,8 +148,8 @@ class Hud(gameViewport: Viewport, private val assets: Assets) {
         table.clear()
         entityList.forEach { entityData ->
             table.row().growX()
-            table.add(Table().apply {
-                background = customWindow
+
+            table.add(Button(uiSkin).apply {
                 pad(15f, 35f, 15f, 45f)
                 addWidget(entityData)
                 addCaptureListener(object : ClickListener() {
@@ -157,7 +157,7 @@ class Hud(gameViewport: Viewport, private val assets: Assets) {
                         onClick(entityData)
                     }
                 })
-            })
+            }).growX()
         }
     }
 
