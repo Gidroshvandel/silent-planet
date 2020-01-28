@@ -3,7 +3,6 @@ package com.silentgames.graphic.engine.base
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.silentgames.graphic.Assets
 import com.silentgames.graphic.engine.EngineAxis
-import ktx.style.get
 
 abstract class Sprite(axis: EngineAxis,
                       protected val bmpResourceId: String,
@@ -23,12 +22,10 @@ abstract class Sprite(axis: EngineAxis,
     }
 
     protected open fun initBitmap(bmpResourceId: String): Sprite {
-        return Sprite(assets.uiSkin.get<Sprite>(bmpResourceId.removeExtension())).apply {
+        return assets.getSprite(bmpResourceId).apply {
             flip(false, true)
         }
     }
-
-    private fun String.removeExtension() = substringBeforeLast(".")
 
     protected open fun getBitmap(): Sprite {
         val bitmapCache = resourceBuffer.get(getBitmapId())

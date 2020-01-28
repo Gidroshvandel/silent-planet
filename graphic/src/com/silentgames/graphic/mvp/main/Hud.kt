@@ -1,7 +1,6 @@
 package com.silentgames.graphic.mvp.main
 
 import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.NinePatch
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.scenes.scene2d.Actor
@@ -24,7 +23,7 @@ import com.silentgames.graphic.mvp.main.Hud.Color.RED
 import com.silentgames.graphic.mvp.main.Hud.Color.WHITE
 import ktx.style.get
 
-class Hud(gameViewport: Viewport, assets: Assets) {
+class Hud(gameViewport: Viewport, private val assets: Assets) {
 
     private val uiSkin by lazy { assets.uiSkin }
 
@@ -131,7 +130,7 @@ class Hud(gameViewport: Viewport, assets: Assets) {
 
     private fun Image.setTexture(path: String) {
         val size = (SilentPlanetGame.HEIGHT / Constants.verticalCountOfCells)
-        val sprite = Sprite(Texture(path))
+        val sprite = assets.getSprite(path)
         sprite.setSize(size, size)
         this.drawable = SpriteDrawable(sprite)
     }

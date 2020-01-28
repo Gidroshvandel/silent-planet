@@ -9,6 +9,6 @@ object AtlasGenerator {
         val settings = TexturePacker.Settings()
         settings.maxWidth = 2048
         settings.maxHeight = 2048
-        TexturePacker.process(settings, "android/assets", "android/assets/atlas", "game")
+        TexturePacker.process(settings, "android/assets/texture", "android/assets/atlas", "game")
     }
 }

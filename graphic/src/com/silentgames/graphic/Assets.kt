@@ -7,6 +7,7 @@ import com.badlogic.gdx.assets.loaders.SkinLoader
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader
@@ -23,7 +24,7 @@ class Assets {
     private val skinResources = ObjectMap<String, Any>()
 
     private val atlasDescriptor = AssetDescriptor("atlas/game.atlas", TextureAtlas::class.java)
-    private val skinDescriptor = AssetDescriptor("ui/default-ui-skin.json", Skin::class.java,
+    private val skinDescriptor = AssetDescriptor("atlas/default-ui-skin.json", Skin::class.java,
             SkinLoader.SkinParameter("atlas/game.atlas", skinResources))
 
 //    private val i18nDescriptor = AssetDescriptor("i18n/medieval-tycoon", I18NBundle::class.java, I18NBundleLoader.I18NBundleParameter(Locale.getDefault()))
@@ -32,13 +33,12 @@ class Assets {
         manager.get(skinDescriptor)
     }
 
-//    val i18n: I18NBundle by lazy {
-//        manager.get(i18nDescriptor)
-//    }
+    fun getSprite(name: String): Sprite = Sprite(uiSkin.getSprite(name.removeExtension()))
+
+    private fun String.removeExtension() = substringBeforeLast(".")
 
     init {
         manager.load(atlasDescriptor)
-//        manager.load(i18nDescriptor)
 
         val resolver = InternalFileHandleResolver()
         manager.setLoader<FreeTypeFontGenerator, FreeTypeFontGeneratorLoader.FreeTypeFontGeneratorParameters>(FreeTypeFontGenerator::class.java, FreeTypeFontGeneratorLoader(resolver))
