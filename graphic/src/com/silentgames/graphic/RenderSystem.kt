@@ -1,7 +1,5 @@
 package com.silentgames.graphic
 
-import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.silentgames.core.logic.Constants
@@ -68,8 +66,7 @@ class RenderSystem(
         batch.projectionMatrix = viewport.camera.combined
 
         viewport.apply()
-        Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+
         batch.begin()
 
 //        batch.draw(com.badlogic.gdx.graphics.Texture("space_texture.jpg"), 0f, 0f, camera.viewportWidth, camera.viewportHeight)

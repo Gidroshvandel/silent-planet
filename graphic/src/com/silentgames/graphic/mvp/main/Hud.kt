@@ -99,7 +99,9 @@ class Hud(gameViewport: Viewport, private val assets: Assets) {
 
     fun drawBackground() {
         stage.batch.begin()
+        stage.batch.disableBlending()
         stage.batch.draw(background, 0f, 0f, stage.viewport.worldWidth, stage.viewport.worldHeight)
+        stage.batch.enableBlending()
         stage.batch.end()
     }
 
