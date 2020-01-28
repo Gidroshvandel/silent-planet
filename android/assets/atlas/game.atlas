@@ -94,57 +94,64 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+abyss_cell
+  rotate: false
+  xy: 1204, 575
+  size: 572, 572
+  orig: 572, 572
+  offset: 0, 0
+  index: -1
 dead_cell
   rotate: false
-  xy: 1204, 573
+  xy: 1204, 2
   size: 571, 571
   orig: 571, 571
   offset: 0, 0
   index: -1
-one_crystal
-  rotate: false
-  xy: 1204, 2
-  size: 569, 569
-  orig: 569, 569
-  offset: 0, 0
-  index: -1
 pirate
   rotate: false
-  xy: 2, 122
+  xy: 2, 125
   size: 1200, 1600
   orig: 1200, 1600
   offset: 0, 0
   index: -1
 tornado_cell
   rotate: false
-  xy: 1204, 1146
+  xy: 1204, 1149
   size: 576, 576
   orig: 576, 576
   offset: 0, 0
   index: -1
 
 game3.png
-size: 2048,1024
+size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 arow_red_cell
   rotate: false
-  xy: 2, 2
+  xy: 2, 565
   size: 565, 565
   orig: 565, 565
   offset: 0, 0
   index: -1
 empty_cell
   rotate: false
-  xy: 1133, 6
+  xy: 2, 2
   size: 561, 561
   orig: 561, 561
   offset: 0, 0
   index: -1
+one_crystal
+  rotate: false
+  xy: 2, 1132
+  size: 569, 569
+  orig: 569, 569
+  offset: 0, 0
+  index: -1
 two_crystals
   rotate: false
-  xy: 569, 5
+  xy: 573, 1139
   size: 562, 562
   orig: 562, 562
   offset: 0, 0

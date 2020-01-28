@@ -5,10 +5,7 @@ import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.*
 import com.silentgames.core.logic.ecs.entity.cell.CellEcs
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
-import com.silentgames.core.logic.ecs.system.ArrowSystem
-import com.silentgames.core.logic.ecs.system.MovementSystem
-import com.silentgames.core.logic.ecs.system.TornadoSystem
-import com.silentgames.core.logic.ecs.system.getAvailableMoveDistancePositionList
+import com.silentgames.core.logic.ecs.system.*
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -91,11 +88,15 @@ private fun GameState.getAdjacentNodes(node: Node, unit: UnitEcs): List<Node> {
     val cell = this.getCell(node.position)
     val arrow = cell?.getComponent<Arrow>()
     val tornado = cell?.getComponent<Tornado>()
+    val abyss = cell?.getComponent<Abyss>()
     return if (cell != null && !cell.hasComponent<Hide>() && arrow != null) {
         val destination = getDestination(arrow, unit, cell)
         if (destination != null) listOf(Node(destination, cost = Int.MAX_VALUE)) else listOf()
     } else if (cell != null && !cell.hasComponent<Hide>() && tornado != null) {
-        val destination = getDestination(tornado, unit, cell)
+        val destination = getDestination(unit, cell)
+        if (destination != null) listOf(Node(destination, cost = Int.MAX_VALUE)) else listOf()
+    } else if (cell != null && !cell.hasComponent<Hide>() && abyss != null) {
+        val destination = getDestination(unit)
         if (destination != null) listOf(Node(destination, cost = Int.MAX_VALUE)) else listOf()
     } else {
         this.getAvailableMoveDistancePositionList(node.position, unit).map { Node(it, cost = Int.MAX_VALUE) }
@@ -108,10 +109,15 @@ fun GameState.getDestination(arrow: Arrow, unit: UnitEcs, cell: CellEcs): Axis? 
     return ArrowSystem().getCorrectTarget(this, arrow, cellPosition, unitFractionsType)
 }
 
-fun GameState.getDestination(tornado: Tornado, unit: UnitEcs, cell: CellEcs): Axis? {
+fun GameState.getDestination(unit: UnitEcs, cell: CellEcs): Axis? {
     val cellPosition = cell.getComponent<Position>() ?: return null
     val unitFractionsType = unit.getComponent<FractionsType>() ?: return null
     return TornadoSystem().getTarget(this, unitFractionsType, cellPosition.currentPosition)
+}
+
+fun GameState.getDestination(unit: UnitEcs): Axis? {
+    val paths = unit.getComponent<Route>()?.paths ?: return null
+    return AbyssSystem().getTarget(paths, this)
 }
 
 fun GameState.getAvailableMoveDistancePositionList(position: Axis, unit: UnitEcs) =
