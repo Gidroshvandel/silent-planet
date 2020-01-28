@@ -2,12 +2,14 @@ package com.silentgames.graphic.engine
 
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.silentgames.core.logic.Constants
+import com.silentgames.graphic.Assets
 import com.silentgames.graphic.engine.base.Sprite
 
 open class Background(
         axis: EngineAxis,
-        bmpId: String
-) : Sprite(axis, bmpId) {
+        bmpId: String,
+        assets: Assets
+) : Sprite(axis, bmpId, assets) {
 
     override fun draw(batch: Batch, width: Int, height: Int) {
         val size = (width / Constants.verticalCountOfCells).toFloat()

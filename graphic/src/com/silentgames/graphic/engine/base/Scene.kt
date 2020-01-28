@@ -19,6 +19,8 @@ class Scene(
         const val ORIENTATION_HOR = 1
     }
 
+    private val resourceBuffer = ResourceBuffer()
+
     private var updated = false
 
     var mScaleFactor = 1f
@@ -37,6 +39,7 @@ class Scene(
     fun setLayer(i: Int, layer: Layer) {
         updated = true
         if (i < layers.size) {
+            layer.onResourceBufferAttached(resourceBuffer)
             layers[i] = layer
         }
     }

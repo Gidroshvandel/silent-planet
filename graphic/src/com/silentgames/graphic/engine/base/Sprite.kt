@@ -1,12 +1,15 @@
 package com.silentgames.graphic.engine.base
 
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
-import com.silentgames.graphic.engine.BitmapBuffer
+import com.silentgames.graphic.Assets
 import com.silentgames.graphic.engine.EngineAxis
+import ktx.style.get
 
 abstract class Sprite(axis: EngineAxis,
-                      private val bmpResourceId: String) : Basic() {
+                      protected val bmpResourceId: String,
+                      private val assets: Assets) : Basic() {
+
+    private lateinit var resourceBuffer: ResourceBuffer
 
     var axis: EngineAxis = axis
         set(value) {
@@ -15,19 +18,25 @@ abstract class Sprite(axis: EngineAxis,
 
     private var resized = false
 
+    override fun onResourceBufferAttached(resourceBuffer: ResourceBuffer) {
+        this.resourceBuffer = resourceBuffer
+    }
+
     protected open fun initBitmap(bmpResourceId: String): Sprite {
-        return Sprite(Texture(bmpResourceId)).apply {
+        return Sprite(assets.uiSkin.get<Sprite>(bmpResourceId.removeExtension())).apply {
             flip(false, true)
         }
     }
 
+    private fun String.removeExtension() = substringBeforeLast(".")
+
     protected open fun getBitmap(): Sprite {
-        val bitmapCache = BitmapBuffer.get(getBitmapId())
+        val bitmapCache = resourceBuffer.get(getBitmapId())
         return if (bitmapCache != null) {
             bitmapCache
         } else {
             val bitmap = initBitmap(bmpResourceId)
-            BitmapBuffer.put(getBitmapId(), bitmap)
+            resourceBuffer.put(getBitmapId(), bitmap)
             bitmap
         }
     }
@@ -39,7 +48,7 @@ abstract class Sprite(axis: EngineAxis,
         } else {
             resized = true
             bitmap.setSize(width, height)
-            BitmapBuffer.put(getBitmapId(), bitmap)
+            resourceBuffer.put(getBitmapId(), bitmap)
             bitmap
         }
     }

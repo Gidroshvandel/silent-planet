@@ -1,5 +1,7 @@
 package com.silentgames.graphic
 
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.silentgames.core.logic.Constants
@@ -17,7 +19,12 @@ import com.silentgames.graphic.engine.base.Layer
 import com.silentgames.graphic.engine.base.Scene
 import com.silentgames.graphic.mvp.InputMultiplexer
 
-class RenderSystem(private val viewport: Viewport, private val batch: Batch, private val onClick: (Axis) -> Unit) : UnitSystem() {
+class RenderSystem(
+        private val viewport: Viewport,
+        private val batch: Batch,
+        private val assets: Assets,
+        private val onClick: (Axis) -> Unit
+) : UnitSystem() {
 
     private val mScaleFactor: Int = 1
 
@@ -60,6 +67,8 @@ class RenderSystem(private val viewport: Viewport, private val batch: Batch, pri
         batch.projectionMatrix = viewport.camera.combined
 
         viewport.apply()
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
         batch.begin()
 
 //        batch.draw(com.badlogic.gdx.graphics.Texture("space_texture.jpg"), 0f, 0f, camera.viewportWidth, camera.viewportHeight)
@@ -127,12 +136,14 @@ class RenderSystem(private val viewport: Viewport, private val batch: Batch, pri
             ArrowBackground(
                     position.toEngineAxis(),
                     textureId,
+                    assets,
                     arrow.rotateAngle
             )
         } else {
             Background(
                     position.toEngineAxis(),
-                    textureId
+                    textureId,
+                    assets
             )
         }
     }
@@ -143,7 +154,8 @@ class RenderSystem(private val viewport: Viewport, private val batch: Batch, pri
         return Entity(
                 this.id.toString(),
                 position.currentPosition.toEngineAxis(),
-                textureId
+                textureId,
+                assets
         ).apply {
             if (!position.moved && position.oldPosition != position.currentPosition) {
                 position.moved = true

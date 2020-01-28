@@ -20,6 +20,12 @@ open class Layer {
         processing = false
     }
 
+    fun onResourceBufferAttached(resourceBuffer: ResourceBuffer) {
+        data.forEach {
+            it.onResourceBufferAttached(resourceBuffer)
+        }
+    }
+
     /**
      * добавление на слой объектов
      *

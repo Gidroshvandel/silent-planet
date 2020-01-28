@@ -25,7 +25,7 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
                 this,
                 null,
                 SilentPlanetViewModel(),
-                SilentPlanetModel(viewPort)
+                SilentPlanetModel(viewPort, assets)
         )
 
         initUi()

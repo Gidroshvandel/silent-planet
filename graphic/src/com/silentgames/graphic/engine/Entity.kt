@@ -2,6 +2,7 @@ package com.silentgames.graphic.engine
 
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.silentgames.core.logic.Constants
+import com.silentgames.graphic.Assets
 import com.silentgames.graphic.engine.base.Sprite
 import kotlin.math.max
 import kotlin.math.min
@@ -9,8 +10,9 @@ import kotlin.math.min
 class Entity(
         val id: String,
         axis: EngineAxis,
-        bmpResourceId: String
-) : Sprite(axis, bmpResourceId) {
+        bmpResourceId: String,
+        assets: Assets
+) : Sprite(axis, bmpResourceId, assets) {
 
     private var speed = 0.2
 

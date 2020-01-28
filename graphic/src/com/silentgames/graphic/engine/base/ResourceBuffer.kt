@@ -1,8 +1,8 @@
-package com.silentgames.graphic.engine
+package com.silentgames.graphic.engine.base
 
 import com.badlogic.gdx.graphics.g2d.Sprite
 
-object BitmapBuffer {
+class ResourceBuffer {
 
     private var bitmapBuffer: HashMap<Int, Sprite> = HashMap()
 
