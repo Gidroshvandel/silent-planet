@@ -1,4 +1,4 @@
-package com.silentgames.graphic.mvp.main
+package com.silentgames.graphic.hud
 
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.NinePatch
@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable
@@ -18,9 +19,11 @@ import com.silentgames.core.logic.Constants
 import com.silentgames.core.logic.ecs.component.FractionsType
 import com.silentgames.core.logic.ecs.component.FractionsType.*
 import com.silentgames.graphic.Assets
+import com.silentgames.graphic.hud.Hud.Color.RED
+import com.silentgames.graphic.hud.Hud.Color.WHITE
 import com.silentgames.graphic.mvp.InputMultiplexer
-import com.silentgames.graphic.mvp.main.Hud.Color.RED
-import com.silentgames.graphic.mvp.main.Hud.Color.WHITE
+import com.silentgames.graphic.mvp.main.EntityData
+import com.silentgames.graphic.mvp.main.SilentPlanetGame
 import ktx.style.get
 
 class Hud(gameViewport: Viewport, private val assets: Assets) {
@@ -149,13 +152,11 @@ class Hud(gameViewport: Viewport, private val assets: Assets) {
                 background = customWindow
                 pad(15f, 35f, 15f, 45f)
                 addWidget(entityData)
-                addListener { event ->
-                    if (event is InputEvent && event.type == InputEvent.Type.touchDown) {
+                addCaptureListener(object : ClickListener() {
+                    override fun clicked(event: InputEvent?, x: Float, y: Float) {
                         onClick(entityData)
-                        return@addListener true
                     }
-                    return@addListener false
-                }
+                })
             })
         }
     }

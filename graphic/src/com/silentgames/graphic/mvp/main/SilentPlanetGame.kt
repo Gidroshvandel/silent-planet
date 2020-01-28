@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Scaling
 import com.silentgames.core.logic.ecs.component.FractionsType
 import com.silentgames.graphic.AppViewport
 import com.silentgames.graphic.Assets
+import com.silentgames.graphic.hud.Hud
 
 
 class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
