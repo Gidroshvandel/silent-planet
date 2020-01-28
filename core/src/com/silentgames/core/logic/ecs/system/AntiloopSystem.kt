@@ -22,18 +22,25 @@ class AntiloopSystem : UnitSystem() {
     }
 
     private fun breakCycle(paths: MutableList<Motion>, unit: UnitEcs, shipPosition: Axis) {
-        val marker = this.markerCycleMotion(paths)
+        val marker = this.markerCycleMotion(2, paths)
         val last = paths.lastOrNull()
-        if (last?.motionType == TELEPORT && marker?.motionType == TELEPORT) {
-            if (last.axis == marker.axis) {
+        if (this.isTeleport(paths)) {
+            if (last?.axis == marker?.axis) {
                 unit.addComponent(Teleport())
                 unit.addComponent(TargetPosition(shipPosition))
             }
         }
     }
 
-    private fun markerCycleMotion(paths: MutableList<Motion>): Motion? {
-        val isNormalIndex = ((paths.lastIndex - 2) in 0..paths.size)
-        return if (isNormalIndex) paths[paths.lastIndex - 2] else null
+    private fun markerCycleMotion(reduceIndex: Int, paths: MutableList<Motion>): Motion? {
+        val index = paths.lastIndex - reduceIndex
+        val isNormalIndex = (index in 0..paths.size)
+        return if (isNormalIndex) paths[index] else null
+    }
+
+    private fun isTeleport(paths: MutableList<Motion>): Boolean {
+        return (this.markerCycleMotion(1, paths)?.motionType == TELEPORT
+                && this.markerCycleMotion(2, paths)?.motionType == TELEPORT
+                && paths.lastOrNull()?.motionType == TELEPORT)
     }
 }

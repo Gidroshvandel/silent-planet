@@ -37,13 +37,14 @@ class SilentPlanetPresenter internal constructor(
         ))
 
         viewModel.engine.addSystem(AiPlayerSystem(
-//                listOf(FractionsType.HUMAN, FractionsType.ALIEN, FractionsType.PIRATE, FractionsType.ROBOT)
+                listOf(FractionsType.HUMAN, FractionsType.ALIEN, FractionsType.PIRATE, FractionsType.ROBOT)
         ))
         viewModel.engine.addSystem(AddCrystalSystem())
         viewModel.engine.addSystem(GoalSystem())
         viewModel.engine.addSystem(AiShipSystem())
         viewModel.engine.addSystem(ArrowSystem())
         viewModel.engine.addSystem(TornadoSystem())
+        viewModel.engine.addSystem(AbyssSystem())
         viewModel.engine.addSystem(SavePathSystem())
         viewModel.engine.addSystem(AntiloopSystem())
         viewModel.engine.addSystem(MovementSystem())

@@ -65,6 +65,7 @@ class CellRandomGenerator {
             RandomCellType.CRYSTAL_THREE -> CrystalCell(axis, CrystalsEnum.THREE)
             RandomCellType.EMPTY -> EmptyCell(axis)
             RandomCellType.TORNADO -> TornadoCell(axis)
+            RandomCellType.ABYSS -> AbyssCell(axis)
         }
     }
 
@@ -100,7 +101,8 @@ class CellGeneratorParams(
         private val crystalOneCellCount: Int = 10,
         private val crystalTwoCellCount: Int = 5,
         private val crystalThreeCellCount: Int = 5,
-        private val tornadoCellCount: Int = 4
+        private val tornadoCellCount: Int = 4,
+        private val abyssCellCount: Int = 4
 ) {
     private val emptyCount: Int = Constants.countOfGroundCells - (
             deathCellCount +
@@ -109,7 +111,8 @@ class CellGeneratorParams(
                     crystalOneCellCount +
                     crystalTwoCellCount +
                     crystalThreeCellCount +
-                    tornadoCellCount)
+                    tornadoCellCount +
+                    abyssCellCount)
 
     fun getRandomEntityList() = listOf(
             RandomEntity(RandomCellType.DEATH, deathCellCount),
@@ -119,7 +122,8 @@ class CellGeneratorParams(
             RandomEntity(RandomCellType.CRYSTAL_TWO, crystalTwoCellCount),
             RandomEntity(RandomCellType.CRYSTAL_THREE, crystalThreeCellCount),
             RandomEntity(RandomCellType.EMPTY, emptyCount),
-            RandomEntity(RandomCellType.TORNADO, tornadoCellCount)
+            RandomEntity(RandomCellType.TORNADO, tornadoCellCount),
+            RandomEntity(RandomCellType.ABYSS, abyssCellCount)
     )
 }
 
@@ -142,5 +146,6 @@ enum class RandomCellType {
     CRYSTAL_TWO,
     CRYSTAL_THREE,
     EMPTY,
-    TORNADO
+    TORNADO,
+    ABYSS
 }
