@@ -13,7 +13,7 @@ import com.silentgames.core.logic.ecs.component.Texture
  */
 class SpaceCell(
         position: Axis,
-        imageName: String = "space_texture.jpg"
+        imageName: String = "space.png"
 ) : CellEcs(
         Position(position),
         Description(Strings.space_cell_name.getString(), Strings.space_cell_description.getString()),

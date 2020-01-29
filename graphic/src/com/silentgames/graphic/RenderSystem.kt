@@ -1,5 +1,6 @@
 package com.silentgames.graphic
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.silentgames.core.logic.Constants
@@ -54,6 +55,9 @@ class RenderSystem(
         })
     }
 
+
+    private var stateTime = 0f
+
     override fun execute(gameState: GameState) {
         super.execute(gameState)
 
@@ -70,10 +74,11 @@ class RenderSystem(
         batch.begin()
 
 //        batch.draw(com.badlogic.gdx.graphics.Texture("space_texture.jpg"), 0f, 0f, camera.viewportWidth, camera.viewportHeight)
+        stateTime += Gdx.graphics.deltaTime
 
         scene?.getLayers()?.forEach { layer ->
             for (tmp in layer.data) {
-                tmp.draw(batch, width, height)
+                tmp.draw(batch, width, height, stateTime)
             }
         }
 
