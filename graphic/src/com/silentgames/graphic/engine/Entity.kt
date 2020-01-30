@@ -1,6 +1,9 @@
 package com.silentgames.graphic.engine
 
+import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.utils.Array
 import com.silentgames.core.logic.Constants
 import com.silentgames.graphic.Assets
 import com.silentgames.graphic.engine.base.Sprite
@@ -20,32 +23,24 @@ class Entity(
 
     var isMove = false
 
-    override fun draw(batch: Batch, width: Int, height: Int) {
-        val size = ((width / Constants.verticalCountOfCells) * 0.7).toFloat()
-        val sprite = getResizedBitmap(size, size)
+    override fun initAnimation(textures: Array<TextureRegion>): Animation<TextureRegion> =
+            Animation(0.033f, textures, Animation.PlayMode.NORMAL)
 
-        val x = cellCenterNumeratorSquare(
-                axis.x,
-                width,
-                sprite
-        )
-        val y = cellCenterNumeratorSquare(
-                axis.y,
-                height,
-                sprite
-        )
-        sprite.setPosition(x, y)
-
-        sprite.draw(batch)
+    override fun draw(batch: Batch, width: Int, height: Int, stateTime: Float) {
+        val axis = getCoordinates(axis, width, height)
+        runningAnimation?.getKeyFrame(stateTime, true)?.let {
+            batch.draw(
+                    it,
+                    axis.x,
+                    axis.y,
+                    getSize(width, Constants.verticalCountOfCells),
+                    getSize(height, Constants.horizontalCountOfCells)
+            )
+        }
     }
 
-    private fun cellCenterNumeratorSquare(cell: Float, viewSize: Int, bitmap: com.badlogic.gdx.graphics.g2d.Sprite): Float {
-        return cellCenterNumeratorPoint(cell, viewSize) - bitmap.width / 2
-    }
-
-    private fun cellCenterNumeratorPoint(cell: Float, viewSize: Int): Float {
-        val lineCountOfCells = Constants.horizontalCountOfCells
-        return 1f / (2 * lineCountOfCells) * viewSize + 1f / lineCountOfCells * cell * viewSize
+    override fun getSize(batchSize: Int, lineCountOfCells: Int): Float {
+        return super.getSize(batchSize, lineCountOfCells) * 0.7f
     }
 
     fun move(fromAxis: EngineAxis, toAxis: EngineAxis) {

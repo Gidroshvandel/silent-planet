@@ -6,84 +6,126 @@ filter: Nearest,Nearest
 repeat: none
 alien
   rotate: false
-  xy: 592, 191
+  xy: 1806, 1552
   size: 204, 204
   orig: 204, 204
   offset: 0, 0
   index: -1
 aliens_space_ship
   rotate: false
-  xy: 798, 243
-  size: 80, 152
-  orig: 80, 152
+  xy: 437, 240
+  size: 244, 192
+  orig: 244, 192
   offset: 0, 0
   index: -1
 arrow_green_cell
   rotate: false
-  xy: 1204, 817
+  xy: 1204, 854
   size: 578, 578
   orig: 578, 578
   offset: 0, 0
   index: -1
 crystal
   rotate: false
-  xy: 370, 175
+  xy: 215, 212
   size: 220, 220
   orig: 220, 220
   offset: 0, 0
   index: -1
 human_space_ship
   rotate: false
-  xy: 1806, 1706
-  size: 173, 291
-  orig: 173, 291
+  xy: 1806, 1758
+  size: 208, 276
+  orig: 208, 276
   offset: 0, 0
   index: -1
 human_spaceman
   rotate: false
-  xy: 2, 397
+  xy: 2, 434
   size: 1200, 1600
   orig: 1200, 1600
   offset: 0, 0
   index: -1
 pirate_space_ship
   rotate: false
-  xy: 2, 104
-  size: 173, 291
-  orig: 173, 291
+  xy: 1784, 970
+  size: 164, 176
+  orig: 164, 176
   offset: 0, 0
   index: -1
 planet_background
   rotate: false
-  xy: 1806, 1544
+  xy: 2, 2
   size: 160, 160
   orig: 160, 160
   offset: 0, 0
   index: -1
 robot
   rotate: false
-  xy: 2, 2
+  xy: 1087, 332
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
 robot_space_ship
   rotate: false
-  xy: 177, 132
-  size: 191, 263
-  orig: 191, 263
+  xy: 2, 164
+  size: 211, 268
+  orig: 211, 268
   offset: 0, 0
   index: -1
+space
+  rotate: false
+  xy: 683, 232
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: 0
+space
+  rotate: false
+  xy: 885, 232
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: 1
+space
+  rotate: false
+  xy: 885, 232
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: 5
+space
+  rotate: false
+  xy: 1806, 1350
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: 2
+space
+  rotate: false
+  xy: 1806, 1350
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: 4
+space
+  rotate: false
+  xy: 1784, 1148
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: 3
 space_texture
   rotate: false
-  xy: 1204, 1397
+  xy: 1204, 1434
   size: 600, 600
   orig: 600, 600
   offset: 0, 0
   index: -1
 three_crystals
   rotate: false
-  xy: 1204, 238
+  xy: 1204, 275
   size: 577, 577
   orig: 577, 577
   offset: 0, 0
@@ -164,19 +206,28 @@ filter: Nearest,Nearest
 repeat: none
 ui/custom_window
   rotate: false
-  xy: 2, 2
+  xy: 2, 99
   size: 177, 153
   split: 76, 76, 74, 75
   pad: 0, 0, 0, 0
   orig: 177, 153
   offset: 0, 0
   index: -1
-ui/rounded_window
+ui/custom_window_dark
   rotate: false
-  xy: 181, 54
-  size: 101, 101
-  split: 10, 10, 11, 9
+  xy: 181, 99
+  size: 177, 153
+  split: 76, 76, 75, 76
   pad: 0, 0, 0, 0
-  orig: 101, 101
+  orig: 177, 153
+  offset: 0, 0
+  index: -1
+ui/rounded_window_blue
+  rotate: false
+  xy: 2, 2
+  size: 109, 95
+  split: 19, 19, 19, 19
+  pad: 0, 0, 0, 0
+  orig: 109, 95
   offset: 0, 0
   index: -1

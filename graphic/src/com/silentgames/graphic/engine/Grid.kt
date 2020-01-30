@@ -5,7 +5,7 @@ import com.silentgames.graphic.engine.base.Basic
 
 class Grid : Basic() {
 
-    override fun draw(batch: Batch, width: Int, height: Int) {
+    override fun draw(batch: Batch, width: Int, height: Int, stateTime: Float) {
 
 //        batch.end()
 //        val shapeRenderer = ShapeRenderer()

@@ -9,16 +9,18 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.ObjectMap
 import kotlin.math.min
 
 class Assets {
 
-    private val manager: AssetManager = AssetManager()
+    val manager: AssetManager = AssetManager()
 
     private val fontChars = "абвгдежзийклмнопрстуфхцчшщъыьэюяabcdefghijklmnopqrstuvwxyzАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+±=()*&.;:,{}\"´`'<>"
     private val skinResources = ObjectMap<String, Any>()
@@ -33,7 +35,17 @@ class Assets {
         manager.get(skinDescriptor)
     }
 
-    fun getSprite(name: String): Sprite = Sprite(uiSkin.getSprite(name.removeExtension()))
+    fun getSprite(name: String): Sprite =
+            Sprite(getTextureRegions(name).first() ?: uiSkin.getSprite(name.removeExtension()))
+
+    fun getTextureRegions(name: String): Array<TextureRegion> {
+        return uiSkin.getRegions(name.removeExtension())
+                ?: Array<TextureRegion>().apply { add(getTextureRegion(name)) }
+    }
+
+    private fun getTextureRegion(name: String): TextureRegion {
+        return uiSkin.getRegion(name.removeExtension())
+    }
 
     private fun String.removeExtension() = substringBeforeLast(".")
 

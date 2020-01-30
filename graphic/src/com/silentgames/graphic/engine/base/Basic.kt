@@ -11,6 +11,6 @@ abstract class Basic {
         onUpdated.invoke(false)
     }
 
-    internal abstract fun draw(batch: Batch, width: Int, height: Int)
+    internal abstract fun draw(batch: Batch, width: Int, height: Int, stateTime: Float)
 
 }
