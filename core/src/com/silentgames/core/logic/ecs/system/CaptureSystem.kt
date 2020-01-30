@@ -1,5 +1,6 @@
 package com.silentgames.core.logic.ecs.system
 
+import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.*
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
@@ -8,56 +9,55 @@ import com.silentgames.core.utils.notNull
 class CaptureSystem : UnitSystem() {
 
     override fun execute(gameState: GameState, unit: UnitEcs) {
-        notNull(
-                unit.getComponent(),
-                unit.getComponent(),
-                unit,
-                gameState,
-                ::capture
-        )
-    }
-
-    private fun capture(position: Position, unitFractionsType: FractionsType, unit: UnitEcs, gameState: GameState) {
-        val enemyUnits = gameState.getUnits(position.currentPosition).filterNot {
-            val fractionsType = it.getComponent<FractionsType>()
-            fractionsType == null
-                    || fractionsType == unitFractionsType
-                    || it.hasComponent<Transport>()
-                    || it.hasComponent<CapitalShip>()
-        }
-        if (enemyUnits.size > 1) {
-            gameState.captureUnitByEnemy(unit, enemyUnits)
-        } else {
-            enemyUnits.firstOrNull()?.let { enemy ->
-                gameState.captureEnemyByUnit(enemy, unit, unitFractionsType)
-            }
+        unit.getComponent<Active>()?.let {
+            notNull(
+                    unit.getComponent<Position>()?.currentPosition,
+                    unit.getComponent(),
+                    unit,
+                    gameState,
+                    ::capture
+            )
         }
     }
 
-    private fun GameState.captureUnitByEnemy(unit: UnitEcs, enemyUnits: List<UnitEcs>) {
-        enemyUnits.first().getComponent<FractionsType>()?.let { enemyFractionsType ->
-            unit.addComponent(Capture(enemyFractionsType))
-            getCapitalShipPosition(enemyFractionsType)?.currentPosition?.let { shipPosition ->
-                unit.addComponent(Teleport())
-                unit.addComponent(TargetPosition(shipPosition))
-                unit.removeComponent(Active::class.java)
-                enemyUnits.forEach {
-                    it.addComponent(Teleport())
-                    it.addComponent(TargetPosition(shipPosition))
+    private fun capture(position: Axis, unitFractionsType: FractionsType, unit: UnitEcs, gameState: GameState) {
+        if (gameState.getCapitalShipPosition(unitFractionsType)?.currentPosition != position) {
+            val enemies = getEnemies(gameState, position, unitFractionsType)
+            if (enemies.isNotEmpty()) {
+                if (enemies.size > 1) {
+                    enemies.first().getComponent<FractionsType>()?.let {
+                        gameState.captureUnit(unit, enemies, it)
+                    }
+                } else {
+                    gameState.captureUnit(enemies.first(), listOf(unit), unitFractionsType)
                 }
             }
         }
     }
 
-    private fun GameState.captureEnemyByUnit(enemy: UnitEcs, unit: UnitEcs, unitFractionsType: FractionsType) {
-        enemy.addComponent(Capture(unitFractionsType))
-        getCapitalShipPosition(unitFractionsType)?.currentPosition?.let {
-            enemy.addComponent(Teleport())
-            enemy.addComponent(TargetPosition(it))
-            enemy.removeComponent(Active::class.java)
-            unit.addComponent(Teleport())
-            unit.addComponent(TargetPosition(it))
+    private fun getEnemies(gameState: GameState, position: Axis, unitFractionsType: FractionsType): List<UnitEcs> {
+        return gameState.getUnits(position).filterNot {
+            val fractionsType = it.getComponent<FractionsType>()
+            fractionsType == null
+                    || fractionsType == unitFractionsType
+                    || it.hasComponent<CapitalShip>()
+                    || !it.hasComponent<Active>()
         }
     }
 
+    private fun GameState.captureUnit(captured: UnitEcs, enemies: List<UnitEcs>, fractionsType: FractionsType) {
+        captured.addComponent(Capture(fractionsType))
+        getCapitalShipPosition(fractionsType)?.currentPosition?.let {
+            captured.removeComponent(Active::class.java)
+            val enemiesWithCaptured = enemies.toMutableList().apply { add(captured) }
+            moveUnits(enemiesWithCaptured, it)
+        }
+    }
+
+    private fun moveUnits(units: List<UnitEcs>, position: Axis) {
+        units.forEach {
+            it.addComponent(Teleport())
+            it.addComponent(TargetPosition(position))
+        }
+    }
 }
