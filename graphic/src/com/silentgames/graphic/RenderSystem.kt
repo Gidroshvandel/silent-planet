@@ -3,7 +3,6 @@ package com.silentgames.graphic
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.Batch
-import com.badlogic.gdx.input.GestureDetector
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.silentgames.core.logic.Constants
 import com.silentgames.core.logic.ecs.Axis
@@ -177,7 +176,7 @@ class RenderSystem(
         camera.viewportHeight = viewport.worldHeight
         camera.viewportWidth = viewport.worldHeight
         camera.update()
-        InputMultiplexer.addProcessor(GestureDetector(GameGestureAdapter(camera)))
+        InputMultiplexer.addProcessor(GameBoardZoomGestureDetector(GameGestureAdapter(camera)))
     }
 
 }

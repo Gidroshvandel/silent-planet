@@ -11,6 +11,8 @@ fun Camera.unProject(vector: Vector2) =
 
 fun Vector2.toVector3() = Vector3(x, y, 0f)
 
+fun Vector3.toVector2() = Vector2(x, y)
+
 object Logger {
 
     init {

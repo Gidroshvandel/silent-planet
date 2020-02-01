@@ -1,27 +1,74 @@
 package com.silentgames.graphic
 
+import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.input.GestureDetector
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 
-class GameGestureAdapter(private val camera: OrthographicCamera) : GestureDetector.GestureAdapter() {
+class GameBoardZoomGestureDetector(
+        private val listener: GameBoardZoomGestureAdapter
+) : GestureDetector(listener) {
+
+    override fun scrolled(amount: Int): Boolean {
+        return listener.mouseScrolled(amount)
+    }
+
+    override fun mouseMoved(screenX: Int, screenY: Int): Boolean {
+        return listener.mouseMoved(screenX, screenY)
+    }
+
+    open class GameBoardZoomGestureAdapter() : GestureDetector.GestureAdapter() {
+
+        open fun mouseScrolled(amount: Int): Boolean = false
+
+        open fun mouseMoved(screenX: Int, screenY: Int): Boolean = false
+
+    }
+}
+
+class GameGestureAdapter(private val camera: OrthographicCamera) : GameBoardZoomGestureDetector.GameBoardZoomGestureAdapter() {
     private var scaleFactor: Float = 1f
     private var isNowPinch = false
     private var zoomPoint: Vector2? = null
 
+    private var mousePosition = Vector2()
+
+    override fun mouseMoved(screenX: Int, screenY: Int): Boolean {
+        mousePosition = Vector2(screenX.toFloat(), screenY.toFloat())
+        return super.mouseMoved(screenX, screenY)
+    }
+
+    override fun mouseScrolled(amount: Int): Boolean {
+        camera.setPosition(camera.unProject(mousePosition).toVector2())
+        if (amount > 0) {
+            scaleFactor += 0.1f
+        } else {
+            scaleFactor -= 0.1f
+        }
+        zoomCamera(scaleFactor)
+        scaleFactor = camera.zoom
+        return super.mouseScrolled(amount)
+    }
+
+    private fun zoomCamera(zoom: Float) {
+        camera.zoom = when {
+            zoom > 1 -> {
+                1f
+            }
+            zoom < 0.5 -> {
+                0.5f
+            }
+            else -> {
+                zoom
+            }
+        }
+        checkCameraBorders()
+    }
+
     override fun zoom(initialDistance: Float, distance: Float): Boolean {
         val ratio: Float = initialDistance / distance
-
-        var zoom = scaleFactor * ratio
-
-        if (zoom > 1) {
-            zoom = 1f
-        } else if (zoom < 0.5) {
-            zoom = 0.5f
-        }
-        camera.zoom = zoom
-        checkCameraBorders()
+        zoomCamera(scaleFactor * ratio)
         return false
     }
 
@@ -60,10 +107,7 @@ class GameGestureAdapter(private val camera: OrthographicCamera) : GestureDetect
         if (zoomPoint == null) {
             zoomPoint = Vector2((initialPointerFirst.x + initialPointerSecond.x) / 2, (initialPointerFirst.y + initialPointerSecond.y) / 2)
         }
-        zoomPoint?.let {
-            camera.position.x = it.x
-            camera.position.y = it.y
-        }
+        zoomPoint?.let { camera.setPosition(it) }
         return false
     }
 
@@ -72,6 +116,11 @@ class GameGestureAdapter(private val camera: OrthographicCamera) : GestureDetect
         zoomPoint = null
         scaleFactor = camera.zoom
         super.pinchStop()
+    }
+
+    private fun Camera.setPosition(vector2: Vector2) {
+        position.x = vector2.x
+        position.y = vector2.y
     }
 
     private fun checkCameraBorders() {
