@@ -1,13 +1,9 @@
 package com.silentgames.graphic
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.input.GestureDetector
-import com.badlogic.gdx.math.MathUtils
-import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.silentgames.core.logic.Constants
 import com.silentgames.core.logic.ecs.Axis
@@ -33,9 +29,7 @@ class RenderSystem(
         private val onClick: (Axis) -> Unit
 ) : UnitSystem() {
 
-    val camera = (viewport.camera as OrthographicCamera)
-
-    private var scaleFactor: Float = 1f
+    private val camera = (viewport.camera as OrthographicCamera)
 
     private var scene: Scene? = null
 
@@ -44,30 +38,18 @@ class RenderSystem(
     private val width get() = viewport.worldHeight.toInt()
     private val height get() = viewport.worldHeight.toInt()
 
+    private var stateTime = 0f
+
     override fun onEngineAttach(engine: EngineEcs) {
         scene = Scene(mutableListOf(Layer(), GridLayer(), Layer()), width, height)
-        initClick()
+        addClickListener()
         addZoomListener()
         this.engine = engine
     }
 
-    private fun initClick() {
-        InputMultiplexer.addProcessor(InputMouse { axis ->
-            scene?.let {
-                val unProjectAxis = camera.unProject(Vector2(axis.x.toFloat(), axis.y.toFloat()))
-                val x = ((Constants.horizontalCountOfCells) * unProjectAxis.x / camera.viewportWidth).toInt()
-                val y = ((Constants.verticalCountOfCells) * unProjectAxis.y / camera.viewportHeight).toInt()
-                println("x = " + x + "y = " + y)
-
-                if (x < Constants.horizontalCountOfCells && y < Constants.verticalCountOfCells) {
-                    onClick(Axis(x, y))
-                }
-            }
-        })
+    override fun execute(gameState: GameState, unit: UnitEcs) {
+        unit.removeComponent(Moving::class.java)
     }
-
-
-    private var stateTime = 0f
 
     override fun execute(gameState: GameState) {
         super.execute(gameState)
@@ -99,102 +81,6 @@ class RenderSystem(
         }
 
         batch.end()
-
-
-    }
-
-    private fun addZoomListener() {
-        camera.viewportHeight = viewport.worldHeight
-        camera.viewportWidth = viewport.worldHeight
-        camera.update()
-        InputMultiplexer.addProcessor(GestureDetector(object : GestureDetector.GestureAdapter() {
-
-            private var isNowPinch = false
-            private var zoomPoint: Vector2? = null
-
-            override fun zoom(initialDistance: Float, distance: Float): Boolean {
-                val ratio: Float = initialDistance / distance
-
-                var zoom = scaleFactor * ratio
-
-                if (zoom > 1) {
-                    zoom = 1f
-                } else if (zoom < 0.5) {
-                    zoom = 0.5f
-                }
-                camera.zoom = zoom
-                checkCameraBorders()
-                return false
-            }
-
-            override fun tap(x: Float, y: Float, count: Int, button: Int): Boolean {
-                if (count == 2) {
-                    if (scaleFactor < 1f) {
-                        camera.zoom = 1f
-                        scaleFactor = camera.zoom
-                    } else {
-                        camera.zoom = 0.5f
-                        scaleFactor = camera.zoom
-                        val vector = camera.unProject(Vector2(x, y))
-                        camera.position.x = vector.x
-                        camera.position.y = vector.y
-                    }
-                    checkCameraBorders()
-                    return true
-                }
-                return false
-            }
-
-
-            override fun pan(x: Float, y: Float, deltaX: Float, deltaY: Float): Boolean {
-                if (!isNowPinch) {
-                    camera.translate(-deltaX * 0.5f, -deltaY * 0.5f)
-                    checkCameraBorders()
-                }
-                return false
-            }
-
-
-            override fun pinch(initialPointer1: Vector2, initialPointer2: Vector2, pointer1: Vector2, pointer2: Vector2): Boolean {
-                isNowPinch = true
-                val initialPointerFirst = camera.unProject(initialPointer1)
-                val initialPointerSecond = camera.unProject(initialPointer2)
-                if (zoomPoint == null) {
-                    zoomPoint = Vector2((initialPointerFirst.x + initialPointerSecond.x) / 2, (initialPointerFirst.y + initialPointerSecond.y) / 2)
-                }
-                zoomPoint?.let {
-                    camera.position.x = it.x
-                    camera.position.y = it.y
-                }
-                return false
-            }
-
-            override fun pinchStop() {
-                isNowPinch = false
-                zoomPoint = null
-                scaleFactor = camera.zoom
-                super.pinchStop()
-            }
-
-            private fun checkCameraBorders() {
-                val effectiveViewportWidth: Float = camera.viewportWidth * camera.zoom
-                val effectiveViewportHeight: Float = camera.viewportHeight * camera.zoom
-                camera.position.x = MathUtils.clamp(camera.position.x, effectiveViewportWidth / 2f, width - effectiveViewportWidth / 2f)
-                camera.position.y = MathUtils.clamp(camera.position.y, effectiveViewportHeight / 2f, height - effectiveViewportHeight / 2f)
-            }
-
-
-        }))
-    }
-
-    private fun Camera.unProject(vector: Vector2) =
-            unproject(vector.toVector3(), 0f, 0f, Gdx.graphics.height.toFloat(), Gdx.graphics.height.toFloat())
-
-    private fun Vector2.toVector3() = Vector3(x, y, 0f)
-
-
-    override fun execute(gameState: GameState, unit: UnitEcs) {
-        unit.removeComponent(Moving::class.java)
     }
 
     private fun render(gameState: GameState) {
@@ -282,5 +168,16 @@ class RenderSystem(
     }
 
     private fun Axis.toEngineAxis(): EngineAxis = EngineAxis(x.toFloat(), y.toFloat())
+
+    private fun addClickListener() {
+        InputMultiplexer.addProcessor(InputMouse(camera, onClick))
+    }
+
+    private fun addZoomListener() {
+        camera.viewportHeight = viewport.worldHeight
+        camera.viewportWidth = viewport.worldHeight
+        camera.update()
+        InputMultiplexer.addProcessor(GestureDetector(GameGestureAdapter(camera)))
+    }
 
 }
