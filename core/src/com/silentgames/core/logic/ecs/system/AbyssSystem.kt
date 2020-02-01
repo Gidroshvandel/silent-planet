@@ -3,7 +3,11 @@ package com.silentgames.core.logic.ecs.system
 import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.Motion
-import com.silentgames.core.logic.ecs.component.*
+import com.silentgames.core.logic.ecs.MotionType
+import com.silentgames.core.logic.ecs.component.Abyss
+import com.silentgames.core.logic.ecs.component.Route
+import com.silentgames.core.logic.ecs.component.TargetPosition
+import com.silentgames.core.logic.ecs.component.Teleport
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.utils.notNull
 
@@ -13,33 +17,24 @@ class AbyssSystem : UnitSystem() {
             cell.getComponent<Abyss>()?.let {
                 notNull(unit.getComponent<Route>()?.paths,
                         unit,
-                        gameState,
                         ::abyss)
             }
         }
     }
 
-    private fun abyss(paths: MutableList<Motion>, unit: UnitEcs, gameState: GameState) {
-        this.getTarget(paths, gameState)?.let {
+    private fun abyss(paths: MutableList<Motion>, unit: UnitEcs) {
+        this.getTarget(paths)?.let {
             unit.addComponent(Teleport())
             unit.addComponent(TargetPosition(it))
         }
     }
 
-    fun getTarget(paths: MutableList<Motion>, gameState: GameState): Axis? {
+    fun getTarget(paths: MutableList<Motion>): Axis? {
         paths.reversed().forEach {
-            if (!this.isAbyss(it.axis, gameState) || !this.isArrow(it.axis, gameState)) {
+            if (it.motionType == MotionType.MOVEMENT) {
                 return it.axis
             }
         }
         return null
-    }
-
-    private fun isArrow(axis: Axis, gameState: GameState): Boolean {
-        return gameState.getCell(axis)?.getComponent<Arrow>() != null
-    }
-
-    private fun isAbyss(axis: Axis, gameState: GameState): Boolean {
-        return gameState.getCell(axis)?.getComponent<Abyss>() != null
     }
 }
