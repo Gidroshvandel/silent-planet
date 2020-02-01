@@ -115,9 +115,9 @@ fun GameState.getDestination(unit: UnitEcs, cell: CellEcs): Axis? {
     return TornadoSystem().getTarget(this, unitFractionsType, cellPosition.currentPosition)
 }
 
-fun GameState.getDestination(unit: UnitEcs): Axis? {
+fun getDestination(unit: UnitEcs): Axis? {
     val paths = unit.getComponent<Route>()?.paths ?: return null
-    return AbyssSystem().getTarget(paths, this)
+    return AbyssSystem().getTarget(paths)
 }
 
 fun GameState.getAvailableMoveDistancePositionList(position: Axis, unit: UnitEcs) =
