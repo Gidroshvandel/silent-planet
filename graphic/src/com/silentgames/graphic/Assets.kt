@@ -22,7 +22,7 @@ class Assets {
 
     val manager: AssetManager = AssetManager()
 
-    private val fontChars = "абвгдежзийклмнопрстуфхцчшщъыьэюяabcdefghijklmnopqrstuvwxyzАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+±=()*&.;:,{}\"´`'<>"
+    private val fontChars = "абвгдеёжзийклмнопрстуфхцчшщъыьэюяabcdefghijklmnopqrstuvwxyzАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+±=()*&.;:,{}\"´`'<>"
     private val skinResources = ObjectMap<String, Any>()
 
     private val atlasDescriptor = AssetDescriptor("atlas/game.atlas", TextureAtlas::class.java)
