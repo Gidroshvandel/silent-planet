@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Array
 import com.silentgames.core.logic.Constants
 import com.silentgames.graphic.Assets
 import com.silentgames.graphic.engine.EngineAxis
+import com.silentgames.graphic.scaleImageForBoard
 
 abstract class Sprite(axis: EngineAxis,
                       protected val bmpResourceId: String,
@@ -53,20 +54,24 @@ abstract class Sprite(axis: EngineAxis,
 
     protected open fun getBitmapId(): Int = bmpResourceId.hashCode()
 
-    protected open fun getSize(batchSize: Int, lineCountOfCells: Int) =
-            (batchSize / lineCountOfCells).toFloat()
+    protected open fun getSize(textureRegion: TextureRegion, batchSize: Int) =
+            scaleImageForBoard(
+                    textureRegion.regionWidth.toFloat(),
+                    textureRegion.regionHeight.toFloat(),
+                    batchSize.toFloat()
+            )
 
-    protected open fun getCoordinates(axis: EngineAxis, width: Int, height: Int): EngineAxis {
+    protected open fun getCoordinates(axis: EngineAxis, width: Int, height: Int, textureRegion: TextureRegion): EngineAxis {
         val x = cellCenterNumeratorSquare(
                 axis.x,
                 width,
-                getSize(width, Constants.verticalCountOfCells),
+                getSize(textureRegion, width).x,
                 Constants.verticalCountOfCells
         )
         val y = cellCenterNumeratorSquare(
                 axis.y,
                 height,
-                getSize(height, Constants.horizontalCountOfCells),
+                getSize(textureRegion, height).y,
                 Constants.horizontalCountOfCells
         )
         return EngineAxis(x, y)

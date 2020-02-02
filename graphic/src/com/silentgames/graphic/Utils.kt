@@ -5,8 +5,19 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
+import com.badlogic.gdx.utils.Scaling
+import com.silentgames.core.logic.Constants
 
-fun Camera.unProject(vector: Vector2) =
+fun scaleImageForBoard(width: Float, height: Float, size: Float): Vector2 {
+    return scaleImageForBoard(width, height, size, Constants.verticalCountOfCells)
+}
+
+fun scaleImageForBoard(width: Float, height: Float, size: Float, countOfCells: Int): Vector2 {
+    val targetSize = (size / countOfCells)
+    return Scaling.fit.apply(width, height, targetSize, targetSize)
+}
+
+fun Camera.unProject(vector: Vector2): Vector3 =
         unproject(vector.toVector3(), 0f, 0f, Gdx.graphics.height.toFloat(), Gdx.graphics.height.toFloat())
 
 fun Vector2.toVector3() = Vector3(x, y, 0f)

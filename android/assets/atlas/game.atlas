@@ -4,130 +4,165 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+abyss_cell
+  rotate: false
+  xy: 1146, 582
+  size: 572, 572
+  orig: 572, 572
+  offset: 0, 0
+  index: -1
 alien
   rotate: false
-  xy: 1784, 1552
+  xy: 1588, 1787
   size: 204, 204
   orig: 204, 204
   offset: 0, 0
   index: -1
 aliens_space_ship
   rotate: false
-  xy: 437, 240
+  xy: 534, 1799
   size: 244, 192
   orig: 244, 192
   offset: 0, 0
   index: -1
+arow_red_cell
+  rotate: false
+  xy: 1339, 1156
+  size: 565, 565
+  orig: 565, 565
+  offset: 0, 0
+  index: -1
 arrow_green_cell
   rotate: false
-  xy: 1204, 1456
+  xy: 1159, 2
   size: 578, 578
   orig: 578, 578
   offset: 0, 0
   index: -1
 crystal
   rotate: false
-  xy: 215, 212
-  size: 220, 220
-  orig: 220, 220
+  xy: 2, 1891
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+dead_cell
+  rotate: false
+  xy: 573, 654
+  size: 571, 571
+  orig: 571, 571
+  offset: 0, 0
+  index: -1
+empty_cell
+  rotate: false
+  xy: 212, 1236
+  size: 561, 561
+  orig: 561, 561
   offset: 0, 0
   index: -1
 human_space_ship
   rotate: false
-  xy: 1784, 1758
+  xy: 2, 1553
   size: 208, 276
   orig: 208, 276
   offset: 0, 0
   index: -1
-human_spaceman
+one_crystal
   rotate: false
-  xy: 2, 434
-  size: 1200, 1600
-  orig: 1200, 1600
+  xy: 2, 665
+  size: 569, 569
+  orig: 569, 569
   offset: 0, 0
   index: -1
 pirate_space_ship
   rotate: false
-  xy: 1783, 970
+  xy: 368, 1815
   size: 164, 176
   orig: 164, 176
   offset: 0, 0
   index: -1
 planet_background
   rotate: false
-  xy: 2, 2
+  xy: 206, 1831
   size: 160, 160
   orig: 160, 160
   offset: 0, 0
   index: -1
 robot
   rotate: false
-  xy: 1087, 332
+  xy: 104, 1891
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
 robot_space_ship
   rotate: false
-  xy: 2, 164
+  xy: 1794, 1723
   size: 211, 268
   orig: 211, 268
   offset: 0, 0
   index: -1
 space
   rotate: false
-  xy: 683, 232
+  xy: 780, 1791
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 0
 space
   rotate: false
-  xy: 885, 232
+  xy: 982, 1791
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 1
 space
   rotate: false
-  xy: 885, 232
+  xy: 982, 1791
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 5
 space
   rotate: false
-  xy: 1784, 1350
+  xy: 1184, 1791
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 2
 space
   rotate: false
-  xy: 1784, 1350
+  xy: 1184, 1791
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 4
 space
   rotate: false
-  xy: 1783, 1148
+  xy: 1386, 1791
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 3
 three_crystals
   rotate: false
-  xy: 1204, 877
+  xy: 580, 3
   size: 577, 577
   orig: 577, 577
   offset: 0, 0
   index: -1
 tornado_cell
   rotate: false
-  xy: 1204, 299
+  xy: 2, 76
   size: 576, 576
   orig: 576, 576
+  offset: 0, 0
+  index: -1
+two_crystals
+  rotate: false
+  xy: 775, 1227
+  size: 562, 562
+  orig: 562, 562
   offset: 0, 0
   index: -1
 
@@ -136,59 +171,24 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-abyss_cell
+human_spaceman
   rotate: false
-  xy: 1204, 1146
-  size: 572, 572
-  orig: 572, 572
-  offset: 0, 0
-  index: -1
-dead_cell
-  rotate: false
-  xy: 1204, 573
-  size: 571, 571
-  orig: 571, 571
-  offset: 0, 0
-  index: -1
-one_crystal
-  rotate: false
-  xy: 1204, 2
-  size: 569, 569
-  orig: 569, 569
-  offset: 0, 0
-  index: -1
-pirate
-  rotate: false
-  xy: 2, 118
+  xy: 2, 2
   size: 1200, 1600
   orig: 1200, 1600
   offset: 0, 0
   index: -1
 
 game3.png
-size: 2048,1024
+size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-arow_red_cell
+pirate
   rotate: false
   xy: 2, 2
-  size: 565, 565
-  orig: 565, 565
-  offset: 0, 0
-  index: -1
-empty_cell
-  rotate: false
-  xy: 1133, 6
-  size: 561, 561
-  orig: 561, 561
-  offset: 0, 0
-  index: -1
-two_crystals
-  rotate: false
-  xy: 569, 5
-  size: 562, 562
-  orig: 562, 562
+  size: 1200, 1600
+  orig: 1200, 1600
   offset: 0, 0
   index: -1
 

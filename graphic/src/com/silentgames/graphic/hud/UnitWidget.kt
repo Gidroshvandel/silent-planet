@@ -8,10 +8,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable
 import com.badlogic.gdx.utils.Align
-import com.silentgames.core.logic.Constants
 import com.silentgames.graphic.Assets
 import com.silentgames.graphic.mvp.main.EntityData
 import com.silentgames.graphic.mvp.main.SilentPlanetGame
+import com.silentgames.graphic.scaleImageForBoard
 
 class UnitWidget(
         val assets: Assets,
@@ -31,29 +31,44 @@ class UnitWidget(
 
     private fun Table.addWidget(entityData: EntityData) {
         this.apply {
+
             add(Table().also {
                 it.row()
-                it.add(Image().apply { setTexture(entityData.texture) }).pad(5f)
+                it.add(Image().apply { setTexture(entityData.texture) }).pad(5f).center()
                 it.row()
                 it.add(
                         Label(entityData.name, skin).also { label ->
                             label.setAlignment(Align.center)
                         }
-                ).pad(5f)
-            }).space(5f)
+                ).pad(5f).center()
+            }).space(5f).center()
+
             add(
                     Label(entityData.description, skin).also {
                         it.setWrap(true)
                         it.setAlignment(Align.center)
                     }).prefWidth(150f).growX().space(5f)
-            add(Image().apply { setTexture("crystal.png") }).space(5f).center()
+
+            if (entityData.crystalCount.toInt() > 0) {
+                add(Table().also {
+                    it.row()
+                    it.add(Image().apply { setTexture("crystal") }).pad(2f).center()
+                    it.row()
+                    it.add(
+                            Label(entityData.crystalCount, skin).also { label ->
+                                label.setAlignment(Align.center)
+                            }
+                    ).pad(2f).center()
+                }).space(5f)
+            }
+
         }
     }
 
     private fun Image.setTexture(path: String) {
-        val size = (SilentPlanetGame.HEIGHT / Constants.verticalCountOfCells)
         val sprite = assets.getSprite(path)
-        sprite.setSize(size, size)
+        val size = scaleImageForBoard(sprite.width, sprite.height, SilentPlanetGame.HEIGHT * 1.2f)
+        sprite.setSize(size.x, size.y)
         this.drawable = SpriteDrawable(sprite)
     }
 

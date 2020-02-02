@@ -3,8 +3,8 @@ package com.silentgames.graphic.engine
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Array
-import com.silentgames.core.logic.Constants
 import com.silentgames.graphic.Assets
 import com.silentgames.graphic.engine.base.Sprite
 import kotlin.math.max
@@ -27,20 +27,24 @@ class Entity(
             Animation(0.033f, textures, Animation.PlayMode.NORMAL)
 
     override fun draw(batch: Batch, width: Int, height: Int, stateTime: Float) {
-        val axis = getCoordinates(axis, width, height)
         runningAnimation?.getKeyFrame(stateTime, true)?.let {
+            val axis = getCoordinates(axis, width, height, it)
+            val size = getSize(it, width)
             batch.draw(
                     it,
                     axis.x,
                     axis.y,
-                    getSize(width, Constants.verticalCountOfCells),
-                    getSize(height, Constants.horizontalCountOfCells)
+                    size.x,
+                    size.y
             )
         }
     }
 
-    override fun getSize(batchSize: Int, lineCountOfCells: Int): Float {
-        return super.getSize(batchSize, lineCountOfCells) * 0.7f
+    override fun getSize(textureRegion: TextureRegion, batchSize: Int): Vector2 {
+        return super.getSize(textureRegion, batchSize).apply {
+            x *= 0.9f
+            y *= 0.9f
+        }
     }
 
     fun move(fromAxis: EngineAxis, toAxis: EngineAxis) {
