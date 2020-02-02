@@ -91,7 +91,7 @@ class SilentPlanetPresenter internal constructor(
         view.changePirateCristalCount(0)
         view.changeRobotCristalCount(0)
 
-        view.enableButton(false)
+        view.enableCrystalActionButton(false)
     }
 
     override fun onRender() {
@@ -114,7 +114,7 @@ class SilentPlanetPresenter internal constructor(
             if (entities.size > 1) {
                 val listToShow: MutableList<EntityEcs> = entities.toMutableList()
                 cellType?.let { listToShow.add(it) }
-                view.showEntityMenuDialog(listToShow.map())
+                showEntityInfo(listToShow)
             } else {
                 if (selectedEntity == null
                         && entities.isNotEmpty()) {
@@ -133,11 +133,10 @@ class SilentPlanetPresenter internal constructor(
 
             entity.getComponent<Position>()?.currentPosition?.let {
                 if (!crystalsOverZero(it)) {
-                    view.enableButton(false)
+                    view.enableCrystalActionButton(false)
                 }
             }
-
-            view.showEntityInfo(entity.toEntityData())
+            showEntityInfo(entity)
         }
     }
 
@@ -188,24 +187,24 @@ class SilentPlanetPresenter internal constructor(
     private fun updateEntityState(unit: UnitEcs) {
         val position = unit.getComponent<Position>()?.currentPosition
         if (position != null && crystalsOverZero(position)) {
-            view.enableButton(true)
+            view.enableCrystalActionButton(true)
         } else {
-            view.enableButton(false)
+            view.enableCrystalActionButton(false)
         }
-        view.showEntityInfo(unit.toEntityData())
+        showEntityInfo(unit)
     }
 
     private fun crystalsOverZero(position: Axis): Boolean =
             viewModel.engine.gameState.getCell(position)?.getComponent<Crystal>()?.count ?: 0 > 0
 
     private fun selectCell(cellType: EntityEcs) {
-        view.enableButton(false)
+        view.enableCrystalActionButton(false)
         viewModel.selectedEntity = null
-        view.showEntityInfo(cellType.toEntityData())
+        showEntityInfo(cellType)
     }
 
     private fun tryMove(unit: UnitEcs, targetPosition: Axis) {
-        view.enableButton(false)
+        view.enableCrystalActionButton(false)
         unit.addComponent(TargetPosition(targetPosition))
         if (!viewModel.engine.gameState.moveSuccess) {
             viewModel.selectedEntity = null
@@ -216,5 +215,18 @@ class SilentPlanetPresenter internal constructor(
     override fun saveInstanceState(onSave: (GameState) -> Unit) {
         viewModel.engine.stop()
         onSave(viewModel.engine.gameState)
+    }
+
+    private fun showEntityInfo(data: EntityEcs) {
+        showEntityInfo(listOf(data))
+    }
+
+    private fun showEntityInfo(dataList: List<EntityEcs>) {
+        if (dataList.size == 1 && dataList.first() is UnitEcs) {
+            view.changeBottomActionButtonVisibility(true)
+        } else {
+            view.changeBottomActionButtonVisibility(false)
+        }
+        view.showEntityMenuDialog(dataList.map())
     }
 }

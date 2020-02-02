@@ -14,32 +14,24 @@
     "default": {
       "down": "ui/custom_window",
       "up": "ui/custom_window_dark"
+    },
+    "custom_button_dark": {
+      "down": "ui/custom_button",
+      "up": "ui/custom_button_dark",
+      "disabled": "ui/custom_button_disable"
     }
   },
-  "Color": {
-    "green": {
-      "a": 1,
-      "b": 0,
-      "g": 1,
-      "r": 0
+  "TextButtonStyle": {
+    "default": {
+      "parent": "default",
+      "font": "regular-font",
+      "fontColor": "white"
     },
-    "white": {
-      "a": 1,
-      "b": 1,
-      "g": 1,
-      "r": 1
-    },
-    "red": {
-      "a": 1,
-      "b": 0,
-      "g": 0,
-      "r": 1
-    },
-    "black": {
-      "a": 1,
-      "b": 0,
-      "g": 0,
-      "r": 0
+    "custom_button_dark": {
+      "parent": "custom_button_dark",
+      "font": "regular-font",
+      "fontColor": "white",
+      "disabledFontColor": "light_gray"
     }
   }
 }

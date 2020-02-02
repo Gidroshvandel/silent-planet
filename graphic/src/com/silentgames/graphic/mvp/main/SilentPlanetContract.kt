@@ -9,9 +9,9 @@ interface SilentPlanetContract {
 
         fun showToast(text: String)
 
-        fun showEntityInfo(entity: EntityData)
+        fun enableCrystalActionButton(isEnabled: Boolean)
 
-        fun enableButton(isEnabled: Boolean)
+        fun changeBottomActionButtonVisibility(visible: Boolean)
 
         fun showEntityMenuDialog(dataList: MutableList<EntityData>)
 

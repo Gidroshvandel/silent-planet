@@ -62,7 +62,9 @@ enum class Strings(private var string: String) {
     human_ship_name("Пионер"),
     human_ship_description("Космический корабль землян"),
     alien_ship_name("Лиира"),
-    alien_ship_description("Космический корабль загадочной рассы");
+    alien_ship_description("Космический корабль загадочной рассы"),
+
+    get_crystal_action("Взять кристал");
 
     fun getString(vararg args: Any?): String = String.format(string, *args)
 

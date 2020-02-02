@@ -3,6 +3,7 @@ package com.silentgames.graphic.hud
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.ui.Cell
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.viewport.Viewport
@@ -43,6 +44,8 @@ class Hud(gameViewport: Viewport, private val assets: Assets) {
 
     private val topScorePanel = TopScorePanel(uiSkin)
 
+    private var bottomActionPanelCell: Cell<BottomActionPanel>? = null
+
     init {
         stage.addActor(
                 Table().apply {
@@ -52,6 +55,10 @@ class Hud(gameViewport: Viewport, private val assets: Assets) {
                     add(topScorePanel).growX()
                     row().grow()
                     add(ScrollPane(table))
+                    row().expandX()
+                    bottomActionPanelCell = add(BottomActionPanel(uiSkin)).apply {
+                        setVisibleSettings()
+                    }
                 })
         InputMultiplexer.addProcessor(stage)
     }
@@ -64,17 +71,38 @@ class Hud(gameViewport: Viewport, private val assets: Assets) {
         stage.batch.end()
     }
 
-    fun addWidget(entityData: EntityData) {
-        update(listOf(entityData)) {}
+    fun setBottomActionPanelVisibility(visible: Boolean) {
+        if (visible) {
+            bottomActionPanelCell?.setVisibleSettings()
+        } else {
+            bottomActionPanelCell?.setInvisibleSettings()
+        }
+    }
+
+    fun setCrystalActionButtonEnabled(enabled: Boolean) {
+        bottomActionPanelCell?.actor?.setCrystalActionButtonEnabled(enabled)
     }
 
     fun update(entityList: List<EntityData>, onClick: (EntityData) -> Unit) {
         table.clear()
         entityList.forEach { entityData ->
             table.row().growX()
-
             table.add(UnitWidget(assets, entityData, onClick)).growX()
         }
+    }
+
+    private fun Cell<BottomActionPanel>.setVisibleSettings() {
+        this.prefHeight(100f)?.growX()
+        this.actor.isVisible = true
+    }
+
+    private fun Cell<BottomActionPanel>.setInvisibleSettings() {
+        this.size(0f)
+        this.actor.isVisible = false
+    }
+
+    fun onGetCrystalClick(click: () -> Unit) {
+        bottomActionPanelCell?.actor?.onGetCrystalClick = click
     }
 
     fun changeFractionCrystalOnBoard(fractionsType: FractionsType, count: Int) {

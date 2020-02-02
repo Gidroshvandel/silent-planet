@@ -43,6 +43,10 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
         (camera as? OrthographicCamera)?.setToOrtho(true)
         camera.position.x = HEIGHT / 2f
         camera.position.y = HEIGHT / 2f
+
+        hud.onGetCrystalClick {
+            presenter.onActionButtonClick()
+        }
     }
 
     override fun render() {
@@ -77,14 +81,15 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
         const val HEIGHT = 480f
     }
 
-    override fun showEntityInfo(entity: EntityData) {
-        hud.addWidget(entity)
-    }
-
     override fun showToast(text: String) {
     }
 
-    override fun enableButton(isEnabled: Boolean) {
+    override fun enableCrystalActionButton(isEnabled: Boolean) {
+        hud.setCrystalActionButtonEnabled(isEnabled)
+    }
+
+    override fun changeBottomActionButtonVisibility(visible: Boolean) {
+        hud.setBottomActionPanelVisibility(visible)
     }
 
     override fun showEntityMenuDialog(dataList: MutableList<EntityData>) {
