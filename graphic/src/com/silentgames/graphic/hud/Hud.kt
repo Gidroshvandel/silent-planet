@@ -17,7 +17,7 @@ class Hud(gameViewport: Viewport, private val assets: Assets) {
 
     private val uiSkin by lazy { assets.uiSkin }
 
-    private val background by lazy { uiSkin.get<Sprite>("space_texture") }
+    private val background by lazy { uiSkin.get<Sprite>("ui/bg_space") }
 
     val stage = Stage(
             object : Viewport() {

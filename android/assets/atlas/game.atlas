@@ -6,7 +6,7 @@ filter: Nearest,Nearest
 repeat: none
 alien
   rotate: false
-  xy: 1806, 1552
+  xy: 1784, 1552
   size: 204, 204
   orig: 204, 204
   offset: 0, 0
@@ -20,7 +20,7 @@ aliens_space_ship
   index: -1
 arrow_green_cell
   rotate: false
-  xy: 1204, 854
+  xy: 1204, 1456
   size: 578, 578
   orig: 578, 578
   offset: 0, 0
@@ -34,7 +34,7 @@ crystal
   index: -1
 human_space_ship
   rotate: false
-  xy: 1806, 1758
+  xy: 1784, 1758
   size: 208, 276
   orig: 208, 276
   offset: 0, 0
@@ -48,7 +48,7 @@ human_spaceman
   index: -1
 pirate_space_ship
   rotate: false
-  xy: 1784, 970
+  xy: 1783, 970
   size: 164, 176
   orig: 164, 176
   offset: 0, 0
@@ -97,37 +97,37 @@ space
   index: 5
 space
   rotate: false
-  xy: 1806, 1350
+  xy: 1784, 1350
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 2
 space
   rotate: false
-  xy: 1806, 1350
+  xy: 1784, 1350
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 4
 space
   rotate: false
-  xy: 1784, 1148
+  xy: 1783, 1148
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 3
-space_texture
-  rotate: false
-  xy: 1204, 1434
-  size: 600, 600
-  orig: 600, 600
-  offset: 0, 0
-  index: -1
 three_crystals
   rotate: false
-  xy: 1204, 275
+  xy: 1204, 877
   size: 577, 577
   orig: 577, 577
+  offset: 0, 0
+  index: -1
+tornado_cell
+  rotate: false
+  xy: 1204, 299
+  size: 576, 576
+  orig: 576, 576
   offset: 0, 0
   index: -1
 
@@ -138,75 +138,75 @@ filter: Nearest,Nearest
 repeat: none
 abyss_cell
   rotate: false
-  xy: 1204, 575
+  xy: 1204, 1146
   size: 572, 572
   orig: 572, 572
   offset: 0, 0
   index: -1
 dead_cell
   rotate: false
-  xy: 1204, 2
+  xy: 1204, 573
   size: 571, 571
   orig: 571, 571
   offset: 0, 0
   index: -1
+one_crystal
+  rotate: false
+  xy: 1204, 2
+  size: 569, 569
+  orig: 569, 569
+  offset: 0, 0
+  index: -1
 pirate
   rotate: false
-  xy: 2, 125
+  xy: 2, 118
   size: 1200, 1600
   orig: 1200, 1600
   offset: 0, 0
   index: -1
-tornado_cell
-  rotate: false
-  xy: 1204, 1149
-  size: 576, 576
-  orig: 576, 576
-  offset: 0, 0
-  index: -1
 
 game3.png
-size: 2048,2048
+size: 2048,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 arow_red_cell
   rotate: false
-  xy: 2, 565
+  xy: 2, 2
   size: 565, 565
   orig: 565, 565
   offset: 0, 0
   index: -1
 empty_cell
   rotate: false
-  xy: 2, 2
+  xy: 1133, 6
   size: 561, 561
   orig: 561, 561
   offset: 0, 0
   index: -1
-one_crystal
-  rotate: false
-  xy: 2, 1132
-  size: 569, 569
-  orig: 569, 569
-  offset: 0, 0
-  index: -1
 two_crystals
   rotate: false
-  xy: 573, 1139
+  xy: 569, 5
   size: 562, 562
   orig: 562, 562
   offset: 0, 0
   index: -1
 
 game4.png
-size: 512,256
+size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+ui/bg_space
+  rotate: false
+  xy: 2, 202
+  size: 561, 540
+  orig: 561, 540
+  offset: 0, 0
+  index: -1
 ui/custom_button
   rotate: false
-  xy: 2, 47
+  xy: 2, 2
   size: 174, 43
   split: 113, 17, 15, 9
   pad: 0, 0, 0, 0
@@ -215,7 +215,7 @@ ui/custom_button
   index: -1
 ui/custom_button_dark
   rotate: false
-  xy: 2, 2
+  xy: 181, 157
   size: 174, 43
   split: 114, 17, 15, 9
   pad: 0, 0, 0, 0
@@ -224,7 +224,7 @@ ui/custom_button_dark
   index: -1
 ui/custom_button_disable
   rotate: false
-  xy: 178, 47
+  xy: 565, 544
   size: 174, 43
   split: 113, 17, 19, 9
   pad: 0, 0, 0, 0
@@ -233,7 +233,7 @@ ui/custom_button_disable
   index: -1
 ui/custom_window
   rotate: false
-  xy: 2, 92
+  xy: 2, 47
   size: 177, 153
   split: 76, 76, 74, 75
   pad: 0, 0, 0, 0
@@ -242,7 +242,7 @@ ui/custom_window
   index: -1
 ui/custom_window_dark
   rotate: false
-  xy: 181, 92
+  xy: 565, 589
   size: 177, 153
   split: 76, 76, 75, 76
   pad: 0, 0, 0, 0
@@ -251,7 +251,7 @@ ui/custom_window_dark
   index: -1
 ui/rounded_window_blue
   rotate: false
-  xy: 360, 150
+  xy: 744, 647
   size: 109, 95
   split: 19, 19, 19, 19
   pad: 0, 0, 0, 0
