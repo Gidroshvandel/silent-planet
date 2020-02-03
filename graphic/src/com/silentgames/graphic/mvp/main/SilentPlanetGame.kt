@@ -5,22 +5,31 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.utils.Scaling
+import com.badlogic.gdx.utils.viewport.ScreenViewport
+import com.silentgames.core.Strings
 import com.silentgames.core.logic.ecs.component.FractionsType
 import com.silentgames.graphic.AppViewport
 import com.silentgames.graphic.Assets
 import com.silentgames.graphic.hud.Hud
+import com.silentgames.graphic.hud.Toast
+import com.silentgames.graphic.hud.Toast.ToastFactory
 
 
 class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
 
     private lateinit var presenter: SilentPlanetContract.Presenter
 
+    private val fullViewPort = ScreenViewport()
     private val viewPort = AppViewport(Scaling.fillY, HEIGHT, HEIGHT)
     private val camera by lazy(viewPort::getCamera)
 
     private val assets by lazy { Assets() }
 
     private val hud by lazy { Hud(viewPort, assets) }
+
+    private val toastFactory by lazy { ToastFactory.Builder().font(assets.uiSkin.getFont(Assets.Font.REGULAR.fontName)).build() }
+
+    private var currentToast: Toast? = null
 
     override fun create() {
 
@@ -60,6 +69,10 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
         hud.drawBackground()
         hud.stage.act()
         hud.stage.draw()
+
+        fullViewPort.apply(true)
+
+        currentToast?.render(fullViewPort)
     }
 
     override fun resize(width: Int, height: Int) {
@@ -70,6 +83,9 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
 
         hud.stage.act()
         hud.stage.draw()
+
+        fullViewPort.update(width, height, true)
+        currentToast?.update(width.toFloat())
     }
 
     override fun dispose() {
@@ -82,6 +98,7 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
     }
 
     override fun showToast(text: String) {
+        currentToast = toastFactory.create(text, Toast.Length.LONG)
     }
 
     override fun enableCrystalActionButton(isEnabled: Boolean) {
@@ -119,8 +136,10 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
     }
 
     override fun showPlayerBuybackSuccessMessage(name: String) {
+        currentToast = toastFactory.create(Strings.player_buyback_success.getString(name), Toast.Length.LONG)
     }
 
     override fun showPlayerBuybackFailureMessage(missingAmount: Int) {
+        currentToast = toastFactory.create(Strings.player_buyback_failure.getString(missingAmount), Toast.Length.LONG)
     }
 }
