@@ -69,7 +69,7 @@ class Assets {
         skinResources.put("clear", Color.CLEAR)
         skinResources.put("black", Color.BLACK)
 
-        skinResources.put("white", Color.WHITE)
+        skinResources.put(TextColor.WHITE.colorName, Color.WHITE)
         skinResources.put("light_gray", Color.LIGHT_GRAY)
         skinResources.put("gray", Color.GRAY)
         skinResources.put("dark_gray", Color.DARK_GRAY)
@@ -97,7 +97,7 @@ class Assets {
         skinResources.put("tan", Color.TAN)
         skinResources.put("firebrick", Color.FIREBRICK)
 
-        skinResources.put("red", Color.RED)
+        skinResources.put(TextColor.RED.colorName, Color.RED)
         skinResources.put("scarlet", Color.SCARLET)
         skinResources.put("coral", Color.CORAL)
         skinResources.put("salmon", Color.SALMON)
@@ -121,7 +121,7 @@ class Assets {
         smallFont.fontParameters.size = dimension / 46
         manager.load("small-font.ttf", BitmapFont::class.java, smallFont)
         manager.finishLoadingAsset<Any>("small-font.ttf")
-        skinResources.put("small-font", manager.get<Any>("small-font.ttf"))
+        skinResources.put(Font.SMALL.fontName, manager.get<Any>("small-font.ttf"))
 
         val regularFont = FreetypeFontLoader.FreeTypeFontLoaderParameter()
         regularFont.fontFileName = "fonts/Roboto-Bold.ttf"
@@ -135,7 +135,7 @@ class Assets {
         regularFont.fontParameters.size = dimension / 40
         manager.load("regular-font.ttf", BitmapFont::class.java, regularFont)
         manager.finishLoadingAsset<Any>("regular-font.ttf")
-        skinResources.put("regular-font", manager.get<Any>("regular-font.ttf"))
+        skinResources.put(Font.REGULAR.fontName, manager.get<Any>("regular-font.ttf"))
 
         val largeFont = FreetypeFontLoader.FreeTypeFontLoaderParameter()
         largeFont.fontFileName = "fonts/Merriweather-Bold.ttf"
@@ -146,6 +146,17 @@ class Assets {
         largeFont.fontParameters.size = dimension / 26
         manager.load("large-font.ttf", BitmapFont::class.java, largeFont)
         manager.finishLoadingAsset<Any>("large-font.ttf")
-        skinResources.put("large-font", manager.get<Any>("large-font.ttf"))
+        skinResources.put(Font.LARGE.fontName, manager.get<Any>("large-font.ttf"))
+    }
+
+    enum class TextColor(val colorName: String) {
+        WHITE("white"),
+        RED("red")
+    }
+
+    enum class Font(val fontName: String) {
+        SMALL("small-font"),
+        LARGE("large-font"),
+        REGULAR("regular-font")
     }
 }

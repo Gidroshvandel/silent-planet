@@ -113,15 +113,4 @@ class Hud(gameViewport: Viewport, private val assets: Assets) {
         topScorePanel.selectFraction(fractionsType)
     }
 
-    enum class Color(val colorName: String) {
-        WHITE("white"),
-        RED("red")
-    }
-
-    enum class Font(val fontName: String) {
-        SMALL("small-font"),
-        LARGE("large-font"),
-        REGULAR("regular-font")
-    }
-
 }

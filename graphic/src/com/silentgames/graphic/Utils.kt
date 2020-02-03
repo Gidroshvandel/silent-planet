@@ -9,10 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.Scaling
 import com.silentgames.core.logic.Constants
-import com.silentgames.graphic.hud.Hud
 
-fun Label.setColor(color: Hud.Color, skin: Skin) {
-    this.style = Label.LabelStyle(skin.getFont(Hud.Font.REGULAR.fontName), skin.getColor(color.colorName)).also {
+fun Label.setColor(color: Assets.TextColor, skin: Skin) {
+    this.style = Label.LabelStyle(skin.getFont(Assets.Font.REGULAR.fontName), skin.getColor(color.colorName)).also {
         it.background = this.style.background
     }
 }

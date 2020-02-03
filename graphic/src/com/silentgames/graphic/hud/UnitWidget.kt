@@ -63,7 +63,7 @@ class UnitWidget(
                 it.row()
                 it.add(
                         getDescriptionLabel(Strings.captive.getString()).also { label ->
-                            label.setColor(Hud.Color.RED, skin)
+                            label.setColor(Assets.TextColor.RED, skin)
                         }
                 ).pad(2f).center()
                 it.row()
@@ -92,7 +92,7 @@ class UnitWidget(
                 it.add(
                         Label(Strings.buyout.getString(), skin).also { label ->
                             label.setAlignment(Align.center)
-                            label.setColor(Hud.Color.RED, skin)
+                            label.setColor(Assets.TextColor.RED, skin)
                         }
                 ).pad(2f).center()
                 it.row()

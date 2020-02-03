@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Align
 import com.silentgames.core.Strings
 import com.silentgames.core.logic.Constants
 import com.silentgames.core.logic.ecs.component.FractionsType
+import com.silentgames.graphic.Assets
 import com.silentgames.graphic.setColor
 import ktx.style.get
 
@@ -62,19 +63,19 @@ class TopScorePanel(private val uiSkin: Skin) : Table() {
     }
 
     fun selectFraction(fractionsType: FractionsType) {
-        aliensLabel.setColor(Hud.Color.WHITE)
-        humansLabel.setColor(Hud.Color.WHITE)
-        piratesLabel.setColor(Hud.Color.WHITE)
-        robotsLabel.setColor(Hud.Color.WHITE)
+        aliensLabel.setColor(Assets.TextColor.WHITE)
+        humansLabel.setColor(Assets.TextColor.WHITE)
+        piratesLabel.setColor(Assets.TextColor.WHITE)
+        robotsLabel.setColor(Assets.TextColor.WHITE)
         when (fractionsType) {
-            FractionsType.ALIEN -> aliensLabel.setColor(Hud.Color.RED)
-            FractionsType.HUMAN -> humansLabel.setColor(Hud.Color.RED)
-            FractionsType.PIRATE -> piratesLabel.setColor(Hud.Color.RED)
-            FractionsType.ROBOT -> robotsLabel.setColor(Hud.Color.RED)
+            FractionsType.ALIEN -> aliensLabel.setColor(Assets.TextColor.RED)
+            FractionsType.HUMAN -> humansLabel.setColor(Assets.TextColor.RED)
+            FractionsType.PIRATE -> piratesLabel.setColor(Assets.TextColor.RED)
+            FractionsType.ROBOT -> robotsLabel.setColor(Assets.TextColor.RED)
         }
     }
 
-    private fun Label.setColor(color: Hud.Color) {
+    private fun Label.setColor(color: Assets.TextColor) {
         this.setColor(color, uiSkin)
     }
 
