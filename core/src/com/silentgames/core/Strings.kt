@@ -64,7 +64,12 @@ enum class Strings(private var string: String) {
     alien_ship_name("Лиира"),
     alien_ship_description("Космический корабль загадочной рассы"),
 
-    get_crystal_action("Взять кристал");
+    get_crystal_action("Взять кристал"),
+
+    player_buyback_success("%s возвращён на корабль"),
+    player_buyback_failure("Необходимо ещё кристалов: %1d"),
+    captive("Пленный"),
+    buyout("Выкуп");
 
     fun getString(vararg args: Any?): String = String.format(string, *args)
 

@@ -5,8 +5,17 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.Scaling
 import com.silentgames.core.logic.Constants
+import com.silentgames.graphic.hud.Hud
+
+fun Label.setColor(color: Hud.Color, skin: Skin) {
+    this.style = Label.LabelStyle(skin.getFont(Hud.Font.REGULAR.fontName), skin.getColor(color.colorName)).also {
+        it.background = this.style.background
+    }
+}
 
 fun scaleImageForBoard(width: Float, height: Float, size: Float): Vector2 {
     return scaleImageForBoard(width, height, size, Constants.verticalCountOfCells)

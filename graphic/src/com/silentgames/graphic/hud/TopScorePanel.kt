@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Align
 import com.silentgames.core.Strings
 import com.silentgames.core.logic.Constants
 import com.silentgames.core.logic.ecs.component.FractionsType
+import com.silentgames.graphic.setColor
 import ktx.style.get
 
 class TopScorePanel(private val uiSkin: Skin) : Table() {
@@ -74,9 +75,7 @@ class TopScorePanel(private val uiSkin: Skin) : Table() {
     }
 
     private fun Label.setColor(color: Hud.Color) {
-        this.style = Label.LabelStyle(uiSkin.getFont(Hud.Font.REGULAR.fontName), uiSkin.getColor(color.colorName)).also {
-            it.background = this.style.background
-        }
+        this.setColor(color, uiSkin)
     }
 
     private fun getCrystalTitle(fractionName: String, currentCrystals: Int): String {

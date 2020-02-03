@@ -8,10 +8,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable
 import com.badlogic.gdx.utils.Align
+import com.silentgames.core.Strings
 import com.silentgames.graphic.Assets
 import com.silentgames.graphic.mvp.main.EntityData
 import com.silentgames.graphic.mvp.main.SilentPlanetGame
 import com.silentgames.graphic.scaleImageForBoard
+import com.silentgames.graphic.setColor
 
 class UnitWidget(
         val assets: Assets,
@@ -20,7 +22,7 @@ class UnitWidget(
 ) : Button(assets.uiSkin) {
 
     init {
-        pad(15f, 35f, 15f, 45f)
+        pad(30f, 35f, 38f, 35f)
         addWidget(entityData)
         addCaptureListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
@@ -43,27 +45,65 @@ class UnitWidget(
                 ).pad(5f).center()
             }).space(5f).center()
 
-            add(
-                    Label(entityData.description, skin).also {
-                        it.setWrap(true)
-                        it.setAlignment(Align.center)
-                    }).prefWidth(150f).growX().space(5f)
-
-            if (entityData.crystalCount.toInt() > 0) {
-                add(Table().also {
-                    it.row()
-                    it.add(Image().apply { setTexture("crystal") }).pad(2f).center()
-                    it.row()
-                    it.add(
-                            Label(entityData.crystalCount, skin).also { label ->
-                                label.setAlignment(Align.center)
-                            }
-                    ).pad(2f).center()
-                }).space(5f)
+            if (entityData.captured) {
+                add(getCapturedDescriptionTable(entityData.description)).prefWidth(150f).growX().space(5f)
+                add(getBuyBackCrystalsTable(entityData.crystalCount)).space(5f)
+            } else {
+                add(getDescriptionLabel(entityData.description)).prefWidth(150f).growX().space(5f)
+                if (entityData.crystalCount.toInt() > 0) {
+                    add(getEntityCrystalsTable(entityData.crystalCount)).space(5f)
+                }
             }
 
         }
     }
+
+    private fun getCapturedDescriptionTable(description: String) =
+            Table().also {
+                it.row()
+                it.add(
+                        getDescriptionLabel(Strings.captive.getString()).also { label ->
+                            label.setColor(Hud.Color.RED, skin)
+                        }
+                ).pad(2f).center()
+                it.row()
+                it.add(getDescriptionLabel(description)).prefWidth(150f).growX().space(5f)
+            }
+
+    private fun getDescriptionLabel(description: String) = Label(description, skin).also {
+        it.setWrap(true)
+        it.setAlignment(Align.center)
+    }
+
+    private fun getEntityCrystalsTable(crystalCount: String) =
+            Table().also {
+                it.row()
+                it.add(Image().apply { setTexture("crystal") }).pad(2f).center()
+                it.row()
+                it.add(
+                        Label(crystalCount, skin).also { label ->
+                            label.setAlignment(Align.center)
+                        }
+                ).pad(2f).center()
+            }
+
+    private fun getBuyBackCrystalsTable(crystalCount: String) =
+            Table().also {
+                it.add(
+                        Label(Strings.buyout.getString(), skin).also { label ->
+                            label.setAlignment(Align.center)
+                            label.setColor(Hud.Color.RED, skin)
+                        }
+                ).pad(2f).center()
+                it.row()
+                it.add(Image().apply { setTexture("crystal") }).pad(2f).center()
+                it.row()
+                it.add(
+                        Label(crystalCount, skin).also { label ->
+                            label.setAlignment(Align.center)
+                        }
+                ).pad(2f).center()
+            }
 
     private fun Image.setTexture(path: String) {
         val sprite = assets.getSprite(path)
