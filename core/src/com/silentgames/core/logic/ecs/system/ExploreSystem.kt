@@ -1,6 +1,8 @@
 package com.silentgames.core.logic.ecs.system
 
+import com.silentgames.core.logic.CoreLogger
 import com.silentgames.core.logic.ecs.GameState
+import com.silentgames.core.logic.ecs.component.Description
 import com.silentgames.core.logic.ecs.component.Hide
 import com.silentgames.core.logic.ecs.component.Position
 import com.silentgames.core.logic.ecs.component.Texture
@@ -23,6 +25,10 @@ class ExploreSystem : UnitSystem() {
     }
 
     private fun makeCellExplored(hide: Hide, cell: CellEcs) {
+        CoreLogger.logDebug(
+                this::class.simpleName ?: "",
+                "${cell.getComponent<Description>()?.name} ${cell.getComponent<Position>()?.currentPosition.toString()}"
+        )
         cell.addComponent(Texture(hide.imageToShow))
         cell.addComponent(hide.descriptionToShow)
         cell.removeComponent(hide)

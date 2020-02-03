@@ -1,5 +1,6 @@
 package com.silentgames.core.logic.ecs.system
 
+import com.silentgames.core.logic.CoreLogger
 import com.silentgames.core.logic.ecs.EngineEcs
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.*
@@ -26,6 +27,8 @@ class TurnSystem(private val onTurnChanged: (FractionsType) -> Unit) : UnitSyste
             gameState.turn.turnCount()
             gameState.makeCurrentFractionTurnUnitsCanTurn()
             gameState.turn.currentTurnFraction.let { onTurnChanged.invoke(it) }
+            CoreLogger.logDebug(this::class.simpleName
+                    ?: "", gameState.turn.currentTurnFraction.name)
         }
     }
 

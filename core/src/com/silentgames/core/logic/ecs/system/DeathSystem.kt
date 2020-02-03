@@ -2,6 +2,7 @@ package com.silentgames.core.logic.ecs.system
 
 
 import com.silentgames.core.Strings
+import com.silentgames.core.logic.CoreLogger
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.Active
 import com.silentgames.core.logic.ecs.component.Death
@@ -26,6 +27,10 @@ class DeathSystem : UnitSystem() {
 
     private fun death(death: Death, unit: UnitEcs) {
         if (death.unit == null) {
+            CoreLogger.logDebug(
+                    this::class.simpleName ?: "",
+                    "${unit.getComponent<Description>()?.name} ${unit.getComponent<Position>()?.currentPosition.toString()}"
+            )
             death.unit = unit
             unit.removeComponent(Active::class.java)
             unit.getComponent<Description>()?.let {

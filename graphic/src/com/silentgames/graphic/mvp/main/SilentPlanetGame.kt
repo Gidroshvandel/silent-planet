@@ -10,6 +10,7 @@ import com.silentgames.core.Strings
 import com.silentgames.core.logic.ecs.component.FractionsType
 import com.silentgames.graphic.AppViewport
 import com.silentgames.graphic.Assets
+import com.silentgames.graphic.Logger
 import com.silentgames.graphic.hud.Hud
 import com.silentgames.graphic.hud.Toast
 import com.silentgames.graphic.hud.Toast.ToastFactory
@@ -32,6 +33,8 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
     private var currentToast: Toast? = null
 
     override fun create() {
+
+        Logger.create()
 
         presenter = SilentPlanetPresenter(
                 this,

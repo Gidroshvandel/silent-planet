@@ -1,5 +1,6 @@
 package com.silentgames.core.logic.ecs.system
 
+import com.silentgames.core.logic.CoreLogger
 import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.*
@@ -46,6 +47,10 @@ class CaptureSystem : UnitSystem() {
     }
 
     private fun GameState.captureUnit(captured: UnitEcs, enemies: List<UnitEcs>, fractionsType: FractionsType) {
+        CoreLogger.logDebug(
+                "CaptureSystem",
+                "captured ${captured.getComponent<Description>()?.name} ${captured.getComponent<Position>()?.currentPosition.toString()}"
+        )
         captured.addComponent(Capture(fractionsType))
         getCapitalShipPosition(fractionsType)?.currentPosition?.let {
             captured.removeComponent(Active::class.java)

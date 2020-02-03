@@ -1,5 +1,6 @@
 package com.silentgames.core.logic.ecs.system
 
+import com.silentgames.core.logic.CoreLogger
 import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.*
@@ -22,7 +23,7 @@ class MovementSystem : UnitSystem() {
                     unit.getComponent<Position>()?.currentPosition,
                     unit,
                     gameState,
-                    ::isCanMove
+                    ::tryToMove
             ) ?: false
         }
         if (moveSuccess) {
@@ -45,6 +46,27 @@ class MovementSystem : UnitSystem() {
     ) {
         gameState.moveUnit(unit, targetPosition.axis)
         unit.removeComponent(targetPosition)
+    }
+
+    private fun tryToMove(
+            targetPosition: Axis,
+            currentPosition: Axis,
+            unit: UnitEcs,
+            gameState: GameState
+    ): Boolean {
+        val isCanMove = isCanMove(targetPosition, currentPosition, unit, gameState)
+        if (isCanMove) {
+            CoreLogger.logDebug(
+                    this::class.simpleName ?: "",
+                    "moved success " + unit.getComponent<Description>()?.name
+            )
+        } else {
+            CoreLogger.logDebug(
+                    this::class.simpleName ?: "",
+                    "moved failed " + unit.getComponent<Description>()?.name
+            )
+        }
+        return isCanMove
     }
 
     fun isCanMove(

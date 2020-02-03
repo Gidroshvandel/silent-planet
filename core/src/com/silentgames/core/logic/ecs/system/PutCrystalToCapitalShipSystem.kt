@@ -1,8 +1,10 @@
 package com.silentgames.core.logic.ecs.system
 
+import com.silentgames.core.logic.CoreLogger
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.CapitalShip
 import com.silentgames.core.logic.ecs.component.Crystal
+import com.silentgames.core.logic.ecs.component.Description
 import com.silentgames.core.logic.ecs.component.Position
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 
@@ -28,6 +30,10 @@ class PutCrystalToCapitalShipSystem : UnitSystem() {
                         capitalShip.addComponent(crystals)
                         it.removeComponent(crystals)
                     }
+                    CoreLogger.logDebug(
+                            "PutCrystalToCapitalShipSystem",
+                            "${capitalShip.getComponent<Description>()?.name} ${capitalShip.getComponent<Position>()?.currentPosition.toString()}"
+                    )
                 }
             }
         }

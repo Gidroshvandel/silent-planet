@@ -1,12 +1,10 @@
 package com.silentgames.core.logic.ecs.system
 
 import com.silentgames.core.logic.Constants
+import com.silentgames.core.logic.CoreLogger
 import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.GameState
-import com.silentgames.core.logic.ecs.component.FractionsType
-import com.silentgames.core.logic.ecs.component.TargetPosition
-import com.silentgames.core.logic.ecs.component.Teleport
-import com.silentgames.core.logic.ecs.component.Tornado
+import com.silentgames.core.logic.ecs.component.*
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.logic.ecs.system.TornadoSystem.GameZone.*
 import com.silentgames.core.utils.notNull
@@ -34,6 +32,10 @@ class TornadoSystem : UnitSystem() {
     private fun tornado(gameState: GameState, fractionsType: FractionsType, position: Axis, unit: UnitEcs) {
         val axis = this.getTarget(gameState, fractionsType, position)
         if (axis != null) {
+            CoreLogger.logDebug(
+                    this::class.simpleName ?: "",
+                    "${unit.getComponent<Description>()?.name} target $axis"
+            )
             unit.addComponent(Teleport())
             unit.addComponent(TargetPosition(axis))
         }

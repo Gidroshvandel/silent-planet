@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.Scaling
 import com.silentgames.core.logic.Constants
+import com.silentgames.core.logic.CoreLogger
 
 fun Label.setColor(color: Assets.TextColor, skin: Skin) {
     this.style = Label.LabelStyle(skin.getFont(Assets.Font.REGULAR.fontName), skin.getColor(color.colorName)).also {
@@ -34,8 +35,11 @@ fun Vector3.toVector2() = Vector2(x, y)
 
 object Logger {
 
-    init {
+    fun create() {
         Gdx.app.logLevel = LOG_DEBUG
+        CoreLogger.onMessageLogged = { tag, message ->
+            logDebug(tag, message)
+        }
     }
 
     fun logDebug(tag: String, message: String) {

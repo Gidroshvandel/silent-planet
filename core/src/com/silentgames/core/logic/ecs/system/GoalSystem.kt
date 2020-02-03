@@ -1,5 +1,6 @@
 package com.silentgames.core.logic.ecs.system
 
+import com.silentgames.core.logic.CoreLogger
 import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.Goal
@@ -14,6 +15,10 @@ class GoalSystem : UnitSystem() {
         val goal = unit.getComponent<Goal>()
         val nextAxisToGoal = goal?.axis?.let { gameState.getNextAxisToGoal(unit, goal.axis) }
         if (nextAxisToGoal != null) {
+            CoreLogger.logDebug(
+                    this::class.simpleName ?: "",
+                    "target $nextAxisToGoal"
+            )
             unit.addComponent(TargetPosition(nextAxisToGoal))
         }
     }
