@@ -5,7 +5,6 @@ import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.*
 import com.silentgames.core.logic.ecs.entity.cell.CellEcs
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
-import com.silentgames.core.logic.ecs.system.AbyssSystem
 import com.silentgames.core.logic.ecs.system.MovementSystem
 import com.silentgames.core.logic.ecs.system.getAvailableMoveDistancePositionList
 import kotlin.math.pow
@@ -93,8 +92,7 @@ private fun GameState.getAdjacentNodes(node: Node, unit: UnitEcs): List<Node> {
         val destination = getDestination(cell)
         if (destination != null) listOf(Node(destination, cost = Int.MAX_VALUE)) else listOf()
     } else if (cell != null && !cell.hasComponent<Hide>() && abyss != null) {
-        val destination = getDestination(unit)
-        if (destination != null) listOf(Node(destination, cost = Int.MAX_VALUE)) else listOf()
+        listOf(Node(Axis(0, 0), cost = Int.MAX_VALUE))
     } else {
         this.getAvailableMoveDistancePositionList(node.position, unit).map { Node(it, cost = Int.MAX_VALUE) }
     }
@@ -102,11 +100,6 @@ private fun GameState.getAdjacentNodes(node: Node, unit: UnitEcs): List<Node> {
 
 fun getDestination(cell: CellEcs): Axis? {
     return cell.getComponent<MovementCoordinatesComponent>()?.axis ?: return null
-}
-
-fun getDestination(unit: UnitEcs): Axis? {
-    val paths = unit.getComponent<Route>()?.paths ?: return null
-    return AbyssSystem().getTarget(paths)
 }
 
 fun GameState.getAvailableMoveDistancePositionList(position: Axis, unit: UnitEcs) =
