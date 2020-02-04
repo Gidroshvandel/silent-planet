@@ -10,6 +10,10 @@ import com.silentgames.core.utils.notNull
 
 class MovementSystem : UnitSystem() {
 
+    companion object {
+        private const val SYSTEM_TAG = "MovementSystem"
+    }
+
     override fun execute(gameState: GameState, unit: UnitEcs) {
         val moveSuccess = if (unit.hasComponent<Teleport>()
                 || unit.getComponent<FractionsType>() != gameState.turn.currentTurnFraction
@@ -56,15 +60,9 @@ class MovementSystem : UnitSystem() {
     ): Boolean {
         val isCanMove = isCanMove(targetPosition, currentPosition, unit, gameState)
         if (isCanMove) {
-            CoreLogger.logDebug(
-                    this::class.simpleName ?: "",
-                    "moved success " + unit.getComponent<Description>()?.name
-            )
+            CoreLogger.logDebug(SYSTEM_TAG, "moved success " + unit.getName())
         } else {
-            CoreLogger.logDebug(
-                    this::class.simpleName ?: "",
-                    "moved failed " + unit.getComponent<Description>()?.name
-            )
+            CoreLogger.logDebug(SYSTEM_TAG, "moved failed " + unit.getName())
         }
         return isCanMove
     }

@@ -9,6 +9,10 @@ import com.silentgames.core.utils.notNull
 
 class CaptureSystem : UnitSystem() {
 
+    companion object {
+        private const val SYSTEM_TAG = "CaptureSystem"
+    }
+
     override fun execute(gameState: GameState, unit: UnitEcs) {
         unit.getComponent<Active>()?.let {
             notNull(
@@ -48,8 +52,7 @@ class CaptureSystem : UnitSystem() {
 
     private fun GameState.captureUnit(captured: UnitEcs, enemies: List<UnitEcs>, fractionsType: FractionsType) {
         CoreLogger.logDebug(
-                "CaptureSystem",
-                "captured ${captured.getComponent<Description>()?.name} ${captured.getComponent<Position>()?.currentPosition.toString()}"
+                SYSTEM_TAG, "captured ${captured.getName()} ${captured.getCurrentPosition().toString()}"
         )
         captured.addComponent(Capture(fractionsType))
         getCapitalShipPosition(fractionsType)?.currentPosition?.let {

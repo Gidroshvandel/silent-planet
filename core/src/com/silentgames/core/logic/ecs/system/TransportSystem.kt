@@ -2,11 +2,14 @@ package com.silentgames.core.logic.ecs.system
 
 import com.silentgames.core.logic.CoreLogger
 import com.silentgames.core.logic.ecs.GameState
-import com.silentgames.core.logic.ecs.component.Description
 import com.silentgames.core.logic.ecs.component.Transport
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 
 class TransportSystem : UnitSystem() {
+
+    companion object {
+        private const val SYSTEM_TAG = "TransportSystem"
+    }
 
     override fun execute(gameState: GameState, unit: UnitEcs) {
         if (unit.hasComponent<Transport>()) {
@@ -20,8 +23,8 @@ class TransportSystem : UnitSystem() {
         transport?.unitsOnBoard?.toMutableList()?.forEach { unit ->
             if (unit.getCurrentPosition() != this.getCurrentPosition()) {
                 CoreLogger.logDebug(
-                        "TransportSystem",
-                        "move from transport ${this.getComponent<Description>()?.name} ${unit.getCurrentPosition()} ${unit.getComponent<Description>()?.name}"
+                        SYSTEM_TAG,
+                        "move from transport ${this.getName()} ${unit.getCurrentPosition()} ${unit.getName()}"
                 )
                 transport.removeFromBoard(unit)
             }
@@ -38,8 +41,8 @@ class TransportSystem : UnitSystem() {
                         && !transport.unitsOnBoard.contains(unit)
                 ) {
                     CoreLogger.logDebug(
-                            "TransportSystem",
-                            "move to transport ${this.getComponent<Description>()?.name} ${unit.getCurrentPosition()} ${unit.getComponent<Description>()?.name}"
+                            SYSTEM_TAG,
+                            "move to transport ${this.getName()} ${unit.getCurrentPosition()} ${unit.getName()}"
                     )
                     transport.addOnBoard(unit)
                 }

@@ -11,6 +11,10 @@ import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 
 class AiShipSystem : UnitSystem() {
 
+    companion object {
+        private const val SYSTEM_TAG = "AiShipSystem"
+    }
+
     override fun execute(gameState: GameState, unit: UnitEcs) {
         if (gameState.turn.canTurn && !unit.hasComponent<TargetPosition>()
                 && unit.hasComponent<ArtificialIntelligence>()

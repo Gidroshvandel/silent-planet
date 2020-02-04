@@ -11,6 +11,10 @@ class WinSystem(
         private val onWin: (FractionsType) -> Unit
 ) : UnitSystem() {
 
+    companion object {
+        private const val SYSTEM_TAG = "WinSystem"
+    }
+
     override fun execute(gameState: GameState, unit: UnitEcs) {
         checkWin(gameState)
     }

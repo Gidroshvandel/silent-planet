@@ -1,5 +1,6 @@
 package com.silentgames.core.logic.ecs.system
 
+import com.silentgames.core.logic.CoreLogger
 import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.Motion
@@ -12,6 +13,11 @@ import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.utils.notNull
 
 class AbyssSystem : UnitSystem() {
+
+    companion object {
+        private const val SYSTEM_TAG = "AbyssSystem"
+    }
+
     override fun execute(gameState: GameState, unit: UnitEcs) {
         gameState.getCurrentUnitCell(unit) { cell ->
             cell.getComponent<Abyss>()?.let {
@@ -26,10 +32,11 @@ class AbyssSystem : UnitSystem() {
         this.getTarget(paths)?.let {
             unit.addComponent(Teleport())
             unit.addComponent(TargetPosition(it))
+            CoreLogger.logDebug(SYSTEM_TAG, "unit ${unit.getName()} teleport to $it")
         }
     }
 
-    fun getTarget(paths: MutableList<Motion>): Axis? {
+    private fun getTarget(paths: MutableList<Motion>): Axis? {
         paths.reversed().forEach {
             if (it.motionType == MotionType.MOVEMENT) {
                 return it.axis

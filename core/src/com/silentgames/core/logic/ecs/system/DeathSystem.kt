@@ -13,6 +13,10 @@ import com.silentgames.core.utils.notNull
 
 class DeathSystem : UnitSystem() {
 
+    companion object {
+        private const val SYSTEM_TAG = "DeathSystem"
+    }
+
     override fun execute(gameState: GameState, unit: UnitEcs) {
         val position = unit.getComponent<Position>()?.currentPosition
         if (position != null) {
@@ -27,10 +31,7 @@ class DeathSystem : UnitSystem() {
 
     private fun death(death: Death, unit: UnitEcs) {
         if (death.unit == null) {
-            CoreLogger.logDebug(
-                    this::class.simpleName ?: "",
-                    "${unit.getComponent<Description>()?.name} ${unit.getComponent<Position>()?.currentPosition.toString()}"
-            )
+            CoreLogger.logDebug(SYSTEM_TAG, "${unit.getName()} ${unit.getCurrentPosition().toString()}")
             death.unit = unit
             unit.removeComponent(Active::class.java)
             unit.getComponent<Description>()?.let {

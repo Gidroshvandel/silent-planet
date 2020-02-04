@@ -1,5 +1,6 @@
 package com.silentgames.core.logic.ecs.system
 
+import com.silentgames.core.logic.CoreLogger
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.Crystal
 import com.silentgames.core.logic.ecs.component.Position
@@ -7,6 +8,10 @@ import com.silentgames.core.logic.ecs.component.event.AddCrystalEvent
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 
 class AddCrystalSystem : UnitSystem() {
+
+    companion object {
+        private const val SYSTEM_TAG = "AddCrystalSystem"
+    }
 
     override fun execute(gameState: GameState, unit: UnitEcs) {
         unit.getComponent<AddCrystalEvent>()?.let {
@@ -21,6 +26,7 @@ class AddCrystalSystem : UnitSystem() {
             if (crystal != null && crystal.count > 0) {
                 unit.addCrystal(addCrystalEvent)
                 crystal.getCount(addCrystalEvent.crystals)
+                CoreLogger.logDebug(SYSTEM_TAG, "unit ${unit.getName()} added addCrystalEvent")
             }
         }
     }

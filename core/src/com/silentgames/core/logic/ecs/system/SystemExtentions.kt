@@ -4,6 +4,7 @@ import com.silentgames.core.logic.Constants
 import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.Crystal
+import com.silentgames.core.logic.ecs.component.Description
 import com.silentgames.core.logic.ecs.component.Hide
 import com.silentgames.core.logic.ecs.component.Position
 import com.silentgames.core.logic.ecs.entity.EntityEcs
@@ -16,6 +17,8 @@ fun GameState.getCurrentUnitCell(unit: UnitEcs, cellExist: (cell: CellEcs, posit
         getCell(position)?.let { cellExist.invoke(it, position) }
     }
 }
+
+fun EntityEcs.getName() = getComponent<Description>()?.name ?: ""
 
 fun GameState.getCurrentUnitCell(unit: UnitEcs, cellExist: (cell: CellEcs) -> Unit) {
     val position = unit.getComponent<Position>()?.currentPosition

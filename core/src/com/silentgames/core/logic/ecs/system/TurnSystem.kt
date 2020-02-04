@@ -8,6 +8,10 @@ import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 
 class TurnSystem(private val onTurnChanged: (FractionsType) -> Unit) : UnitSystem() {
 
+    companion object {
+        private const val SYSTEM_TAG = "TurnSystem"
+    }
+
     override fun onEngineAttach(engine: EngineEcs) {
         engine.gameState.makeCurrentFractionTurnUnitsCanTurn()
         engine.gameState.turn.currentTurnFraction.let { onTurnChanged.invoke(it) }
@@ -27,8 +31,7 @@ class TurnSystem(private val onTurnChanged: (FractionsType) -> Unit) : UnitSyste
             gameState.turn.turnCount()
             gameState.makeCurrentFractionTurnUnitsCanTurn()
             gameState.turn.currentTurnFraction.let { onTurnChanged.invoke(it) }
-            CoreLogger.logDebug(this::class.simpleName
-                    ?: "", gameState.turn.currentTurnFraction.name)
+            CoreLogger.logDebug(SYSTEM_TAG, gameState.turn.currentTurnFraction.name)
         }
     }
 

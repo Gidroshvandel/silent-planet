@@ -11,14 +11,15 @@ import com.silentgames.core.logic.findPath
 
 class GoalSystem : UnitSystem() {
 
+    companion object {
+        private const val SYSTEM_TAG = "GoalSystem"
+    }
+
     override fun execute(gameState: GameState, unit: UnitEcs) {
         val goal = unit.getComponent<Goal>()
         val nextAxisToGoal = goal?.axis?.let { gameState.getNextAxisToGoal(unit, goal.axis) }
         if (nextAxisToGoal != null) {
-            CoreLogger.logDebug(
-                    this::class.simpleName ?: "",
-                    "target $nextAxisToGoal"
-            )
+            CoreLogger.logDebug(SYSTEM_TAG, "target $nextAxisToGoal")
             unit.addComponent(TargetPosition(nextAxisToGoal))
         }
     }

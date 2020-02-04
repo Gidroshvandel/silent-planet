@@ -10,6 +10,11 @@ import com.silentgames.core.logic.ecs.system.TornadoSystem.GameZone.*
 import com.silentgames.core.utils.notNull
 
 class TornadoSystem : CellSystem() {
+
+    companion object {
+        private const val SYSTEM_TAG = "TornadoSystem"
+    }
+
     private enum class GameZone(val axis: Axis) {
         UP_LEFT(Axis(1, 1)),
         UP_RIGHT(Axis(1, Constants.horizontalCountOfGroundCells)),
@@ -29,10 +34,7 @@ class TornadoSystem : CellSystem() {
         val isAnglePosition = values().toList().map { it.axis }.contains(position)
         val axis = if (isAnglePosition) this.getSpacePosition(position) else this.getAnglePosition(position)
         if (axis != null) {
-//            CoreLogger.logDebug(
-//                    this::class.simpleName ?: "",
-//                    "${cell.getComponent<Description>()?.name} target $axis"
-//            )
+//            CoreLogger.logDebug(SYSTEM_TAG, "${cell.getName()} moved to $axis")
             cell.addComponent(MovementCoordinatesComponent(axis))
         }
     }

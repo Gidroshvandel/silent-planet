@@ -1,5 +1,6 @@
 package com.silentgames.core.logic.ecs.system
 
+import com.silentgames.core.logic.CoreLogger
 import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.Motion
@@ -11,7 +12,12 @@ import com.silentgames.core.logic.ecs.component.Teleport
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.utils.notNull
 
-class AntiloopSystem : UnitSystem() {
+class AntiLoopSystem : UnitSystem() {
+
+    companion object {
+        private const val SYSTEM_TAG = "AntiLoopSystem"
+    }
+
     override fun execute(gameState: GameState, unit: UnitEcs) {
         unit.getComponent<FractionsType>()?.let {
             notNull(unit.getComponent<Route>()?.paths,
@@ -28,6 +34,7 @@ class AntiloopSystem : UnitSystem() {
             if (last?.axis == marker?.axis) {
                 unit.addComponent(Teleport())
                 unit.addComponent(TargetPosition(shipPosition))
+                CoreLogger.logDebug(SYSTEM_TAG, "unit ${unit.getName()} movement cycle break")
             }
         }
     }

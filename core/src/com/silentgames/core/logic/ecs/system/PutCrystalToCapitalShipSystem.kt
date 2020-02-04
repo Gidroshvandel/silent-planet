@@ -4,11 +4,14 @@ import com.silentgames.core.logic.CoreLogger
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.CapitalShip
 import com.silentgames.core.logic.ecs.component.Crystal
-import com.silentgames.core.logic.ecs.component.Description
 import com.silentgames.core.logic.ecs.component.Position
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 
 class PutCrystalToCapitalShipSystem : UnitSystem() {
+
+    companion object {
+        private const val SYSTEM_TAG = "PutCrystalToCapitalShipSystem"
+    }
 
     override fun execute(gameState: GameState, unit: UnitEcs) {
         unit.getComponent<Position>()?.let {
@@ -31,8 +34,7 @@ class PutCrystalToCapitalShipSystem : UnitSystem() {
                         it.removeComponent(crystals)
                     }
                     CoreLogger.logDebug(
-                            "PutCrystalToCapitalShipSystem",
-                            "${capitalShip.getComponent<Description>()?.name} ${capitalShip.getComponent<Position>()?.currentPosition.toString()}"
+                            SYSTEM_TAG, "${capitalShip.getName()} ${capitalShip.getCurrentPosition().toString()}"
                     )
                 }
             }

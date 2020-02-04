@@ -13,6 +13,11 @@ import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.utils.notNull
 
 class SavePathSystem : UnitSystem() {
+
+    companion object {
+        private const val SYSTEM_TAG = "SavePathSystem"
+    }
+
     override fun execute(gameState: GameState, unit: UnitEcs) {
         notNull(unit,
                 unit.getComponent<Position>()?.currentPosition,

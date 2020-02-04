@@ -12,6 +12,11 @@ import com.silentgames.core.logic.ecs.entity.cell.CellEcs
 import com.silentgames.core.utils.notNull
 
 class ArrowSystem : CellSystem() {
+
+    companion object {
+        private const val SYSTEM_TAG = "ArrowSystem"
+    }
+
     override fun execute(gameState: GameState, unit: CellEcs) {
         unit.getCurrentPosition()?.let {
             notNull(unit.getComponent(),

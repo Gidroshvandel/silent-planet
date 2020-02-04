@@ -2,7 +2,6 @@ package com.silentgames.core.logic.ecs.system
 
 import com.silentgames.core.logic.CoreLogger
 import com.silentgames.core.logic.ecs.GameState
-import com.silentgames.core.logic.ecs.component.Description
 import com.silentgames.core.logic.ecs.component.Hide
 import com.silentgames.core.logic.ecs.component.Position
 import com.silentgames.core.logic.ecs.component.Texture
@@ -11,6 +10,10 @@ import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.utils.notNull
 
 class ExploreSystem : UnitSystem() {
+
+    companion object {
+        private const val SYSTEM_TAG = "ExploreSystem"
+    }
 
     override fun execute(gameState: GameState, unit: UnitEcs) {
         val position = unit.getComponent<Position>()?.currentPosition
@@ -25,13 +28,13 @@ class ExploreSystem : UnitSystem() {
     }
 
     private fun makeCellExplored(hide: Hide, cell: CellEcs) {
-        CoreLogger.logDebug(
-                this::class.simpleName ?: "",
-                "${cell.getComponent<Description>()?.name} ${cell.getComponent<Position>()?.currentPosition.toString()}"
-        )
         cell.addComponent(Texture(hide.imageToShow))
         cell.addComponent(hide.descriptionToShow)
         cell.removeComponent(hide)
+        CoreLogger.logDebug(
+                SYSTEM_TAG,
+                "${cell.getName()} ${cell.getCurrentPosition().toString()}"
+        )
     }
 
 }

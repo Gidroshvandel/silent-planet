@@ -48,7 +48,7 @@ class SilentPlanetPresenter internal constructor(
         viewModel.engine.addSystem(MovementCoordinatesSystem())
         viewModel.engine.addSystem(SaveUnitFromSpaceSystem())
         viewModel.engine.addSystem(SavePathSystem())
-        viewModel.engine.addSystem(AntiloopSystem())
+        viewModel.engine.addSystem(AntiLoopSystem())
 //        viewModel.engine.addSystem(CaptureSystem())
         viewModel.engine.addSystem(MovementSystem())
         viewModel.engine.addSystem(TeleportSystem())

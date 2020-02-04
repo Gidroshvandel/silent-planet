@@ -11,6 +11,10 @@ import com.silentgames.core.logic.findPathToCell
 
 class AiPlayerSystem(private val aiFractionList: List<FractionsType> = listOf()) : UnitSystem() {
 
+    companion object {
+        private const val SYSTEM_TAG = "AiPlayerSystem"
+    }
+
 //    fun GameState.choosePlayerToMove(fractionsType: FractionsType): UnitEcs? {
 //        val capitalShip = this.getCapitalShip(fractionsType)
 //        val list = this.unitMap.filter { it.getComponent<FractionsType>() == fractionsType }
