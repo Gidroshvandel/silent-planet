@@ -2,7 +2,10 @@ package com.silentgames.core.logic
 
 import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.GameState
-import com.silentgames.core.logic.ecs.component.*
+import com.silentgames.core.logic.ecs.component.Abyss
+import com.silentgames.core.logic.ecs.component.Hide
+import com.silentgames.core.logic.ecs.component.MovementCoordinatesComponent
+import com.silentgames.core.logic.ecs.component.Position
 import com.silentgames.core.logic.ecs.entity.cell.CellEcs
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.logic.ecs.system.MovementSystem
@@ -11,19 +14,19 @@ import kotlin.math.pow
 import kotlin.math.sqrt
 
 fun GameState.findPath(position: Axis, goal: Axis, unit: UnitEcs): List<Axis> {
-    println("START(${unit.getComponent<Description>()?.name})-----------------------------")
+//    println("START(${unit.getComponent<Description>()?.name})-----------------------------")
     val startPosition = Node(position, cost = 0)
     val goalNode = Node(goal)
     val reachable = mutableListOf(startPosition)
     val explored = mutableListOf<Node>()
     while (reachable.isNotEmpty()) {
-        println("reachable-------------------------------------------")
+//        println("reachable-------------------------------------------")
         reachable.forEach {
-            println(it.toString())
+            //            println(it.toString())
         }
-        println("node-------------------------------------------")
+//        println("node-------------------------------------------")
         val node = reachable.chooseNode(goalNode)
-        println(node.toString())
+//        println(node.toString())
         if (node != goalNode) {
             reachable.remove(node)
             explored.add(node)
@@ -39,18 +42,18 @@ fun GameState.findPath(position: Axis, goal: Axis, unit: UnitEcs): List<Axis> {
                 }
             }
         } else {
-            println("SUCCESS-------------------------------------------")
+//            println("SUCCESS-------------------------------------------")
             val finalPath = buildPath(node).toMutableList().apply {
                 remove(startPosition.position)
             }
-            println("PATH-------------------------------------------")
+//            println("PATH-------------------------------------------")
             finalPath.forEach {
-                println(it.toString())
+                //                println(it.toString())
             }
             return finalPath
         }
     }
-    println("FAILURE-------------------------------------------")
+//    println("FAILURE-------------------------------------------")
     return listOf()
 }
 

@@ -19,7 +19,7 @@ class GoalSystem : UnitSystem() {
         val goal = unit.getComponent<Goal>()
         val nextAxisToGoal = goal?.axis?.let { gameState.getNextAxisToGoal(unit, goal.axis) }
         if (nextAxisToGoal != null) {
-            CoreLogger.logDebug(SYSTEM_TAG, "target $nextAxisToGoal")
+            CoreLogger.logDebug(SYSTEM_TAG, "unit ${unit.getName()} added goal $nextAxisToGoal")
             unit.addComponent(TargetPosition(nextAxisToGoal))
         }
     }
