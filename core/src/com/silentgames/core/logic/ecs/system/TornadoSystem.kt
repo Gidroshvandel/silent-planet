@@ -1,10 +1,8 @@
 package com.silentgames.core.logic.ecs.system
 
 import com.silentgames.core.logic.Constants
-import com.silentgames.core.logic.CoreLogger
 import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.GameState
-import com.silentgames.core.logic.ecs.component.Description
 import com.silentgames.core.logic.ecs.component.MovementCoordinatesComponent
 import com.silentgames.core.logic.ecs.component.Tornado
 import com.silentgames.core.logic.ecs.entity.cell.CellEcs
@@ -31,10 +29,10 @@ class TornadoSystem : CellSystem() {
         val isAnglePosition = values().toList().map { it.axis }.contains(position)
         val axis = if (isAnglePosition) this.getSpacePosition(position) else this.getAnglePosition(position)
         if (axis != null) {
-            CoreLogger.logDebug(
-                    this::class.simpleName ?: "",
-                    "${cell.getComponent<Description>()?.name} target $axis"
-            )
+//            CoreLogger.logDebug(
+//                    this::class.simpleName ?: "",
+//                    "${cell.getComponent<Description>()?.name} target $axis"
+//            )
             cell.addComponent(MovementCoordinatesComponent(axis))
         }
     }
