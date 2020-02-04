@@ -5,7 +5,9 @@ import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.*
 import com.silentgames.core.logic.ecs.entity.cell.CellEcs
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
-import com.silentgames.core.logic.ecs.system.*
+import com.silentgames.core.logic.ecs.system.AbyssSystem
+import com.silentgames.core.logic.ecs.system.MovementSystem
+import com.silentgames.core.logic.ecs.system.getAvailableMoveDistancePositionList
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -86,14 +88,9 @@ private fun estimateDistance(node: Node, goalNode: Node): Int =
 // Where can we get from here?
 private fun GameState.getAdjacentNodes(node: Node, unit: UnitEcs): List<Node> {
     val cell = this.getCell(node.position)
-    val arrow = cell?.getComponent<Arrow>()
-    val tornado = cell?.getComponent<Tornado>()
     val abyss = cell?.getComponent<Abyss>()
-    return if (cell != null && !cell.hasComponent<Hide>() && arrow != null) {
-        val destination = getDestination(arrow, unit, cell)
-        if (destination != null) listOf(Node(destination, cost = Int.MAX_VALUE)) else listOf()
-    } else if (cell != null && !cell.hasComponent<Hide>() && tornado != null) {
-        val destination = getDestination(unit, cell)
+    return if (cell != null && !cell.hasComponent<Hide>() && cell.hasComponent<MovementCoordinatesComponent>()) {
+        val destination = getDestination(cell)
         if (destination != null) listOf(Node(destination, cost = Int.MAX_VALUE)) else listOf()
     } else if (cell != null && !cell.hasComponent<Hide>() && abyss != null) {
         val destination = getDestination(unit)
@@ -103,16 +100,8 @@ private fun GameState.getAdjacentNodes(node: Node, unit: UnitEcs): List<Node> {
     }
 }
 
-fun GameState.getDestination(arrow: Arrow, unit: UnitEcs, cell: CellEcs): Axis? {
-    val cellPosition = cell.getComponent<Position>() ?: return null
-    val unitFractionsType = unit.getComponent<FractionsType>() ?: return null
-    return ArrowSystem().getCorrectTarget(this, arrow, cellPosition, unitFractionsType)
-}
-
-fun GameState.getDestination(unit: UnitEcs, cell: CellEcs): Axis? {
-    val cellPosition = cell.getComponent<Position>() ?: return null
-    val unitFractionsType = unit.getComponent<FractionsType>() ?: return null
-    return TornadoSystem().getTarget(this, unitFractionsType, cellPosition.currentPosition)
+fun getDestination(cell: CellEcs): Axis? {
+    return cell.getComponent<MovementCoordinatesComponent>()?.axis ?: return null
 }
 
 fun getDestination(unit: UnitEcs): Axis? {
@@ -156,7 +145,7 @@ fun GameState.findPathToCell(unit: UnitEcs, event: (CellEcs) -> Boolean): List<A
     return listOf()
 }
 
-private class Node(val position: Axis, var previous: Node? = null, var cost: Int = 1) {
+private class Node(val position: Axis = Axis(0, 0), var previous: Node? = null, var cost: Int = 1) {
 
     override fun equals(other: Any?): Boolean {
         return if (other is Node) {
