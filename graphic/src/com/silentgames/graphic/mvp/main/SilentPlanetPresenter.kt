@@ -208,7 +208,8 @@ class SilentPlanetPresenter internal constructor(
     private fun tryMove(unit: UnitEcs, targetPosition: Axis) {
         view.enableCrystalActionButton(false)
         unit.addComponent(TargetPosition(targetPosition))
-        if (!viewModel.engine.gameState.moveSuccess) {
+        viewModel.engine.processSystems()
+        if (viewModel.engine.gameState.unitMap.find { it.hasComponent<MovedSuccess>() } == null) {
             viewModel.selectedEntity = null
             select(targetPosition)
         }

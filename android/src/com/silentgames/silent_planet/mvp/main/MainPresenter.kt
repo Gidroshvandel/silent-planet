@@ -217,10 +217,10 @@ class MainPresenter internal constructor(
     private fun tryMove(unit: UnitEcs, targetPosition: Axis) {
         view.enableButton(false)
         unit.addComponent(TargetPosition(targetPosition))
-        if (!viewModel.engine.gameState.moveSuccess) {
-            viewModel.selectedEntity = null
-            select(targetPosition)
-        }
+//        if (!viewModel.engine.gameState.moveSuccess) {
+//            viewModel.selectedEntity = null
+//            select(targetPosition)
+//        }
     }
 
     override fun saveInstanceState(onSave: (GameState) -> Unit) {

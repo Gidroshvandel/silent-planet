@@ -11,8 +11,7 @@ import java.io.Serializable
 class GameState(
         cellList: List<CellEcs>,
         unitList: List<UnitEcs>,
-        firstTurnFraction: FractionsType,
-        var moveSuccess: Boolean = false
+        firstTurnFraction: FractionsType
 ) : Serializable {
 
     val turn: Turn = Turn(firstTurnFraction)
