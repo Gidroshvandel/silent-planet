@@ -29,7 +29,7 @@ class PutCrystalToCapitalShipSystem : UnitSystem() {
             fractionsType: FractionsType
     ) {
         val capitalShip = gameState.getCapitalShip(fractionsType)
-        if (capitalShip != null) {
+        if (capitalShip != null && capitalShip.getCurrentPosition() == unit.getCurrentPosition()) {
             val crystals = unit.getComponent<Crystal>()
             if (!unit.hasComponent<CapitalShip>() && crystals != null) {
                 val capitalShipCrystals = capitalShip.getComponent<Crystal>()

@@ -3,10 +3,7 @@ package com.silentgames.core.logic.ecs.entity.cell
 
 import com.silentgames.core.Strings
 import com.silentgames.core.logic.ecs.Axis
-import com.silentgames.core.logic.ecs.component.Description
-import com.silentgames.core.logic.ecs.component.MovingMode
-import com.silentgames.core.logic.ecs.component.Position
-import com.silentgames.core.logic.ecs.component.Texture
+import com.silentgames.core.logic.ecs.component.*
 
 /**
  * Created by gidroshvandel on 07.07.16.
@@ -21,5 +18,6 @@ class SpaceCell(
 ) {
     init {
         addComponent(MovingMode.FLY)
+        addComponent(LossCrystalComponent())
     }
 }

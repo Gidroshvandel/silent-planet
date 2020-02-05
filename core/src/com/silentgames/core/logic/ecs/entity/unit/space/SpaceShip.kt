@@ -23,6 +23,7 @@ abstract class SpaceShip(
 
     init {
         addComponent(CapitalShip())
+        addComponent(LossCrystalImmunityComponent())
     }
 
 }
