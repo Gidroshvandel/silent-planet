@@ -33,7 +33,7 @@ class AiPlayerSystem(private val aiFractionList: List<FractionsType> = listOf())
             this.unitsOnBoard.firstOrNull { it.getComponent<FractionsType>() == fractionsType }
 
     override fun execute(gameState: GameState) {
-        if (gameState.turn.canTurn && aiFractionList.contains(gameState.turn.currentTurnFraction)) {
+        if (!gameState.isTurnEnd() && aiFractionList.contains(gameState.turn.currentTurnFraction)) {
             val unit = gameState.choosePlayerToMove(gameState.turn.currentTurnFraction)
                     ?: gameState.getCapitalShip(gameState.turn.currentTurnFraction)
             unit?.addComponent(ArtificialIntelligence())

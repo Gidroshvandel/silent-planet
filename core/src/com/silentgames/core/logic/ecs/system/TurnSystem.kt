@@ -19,33 +19,27 @@ class TurnSystem(private val onTurnChanged: (FractionsType) -> Unit) : UnitSyste
         engine.gameState.turn.currentTurnFraction.let { onTurnChanged.invoke(it) }
     }
 
-    private fun GameState.endTurn() {
-        unitMap.forEach {
-            it.removeComponent(CanTurn::class.java)
+    override fun execute(gameState: GameState, unit: UnitEcs) {
+        if (unit.hasComponent<MovedSuccess>()) {
+            unit.removeComponent(CanTurn::class.java)
         }
     }
 
     override fun execute(gameState: GameState) {
         super.execute(gameState)
-        if (!gameState.turn.canTurn && gameState.unitMap.find { it.hasComponent<MovedSuccess>() } == null) {
+        if (gameState.isTurnEnd() && gameState.unitMap.find { it.hasComponent<MovedSuccess>() } == null) {
             gameState.endTurn()
-            gameState.turn.turnCount()
+            gameState.turn.nextTurn()
             gameState.makeCurrentFractionTurnUnitsCanTurn()
             gameState.turn.currentTurnFraction.let { onTurnChanged.invoke(it) }
             CoreLogger.logDebug(SYSTEM_TAG, gameState.turn.currentTurnFraction.name)
         }
     }
 
-    override fun execute(gameState: GameState, unit: UnitEcs) {
-        if (unit.hasComponent<MovedSuccess>()) {
-            unit.removeComponent(CanTurn::class.java)
-        }
-        if (gameState.isTurnEnd()) {
-            gameState.turn.endTurn()
+    private fun GameState.endTurn() {
+        unitMap.forEach {
+            it.removeComponent(CanTurn::class.java)
         }
     }
-
-    private fun GameState.isTurnEnd() =
-            getAllFractionUnits(turn.currentTurnFraction).find { !it.hasComponent<CanTurn>() } != null
 
 }

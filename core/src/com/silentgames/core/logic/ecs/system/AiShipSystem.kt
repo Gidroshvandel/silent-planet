@@ -16,7 +16,7 @@ class AiShipSystem : UnitSystem() {
     }
 
     override fun execute(gameState: GameState, unit: UnitEcs) {
-        if (gameState.turn.canTurn && !unit.hasComponent<TargetPosition>()
+        if (!gameState.isTurnEnd() && !unit.hasComponent<TargetPosition>()
                 && unit.hasComponent<ArtificialIntelligence>()
                 && unit.hasComponent<CapitalShip>()) {
             unit.getMoveShipPosition(gameState)?.let {

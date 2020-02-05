@@ -60,6 +60,9 @@ class GameState(
         makeUnitsCanTurn(turn.currentTurnFraction)
     }
 
+    fun isTurnEnd() =
+            getAllFractionUnits(turn.currentTurnFraction).find { !it.hasComponent<CanTurn>() } != null
+
     private fun makeUnitsCanTurn(fractionsType: FractionsType) {
         unitMap.filter {
             it.getComponent<FractionsType>() == fractionsType
