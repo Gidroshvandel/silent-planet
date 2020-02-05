@@ -66,6 +66,8 @@ enum class Strings(private var string: String) {
 
     get_crystal_action("Взять кристал"),
 
+    skip_turn_action("Пропустить ход"),
+
     player_buyback_success("%s возвращён на корабль"),
     player_buyback_failure("Необходимо ещё кристалов: %1d"),
     captive("Пленный"),

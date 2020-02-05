@@ -59,6 +59,10 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
         hud.onGetCrystalClick {
             presenter.onActionButtonClick()
         }
+
+        hud.onSkipTurnClick {
+            presenter.onTurnSkipped()
+        }
     }
 
     override fun render() {
@@ -106,6 +110,10 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
 
     override fun enableCrystalActionButton(isEnabled: Boolean) {
         hud.setCrystalActionButtonEnabled(isEnabled)
+    }
+
+    override fun enableSkipTurnButton(isEnabled: Boolean) {
+        hud.setSkipTurnButtonEnabled(isEnabled)
     }
 
     override fun changeBottomActionButtonVisibility(visible: Boolean) {

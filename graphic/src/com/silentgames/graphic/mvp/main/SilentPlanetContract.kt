@@ -11,6 +11,8 @@ interface SilentPlanetContract {
 
         fun enableCrystalActionButton(isEnabled: Boolean)
 
+        fun enableSkipTurnButton(isEnabled: Boolean)
+
         fun changeBottomActionButtonVisibility(visible: Boolean)
 
         fun showEntityMenuDialog(dataList: MutableList<EntityData>)
@@ -42,6 +44,8 @@ interface SilentPlanetContract {
         fun saveInstanceState(onSave: (GameState) -> Unit)
 
         fun onRender()
+
+        fun onTurnSkipped()
 
     }
 }

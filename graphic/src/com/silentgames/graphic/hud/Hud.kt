@@ -83,6 +83,10 @@ class Hud(gameViewport: Viewport, private val assets: Assets) {
         bottomActionPanelCell?.actor?.setCrystalActionButtonEnabled(enabled)
     }
 
+    fun setSkipTurnButtonEnabled(enabled: Boolean) {
+        bottomActionPanelCell?.actor?.setSkipTurnButtonEnabled(enabled)
+    }
+
     fun update(entityList: List<EntityData>, onClick: (EntityData) -> Unit) {
         table.clear()
         entityList.forEach { entityData ->
@@ -103,6 +107,10 @@ class Hud(gameViewport: Viewport, private val assets: Assets) {
 
     fun onGetCrystalClick(click: () -> Unit) {
         bottomActionPanelCell?.actor?.onGetCrystalClick = click
+    }
+
+    fun onSkipTurnClick(click: () -> Unit) {
+        bottomActionPanelCell?.actor?.onSkipTurnClick = click
     }
 
     fun changeFractionCrystalOnBoard(fractionsType: FractionsType, count: Int) {

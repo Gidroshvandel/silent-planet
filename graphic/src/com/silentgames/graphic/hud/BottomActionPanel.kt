@@ -11,7 +11,17 @@ class BottomActionPanel(skin: Skin) : Table(skin) {
 
     var onGetCrystalClick: (() -> Unit)? = null
         set(value) {
-            addCaptureListener(object : ClickListener() {
+            crystalActionButton.addCaptureListener(object : ClickListener() {
+                override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                    value?.invoke()
+                }
+            })
+            field = value
+        }
+
+    var onSkipTurnClick: (() -> Unit)? = null
+        set(value) {
+            skipTurnButton.addCaptureListener(object : ClickListener() {
                 override fun clicked(event: InputEvent?, x: Float, y: Float) {
                     value?.invoke()
                 }
@@ -27,13 +37,26 @@ class BottomActionPanel(skin: Skin) : Table(skin) {
         it.pad(20f)
     }
 
+    private val skipTurnButton = TextButton(
+            Strings.skip_turn_action.getString(),
+            skin,
+            "custom_button_dark"
+    ).also {
+        it.pad(20f)
+    }
+
     init {
         pad(10f, 10f, 10f, 10f)
+        add(skipTurnButton).grow().space(20f)
         add(crystalActionButton).grow()
     }
 
     fun setCrystalActionButtonEnabled(enabled: Boolean) {
         crystalActionButton.isDisabled = !enabled
+    }
+
+    fun setSkipTurnButtonEnabled(enabled: Boolean) {
+        skipTurnButton.isDisabled = !enabled
     }
 
 }

@@ -93,7 +93,7 @@ class SilentPlanetPresenter internal constructor(
         view.changePirateCristalCount(0)
         view.changeRobotCristalCount(0)
 
-        view.enableCrystalActionButton(false)
+        view.changeBottomActionButtonVisibility(false)
     }
 
     override fun onRender() {
@@ -126,20 +126,22 @@ class SilentPlanetPresenter internal constructor(
                 }
             }
         }
+        updateSelectedEntity()
     }
 
     override fun onActionButtonClick() {
         val entity = viewModel.selectedEntity
         if (entity != null) {
             entity.addComponent(AddCrystalEvent())
-
-            entity.getComponent<Position>()?.currentPosition?.let {
-                if (!crystalsOverZero(it)) {
-                    view.enableCrystalActionButton(false)
-                }
-            }
+            viewModel.engine.processSystems()
             showEntityInfo(entity)
         }
+    }
+
+    override fun onTurnSkipped() {
+        viewModel.selectedEntity?.removeComponent(CanTurn::class.java)
+        viewModel.engine.processSystems()
+        updateSelectedEntity()
     }
 
     override fun onEntityDialogElementSelect(entityData: EntityData) {
@@ -153,7 +155,10 @@ class SilentPlanetPresenter internal constructor(
     }
 
     override fun onCapturedPlayerClick(entityData: EntityData) {
-        viewModel.engine.gameState.unitMap.find { it.id == entityData.id }?.addComponent(BuyBackEvent())
+        viewModel.engine.gameState.unitMap.find { it.id == entityData.id }?.let {
+            it.addComponent(BuyBackEvent())
+            viewModel.engine.processSystems()
+        }
     }
 
     private fun List<EntityEcs>.map() =
@@ -181,32 +186,20 @@ class SilentPlanetPresenter internal constructor(
         )
     }
 
-    private fun selectEntity(entity: UnitEcs) {
-        updateEntityState(entity)
-        viewModel.selectedEntity = entity
-    }
-
-    private fun updateEntityState(unit: UnitEcs) {
-        val position = unit.getComponent<Position>()?.currentPosition
-        if (position != null && crystalsOverZero(position)) {
-            view.enableCrystalActionButton(true)
-        } else {
-            view.enableCrystalActionButton(false)
-        }
+    private fun selectEntity(unit: UnitEcs) {
         showEntityInfo(unit)
+        viewModel.selectedEntity = unit
     }
 
     private fun crystalsOverZero(position: Axis): Boolean =
             viewModel.engine.gameState.getCell(position)?.getComponent<Crystal>()?.count ?: 0 > 0
 
     private fun selectCell(cellType: EntityEcs) {
-        view.enableCrystalActionButton(false)
         viewModel.selectedEntity = null
         showEntityInfo(cellType)
     }
 
     private fun tryMove(unit: UnitEcs, targetPosition: Axis) {
-        view.enableCrystalActionButton(false)
         unit.addComponent(TargetPosition(targetPosition))
         viewModel.engine.processSystems()
         if (viewModel.engine.gameState.unitMap.find { it.hasComponent<MovedSuccess>() } == null) {
@@ -220,16 +213,41 @@ class SilentPlanetPresenter internal constructor(
         onSave(viewModel.engine.gameState)
     }
 
+    private fun updateSelectedEntity() {
+        viewModel.selectedEntity?.let {
+            showEntityInfo(it)
+        }
+    }
+
     private fun showEntityInfo(data: EntityEcs) {
         showEntityInfo(listOf(data))
     }
 
     private fun showEntityInfo(dataList: List<EntityEcs>) {
-        if (dataList.size == 1 && dataList.first() is UnitEcs) {
+        val firstElement = dataList.firstOrNull()
+        if (dataList.size == 1 && firstElement is UnitEcs && firstElement.isCurrentTurn()) {
+            changeEnableCrystalActionButton(firstElement)
+            changeSkipTurnButtonEnabled(firstElement)
             view.changeBottomActionButtonVisibility(true)
         } else {
             view.changeBottomActionButtonVisibility(false)
         }
         view.showEntityMenuDialog(dataList.map())
+    }
+
+    private fun UnitEcs.isCurrentTurn() =
+            viewModel.engine.gameState.turn.currentTurnFraction == getComponent<FractionsType>()
+
+    private fun changeEnableCrystalActionButton(unit: UnitEcs) {
+        val position = unit.getComponent<Position>()?.currentPosition
+        if (position != null && crystalsOverZero(position)) {
+            view.enableCrystalActionButton(true)
+        } else {
+            view.enableCrystalActionButton(false)
+        }
+    }
+
+    private fun changeSkipTurnButtonEnabled(unit: UnitEcs) {
+        view.enableSkipTurnButton(unit.hasComponent<CanTurn>())
     }
 }
