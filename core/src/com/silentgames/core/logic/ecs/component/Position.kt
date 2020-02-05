@@ -6,12 +6,12 @@ class Position(axis: Axis) : ComponentEquals() {
 
     var onPositionChanged: ((Axis) -> Unit)? = null
 
-    var moved = false
+    var needMovingAnimation = true
 
     var currentPosition: Axis = axis
         set(value) {
             oldPosition = field
-            moved = false
+            needMovingAnimation = true
             field = value
             onPositionChanged?.invoke(value)
         }

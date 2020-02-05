@@ -10,7 +10,10 @@ class Transport(position: Position, unitsOnBoard: List<UnitEcs> = listOf()) : Co
     init {
         position.onPositionChanged = { axis ->
             this.unitsOnBoard.forEach {
-                it.getComponent<Position>()?.currentPosition = axis
+                it.getComponent<Position>()?.apply {
+                    currentPosition = axis
+                    needMovingAnimation = false
+                }
             }
         }
     }

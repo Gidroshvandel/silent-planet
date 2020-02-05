@@ -53,7 +53,7 @@ class RenderSystem(
 
     override fun execute(gameState: GameState) {
         super.execute(gameState)
-        CoreLogger.logDebug("Render", "execute")
+//        CoreLogger.logDebug("Render", "execute")
 
         if (engine?.processing == false)
             render(gameState)
@@ -117,7 +117,7 @@ class RenderSystem(
             this.getUnits(axis).firstOrNull {
                 val position = it.getComponent<Position>()
                 position != null
-                        && !position.moved
+                        && position.needMovingAnimation
                         && position.currentPosition != position.oldPosition
                         && !it.hasComponent<Transport>()
             } ?: this.getUnits(axis).firstOrNull { !it.hasComponent<Transport>() }
@@ -156,8 +156,8 @@ class RenderSystem(
                 textureId,
                 assets
         ).apply {
-            if (!position.moved && position.oldPosition != position.currentPosition) {
-                position.moved = true
+            if (position.needMovingAnimation && position.oldPosition != position.currentPosition) {
+                position.needMovingAnimation = false
                 isMoved = true
                 CoreLogger.logDebug("Animation", "unit ${this@toDrawEntity.getName()} Moving")
                 move(
