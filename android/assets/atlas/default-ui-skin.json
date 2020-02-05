@@ -16,7 +16,7 @@
       "up": "ui/custom_window_dark"
     },
     "rounded_window": {
-      "down": "ui/rounded_window_blue",
+      "down": "ui/rounded_window_blue_clicked",
       "up": "ui/rounded_window_blue"
     },
     "custom_button_dark": {
