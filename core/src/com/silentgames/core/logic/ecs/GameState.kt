@@ -1,9 +1,11 @@
 package com.silentgames.core.logic.ecs
 
+import com.silentgames.core.logic.CoreLogger
 import com.silentgames.core.logic.ecs.component.*
 import com.silentgames.core.logic.ecs.entity.EntityEcs
 import com.silentgames.core.logic.ecs.entity.cell.CellEcs
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
+import com.silentgames.core.logic.ecs.system.getName
 import java.io.Serializable
 
 class GameState(
@@ -38,13 +40,6 @@ class GameState(
     fun getCapitalShipPosition(unitFractionsType: FractionsType) =
             getCapitalShip(unitFractionsType)?.getComponent<Position>()
 
-    fun moveUnit(fromPosition: Axis, toPosition: Axis) {
-        val unit = getUnit(fromPosition)
-        if (unit != null) {
-            moveUnit(unit, toPosition)
-        }
-    }
-
     fun getAllFractionUnits(fractionsType: FractionsType): List<UnitEcs> =
             unitMap.filter { it.getComponent<FractionsType>() == fractionsType }
 
@@ -52,7 +47,8 @@ class GameState(
         if (!unitMap.contains(unit)) {
             mutableUnitList.add(unit)
         }
-        unit.addComponent(Moving())
+        CoreLogger.logDebug("Moving", "unit ${unit.getName()} start Moving")
+        unit.addComponent(MovedSuccess())
         unit.getComponent<Position>()?.currentPosition = toPosition
     }
 
@@ -68,7 +64,7 @@ class GameState(
         unitMap.filter {
             it.getComponent<FractionsType>() == fractionsType
         }.forEach {
-            it.addComponent(TurnToMove())
+            it.addComponent(CanTurn())
         }
     }
 

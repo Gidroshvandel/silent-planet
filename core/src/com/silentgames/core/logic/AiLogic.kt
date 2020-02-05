@@ -2,9 +2,9 @@ package com.silentgames.core.logic
 
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.Active
+import com.silentgames.core.logic.ecs.component.CanTurn
 import com.silentgames.core.logic.ecs.component.FractionsType
 import com.silentgames.core.logic.ecs.component.Transport
-import com.silentgames.core.logic.ecs.component.TurnToMove
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 
 fun GameState.choosePlayerToMove(fractionsType: FractionsType): UnitEcs? {
@@ -13,7 +13,7 @@ fun GameState.choosePlayerToMove(fractionsType: FractionsType): UnitEcs? {
         it.getComponent<FractionsType>() == fractionsType
                 && !it.hasComponent<Transport>()
                 && it.hasComponent<Active>()
-                && it.hasComponent<TurnToMove>()
+                && it.hasComponent<CanTurn>()
     }
     val playerOnGround = list.firstOrNull()
     if (playerOnGround != null) {

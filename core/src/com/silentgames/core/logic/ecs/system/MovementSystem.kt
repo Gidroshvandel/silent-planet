@@ -17,7 +17,7 @@ class MovementSystem : UnitSystem() {
     override fun execute(gameState: GameState, unit: UnitEcs) {
         val moveSuccess = if (unit.hasComponent<Teleport>()
                 || unit.getComponent<FractionsType>() != gameState.turn.currentTurnFraction
-                || !unit.hasComponent<TurnToMove>()
+                || !unit.hasComponent<CanTurn>()
                 || !unit.hasComponent<Active>()
         ) {
             false
@@ -31,7 +31,6 @@ class MovementSystem : UnitSystem() {
             ) ?: false
         }
         if (moveSuccess) {
-            unit.addComponent(MovedSuccess())
             notNull(
                     unit.getComponent(),
                     unit,

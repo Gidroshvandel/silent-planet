@@ -5,14 +5,19 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.silentgames.core.logic.Constants
+import com.silentgames.core.logic.CoreLogger
 import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.EngineEcs
 import com.silentgames.core.logic.ecs.GameState
-import com.silentgames.core.logic.ecs.component.*
+import com.silentgames.core.logic.ecs.component.Arrow
+import com.silentgames.core.logic.ecs.component.Position
+import com.silentgames.core.logic.ecs.component.Texture
+import com.silentgames.core.logic.ecs.component.Transport
 import com.silentgames.core.logic.ecs.entity.cell.CellEcs
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
-import com.silentgames.core.logic.ecs.system.UnitSystem
+import com.silentgames.core.logic.ecs.system.System
 import com.silentgames.core.logic.ecs.system.getCurrentPosition
+import com.silentgames.core.logic.ecs.system.getName
 import com.silentgames.core.logic.ecs.system.isVisible
 import com.silentgames.graphic.engine.*
 import com.silentgames.graphic.engine.base.Layer
@@ -26,7 +31,7 @@ class RenderSystem(
         private val batch: Batch,
         private val assets: Assets,
         private val onClick: (Axis) -> Unit
-) : UnitSystem() {
+) : System {
 
     private val camera = (viewport.camera as OrthographicCamera)
 
@@ -46,12 +51,9 @@ class RenderSystem(
         this.engine = engine
     }
 
-    override fun execute(gameState: GameState, unit: UnitEcs) {
-        unit.removeComponent(Moving::class.java)
-    }
-
     override fun execute(gameState: GameState) {
         super.execute(gameState)
+        CoreLogger.logDebug("Render", "execute")
 
         if (engine?.processing == false)
             render(gameState)
@@ -157,6 +159,7 @@ class RenderSystem(
             if (!position.moved && position.oldPosition != position.currentPosition) {
                 position.moved = true
                 isMoved = true
+                CoreLogger.logDebug("Animation", "unit ${this@toDrawEntity.getName()} Moving")
                 move(
                         position.oldPosition.toEngineAxis(),
                         position.currentPosition.toEngineAxis()

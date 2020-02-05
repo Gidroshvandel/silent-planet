@@ -3,7 +3,9 @@ package com.silentgames.core.logic.ecs.system
 import com.silentgames.core.logic.CoreLogger
 import com.silentgames.core.logic.ecs.EngineEcs
 import com.silentgames.core.logic.ecs.GameState
-import com.silentgames.core.logic.ecs.component.*
+import com.silentgames.core.logic.ecs.component.CanTurn
+import com.silentgames.core.logic.ecs.component.FractionsType
+import com.silentgames.core.logic.ecs.component.MovedSuccess
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 
 class TurnSystem(private val onTurnChanged: (FractionsType) -> Unit) : UnitSystem() {
@@ -19,14 +21,13 @@ class TurnSystem(private val onTurnChanged: (FractionsType) -> Unit) : UnitSyste
 
     private fun GameState.endTurn() {
         unitMap.forEach {
-            it.removeComponent(TurnToMove::class.java)
-            it.removeComponent(TurnEnd::class.java)
+            it.removeComponent(CanTurn::class.java)
         }
     }
 
     override fun execute(gameState: GameState) {
         super.execute(gameState)
-        if (!gameState.turn.canTurn && gameState.unitMap.find { it.hasComponent<Moving>() } == null) {
+        if (!gameState.turn.canTurn && gameState.unitMap.find { it.hasComponent<MovedSuccess>() } == null) {
             gameState.endTurn()
             gameState.turn.turnCount()
             gameState.makeCurrentFractionTurnUnitsCanTurn()
@@ -37,8 +38,7 @@ class TurnSystem(private val onTurnChanged: (FractionsType) -> Unit) : UnitSyste
 
     override fun execute(gameState: GameState, unit: UnitEcs) {
         if (unit.hasComponent<MovedSuccess>()) {
-            unit.addComponent(TurnEnd())
-            unit.removeComponent(TurnToMove::class.java)
+            unit.removeComponent(CanTurn::class.java)
         }
         if (gameState.isTurnEnd()) {
             gameState.turn.endTurn()
@@ -46,8 +46,6 @@ class TurnSystem(private val onTurnChanged: (FractionsType) -> Unit) : UnitSyste
     }
 
     private fun GameState.isTurnEnd() =
-            getAllFractionUnits(turn.currentTurnFraction).find {
-                it.hasComponent<TurnEnd>()
-            } != null
+            getAllFractionUnits(turn.currentTurnFraction).find { !it.hasComponent<CanTurn>() } != null
 
 }
