@@ -1,56 +1,29 @@
 package com.silentgames.graphic.hud
 
-import com.badlogic.gdx.graphics.g2d.NinePatch
-import com.badlogic.gdx.scenes.scene2d.Actor
-import com.badlogic.gdx.scenes.scene2d.ui.Cell
-import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
-import com.badlogic.gdx.utils.Align
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.silentgames.core.Strings
 import com.silentgames.core.logic.Constants
 import com.silentgames.core.logic.ecs.component.FractionsType
 import com.silentgames.graphic.Assets
-import com.silentgames.graphic.setColor
-import ktx.style.get
+import com.silentgames.graphic.setTextColor
 
 class TopScorePanel(private val uiSkin: Skin) : Table() {
 
-    private val roundedWindow by lazy { NinePatchDrawable(uiSkin.get<NinePatch>("ui/rounded_window_blue")) }
+    private val humansLabel = createTextButton(getCrystalTitle(Strings.humans.getString(), 0))
+    private val piratesLabel = createTextButton(getCrystalTitle(Strings.pirates.getString(), 0))
+    private val robotsLabel = createTextButton(getCrystalTitle(Strings.robots.getString(), 0))
+    private val aliensLabel = createTextButton(getCrystalTitle(Strings.aliens.getString(), 0))
 
-    private val humansLabel = createLabel(getCrystalTitle(Strings.humans.getString(), 0))
-    private val piratesLabel = createLabel(getCrystalTitle(Strings.pirates.getString(), 0))
-    private val robotsLabel = createLabel(getCrystalTitle(Strings.robots.getString(), 0))
-    private val aliensLabel = createLabel(getCrystalTitle(Strings.aliens.getString(), 0))
-
-    private fun createLabel(text: String) =
-            Label(text, uiSkin, "large").apply {
-                setAlignment(Align.center)
-            }
-
-    private fun Table.addWithPadding(actor: Actor, padding: Float, background: Drawable): Cell<Table> =
-            add(actor.addPadding(padding).addWindowBackground(background))
-                    .grow()
-                    .height(actor.height + padding * 2)
-
-    private fun Actor.addPadding(padding: Float = 0f): Table =
-            Table().also { table ->
-                table.add(this).grow().pad(padding)
-            }
-
-    private fun Table.addWindowBackground(background: Drawable): Table = apply {
-        this.background = background
-    }
+    private fun createTextButton(text: String) = TextButton(text, uiSkin, "rounded_window")
 
     init {
-        row().expandX().let {
-            addWithPadding(humansLabel, 4f, roundedWindow).pad(1f)
-            addWithPadding(piratesLabel, 4f, roundedWindow).pad(1f)
-            addWithPadding(robotsLabel, 4f, roundedWindow).pad(1f)
-            addWithPadding(aliensLabel, 4f, roundedWindow).pad(1f)
-        }
+        val height = 56f
+        add(humansLabel).pad(1f).height(height).grow()
+        add(piratesLabel).pad(1f).height(height).grow()
+        add(robotsLabel).pad(1f).height(height).grow()
+        add(aliensLabel).pad(1f).height(height).grow()
     }
 
     fun changeFractionCrystalOnBoard(fractionsType: FractionsType, count: Int) {
@@ -75,8 +48,8 @@ class TopScorePanel(private val uiSkin: Skin) : Table() {
         }
     }
 
-    private fun Label.setColor(color: Assets.TextColor) {
-        this.setColor(color, uiSkin)
+    private fun TextButton.setColor(color: Assets.TextColor) {
+        this.setTextColor(color, uiSkin)
     }
 
     private fun getCrystalTitle(fractionName: String, currentCrystals: Int): String {

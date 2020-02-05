@@ -7,9 +7,16 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.utils.Scaling
 import com.silentgames.core.logic.Constants
 import com.silentgames.core.logic.CoreLogger
+
+fun TextButton.setTextColor(color: Assets.TextColor, skin: Skin) {
+    this.style = TextButton.TextButtonStyle(this.style).also {
+        it.fontColor = skin.getColor(color.colorName)
+    }
+}
 
 fun Label.setColor(color: Assets.TextColor, skin: Skin) {
     this.style = Label.LabelStyle(skin.getFont(Assets.Font.REGULAR.fontName), skin.getColor(color.colorName)).also {

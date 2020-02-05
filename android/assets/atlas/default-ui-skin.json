@@ -15,6 +15,10 @@
       "down": "ui/custom_window",
       "up": "ui/custom_window_dark"
     },
+    "rounded_window": {
+      "down": "ui/rounded_window_blue",
+      "up": "ui/rounded_window_blue"
+    },
     "custom_button_dark": {
       "down": "ui/custom_button",
       "up": "ui/custom_button_dark",
@@ -24,6 +28,11 @@
   "TextButtonStyle": {
     "default": {
       "parent": "default",
+      "font": "regular-font",
+      "fontColor": "white"
+    },
+    "rounded_window": {
+      "parent": "rounded_window",
       "font": "regular-font",
       "fontColor": "white"
     },
