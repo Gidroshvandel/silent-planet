@@ -161,6 +161,13 @@ class SilentPlanetPresenter internal constructor(
         }
     }
 
+    override fun onTopScorePanelClick(fractionType: FractionsType) {
+        if (fractionType == viewModel.engine.gameState.turn.currentTurnFraction) {
+            viewModel.engine.gameState.endTurn()
+            viewModel.engine.processSystems()
+        }
+    }
+
     private fun List<EntityEcs>.map() =
             map { it.toEntityData() }.toMutableList()
 

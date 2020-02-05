@@ -36,10 +36,4 @@ class TurnSystem(private val onTurnChanged: (FractionsType) -> Unit) : UnitSyste
         }
     }
 
-    private fun GameState.endTurn() {
-        unitMap.forEach {
-            it.removeComponent(CanTurn::class.java)
-        }
-    }
-
 }

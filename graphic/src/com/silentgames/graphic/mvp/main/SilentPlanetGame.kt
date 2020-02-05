@@ -63,6 +63,22 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
         hud.onSkipTurnClick {
             presenter.onTurnSkipped()
         }
+
+        hud.onHumansClick {
+            presenter.onTopScorePanelClick(FractionsType.HUMAN)
+        }
+
+        hud.onPiratesClick {
+            presenter.onTopScorePanelClick(FractionsType.PIRATE)
+        }
+
+        hud.onRobotsClick {
+            presenter.onTopScorePanelClick(FractionsType.ROBOT)
+        }
+
+        hud.onAliensClick {
+            presenter.onTopScorePanelClick(FractionsType.ALIEN)
+        }
     }
 
     override fun render() {

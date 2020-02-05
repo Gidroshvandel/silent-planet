@@ -121,4 +121,20 @@ class Hud(gameViewport: Viewport, private val assets: Assets) {
         topScorePanel.selectFraction(fractionsType)
     }
 
+    fun onHumansClick(click: () -> Unit) {
+        topScorePanel.onHumansClick = click
+    }
+
+    fun onPiratesClick(click: () -> Unit) {
+        topScorePanel.onPiratesClick = click
+    }
+
+    fun onAliensClick(click: () -> Unit) {
+        topScorePanel.onAliensClick = click
+    }
+
+    fun onRobotsClick(click: () -> Unit) {
+        topScorePanel.onRobotsClick = click
+    }
+
 }

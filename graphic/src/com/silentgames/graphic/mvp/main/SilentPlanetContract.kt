@@ -47,5 +47,7 @@ interface SilentPlanetContract {
 
         fun onTurnSkipped()
 
+        fun onTopScorePanelClick(fractionType: FractionsType)
+
     }
 }

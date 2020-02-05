@@ -62,6 +62,12 @@ class GameState(
     fun isTurnEnd() =
             getAllFractionUnits(turn.currentTurnFraction).find { !it.hasComponent<CanTurn>() } != null
 
+    fun endTurn() {
+        unitMap.forEach {
+            it.removeComponent(CanTurn::class.java)
+        }
+    }
+
     private fun makeUnitsCanTurn(fractionsType: FractionsType) {
         unitMap.filter {
             it.getComponent<FractionsType>() == fractionsType
