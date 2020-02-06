@@ -82,7 +82,6 @@ class SilentPlanetPresenter internal constructor(
         viewModel.engine.addSystem(
                 model.getRenderSystem {
                     select(it)
-//                    viewModel.selectedEntity?.let { updateEntityState(it) }
                 }
         )
 
@@ -126,7 +125,6 @@ class SilentPlanetPresenter internal constructor(
                 }
             }
         }
-        updateSelectedEntity()
     }
 
     override fun onActionButtonClick() {
@@ -198,13 +196,13 @@ class SilentPlanetPresenter internal constructor(
         viewModel.selectedEntity = unit
     }
 
-    private fun crystalsOverZero(position: Axis): Boolean =
-            viewModel.engine.gameState.getCell(position)?.getComponent<Crystal>()?.count ?: 0 > 0
-
     private fun selectCell(cellType: EntityEcs) {
         viewModel.selectedEntity = null
         showEntityInfo(cellType)
     }
+
+    private fun crystalsOverZero(position: Axis): Boolean =
+            viewModel.engine.gameState.getCell(position)?.getComponent<Crystal>()?.count ?: 0 > 0
 
     private fun tryMove(unit: UnitEcs, targetPosition: Axis) {
         unit.addComponent(TargetPosition(targetPosition))
@@ -212,6 +210,8 @@ class SilentPlanetPresenter internal constructor(
         if (viewModel.engine.gameState.unitMap.find { it.hasComponent<MovedSuccess>() } == null) {
             viewModel.selectedEntity = null
             select(targetPosition)
+        } else {
+            updateSelectedEntity()
         }
     }
 
