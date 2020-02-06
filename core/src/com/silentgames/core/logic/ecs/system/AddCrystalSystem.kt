@@ -24,21 +24,22 @@ class AddCrystalSystem : UnitSystem() {
         if (position != null) {
             val crystal = getCell(position)?.getComponent<Crystal>()
             if (crystal != null && crystal.count > 0) {
-                unit.addCrystal(addCrystalEvent)
-                crystal.getCount(addCrystalEvent.crystals)
+                crystal.getCount(unit.addCrystal(addCrystalEvent))
                 CoreLogger.logDebug(SYSTEM_TAG, "unit ${unit.getName()} added addCrystalEvent")
             }
         }
     }
 
-    private fun UnitEcs.addCrystal(addCrystalEvent: AddCrystalEvent) {
+    private fun UnitEcs.addCrystal(addCrystalEvent: AddCrystalEvent): Int {
         val unitCrystal = getComponent<Crystal>()
-        if (unitCrystal == null) {
-            addComponent(Crystal(addCrystalEvent.crystals))
+        removeComponent(addCrystalEvent)
+        return if (unitCrystal == null) {
+            val crystal = Crystal()
+            addComponent(crystal)
+            crystal.addCrystals(addCrystalEvent.crystals)
         } else {
             unitCrystal.addCrystals(addCrystalEvent.crystals)
         }
-        removeComponent(addCrystalEvent)
     }
 
 }

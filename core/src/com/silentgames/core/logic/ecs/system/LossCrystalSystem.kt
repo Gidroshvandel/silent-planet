@@ -11,7 +11,7 @@ class LossCrystalSystem : UnitSystem() {
     override fun execute(gameState: GameState, unit: UnitEcs) {
         gameState.getCurrentUnitCell(unit) { cell ->
             if (!unit.hasComponent<LossCrystalImmunityComponent>() && cell.hasComponent<LossCrystalComponent>()) {
-                unit.removeComponent(Crystal())
+                unit.getComponent<Crystal>()?.getAll()
             }
         }
     }

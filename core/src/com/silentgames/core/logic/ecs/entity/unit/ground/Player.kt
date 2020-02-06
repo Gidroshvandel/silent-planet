@@ -23,6 +23,7 @@ abstract class Player(
 
     init {
         addComponent(TurnMode(GroupType.PLAYER))
+        addComponent(Crystal(maxCrystals = 1))
     }
 
 }

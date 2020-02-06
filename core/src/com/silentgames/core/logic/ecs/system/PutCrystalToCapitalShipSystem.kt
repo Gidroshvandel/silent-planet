@@ -36,8 +36,7 @@ class PutCrystalToCapitalShipSystem : UnitSystem() {
                 if (capitalShipCrystals != null) {
                     capitalShipCrystals.addCrystals(crystals.getAll())
                 } else {
-                    capitalShip.addComponent(crystals)
-                    unit.removeComponent(crystals)
+                    capitalShip.addComponent(Crystal(crystals.getAll()))
                 }
                 CoreLogger.logDebug(
                         SYSTEM_TAG,

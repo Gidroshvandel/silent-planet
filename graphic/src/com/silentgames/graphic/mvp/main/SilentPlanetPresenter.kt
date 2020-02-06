@@ -201,8 +201,11 @@ class SilentPlanetPresenter internal constructor(
         showEntityInfo(cellType)
     }
 
-    private fun crystalsOverZero(position: Axis): Boolean =
-            viewModel.engine.gameState.getCell(position)?.getComponent<Crystal>()?.count ?: 0 > 0
+    private fun UnitEcs.canGetCrystals(): Boolean {
+        val position = this.getCurrentPosition() ?: return false
+        return (viewModel.engine.gameState.getCell(position)?.getComponent<Crystal>()?.count ?: 0 > 0
+                && this.getComponent<Crystal>()?.canGetCrystal() == true)
+    }
 
     private fun tryMove(unit: UnitEcs, targetPosition: Axis) {
         unit.addComponent(TargetPosition(targetPosition))
@@ -233,8 +236,8 @@ class SilentPlanetPresenter internal constructor(
     private fun showEntityInfo(dataList: List<EntityEcs>) {
         val firstElement = dataList.firstOrNull()
         if (dataList.size == 1 && firstElement is UnitEcs && firstElement.isCurrentTurn()) {
-            changeEnableCrystalActionButton(firstElement)
-            changeSkipTurnButtonEnabled(firstElement)
+            view.enableCrystalActionButton(firstElement.canGetCrystals())
+            view.enableSkipTurnButton(firstElement.hasComponent<CanTurn>())
             view.changeBottomActionButtonVisibility(true)
         } else {
             view.changeBottomActionButtonVisibility(false)
@@ -244,17 +247,4 @@ class SilentPlanetPresenter internal constructor(
 
     private fun UnitEcs.isCurrentTurn() =
             viewModel.engine.gameState.turn.currentTurnFraction == getComponent<FractionsType>()
-
-    private fun changeEnableCrystalActionButton(unit: UnitEcs) {
-        val position = unit.getComponent<Position>()?.currentPosition
-        if (position != null && crystalsOverZero(position)) {
-            view.enableCrystalActionButton(true)
-        } else {
-            view.enableCrystalActionButton(false)
-        }
-    }
-
-    private fun changeSkipTurnButtonEnabled(unit: UnitEcs) {
-        view.enableSkipTurnButton(unit.hasComponent<CanTurn>())
-    }
 }
