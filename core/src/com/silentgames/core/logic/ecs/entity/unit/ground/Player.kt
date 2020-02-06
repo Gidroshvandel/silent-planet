@@ -19,4 +19,10 @@ abstract class Player(
         MovingMode.WALK,
         fractionsType,
         description
-)
+) {
+
+    init {
+        addComponent(TurnMode(GroupType.PLAYER))
+    }
+
+}

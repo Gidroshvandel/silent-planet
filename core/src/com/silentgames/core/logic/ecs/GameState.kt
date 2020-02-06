@@ -55,24 +55,13 @@ class GameState(
         mutableUnitList.remove(unit)
     }
 
-    fun makeCurrentFractionTurnUnitsCanTurn() {
-        makeUnitsCanTurn(turn.currentTurnFraction)
-    }
-
-    fun isTurnEnd() =
-            getAllFractionUnits(turn.currentTurnFraction).find { !it.hasComponent<CanTurn>() } != null
+    fun isTurnEnd() = getAllFractionUnits(turn.currentTurnFraction).find {
+        it.hasComponent<CanTurn>()
+    } == null
 
     fun endTurn() {
         unitMap.forEach {
             it.removeComponent(CanTurn::class.java)
-        }
-    }
-
-    private fun makeUnitsCanTurn(fractionsType: FractionsType) {
-        unitMap.filter {
-            it.getComponent<FractionsType>() == fractionsType
-        }.forEach {
-            it.addComponent(CanTurn())
         }
     }
 
