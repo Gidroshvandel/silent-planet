@@ -57,6 +57,6 @@ class Crystal(count: Int = 0, private val maxCrystals: Int = MAX_CRYSTAL_INFINIT
         }
     }
 
-    fun canGetCrystal() = maxCrystals > count
+    fun canGetCrystal() = if (maxCrystals == MAX_CRYSTAL_INFINITY) true else maxCrystals > count
 
 }
