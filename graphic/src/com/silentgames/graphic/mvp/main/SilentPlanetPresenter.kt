@@ -209,8 +209,10 @@ class SilentPlanetPresenter internal constructor(
     }
 
     private fun tryMove(unit: UnitEcs, targetPosition: Axis) {
-        unit.addComponent(TargetPosition(targetPosition))
-        viewModel.engine.processSystems()
+        if (unit.hasComponent<CanTurn>()) {
+            unit.addComponent(TargetPosition(targetPosition))
+            viewModel.engine.processSystems()
+        }
         if (viewModel.engine.gameState.unitMap.find { it.hasComponent<MovedSuccess>() } == null) {
             viewModel.selectedEntity = null
             select(targetPosition)
