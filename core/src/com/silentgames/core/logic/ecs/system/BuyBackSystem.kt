@@ -36,28 +36,21 @@ class BuyBackSystem(
             gameState: GameState
     ) {
         val unitCapitalShip = gameState.getCapitalShip(unitFractionsType)
-        val unitFractionCrystals = unitCapitalShip?.getComponent<Crystal>()
+        val unitFractionCrystals = unitCapitalShip?.getComponent<CrystalBag>()
         val invadersCapitalShip = gameState.getCapitalShip(capture.invaderFaction)
-        if (invadersCapitalShip != null
+        val invadersFractionCrystals = invadersCapitalShip?.getComponent<CrystalBag>()
+        if (invadersFractionCrystals != null
                 && unitFractionCrystals != null
-                && unitFractionCrystals.count >= capture.buybackPrice) {
-
-            val invadersFractionCrystals = invadersCapitalShip.getComponent<Crystal>()
-
-            val buyBackCount = unitFractionCrystals.getCount(capture.buybackPrice)
-            if (invadersFractionCrystals == null) {
-                invadersCapitalShip.addComponent(Crystal(buyBackCount))
-            } else {
-                invadersFractionCrystals.addCrystals(buyBackCount)
-            }
+                && invadersFractionCrystals.addCrystals(unitFractionCrystals, capture.buybackPrice)
+        ) {
             unit.removeComponent(capture)
             unit.addComponent(Teleport())
             unit.addComponent(Active())
-            unit.addComponent(TargetPosition(unitCapitalShip.getComponent<Position>()!!.currentPosition))
+            unitCapitalShip.getComponent<Position>()?.currentPosition?.let { unit.addComponent(TargetPosition(it)) }
             onSuccess.invoke(unit.getComponent<Description>()?.name ?: "")
             CoreLogger.logDebug(SYSTEM_TAG, "unit ${unit.getName()} buyBack success")
         } else {
-            onFailure.invoke(capture.buybackPrice.minus(unitFractionCrystals?.count ?: 0))
+            onFailure.invoke(capture.buybackPrice.minus(unitFractionCrystals?.amount ?: 0))
             CoreLogger.logDebug(SYSTEM_TAG, "unit ${unit.getName()} buyBack failure")
         }
     }

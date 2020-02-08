@@ -178,7 +178,8 @@ class SilentPlanetPresenter internal constructor(
         val crystal = when {
             this.hasComponent<Hide>() -> 0
             captured -> this.getComponent<Capture>()?.buybackPrice ?: 0
-            else -> this.getComponent<Crystal>()?.count ?: 0
+            else -> this.getComponent<Crystal>()?.count ?: this.getComponent<CrystalBag>()?.amount
+            ?: 0
         }
 
         return EntityData(
@@ -204,7 +205,7 @@ class SilentPlanetPresenter internal constructor(
     private fun UnitEcs.canGetCrystals(): Boolean {
         val position = this.getCurrentPosition() ?: return false
         return (viewModel.engine.gameState.getCell(position)?.getComponent<Crystal>()?.count ?: 0 > 0
-                && this.getComponent<Crystal>()?.canGetCrystal() == true)
+                && this.getComponent<CrystalBag>()?.canGetCrystal() == true)
     }
 
     private fun tryMove(unit: UnitEcs, targetPosition: Axis) {

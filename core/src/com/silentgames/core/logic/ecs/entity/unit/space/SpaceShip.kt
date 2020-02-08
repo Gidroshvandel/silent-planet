@@ -25,6 +25,7 @@ abstract class SpaceShip(
         addComponent(CapitalShip())
         addComponent(LossCrystalImmunityComponent())
         addComponent(TurnMode(GroupType.SHIP))
+        addComponent(CrystalBag())
     }
 
 }

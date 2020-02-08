@@ -1,36 +1,12 @@
 package com.silentgames.core.logic.ecs.component
 
-private const val MAX_CRYSTAL_INFINITY = -1
-
-class Crystal(count: Int = 0, private val maxCrystals: Int = MAX_CRYSTAL_INFINITY) : ComponentEquals() {
+class Crystal(count: Int = 0) : ComponentEquals() {
 
     var count: Int = count
         private set
 
-    /**
-     * @param count amount of added crystals
-     * @return Int amount of added crystals.
-     * example: count = 3, maxCrystals = 1, return 1
-     * example: count = 1, maxCrystals = 1, return 1
-     * @see maxCrystals maximum number of crystals that can be added
-     */
-    fun addCrystals(count: Int): Int {
-        val balance = this.count
-        val sum = balance + count
-        return when {
-            maxCrystals == MAX_CRYSTAL_INFINITY -> {
-                this.count = sum
-                count
-            }
-            sum >= maxCrystals -> {
-                this.count = maxCrystals
-                maxCrystals - balance
-            }
-            else -> {
-                this.count = sum
-                count
-            }
-        }
+    fun addCrystals(count: Int) {
+        this.count += count
     }
 
     fun getAll(): Int {
@@ -56,7 +32,5 @@ class Crystal(count: Int = 0, private val maxCrystals: Int = MAX_CRYSTAL_INFINIT
             currentBalance
         }
     }
-
-    fun canGetCrystal() = if (maxCrystals == MAX_CRYSTAL_INFINITY) true else maxCrystals > count
 
 }
