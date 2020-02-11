@@ -36,7 +36,7 @@ class MainPresenter internal constructor(
                 }
         ))
 
-        viewModel.engine.addSystem(AiPlayerSystem(
+        viewModel.engine.addSystem(ChoosePlayerToMoveSystem(
                 listOf(FractionsType.HUMAN, FractionsType.ALIEN, FractionsType.PIRATE, FractionsType.ROBOT))
         )
         viewModel.engine.addSystem(AddCrystalSystem())
