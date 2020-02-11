@@ -10,6 +10,8 @@ class CrystalBag(
     var amount: Int = currentCrystals
         private set
 
+    val isFull: Boolean get() = this.amount == this.maxCrystals
+
     /**
      * @param count amount of added crystals
      * @return Int amount of added crystals.

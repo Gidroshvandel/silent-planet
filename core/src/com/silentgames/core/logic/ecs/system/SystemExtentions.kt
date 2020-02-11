@@ -3,10 +3,7 @@ package com.silentgames.core.logic.ecs.system
 import com.silentgames.core.logic.Constants
 import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.GameState
-import com.silentgames.core.logic.ecs.component.Crystal
-import com.silentgames.core.logic.ecs.component.Description
-import com.silentgames.core.logic.ecs.component.Hide
-import com.silentgames.core.logic.ecs.component.Position
+import com.silentgames.core.logic.ecs.component.*
 import com.silentgames.core.logic.ecs.entity.EntityEcs
 import com.silentgames.core.logic.ecs.entity.cell.CellEcs
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
@@ -31,7 +28,8 @@ fun CellEcs.isVisible() = !isHide()
 
 fun CellEcs.isHide() = hasComponent<Hide>()
 
-fun EntityEcs.getCrystalsCount() = getComponent<Crystal>()?.count ?: 0
+fun EntityEcs.getCrystalsCount() = getComponent<Crystal>()?.count
+        ?: getComponent<CrystalBag>()?.amount ?: 0
 
 fun EntityEcs.getCurrentPosition() = getComponent<Position>()?.currentPosition
 
