@@ -8,7 +8,7 @@ class ChoosePlayerToMoveSystem(private val aiFractionList: List<FractionsType> =
     override fun execute(gameState: GameState) {
         if (!gameState.isTurnEnd() && gameState.isPlayersFromCurrentFractionCanTurn() && aiFractionList.contains(gameState.turn.currentTurnFraction)) {
             gameState.choosePlayerToMove(gameState.turn.currentTurnFraction)?.addComponent(ArtificialIntelligence())
-        } else {
+        } else if (aiFractionList.contains(gameState.turn.currentTurnFraction)) {
             gameState.endTurn()
         }
     }
