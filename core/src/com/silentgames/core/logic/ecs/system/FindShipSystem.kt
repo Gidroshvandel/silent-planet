@@ -3,8 +3,8 @@ package com.silentgames.core.logic.ecs.system
 import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.*
-import com.silentgames.core.logic.ecs.component.event.AddCrystalEvent
 import com.silentgames.core.logic.ecs.entity.cell.CellEcs
+import com.silentgames.core.logic.ecs.entity.event.AddCrystalEvent
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 
 class FindShipSystem : UnitSystem() {
@@ -19,7 +19,7 @@ class FindShipSystem : UnitSystem() {
     private fun findShip(gameState: GameState, unit: UnitEcs, cell: CellEcs) {
         when {
             cell.getCrystalsCount() > 0 -> {
-                unit.addComponent(AddCrystalEvent(cell.getCrystalsCount()))
+                gameState.addEvent(AddCrystalEvent(cell.getCrystalsCount(), unit))
                 gameState.getSpaceShipPosition(unit)?.let {
                     unit.addComponent(Goal(it))
                 }

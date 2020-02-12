@@ -1,5 +1,6 @@
 package com.silentgames.core.logic.ecs
 
+import com.silentgames.core.logic.ecs.entity.event.EventEcs
 import com.silentgames.core.logic.ecs.system.System
 
 class EngineEcs(val gameState: GameState) {
@@ -17,6 +18,11 @@ class EngineEcs(val gameState: GameState) {
     fun addSystem(system: System) {
         system.onEngineAttach(this)
         systems.add(system)
+    }
+
+    fun addEvent(event: EventEcs) {
+        gameState.addEvent(event)
+        processSystems()
     }
 
     fun processSystems() {

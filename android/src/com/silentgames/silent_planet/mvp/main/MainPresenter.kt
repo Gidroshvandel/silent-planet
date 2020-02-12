@@ -5,11 +5,11 @@ import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.EngineEcs
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.*
-import com.silentgames.core.logic.ecs.component.event.AddCrystalEvent
-import com.silentgames.core.logic.ecs.component.event.BuyBackEvent
 import com.silentgames.core.logic.ecs.entity.EntityEcs
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.logic.ecs.system.*
+import com.silentgames.core.logic.ecs.system.event.AddCrystalSystem
+import com.silentgames.core.logic.ecs.system.event.BuyBackSystem
 import com.silentgames.silent_planet.dialog.EntityData
 
 /**
@@ -123,7 +123,7 @@ class MainPresenter internal constructor(
     override fun onActionButtonClick() {
         val entity = viewModel.selectedEntity
         if (entity != null) {
-            entity.addComponent(AddCrystalEvent())
+//            entity.addComponent(AddCrystalEventComponent())
 
             entity.getComponent<Position>()?.currentPosition?.let {
                 if (!crystalsOverZero(it)) {
@@ -148,7 +148,7 @@ class MainPresenter internal constructor(
     }
 
     override fun onCapturedPlayerClick(entityData: EntityData) {
-        viewModel.engine.gameState.unitMap.find { it.id == entityData.id }?.addComponent(BuyBackEvent())
+//        viewModel.engine.gameState.unitMap.find { it.id == entityData.id }?.addComponent(BuyBackEventComponent())
     }
 
     private fun List<EntityEcs>.map() =

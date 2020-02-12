@@ -5,11 +5,15 @@ import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.EngineEcs
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.*
-import com.silentgames.core.logic.ecs.component.event.AddCrystalEvent
-import com.silentgames.core.logic.ecs.component.event.BuyBackEvent
 import com.silentgames.core.logic.ecs.entity.EntityEcs
+import com.silentgames.core.logic.ecs.entity.event.AddCrystalEvent
+import com.silentgames.core.logic.ecs.entity.event.BuyBackEvent
+import com.silentgames.core.logic.ecs.entity.event.SkipTurnEvent
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.logic.ecs.system.*
+import com.silentgames.core.logic.ecs.system.event.AddCrystalSystem
+import com.silentgames.core.logic.ecs.system.event.BuyBackSystem
+import com.silentgames.core.logic.ecs.system.event.SkipTurnSystem
 import com.silentgames.graphic.RenderSystem
 
 /**
@@ -42,6 +46,7 @@ class SilentPlanetPresenter internal constructor(
         viewModel.engine.addSystem(FindCrystalSystem())
         viewModel.engine.addSystem(FindShipSystem())
         viewModel.engine.addSystem(AddCrystalSystem())
+        viewModel.engine.addSystem(SkipTurnSystem())
         viewModel.engine.addSystem(GoalSystem())
         viewModel.engine.addSystem(AiShipSystem())
         viewModel.engine.addSystem(ArrowSystem())
@@ -132,15 +137,15 @@ class SilentPlanetPresenter internal constructor(
     override fun onActionButtonClick() {
         val entity = viewModel.selectedEntity
         if (entity != null) {
-            entity.addComponent(AddCrystalEvent())
-            viewModel.engine.processSystems()
+            viewModel.engine.addEvent(AddCrystalEvent(entityEcs = entity))
             showEntityInfo(entity)
         }
     }
 
     override fun onTurnSkipped() {
-        viewModel.selectedEntity?.removeComponent(CanTurn::class.java)
-        viewModel.engine.processSystems()
+        viewModel.selectedEntity?.let {
+            viewModel.engine.addEvent(SkipTurnEvent(it))
+        }
         updateSelectedEntity()
     }
 
@@ -156,15 +161,13 @@ class SilentPlanetPresenter internal constructor(
 
     override fun onCapturedPlayerClick(entityData: EntityData) {
         viewModel.engine.gameState.unitMap.find { it.id == entityData.id }?.let {
-            it.addComponent(BuyBackEvent())
-            viewModel.engine.processSystems()
+            viewModel.engine.addEvent(BuyBackEvent(it))
         }
     }
 
     override fun onTopScorePanelClick(fractionType: FractionsType) {
         if (fractionType == viewModel.engine.gameState.turn.currentTurnFraction) {
-            viewModel.engine.gameState.endTurn()
-            viewModel.engine.processSystems()
+            viewModel.engine.addEvent(SkipTurnEvent())
         }
     }
 

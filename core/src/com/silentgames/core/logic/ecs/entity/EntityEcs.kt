@@ -23,7 +23,7 @@ open class EntityEcs : Serializable {
 
     inline fun <reified T : Component> hasComponent(): Boolean = getComponent<T>() != null
 
-    fun addComponent(component: Component) {
+    open fun addComponent(component: Component) {
         if (components.contains(component)) {
             removeComponent(component)
         }

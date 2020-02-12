@@ -1,32 +1,35 @@
-package com.silentgames.core.logic.ecs.system
+package com.silentgames.core.logic.ecs.system.event
 
 import com.silentgames.core.logic.CoreLogger
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.*
-import com.silentgames.core.logic.ecs.component.event.BuyBackEvent
+import com.silentgames.core.logic.ecs.component.event.BuyBackEventComponent
+import com.silentgames.core.logic.ecs.entity.event.EventEcs
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
+import com.silentgames.core.logic.ecs.system.getName
 import com.silentgames.core.utils.notNull
 
 class BuyBackSystem(
         private val onSuccess: (name: String) -> Unit,
         private val onFailure: (missingAmount: Int) -> Unit
-) : UnitSystem() {
+) : EventSystem() {
 
     companion object {
         private const val SYSTEM_TAG = "BuyBackSystem"
     }
 
-    override fun execute(gameState: GameState, unit: UnitEcs) {
-        unit.getComponent<BuyBackEvent>()?.let {
+    override fun execute(gameState: GameState, eventEcs: EventEcs): Boolean {
+        eventEcs.getComponent<BuyBackEventComponent>()?.let {
             notNull(
-                    unit.getComponent(),
-                    unit.getComponent(),
-                    unit,
+                    it.unitEcs.getComponent(),
+                    it.unitEcs.getComponent(),
+                    it.unitEcs,
                     gameState,
                     ::buyBack
             )
-            unit.removeComponent(it)
+            return true
         }
+        return false
     }
 
     private fun buyBack(

@@ -4,6 +4,7 @@ import com.silentgames.core.logic.CoreLogger
 import com.silentgames.core.logic.ecs.component.*
 import com.silentgames.core.logic.ecs.entity.EntityEcs
 import com.silentgames.core.logic.ecs.entity.cell.CellEcs
+import com.silentgames.core.logic.ecs.entity.event.EventEcs
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.logic.ecs.system.getName
 import java.io.Serializable
@@ -16,9 +17,11 @@ class GameState(
 
     val turn: Turn = Turn(firstTurnFraction)
 
+    val eventList: List<EventEcs> get() = mutableEventList.toList()
     val cellMap: List<CellEcs> get() = mutableCellList.toList()
     val unitMap: List<UnitEcs> get() = mutableUnitList.toList()
 
+    private val mutableEventList: MutableList<EventEcs> = mutableListOf()
     private val mutableCellList: MutableList<CellEcs> = cellList.toMutableList()
     private val mutableUnitList: MutableList<UnitEcs> = unitList.toMutableList()
 
@@ -49,6 +52,14 @@ class GameState(
         CoreLogger.logDebug("Moving", "unit ${unit.getName()} start Moving")
         unit.addComponent(MovedSuccess())
         unit.getComponent<Position>()?.currentPosition = toPosition
+    }
+
+    fun addEvent(event: EventEcs) {
+        mutableEventList.add(event)
+    }
+
+    fun removeEvent(event: EventEcs) {
+        mutableEventList.remove(event)
     }
 
     fun removeUnit(unit: UnitEcs) {
