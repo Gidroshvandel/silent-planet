@@ -95,7 +95,7 @@ private fun GameState.getAdjacentNodes(node: Node, unit: UnitEcs): List<Node> {
         val destination = getDestination(cell)
         if (destination != null) listOf(Node(destination, cost = Int.MAX_VALUE)) else listOf()
     } else if (cell != null && !cell.hasComponent<Hide>() && abyss != null) {
-        listOf(Node(Axis(0, 0), cost = Int.MAX_VALUE))
+        listOf(Node(Axis(Int.MAX_VALUE, Int.MAX_VALUE), cost = Int.MAX_VALUE))
     } else {
         this.getAvailableMoveDistancePositionList(node.position, unit).map { Node(it, cost = Int.MAX_VALUE) }
     }
