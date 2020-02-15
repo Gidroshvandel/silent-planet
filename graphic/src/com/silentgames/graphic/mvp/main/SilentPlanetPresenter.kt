@@ -39,7 +39,7 @@ class SilentPlanetPresenter internal constructor(
                         }
                 ),
                 ChoosePlayerToMoveSystem(
-//                        listOf(FractionsType.HUMAN, FractionsType.ALIEN, FractionsType.PIRATE, FractionsType.ROBOT)
+                        listOf(FractionsType.HUMAN, FractionsType.ALIEN, FractionsType.PIRATE, FractionsType.ROBOT)
                 ),
                 FindCrystalSystem(),
                 FindShipSystem(),

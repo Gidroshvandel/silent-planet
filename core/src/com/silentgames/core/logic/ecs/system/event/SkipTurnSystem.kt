@@ -10,7 +10,9 @@ class SkipTurnSystem : EventSystem() {
     override fun execute(gameState: GameState, eventEcs: EventEcs): Boolean {
         eventEcs.getComponent<SkipTurnEventComponent>()?.let {
             if (it.unitEcs == null) {
-                gameState.endTurn()
+                gameState.unitMap.forEach { unit ->
+                    unit.removeComponent(CanTurn::class.java)
+                }
             } else {
                 it.unitEcs.removeComponent(CanTurn::class.java)
             }

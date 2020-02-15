@@ -72,12 +72,6 @@ class GameState(
         it.hasComponent<CanTurn>()
     } == null
 
-    fun endTurn() {
-        unitMap.forEach {
-            it.removeComponent(CanTurn::class.java)
-        }
-    }
-
     private fun <T : EntityEcs> List<T>.getByPosition(axis: Axis) =
             find { it.getComponent<Position>()?.currentPosition == axis }
 

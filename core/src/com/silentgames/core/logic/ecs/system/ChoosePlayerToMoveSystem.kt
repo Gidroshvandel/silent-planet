@@ -2,6 +2,7 @@ package com.silentgames.core.logic.ecs.system
 
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.*
+import com.silentgames.core.logic.ecs.entity.event.SkipTurnEvent
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 
 class ChoosePlayerToMoveSystem(private val aiFractionList: List<FractionsType> = listOf()) : System {
@@ -9,7 +10,7 @@ class ChoosePlayerToMoveSystem(private val aiFractionList: List<FractionsType> =
         if (!gameState.isTurnEnd() && gameState.isPlayersFromCurrentFractionCanTurn() && aiFractionList.contains(gameState.turn.currentTurnFraction)) {
             gameState.choosePlayerToMove(gameState.turn.currentTurnFraction)?.addComponent(ArtificialIntelligence())
         } else if (aiFractionList.contains(gameState.turn.currentTurnFraction)) {
-            gameState.endTurn()
+            gameState.addEvent(SkipTurnEvent())
         }
     }
 
