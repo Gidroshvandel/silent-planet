@@ -10,12 +10,9 @@ class Position(axis: Axis) : ComponentEquals() {
         onPositionChangedList.add(onChanged)
     }
 
-    var needMovingAnimation = true
-
     var currentPosition: Axis = axis
         set(value) {
             oldPosition = field
-            needMovingAnimation = true
             field = value
             onPositionChangedList.forEach {
                 it.invoke(value)

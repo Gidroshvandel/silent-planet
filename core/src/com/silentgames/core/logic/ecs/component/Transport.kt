@@ -12,8 +12,8 @@ class Transport(position: Position, unitsOnBoard: List<UnitEcs> = listOf()) : Co
             this.unitsOnBoard.forEach {
                 it.getComponent<Position>()?.apply {
                     currentPosition = axis
-                    needMovingAnimation = false
                 }
+                it.removeComponent(Moving::class.java)
             }
         }
     }

@@ -9,10 +9,7 @@ import com.silentgames.core.logic.CoreLogger
 import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.EngineEcs
 import com.silentgames.core.logic.ecs.GameState
-import com.silentgames.core.logic.ecs.component.Arrow
-import com.silentgames.core.logic.ecs.component.Position
-import com.silentgames.core.logic.ecs.component.Texture
-import com.silentgames.core.logic.ecs.component.Transport
+import com.silentgames.core.logic.ecs.component.*
 import com.silentgames.core.logic.ecs.entity.cell.CellEcs
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.logic.ecs.system.RenderSystem
@@ -117,7 +114,7 @@ class RenderSystemImpl(
             this.getUnits(axis).firstOrNull {
                 val position = it.getComponent<Position>()
                 position != null
-                        && position.needMovingAnimation
+                        && it.hasComponent<Moving>()
                         && position.currentPosition != position.oldPosition
                         && !it.hasComponent<Transport>()
             } ?: this.getUnits(axis).firstOrNull { !it.hasComponent<Transport>() }
@@ -149,6 +146,7 @@ class RenderSystemImpl(
     private fun UnitEcs.toDrawEntity(): Pair<Entity, Boolean>? {
         val textureId = this.getComponent<Texture>()?.bitmapName ?: return null
         val position = this.getComponent<Position>() ?: return null
+        val moving = this.getComponent<Moving>()
         var isMoved = false
         val entity = Entity(
                 this.id.toString(),
@@ -156,8 +154,7 @@ class RenderSystemImpl(
                 textureId,
                 assets
         ).apply {
-            if (position.needMovingAnimation && position.oldPosition != position.currentPosition) {
-                position.needMovingAnimation = false
+            if (moving != null && position.oldPosition != position.currentPosition) {
                 isMoved = true
                 CoreLogger.logDebug("Animation", "unit ${this@toDrawEntity.getName()} Moving")
                 move(
