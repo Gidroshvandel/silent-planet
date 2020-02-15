@@ -1,17 +1,10 @@
 package com.silentgames.silent_planet.mvp.main
 
-import com.silentgames.core.logic.Constants
 import com.silentgames.core.logic.ecs.Axis
-import com.silentgames.core.logic.ecs.EngineEcs
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.*
 import com.silentgames.core.logic.ecs.entity.EntityEcs
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
-import com.silentgames.core.logic.ecs.system.*
-import com.silentgames.core.logic.ecs.system.event.AddCrystalSystem
-import com.silentgames.core.logic.ecs.system.event.BuyBackSystem
-import com.silentgames.core.logic.ecs.system.event.MovementSystem
-import com.silentgames.core.logic.ecs.system.event.TeleportSystem
 import com.silentgames.silent_planet.dialog.EntityData
 
 /**
@@ -25,71 +18,71 @@ class MainPresenter internal constructor(
 ) : MainContract.Presenter {
 
     override fun onCreate() {
-        viewModel.engine = EngineEcs(
-                gameState ?: model.generateNewBattleGround(FractionsType.HUMAN)
-        )
-
-        viewModel.engine.addSystem(BuyBackSystem(
-                {
-                    view.showPlayerBuybackSuccessMessage(it)
-                },
-                {
-                    view.showPlayerBuybackFailureMessage(it)
-                }
-        ))
-
-        viewModel.engine.addSystem(ChoosePlayerToMoveSystem(
-                listOf(FractionsType.HUMAN, FractionsType.ALIEN, FractionsType.PIRATE, FractionsType.ROBOT))
-        )
-        viewModel.engine.addSystem(AddCrystalSystem())
-        viewModel.engine.addSystem(GoalSystem())
-        viewModel.engine.addSystem(AiShipSystem())
-        viewModel.engine.addSystem(ArrowSystem())
-        viewModel.engine.addSystem(TornadoSystem())
-        viewModel.engine.addSystem(MovementSystem())
-        viewModel.engine.addSystem(TeleportSystem())
-//        viewModel.engine.addSystem(CaptureSystem())
+//        viewModel.engine = EngineEcs(
+//                gameState ?: model.generateNewBattleGround(FractionsType.HUMAN)
+//        )
+//
+//        viewModel.engine.addSystem(BuyBackSystem(
+//                {
+//                    view.showPlayerBuybackSuccessMessage(it)
+//                },
+//                {
+//                    view.showPlayerBuybackFailureMessage(it)
+//                }
+//        ))
+//
+//        viewModel.engine.addSystem(ChoosePlayerToMoveSystem(
+//                listOf(FractionsType.HUMAN, FractionsType.ALIEN, FractionsType.PIRATE, FractionsType.ROBOT))
+//        )
+//        viewModel.engine.addSystem(AddCrystalSystem())
+//        viewModel.engine.addSystem(GoalSystem())
+//        viewModel.engine.addSystem(AiShipSystem())
+//        viewModel.engine.addSystem(ArrowSystem())
+//        viewModel.engine.addSystem(TornadoSystem())
+//        viewModel.engine.addSystem(MovementSystem())
 //        viewModel.engine.addSystem(TeleportSystem())
-        viewModel.engine.addSystem(ExploreSystem())
-        viewModel.engine.addSystem(DeathSystem())
-        viewModel.engine.addSystem(PutCrystalToCapitalShipSystem())
-        viewModel.engine.addSystem(TransportSystem())
-        viewModel.engine.addSystem(
-                WinSystem(
-                        Constants.countCrystalsToWin,
-                        { fractionsType, crystals ->
-                            when (fractionsType) {
-                                FractionsType.ALIEN -> view.changeAlienCristalCount(crystals)
-                                FractionsType.HUMAN -> view.changeHumanCristalCount(crystals)
-                                FractionsType.PIRATE -> view.changePirateCristalCount(crystals)
-                                FractionsType.ROBOT -> view.changeRobotCristalCount(crystals)
-                            }
-                        },
-                        {
-                            view.showToast("WIN " + it.name)
-                        }
-                )
-        )
-
-        viewModel.engine.addSystem(
-                TurnSystem {
-                    view.selectCurrentFraction(it)
-                }
-        )
+////        viewModel.engine.addSystem(CaptureSystem())
+////        viewModel.engine.addSystem(TeleportSystem())
+//        viewModel.engine.addSystem(ExploreSystem())
+//        viewModel.engine.addSystem(DeathSystem())
+//        viewModel.engine.addSystem(PutCrystalToCapitalShipSystem())
+//        viewModel.engine.addSystem(TransportSystem())
 //        viewModel.engine.addSystem(
-//                model.getRenderSystem {
-//                    viewModel.selectedEntity?.let { updateEntityState(it) }
+//                WinSystem(
+//                        Constants.countCrystalsToWin,
+//                        { fractionsType, crystals ->
+//                            when (fractionsType) {
+//                                FractionsType.ALIEN -> view.changeAlienCristalCount(crystals)
+//                                FractionsType.HUMAN -> view.changeHumanCristalCount(crystals)
+//                                FractionsType.PIRATE -> view.changePirateCristalCount(crystals)
+//                                FractionsType.ROBOT -> view.changeRobotCristalCount(crystals)
+//                            }
+//                        },
+//                        {
+//                            view.showToast("WIN " + it.name)
+//                        }
+//                )
+//        )
+//
+//        viewModel.engine.addSystem(
+//                TurnSystem {
+//                    view.selectCurrentFraction(it)
 //                }
 //        )
-
-        viewModel.engine.processSystems()
-
-        view.changeAlienCristalCount(0)
-        view.changeHumanCristalCount(0)
-        view.changePirateCristalCount(0)
-        view.changeRobotCristalCount(0)
-
-        view.enableButton(false)
+////        viewModel.engine.addSystem(
+////                model.getRenderSystem {
+////                    viewModel.selectedEntity?.let { updateEntityState(it) }
+////                }
+////        )
+//
+//        viewModel.engine.processSystems()
+//
+//        view.changeAlienCristalCount(0)
+//        view.changeHumanCristalCount(0)
+//        view.changePirateCristalCount(0)
+//        view.changeRobotCristalCount(0)
+//
+//        view.enableButton(false)
     }
 
     override fun onSingleTapConfirmed(axis: Axis) {

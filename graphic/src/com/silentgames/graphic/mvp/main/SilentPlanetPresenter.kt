@@ -13,7 +13,6 @@ import com.silentgames.core.logic.ecs.entity.event.SkipTurnEvent
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.logic.ecs.system.*
 import com.silentgames.core.logic.ecs.system.event.*
-import com.silentgames.graphic.RenderSystem
 
 /**
  * Created by gidroshvandel on 21.06.17.
@@ -30,40 +29,39 @@ class SilentPlanetPresenter internal constructor(
                 gameState ?: model.generateNewBattleGround(FractionsType.HUMAN)
         )
 
-        viewModel.engine.addSystem(BuyBackSystem(
-                {
-                    view.showPlayerBuybackSuccessMessage(it)
-                },
-                {
-                    view.showPlayerBuybackFailureMessage(it)
-                }
-        ))
-
-        viewModel.engine.addSystem(ChoosePlayerToMoveSystem(
-                listOf(FractionsType.HUMAN, FractionsType.ALIEN, FractionsType.PIRATE, FractionsType.ROBOT)
-        ))
-        viewModel.engine.addSystem(FindCrystalSystem())
-        viewModel.engine.addSystem(FindShipSystem())
-        viewModel.engine.addSystem(AddCrystalSystem())
-        viewModel.engine.addSystem(SkipTurnSystem())
-        viewModel.engine.addSystem(GoalSystem())
-        viewModel.engine.addSystem(AiShipSystem())
-        viewModel.engine.addSystem(ArrowSystem())
-        viewModel.engine.addSystem(TornadoSystem())
-        viewModel.engine.addSystem(AbyssSystem())
-        viewModel.engine.addSystem(LossCrystalSystem())
-        viewModel.engine.addSystem(MovementCoordinatesSystem())
-        viewModel.engine.addSystem(SaveUnitFromSpaceSystem())
-        viewModel.engine.addSystem(SavePathSystem())
-        viewModel.engine.addSystem(AntiLoopSystem())
-//        viewModel.engine.addSystem(CaptureSystem())
-        viewModel.engine.addSystem(TeleportSystem())
-        viewModel.engine.addSystem(MovementSystem())
-        viewModel.engine.addSystem(ExploreSystem())
-        viewModel.engine.addSystem(DeathSystem())
-        viewModel.engine.addSystem(PutCrystalToCapitalShipSystem())
-        viewModel.engine.addSystem(TransportSystem())
         viewModel.engine.addSystem(
+                BuyBackSystem(
+                        {
+                            view.showPlayerBuybackSuccessMessage(it)
+                        },
+                        {
+                            view.showPlayerBuybackFailureMessage(it)
+                        }
+                ),
+                ChoosePlayerToMoveSystem(
+                        listOf(FractionsType.HUMAN, FractionsType.ALIEN, FractionsType.PIRATE, FractionsType.ROBOT)
+                ),
+                FindCrystalSystem(),
+                FindShipSystem(),
+                AddCrystalSystem(),
+                SkipTurnSystem(),
+                GoalSystem(),
+                AiShipSystem(),
+                ArrowSystem(),
+                TornadoSystem(),
+                AbyssSystem(),
+                LossCrystalSystem(),
+                MovementCoordinatesSystem(),
+                SaveUnitFromSpaceSystem(),
+                SavePathSystem(),
+                AntiLoopSystem(),
+//                CaptureSystem(),
+                TeleportSystem(),
+                MovementSystem(),
+                ExploreSystem(),
+                DeathSystem(),
+                PutCrystalToCapitalShipSystem(),
+                TransportSystem(),
                 WinSystem(
                         Constants.countCrystalsToWin,
                         { fractionsType, crystals ->
@@ -77,23 +75,15 @@ class SilentPlanetPresenter internal constructor(
                         {
                             view.showToast("WIN " + it.name)
                         }
-                )
-        )
-
-        viewModel.engine.addSystem(
+                ),
                 model.getRenderSystem {
                     select(it)
-                }
-        )
-
-        viewModel.engine.addSystem(
+                },
                 TurnSystem {
                     view.selectCurrentFraction(it)
-                }
+                },
+                MovingSystem()
         )
-        viewModel.engine.addSystem(MovingSystem())
-
-        viewModel.engine.processSystems()
 
         view.changeAlienCristalCount(0)
         view.changeHumanCristalCount(0)
@@ -104,10 +94,7 @@ class SilentPlanetPresenter internal constructor(
     }
 
     override fun onRender() {
-        if (viewModel.engine.processing) {
-            viewModel.engine.systems.find { it is RenderSystem }?.execute(viewModel.engine.gameState)
-        } else
-            viewModel.engine.processSystems()
+        viewModel.engine.processing()
     }
 
     private fun select(currentXY: Axis) {

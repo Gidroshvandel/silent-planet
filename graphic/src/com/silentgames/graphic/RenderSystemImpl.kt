@@ -15,7 +15,7 @@ import com.silentgames.core.logic.ecs.component.Texture
 import com.silentgames.core.logic.ecs.component.Transport
 import com.silentgames.core.logic.ecs.entity.cell.CellEcs
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
-import com.silentgames.core.logic.ecs.system.System
+import com.silentgames.core.logic.ecs.system.RenderSystem
 import com.silentgames.core.logic.ecs.system.getCurrentPosition
 import com.silentgames.core.logic.ecs.system.getName
 import com.silentgames.core.logic.ecs.system.isVisible
@@ -26,12 +26,12 @@ import com.silentgames.graphic.engine.base.Sprite
 import com.silentgames.graphic.mvp.InputMultiplexer
 
 
-class RenderSystem(
+class RenderSystemImpl(
         private val viewport: Viewport,
         private val batch: Batch,
         private val assets: Assets,
         private val onClick: (Axis) -> Unit
-) : System {
+) : RenderSystem {
 
     private val camera = (viewport.camera as OrthographicCamera)
 
