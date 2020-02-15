@@ -1,4 +1,4 @@
-package com.silentgames.core.logic.ecs.system
+package com.silentgames.core.logic.ecs.system.unit
 
 import com.silentgames.core.logic.CoreLogger
 import com.silentgames.core.logic.ecs.Axis
@@ -9,6 +9,7 @@ import com.silentgames.core.logic.ecs.component.FractionsType
 import com.silentgames.core.logic.ecs.component.Route
 import com.silentgames.core.logic.ecs.entity.event.TeleportEvent
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
+import com.silentgames.core.logic.ecs.system.getName
 import com.silentgames.core.utils.notNull
 
 class AntiLoopSystem : UnitSystem() {

@@ -1,4 +1,4 @@
-package com.silentgames.core.logic.ecs.system
+package com.silentgames.core.logic.ecs.system.cell
 
 import com.silentgames.core.logic.Constants
 import com.silentgames.core.logic.ecs.Axis
@@ -9,6 +9,7 @@ import com.silentgames.core.logic.ecs.component.ArrowMode.SLANTING
 import com.silentgames.core.logic.ecs.component.MovementCoordinatesComponent
 import com.silentgames.core.logic.ecs.component.RotateAngle
 import com.silentgames.core.logic.ecs.entity.cell.CellEcs
+import com.silentgames.core.logic.ecs.system.getCurrentPosition
 import com.silentgames.core.utils.notNull
 
 class ArrowSystem : CellSystem() {

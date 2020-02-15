@@ -1,4 +1,4 @@
-package com.silentgames.core.logic.ecs.system
+package com.silentgames.core.logic.ecs.system.unit
 
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.CrystalBag

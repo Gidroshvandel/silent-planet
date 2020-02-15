@@ -1,4 +1,4 @@
-package com.silentgames.core.logic.ecs.system
+package com.silentgames.core.logic.ecs.system.ai
 
 import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.GameState
@@ -6,6 +6,9 @@ import com.silentgames.core.logic.ecs.component.*
 import com.silentgames.core.logic.ecs.entity.cell.CellEcs
 import com.silentgames.core.logic.ecs.entity.event.AddCrystalEvent
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
+import com.silentgames.core.logic.ecs.system.getCrystalsCount
+import com.silentgames.core.logic.ecs.system.getCurrentUnitCell
+import com.silentgames.core.logic.ecs.system.unit.UnitSystem
 
 class FindShipSystem : UnitSystem() {
     override fun execute(gameState: GameState, unit: UnitEcs) {

@@ -1,9 +1,10 @@
-package com.silentgames.core.logic.ecs.system
+package com.silentgames.core.logic.ecs.system.ai
 
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.*
 import com.silentgames.core.logic.ecs.entity.event.SkipTurnEvent
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
+import com.silentgames.core.logic.ecs.system.System
 
 class ChoosePlayerToMoveSystem(private val aiFractionList: List<FractionsType> = listOf()) : System {
     override fun execute(gameState: GameState) {

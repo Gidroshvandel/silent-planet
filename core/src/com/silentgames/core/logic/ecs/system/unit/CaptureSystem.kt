@@ -1,4 +1,4 @@
-package com.silentgames.core.logic.ecs.system
+package com.silentgames.core.logic.ecs.system.unit
 
 import com.silentgames.core.logic.CoreLogger
 import com.silentgames.core.logic.ecs.Axis
@@ -6,6 +6,8 @@ import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.*
 import com.silentgames.core.logic.ecs.entity.event.TeleportEvent
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
+import com.silentgames.core.logic.ecs.system.getCurrentPosition
+import com.silentgames.core.logic.ecs.system.getName
 import com.silentgames.core.utils.notNull
 
 class CaptureSystem : UnitSystem() {

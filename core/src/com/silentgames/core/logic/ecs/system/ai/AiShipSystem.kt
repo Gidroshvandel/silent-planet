@@ -1,4 +1,4 @@
-package com.silentgames.core.logic.ecs.system
+package com.silentgames.core.logic.ecs.system.ai
 
 import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.GameState
@@ -8,6 +8,9 @@ import com.silentgames.core.logic.ecs.component.MovingMode
 import com.silentgames.core.logic.ecs.entity.cell.CellEcs
 import com.silentgames.core.logic.ecs.entity.event.MovementEvent
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
+import com.silentgames.core.logic.ecs.system.getCellsAtMoveDistance
+import com.silentgames.core.logic.ecs.system.getCurrentPosition
+import com.silentgames.core.logic.ecs.system.unit.UnitSystem
 
 class AiShipSystem : UnitSystem() {
 

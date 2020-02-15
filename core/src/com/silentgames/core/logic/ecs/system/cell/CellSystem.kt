@@ -1,15 +1,16 @@
-package com.silentgames.core.logic.ecs.system
+package com.silentgames.core.logic.ecs.system.cell
 
 import com.silentgames.core.logic.ecs.EngineEcs
 import com.silentgames.core.logic.ecs.GameState
-import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
+import com.silentgames.core.logic.ecs.entity.cell.CellEcs
+import com.silentgames.core.logic.ecs.system.System
 
-abstract class UnitSystem : System {
+abstract class CellSystem : System {
 
-    abstract fun execute(gameState: GameState, unit: UnitEcs)
+    abstract fun execute(gameState: GameState, unit: CellEcs)
 
     override fun execute(gameState: GameState) {
-        gameState.unitMap.forEach {
+        gameState.cellMap.forEach {
             execute(gameState, it)
         }
     }
@@ -17,4 +18,5 @@ abstract class UnitSystem : System {
     override fun onEngineAttach(engine: EngineEcs) {
         super.onEngineAttach(engine)
     }
+
 }

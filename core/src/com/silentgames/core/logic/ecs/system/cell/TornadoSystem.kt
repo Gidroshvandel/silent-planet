@@ -1,4 +1,4 @@
-package com.silentgames.core.logic.ecs.system
+package com.silentgames.core.logic.ecs.system.cell
 
 import com.silentgames.core.logic.Constants
 import com.silentgames.core.logic.ecs.Axis
@@ -6,7 +6,8 @@ import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.MovementCoordinatesComponent
 import com.silentgames.core.logic.ecs.component.Tornado
 import com.silentgames.core.logic.ecs.entity.cell.CellEcs
-import com.silentgames.core.logic.ecs.system.TornadoSystem.GameZone.*
+import com.silentgames.core.logic.ecs.system.cell.TornadoSystem.GameZone.*
+import com.silentgames.core.logic.ecs.system.getCurrentPosition
 import com.silentgames.core.utils.notNull
 
 class TornadoSystem : CellSystem() {

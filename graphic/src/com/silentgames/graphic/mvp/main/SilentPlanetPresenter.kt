@@ -11,8 +11,12 @@ import com.silentgames.core.logic.ecs.entity.event.BuyBackEvent
 import com.silentgames.core.logic.ecs.entity.event.MovementEvent
 import com.silentgames.core.logic.ecs.entity.event.SkipTurnEvent
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
-import com.silentgames.core.logic.ecs.system.*
+import com.silentgames.core.logic.ecs.system.ai.*
+import com.silentgames.core.logic.ecs.system.cell.ArrowSystem
+import com.silentgames.core.logic.ecs.system.cell.TornadoSystem
 import com.silentgames.core.logic.ecs.system.event.*
+import com.silentgames.core.logic.ecs.system.getCurrentPosition
+import com.silentgames.core.logic.ecs.system.unit.*
 
 /**
  * Created by gidroshvandel on 21.06.17.
