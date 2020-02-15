@@ -5,8 +5,8 @@ import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.ArtificialIntelligence
 import com.silentgames.core.logic.ecs.component.CapitalShip
 import com.silentgames.core.logic.ecs.component.MovingMode
-import com.silentgames.core.logic.ecs.component.TargetPosition
 import com.silentgames.core.logic.ecs.entity.cell.CellEcs
+import com.silentgames.core.logic.ecs.entity.event.MovementEvent
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 
 class AiShipSystem : UnitSystem() {
@@ -16,11 +16,11 @@ class AiShipSystem : UnitSystem() {
     }
 
     override fun execute(gameState: GameState, unit: UnitEcs) {
-        if (!gameState.isTurnEnd() && !unit.hasComponent<TargetPosition>()
+        if (!gameState.isTurnEnd()
                 && unit.hasComponent<ArtificialIntelligence>()
                 && unit.hasComponent<CapitalShip>()) {
             unit.getMoveShipPosition(gameState)?.let {
-                unit.addComponent(TargetPosition(it))
+                gameState.addEvent(MovementEvent(it, unit))
             }
         }
     }

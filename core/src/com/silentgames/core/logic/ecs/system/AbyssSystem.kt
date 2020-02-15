@@ -7,8 +7,7 @@ import com.silentgames.core.logic.ecs.Motion
 import com.silentgames.core.logic.ecs.MotionType
 import com.silentgames.core.logic.ecs.component.Abyss
 import com.silentgames.core.logic.ecs.component.Route
-import com.silentgames.core.logic.ecs.component.TargetPosition
-import com.silentgames.core.logic.ecs.component.Teleport
+import com.silentgames.core.logic.ecs.entity.event.TeleportEvent
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.utils.notNull
 
@@ -21,17 +20,19 @@ class AbyssSystem : UnitSystem() {
     override fun execute(gameState: GameState, unit: UnitEcs) {
         gameState.getCurrentUnitCell(unit) { cell ->
             cell.getComponent<Abyss>()?.let {
-                notNull(unit.getComponent<Route>()?.paths,
+                notNull(
+                        gameState,
+                        unit.getComponent<Route>()?.paths,
                         unit,
-                        ::abyss)
+                        ::abyss
+                )
             }
         }
     }
 
-    private fun abyss(paths: MutableList<Motion>, unit: UnitEcs) {
+    private fun abyss(gameState: GameState, paths: MutableList<Motion>, unit: UnitEcs) {
         this.getTarget(paths)?.let {
-            unit.addComponent(Teleport())
-            unit.addComponent(TargetPosition(it))
+            gameState.addEvent(TeleportEvent(it, unit))
             CoreLogger.logDebug(SYSTEM_TAG, "unit ${unit.getName()} teleport to $it")
         }
     }

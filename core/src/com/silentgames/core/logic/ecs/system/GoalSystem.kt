@@ -5,7 +5,7 @@ import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.Goal
 import com.silentgames.core.logic.ecs.component.Position
-import com.silentgames.core.logic.ecs.component.TargetPosition
+import com.silentgames.core.logic.ecs.entity.event.MovementEvent
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.logic.findPath
 
@@ -20,7 +20,7 @@ class GoalSystem : UnitSystem() {
         val nextAxisToGoal = goal?.axis?.let { gameState.getNextAxisToGoal(unit, goal.axis) }
         if (nextAxisToGoal != null) {
             CoreLogger.logDebug(SYSTEM_TAG, "unit ${unit.getName()} added goal $nextAxisToGoal")
-            unit.addComponent(TargetPosition(nextAxisToGoal))
+            gameState.addEvent(MovementEvent(nextAxisToGoal, unit))
         }
     }
 

@@ -8,7 +8,7 @@ import com.silentgames.core.logic.ecs.component.MovementCoordinatesComponent
 import com.silentgames.core.logic.ecs.component.Position
 import com.silentgames.core.logic.ecs.entity.cell.CellEcs
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
-import com.silentgames.core.logic.ecs.system.MovementSystem
+import com.silentgames.core.logic.ecs.system.event.MovementSystem
 import com.silentgames.core.logic.ecs.system.getAvailableMoveDistancePositionList
 import kotlin.math.pow
 import kotlin.math.sqrt

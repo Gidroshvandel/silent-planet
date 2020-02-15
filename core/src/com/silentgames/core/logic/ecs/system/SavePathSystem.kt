@@ -8,7 +8,8 @@ import com.silentgames.core.logic.ecs.MotionType.MOVEMENT
 import com.silentgames.core.logic.ecs.MotionType.TELEPORT
 import com.silentgames.core.logic.ecs.component.Position
 import com.silentgames.core.logic.ecs.component.Route
-import com.silentgames.core.logic.ecs.component.Teleport
+import com.silentgames.core.logic.ecs.component.event.TargetPosition
+import com.silentgames.core.logic.ecs.component.event.Teleport
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.utils.notNull
 
@@ -19,23 +20,34 @@ class SavePathSystem : UnitSystem() {
     }
 
     override fun execute(gameState: GameState, unit: UnitEcs) {
-        notNull(unit,
+        notNull(
+                gameState,
+                unit,
                 unit.getComponent<Position>()?.currentPosition,
-                ::savePath)
+                ::savePath
+        )
     }
 
-    private fun savePath(unit: UnitEcs, axis: Axis) {
+    private fun savePath(gameState: GameState, unit: UnitEcs, axis: Axis) {
         val route = unit.getComponent<Route>()
         if (route != null) {
             if (route.paths.isNotEmpty() && route.paths.last().axis != axis) {
-                route.paths.add(Motion(axis, motionType(unit)))
+                route.paths.add(Motion(axis, motionType(gameState, unit)))
             }
         } else {
-            unit.addComponent(Route(mutableListOf(Motion(axis, motionType(unit)))))
+            unit.addComponent(Route(mutableListOf(Motion(axis, motionType(gameState, unit)))))
         }
     }
 
-    private fun motionType(unit: UnitEcs): MotionType {
-        return if (unit.getComponent<Teleport>() != null) TELEPORT else MOVEMENT
+    private fun motionType(gameState: GameState, unit: UnitEcs): MotionType {
+        if (gameState.eventList.find {
+                    it.hasComponent<Teleport>()
+                            && it.getComponent<TargetPosition>()?.unit == unit
+                } != null
+        ) {
+            return TELEPORT
+        } else {
+            return MOVEMENT
+        }
     }
 }

@@ -8,7 +8,7 @@ class Transport(position: Position, unitsOnBoard: List<UnitEcs> = listOf()) : Co
     private val mutableUnitsOnBoard: MutableList<UnitEcs> = unitsOnBoard.toMutableList()
 
     init {
-        position.onPositionChanged = { axis ->
+        position.addPositionChangedListener { axis ->
             this.unitsOnBoard.forEach {
                 it.getComponent<Position>()?.apply {
                     currentPosition = axis

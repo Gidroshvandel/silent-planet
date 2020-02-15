@@ -5,6 +5,7 @@ import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.*
 import com.silentgames.core.logic.ecs.component.event.BuyBackEventComponent
 import com.silentgames.core.logic.ecs.entity.event.EventEcs
+import com.silentgames.core.logic.ecs.entity.event.TeleportEvent
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.logic.ecs.system.getName
 import com.silentgames.core.utils.notNull
@@ -47,9 +48,10 @@ class BuyBackSystem(
                 && invadersFractionCrystals.addCrystals(unitFractionCrystals, capture.buybackPrice)
         ) {
             unit.removeComponent(capture)
-            unit.addComponent(Teleport())
             unit.addComponent(Active())
-            unitCapitalShip.getComponent<Position>()?.currentPosition?.let { unit.addComponent(TargetPosition(it)) }
+            unitCapitalShip.getComponent<Position>()?.currentPosition?.let {
+                gameState.addEvent(TeleportEvent(it, unit))
+            }
             onSuccess.invoke(unit.getComponent<Description>()?.name ?: "")
             CoreLogger.logDebug(SYSTEM_TAG, "unit ${unit.getName()} buyBack success")
         } else {

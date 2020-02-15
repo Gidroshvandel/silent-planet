@@ -4,6 +4,7 @@ import com.silentgames.core.logic.CoreLogger
 import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.*
+import com.silentgames.core.logic.ecs.entity.event.TeleportEvent
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.utils.notNull
 
@@ -62,10 +63,9 @@ class CaptureSystem : UnitSystem() {
         }
     }
 
-    private fun moveUnits(units: List<UnitEcs>, position: Axis) {
+    private fun GameState.moveUnits(units: List<UnitEcs>, position: Axis) {
         units.forEach {
-            it.addComponent(Teleport())
-            it.addComponent(TargetPosition(position))
+            this.addEvent(TeleportEvent(position, it))
         }
     }
 }

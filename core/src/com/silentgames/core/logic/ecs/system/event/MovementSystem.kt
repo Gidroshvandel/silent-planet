@@ -1,54 +1,51 @@
-package com.silentgames.core.logic.ecs.system
+package com.silentgames.core.logic.ecs.system.event
 
 import com.silentgames.core.logic.CoreLogger
 import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.*
+import com.silentgames.core.logic.ecs.component.event.TargetPosition
 import com.silentgames.core.logic.ecs.entity.cell.CellEcs
+import com.silentgames.core.logic.ecs.entity.event.EventEcs
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
+import com.silentgames.core.logic.ecs.system.getAvailableMoveDistancePositionList
+import com.silentgames.core.logic.ecs.system.getName
 import com.silentgames.core.utils.notNull
 
-class MovementSystem : UnitSystem() {
+class MovementSystem : EventSystem() {
 
     companion object {
         private const val SYSTEM_TAG = "MovementSystem"
     }
 
-    override fun execute(gameState: GameState, unit: UnitEcs) {
-        val moveSuccess = if (unit.hasComponent<Teleport>()
-                || unit.getComponent<FractionsType>() != gameState.turn.currentTurnFraction
+    override fun execute(gameState: GameState, eventEcs: EventEcs): Boolean {
+        eventEcs.getComponent<TargetPosition>()?.let {
+            if (process(gameState, it.unit, it.axis)) {
+                gameState.moveUnit(it.unit, it.axis)
+            } else {
+                it.unit.removeComponent(MovedSuccess::class.java)
+            }
+            return true
+        }
+
+        return false
+    }
+
+    private fun process(gameState: GameState, unit: UnitEcs, target: Axis): Boolean {
+        return if (unit.getComponent<FractionsType>() != gameState.turn.currentTurnFraction
                 || !unit.hasComponent<CanTurn>()
                 || !unit.hasComponent<Active>()
         ) {
             false
         } else {
             notNull(
-                    unit.getComponent<TargetPosition>()?.axis,
+                    target,
                     unit.getComponent<Position>()?.currentPosition,
                     unit,
                     gameState,
                     ::tryToMove
             ) ?: false
         }
-        if (moveSuccess) {
-            notNull(
-                    unit.getComponent(),
-                    unit,
-                    gameState,
-                    ::move
-            )
-        } else {
-            unit.removeComponent(MovedSuccess::class.java)
-        }
-    }
-
-    private fun move(
-            targetPosition: TargetPosition,
-            unit: UnitEcs,
-            gameState: GameState
-    ) {
-        gameState.moveUnit(unit, targetPosition.axis)
-        unit.removeComponent(targetPosition)
     }
 
     private fun tryToMove(

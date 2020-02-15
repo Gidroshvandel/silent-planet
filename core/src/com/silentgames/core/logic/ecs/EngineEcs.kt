@@ -15,6 +15,12 @@ class EngineEcs(val gameState: GameState) {
             onProcessingChanged?.invoke(value)
         }
 
+    fun addSystem(vararg system: System) {
+        systems.forEach {
+            addSystem(it)
+        }
+    }
+
     fun addSystem(system: System) {
         system.onEngineAttach(this)
         systems.add(system)

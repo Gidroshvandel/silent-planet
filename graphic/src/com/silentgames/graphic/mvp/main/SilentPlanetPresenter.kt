@@ -8,12 +8,11 @@ import com.silentgames.core.logic.ecs.component.*
 import com.silentgames.core.logic.ecs.entity.EntityEcs
 import com.silentgames.core.logic.ecs.entity.event.AddCrystalEvent
 import com.silentgames.core.logic.ecs.entity.event.BuyBackEvent
+import com.silentgames.core.logic.ecs.entity.event.MovementEvent
 import com.silentgames.core.logic.ecs.entity.event.SkipTurnEvent
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.logic.ecs.system.*
-import com.silentgames.core.logic.ecs.system.event.AddCrystalSystem
-import com.silentgames.core.logic.ecs.system.event.BuyBackSystem
-import com.silentgames.core.logic.ecs.system.event.SkipTurnSystem
+import com.silentgames.core.logic.ecs.system.event.*
 import com.silentgames.graphic.RenderSystem
 
 /**
@@ -58,8 +57,8 @@ class SilentPlanetPresenter internal constructor(
         viewModel.engine.addSystem(SavePathSystem())
         viewModel.engine.addSystem(AntiLoopSystem())
 //        viewModel.engine.addSystem(CaptureSystem())
-        viewModel.engine.addSystem(MovementSystem())
         viewModel.engine.addSystem(TeleportSystem())
+        viewModel.engine.addSystem(MovementSystem())
         viewModel.engine.addSystem(ExploreSystem())
         viewModel.engine.addSystem(DeathSystem())
         viewModel.engine.addSystem(PutCrystalToCapitalShipSystem())
@@ -82,15 +81,17 @@ class SilentPlanetPresenter internal constructor(
         )
 
         viewModel.engine.addSystem(
-                TurnSystem {
-                    view.selectCurrentFraction(it)
-                }
-        )
-        viewModel.engine.addSystem(
                 model.getRenderSystem {
                     select(it)
                 }
         )
+
+        viewModel.engine.addSystem(
+                TurnSystem {
+                    view.selectCurrentFraction(it)
+                }
+        )
+        viewModel.engine.addSystem(MovingSystem())
 
         viewModel.engine.processSystems()
 
@@ -214,15 +215,12 @@ class SilentPlanetPresenter internal constructor(
     }
 
     private fun tryMove(unit: UnitEcs, targetPosition: Axis) {
-        if (unit.hasComponent<CanTurn>()) {
-            unit.addComponent(TargetPosition(targetPosition))
-            viewModel.engine.processSystems()
-        }
-        if (viewModel.engine.gameState.unitMap.find { it.hasComponent<MovedSuccess>() } == null) {
+        viewModel.engine.addEvent(MovementEvent(targetPosition, unit))
+        if (unit.hasComponent<MovedSuccess>()) {
+            updateSelectedEntity()
+        } else {
             viewModel.selectedEntity = null
             select(targetPosition)
-        } else {
-            updateSelectedEntity()
         }
     }
 

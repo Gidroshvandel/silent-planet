@@ -10,6 +10,8 @@ import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.logic.ecs.system.*
 import com.silentgames.core.logic.ecs.system.event.AddCrystalSystem
 import com.silentgames.core.logic.ecs.system.event.BuyBackSystem
+import com.silentgames.core.logic.ecs.system.event.MovementSystem
+import com.silentgames.core.logic.ecs.system.event.TeleportSystem
 import com.silentgames.silent_planet.dialog.EntityData
 
 /**
@@ -216,7 +218,7 @@ class MainPresenter internal constructor(
 
     private fun tryMove(unit: UnitEcs, targetPosition: Axis) {
         view.enableButton(false)
-        unit.addComponent(TargetPosition(targetPosition))
+//        unit.addComponent(TargetPosition(targetPosition))
 //        if (!viewModel.engine.gameState.moveSuccess) {
 //            viewModel.selectedEntity = null
 //            select(targetPosition)
