@@ -39,7 +39,7 @@ class SilentPlanetPresenter internal constructor(
                         }
                 ),
                 ChoosePlayerToMoveSystem(
-                        listOf(FractionsType.HUMAN, FractionsType.ALIEN, FractionsType.PIRATE, FractionsType.ROBOT)
+//                        listOf(FractionsType.HUMAN, FractionsType.ALIEN, FractionsType.PIRATE, FractionsType.ROBOT)
                 ),
                 FindCrystalSystem(),
                 FindShipSystem(),
@@ -203,7 +203,7 @@ class SilentPlanetPresenter internal constructor(
 
     private fun tryMove(unit: UnitEcs, targetPosition: Axis) {
         viewModel.engine.addEvent(MovementEvent(targetPosition, unit))
-        if (unit.hasComponent<MovedSuccess>()) {
+        if (unit.hasComponent<Moving>()) {
             updateSelectedEntity()
         } else {
             viewModel.selectedEntity = null

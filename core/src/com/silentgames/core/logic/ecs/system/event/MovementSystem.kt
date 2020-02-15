@@ -22,8 +22,6 @@ class MovementSystem : EventSystem() {
         eventEcs.getComponent<TargetPosition>()?.let {
             if (process(gameState, it.unit, it.axis)) {
                 gameState.moveUnit(it.unit, it.axis)
-            } else {
-                it.unit.removeComponent(MovedSuccess::class.java)
             }
             return true
         }

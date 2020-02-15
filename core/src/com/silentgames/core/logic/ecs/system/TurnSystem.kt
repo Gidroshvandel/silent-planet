@@ -19,7 +19,7 @@ class TurnSystem(private val onTurnChanged: (FractionsType) -> Unit) : UnitSyste
 
     override fun execute(gameState: GameState, unit: UnitEcs) {
         val turnMode = unit.getComponent<TurnMode>()
-        if (unit.hasComponent<MovedSuccess>() && turnMode != null) {
+        if (unit.hasComponent<Moving>() && turnMode != null) {
             gameState.unitMap.filter {
                 it.getComponent<TurnMode>()?.groupType == turnMode.groupType
             }.forEach {
@@ -37,7 +37,6 @@ class TurnSystem(private val onTurnChanged: (FractionsType) -> Unit) : UnitSyste
             gameState.turn.currentTurnFraction.let { onTurnChanged.invoke(it) }
             CoreLogger.logDebug(SYSTEM_TAG, gameState.turn.currentTurnFraction.name)
         }
-        gameState.unitMap.forEach { it.removeComponent(MovedSuccess::class.java) }
     }
 
     private fun GameState.makeCurrentFractionTurnUnitsCanTurn() {

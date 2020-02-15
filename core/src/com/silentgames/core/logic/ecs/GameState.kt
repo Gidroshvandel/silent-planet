@@ -1,7 +1,10 @@
 package com.silentgames.core.logic.ecs
 
 import com.silentgames.core.logic.CoreLogger
-import com.silentgames.core.logic.ecs.component.*
+import com.silentgames.core.logic.ecs.component.CanTurn
+import com.silentgames.core.logic.ecs.component.CapitalShip
+import com.silentgames.core.logic.ecs.component.FractionsType
+import com.silentgames.core.logic.ecs.component.Position
 import com.silentgames.core.logic.ecs.entity.EntityEcs
 import com.silentgames.core.logic.ecs.entity.cell.CellEcs
 import com.silentgames.core.logic.ecs.entity.event.EventEcs
@@ -50,7 +53,6 @@ class GameState(
             mutableUnitList.add(unit)
         }
         CoreLogger.logDebug("Moving", "unit ${unit.getName()} start Moving")
-        unit.addComponent(MovedSuccess())
         unit.getComponent<Position>()?.currentPosition = toPosition
     }
 
