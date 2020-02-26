@@ -5,7 +5,6 @@ import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.ArtificialIntelligence
 import com.silentgames.core.logic.ecs.component.Goal
-import com.silentgames.core.logic.ecs.component.Position
 import com.silentgames.core.logic.ecs.entity.event.MovementEvent
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.logic.ecs.system.getName
@@ -28,8 +27,7 @@ class GoalSystem : UnitSystem() {
     }
 
     private fun GameState.getNextAxisToGoal(unit: UnitEcs, goalTarget: Axis): Axis? {
-        val position = unit.getComponent<Position>()?.currentPosition ?: return null
-        val path = this.findPathToGoal(position, goalTarget, unit)
+        val path = this.findPathToGoal(unit, goalTarget)
         if (path.isNotEmpty()) {
             if (path.last() == goalTarget) {
                 unit.removeComponent(Goal::class.java)

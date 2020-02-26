@@ -2,6 +2,7 @@ package com.silentgames.core.logic.path
 
 import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.GameState
+import com.silentgames.core.logic.ecs.component.Position
 import com.silentgames.core.logic.ecs.entity.cell.CellEcs
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.logic.ecs.system.getCurrentPosition
@@ -25,7 +26,8 @@ fun GameState.findPathToCell(unit: UnitEcs, event: (CellEcs) -> Boolean): List<A
     )
 }
 
-fun GameState.findPathToGoal(position: Axis, goal: Axis, unit: UnitEcs): List<Axis> {
+fun GameState.findPathToGoal(unit: UnitEcs, goal: Axis): List<Axis> {
+    val position = unit.getComponent<Position>()?.currentPosition ?: return listOf()
     return PathFinderCore.findPath(
             position,
             {
