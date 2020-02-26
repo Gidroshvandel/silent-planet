@@ -55,7 +55,7 @@ class CrystalBag(
     fun addAllCrystals(crystal: CrystalBag): Boolean =
             crystal.getCount(addCrystals(crystal.amount)) > 0
 
-    private fun getAll(): Int {
+    fun getAll(): Int {
         val getCrystals = amount
         amount = 0
         return getCrystals

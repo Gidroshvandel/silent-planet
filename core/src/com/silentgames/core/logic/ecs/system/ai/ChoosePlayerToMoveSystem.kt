@@ -16,6 +16,7 @@ class ChoosePlayerToMoveSystem(private val aiFractionList: List<FractionsType> =
 
     override fun execute(gameState: GameState) {
         if (gameState.isMovingFinish()) {
+            gameState.unitMap.firstOrNull { it.hasComponent<ArtificialIntelligence>() }?.removeComponent(CanTurn::class.java)
             gameState.unitMap.forEach {
                 it.removeComponent(ArtificialIntelligence::class.java)
             }
