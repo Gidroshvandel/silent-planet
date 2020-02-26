@@ -8,6 +8,8 @@ import com.silentgames.core.logic.ecs.entity.cell.arrow.ArrowGreenCell
 import com.silentgames.core.logic.ecs.entity.cell.arrow.ArrowRedCell
 import com.silentgames.core.logic.ecs.entity.cell.crystal.CrystalCell
 import com.silentgames.core.logic.ecs.entity.cell.crystal.CrystalsEnum
+import com.silentgames.core.logic.ecs.entity.cell.stun.swell.SwellCell
+import com.silentgames.core.logic.ecs.entity.cell.stun.swell.SwellsEnum
 import java.util.*
 
 class CellRandomGenerator {
@@ -66,6 +68,10 @@ class CellRandomGenerator {
             RandomCellType.EMPTY -> EmptyCell(axis)
             RandomCellType.TORNADO -> TornadoCell(axis)
             RandomCellType.ABYSS -> AbyssCell(axis)
+            RandomCellType.SWELL_ONE -> SwellCell(axis, SwellsEnum.ONE)
+            RandomCellType.SWELL_TWO -> SwellCell(axis, SwellsEnum.TWO)
+            RandomCellType.SWELL_THREE -> SwellCell(axis, SwellsEnum.THREE)
+            RandomCellType.SWELL_FOUR -> SwellCell(axis, SwellsEnum.FOUR)
         }
     }
 
@@ -97,12 +103,17 @@ class CellRandomGenerator {
 class CellGeneratorParams(
         private val deathCellCount: Int = 1,
         private val greenArrowCellCount: Int = 20,
-        private val redArrowCellCount: Int = 20,
+        private val redArrowCellCount: Int = 14,
         private val crystalOneCellCount: Int = 10,
         private val crystalTwoCellCount: Int = 5,
         private val crystalThreeCellCount: Int = 5,
         private val tornadoCellCount: Int = 4,
-        private val abyssCellCount: Int = 4
+        private val abyssCellCount: Int = 4,
+        private val swellOneCellCount: Int = 1,
+        private val swellTwoCellCount: Int = 1,
+        private val swellThreeCellCount: Int = 1,
+        private val swellFourCellCount: Int = 1
+
 ) {
     private val emptyCount: Int = Constants.countOfGroundCells - (
             deathCellCount +
@@ -112,7 +123,11 @@ class CellGeneratorParams(
                     crystalTwoCellCount +
                     crystalThreeCellCount +
                     tornadoCellCount +
-                    abyssCellCount)
+                    abyssCellCount +
+                    swellOneCellCount +
+                    swellTwoCellCount +
+                    swellThreeCellCount +
+                    swellFourCellCount)
 
     fun getRandomEntityList() = listOf(
             RandomEntity(RandomCellType.DEATH, deathCellCount),
@@ -123,7 +138,11 @@ class CellGeneratorParams(
             RandomEntity(RandomCellType.CRYSTAL_THREE, crystalThreeCellCount),
             RandomEntity(RandomCellType.EMPTY, emptyCount),
             RandomEntity(RandomCellType.TORNADO, tornadoCellCount),
-            RandomEntity(RandomCellType.ABYSS, abyssCellCount)
+            RandomEntity(RandomCellType.ABYSS, abyssCellCount),
+            RandomEntity(RandomCellType.SWELL_ONE, swellOneCellCount),
+            RandomEntity(RandomCellType.SWELL_TWO, swellTwoCellCount),
+            RandomEntity(RandomCellType.SWELL_THREE, swellThreeCellCount),
+            RandomEntity(RandomCellType.SWELL_FOUR, swellFourCellCount)
     )
 }
 
@@ -147,5 +166,9 @@ enum class RandomCellType {
     CRYSTAL_THREE,
     EMPTY,
     TORNADO,
-    ABYSS
+    ABYSS,
+    SWELL_ONE,
+    SWELL_TWO,
+    SWELL_THREE,
+    SWELL_FOUR
 }

@@ -4,165 +4,130 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-abyss_cell
-  rotate: false
-  xy: 2, 79
-  size: 572, 572
-  orig: 572, 572
-  offset: 0, 0
-  index: -1
 alien
   rotate: false
-  xy: 1588, 1785
+  xy: 1784, 1552
   size: 204, 204
   orig: 204, 204
   offset: 0, 0
   index: -1
 aliens_space_ship
   rotate: false
-  xy: 534, 1797
+  xy: 215, 240
   size: 244, 192
   orig: 244, 192
   offset: 0, 0
   index: -1
-arow_red_cell
+arrow_green_cell
   rotate: false
-  xy: 1339, 1154
-  size: 565, 565
-  orig: 565, 565
+  xy: 1204, 1456
+  size: 578, 578
+  orig: 578, 578
   offset: 0, 0
   index: -1
 crystal
   rotate: false
-  xy: 2, 1889
+  xy: 829, 332
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
-dead_cell
-  rotate: false
-  xy: 1145, 581
-  size: 571, 571
-  orig: 571, 571
-  offset: 0, 0
-  index: -1
-empty_cell
-  rotate: false
-  xy: 212, 1234
-  size: 561, 561
-  orig: 561, 561
-  offset: 0, 0
-  index: -1
 human_space_ship
   rotate: false
-  xy: 2, 1551
+  xy: 1784, 1758
   size: 208, 276
   orig: 208, 276
   offset: 0, 0
   index: -1
-one_crystal
+human_spaceman
   rotate: false
-  xy: 2, 663
-  size: 569, 569
-  orig: 569, 569
+  xy: 2, 434
+  size: 1200, 1600
+  orig: 1200, 1600
   offset: 0, 0
   index: -1
 pirate_space_ship
   rotate: false
-  xy: 368, 1813
+  xy: 663, 256
   size: 164, 176
   orig: 164, 176
   offset: 0, 0
   index: -1
 planet_background
   rotate: false
-  xy: 206, 1829
+  xy: 2, 2
   size: 160, 160
   orig: 160, 160
   offset: 0, 0
   index: -1
 robot
   rotate: false
-  xy: 104, 1889
+  xy: 931, 332
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
 robot_space_ship
   rotate: false
-  xy: 1794, 1721
+  xy: 2, 164
   size: 211, 268
   orig: 211, 268
   offset: 0, 0
   index: -1
 space
   rotate: false
-  xy: 780, 1789
+  xy: 1784, 1350
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 0
 space
   rotate: false
-  xy: 982, 1789
+  xy: 1784, 1148
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 1
 space
   rotate: false
-  xy: 982, 1789
+  xy: 1784, 1148
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 5
 space
   rotate: false
-  xy: 1184, 1789
+  xy: 1784, 946
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 2
 space
   rotate: false
-  xy: 1184, 1789
+  xy: 1784, 946
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 4
 space
   rotate: false
-  xy: 1386, 1789
+  xy: 461, 232
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 3
-swell
+swell_three
   rotate: false
-  xy: 573, 653
-  size: 570, 570
-  orig: 570, 570
+  xy: 1204, 876
+  size: 578, 578
+  orig: 578, 578
   offset: 0, 0
-  index: 4
+  index: -1
 three_crystals
   rotate: false
-  xy: 1154, 2
+  xy: 1204, 297
   size: 577, 577
   orig: 577, 577
-  offset: 0, 0
-  index: -1
-tornado_cell
-  rotate: false
-  xy: 576, 3
-  size: 576, 576
-  orig: 576, 576
-  offset: 0, 0
-  index: -1
-two_crystals
-  rotate: false
-  xy: 775, 1225
-  size: 562, 562
-  orig: 562, 562
   offset: 0, 0
   index: -1
 
@@ -171,18 +136,32 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-arrow_green_cell
+abyss_cell
   rotate: false
-  xy: 1204, 1024
-  size: 578, 578
-  orig: 578, 578
+  xy: 1204, 575
+  size: 572, 572
+  orig: 572, 572
   offset: 0, 0
   index: -1
-human_spaceman
+dead_cell
   rotate: false
-  xy: 2, 2
+  xy: 1204, 2
+  size: 571, 571
+  orig: 571, 571
+  offset: 0, 0
+  index: -1
+pirate
+  rotate: false
+  xy: 2, 125
   size: 1200, 1600
   orig: 1200, 1600
+  offset: 0, 0
+  index: -1
+tornado_cell
+  rotate: false
+  xy: 1204, 1149
+  size: 576, 576
+  orig: 576, 576
   offset: 0, 0
   index: -1
 
@@ -191,11 +170,53 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-pirate
+arow_red_cell
   rotate: false
   xy: 2, 2
-  size: 1200, 1600
-  orig: 1200, 1600
+  size: 565, 565
+  orig: 565, 565
+  offset: 0, 0
+  index: -1
+empty_cell
+  rotate: false
+  xy: 573, 17
+  size: 561, 561
+  orig: 561, 561
+  offset: 0, 0
+  index: -1
+one_crystal
+  rotate: false
+  xy: 2, 569
+  size: 569, 569
+  orig: 569, 569
+  offset: 0, 0
+  index: -1
+swell_four
+  rotate: false
+  xy: 2, 1140
+  size: 570, 570
+  orig: 570, 570
+  offset: 0, 0
+  index: -1
+swell_one
+  rotate: false
+  xy: 1142, 1145
+  size: 565, 565
+  orig: 565, 565
+  offset: 0, 0
+  index: -1
+swell_two
+  rotate: false
+  xy: 574, 1144
+  size: 566, 566
+  orig: 566, 566
+  offset: 0, 0
+  index: -1
+two_crystals
+  rotate: false
+  xy: 574, 580
+  size: 562, 562
+  orig: 562, 562
   offset: 0, 0
   index: -1
 
