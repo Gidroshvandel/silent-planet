@@ -1,10 +1,7 @@
 package com.silentgames.core.logic.ecs
 
 import com.silentgames.core.logic.CoreLogger
-import com.silentgames.core.logic.ecs.component.CanTurn
-import com.silentgames.core.logic.ecs.component.CapitalShip
-import com.silentgames.core.logic.ecs.component.FractionsType
-import com.silentgames.core.logic.ecs.component.Position
+import com.silentgames.core.logic.ecs.component.*
 import com.silentgames.core.logic.ecs.entity.EntityEcs
 import com.silentgames.core.logic.ecs.entity.cell.CellEcs
 import com.silentgames.core.logic.ecs.entity.event.EventEcs
@@ -71,6 +68,8 @@ class GameState(
     fun isTurnEnd() = getAllFractionUnits(turn.currentTurnFraction).find {
         it.hasComponent<CanTurn>()
     } == null
+
+    fun isMovingFinish() = unitMap.find { it.hasComponent<Moving>() } == null
 
     private fun <T : EntityEcs> List<T>.getByPosition(axis: Axis) =
             find { it.getComponent<Position>()?.currentPosition == axis }

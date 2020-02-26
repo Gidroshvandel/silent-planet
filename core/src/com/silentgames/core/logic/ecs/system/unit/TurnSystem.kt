@@ -30,7 +30,7 @@ class TurnSystem(private val onTurnChanged: (FractionsType) -> Unit) : UnitSyste
 
     override fun execute(gameState: GameState) {
         super.execute(gameState)
-        if (gameState.isTurnEnd() && gameState.unitMap.find { it.hasComponent<Moving>() } == null) {
+        if (gameState.isTurnEnd() && gameState.isMovingFinish()) {
             gameState.turn.nextTurn()
             gameState.makeCurrentFractionTurnUnitsCanTurn()
             gameState.turn.currentTurnFraction.let { onTurnChanged.invoke(it) }

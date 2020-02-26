@@ -15,16 +15,22 @@ class ChoosePlayerToMoveSystem(private val aiFractionList: List<FractionsType> =
     }
 
     override fun execute(gameState: GameState) {
-        gameState.unitMap.forEach {
-            it.removeComponent(ArtificialIntelligence::class.java)
-        }
-        if (!gameState.isTurnEnd() && gameState.isPlayersFromCurrentFractionCanTurn() && aiFractionList.contains(gameState.turn.currentTurnFraction)) {
-            val unitToMove = gameState.choosePlayerToMove(gameState.turn.currentTurnFraction)
-            unitToMove?.addComponent(ArtificialIntelligence())
-            CoreLogger.logDebug(SYSTEM_TAG, "selected unit to move: ${unitToMove?.getName()}")
-        } else if (aiFractionList.contains(gameState.turn.currentTurnFraction)) {
-            CoreLogger.logDebug(SYSTEM_TAG, "SkipTurnEvent")
-            gameState.addEvent(SkipTurnEvent())
+        if (gameState.isMovingFinish()) {
+            gameState.unitMap.forEach {
+                it.removeComponent(ArtificialIntelligence::class.java)
+            }
+            if (!gameState.isTurnEnd() && gameState.isPlayersFromCurrentFractionCanTurn() && aiFractionList.contains(gameState.turn.currentTurnFraction)) {
+                val unitToMove = gameState.choosePlayerToMove(gameState.turn.currentTurnFraction)
+                unitToMove?.addComponent(ArtificialIntelligence())
+                CoreLogger.logDebug(SYSTEM_TAG, "selected unit to move: ${unitToMove?.getName()}")
+            } else if (!gameState.isTurnEnd() && gameState.isShipFromCurrentFractionCanTurn() && aiFractionList.contains(gameState.turn.currentTurnFraction)) {
+                val shipToMove = gameState.getCapitalShip(gameState.turn.currentTurnFraction)
+                shipToMove?.addComponent(ArtificialIntelligence())
+                CoreLogger.logDebug(SYSTEM_TAG, "selected ship to move: ${shipToMove?.getName()}")
+            } else if (aiFractionList.contains(gameState.turn.currentTurnFraction)) {
+                CoreLogger.logDebug(SYSTEM_TAG, "SkipTurnEvent")
+                gameState.addEvent(SkipTurnEvent())
+            }
         }
     }
 
@@ -53,5 +59,10 @@ class ChoosePlayerToMoveSystem(private val aiFractionList: List<FractionsType> =
     private fun GameState.isPlayersFromCurrentFractionCanTurn(): Boolean {
         return this.getAllFractionUnits(this.turn.currentTurnFraction)
                 .any { it.getComponent<MovingMode>() == MovingMode.WALK && it.hasComponent<CanTurn>() }
+    }
+
+    private fun GameState.isShipFromCurrentFractionCanTurn(): Boolean {
+        return this.getAllFractionUnits(this.turn.currentTurnFraction)
+                .any { it.getComponent<MovingMode>() == MovingMode.FLY && it.hasComponent<CanTurn>() }
     }
 }

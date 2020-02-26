@@ -42,9 +42,6 @@ class SilentPlanetPresenter internal constructor(
                             view.showPlayerBuybackFailureMessage(it)
                         }
                 ),
-                ChoosePlayerToMoveSystem(
-                        listOf(FractionsType.HUMAN, FractionsType.ALIEN, FractionsType.PIRATE, FractionsType.ROBOT)
-                ),
                 FindCrystalSystem(),
                 PutCrystalSystem(),
                 FindShipSystem(),
@@ -87,6 +84,9 @@ class SilentPlanetPresenter internal constructor(
                 TurnSystem {
                     view.selectCurrentFraction(it)
                 },
+                ChoosePlayerToMoveSystem(
+                        listOf(FractionsType.HUMAN, FractionsType.ALIEN, FractionsType.PIRATE, FractionsType.ROBOT)
+                ),
                 MovingSystem()
         )
 

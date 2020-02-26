@@ -35,7 +35,7 @@ class GoalSystem : UnitSystem() {
                 unit.removeComponent(Goal::class.java)
             }
             return path.last()
-        } else if (path.isEmpty() && position == goalTarget) {
+        } else {
             unit.removeComponent(Goal::class.java)
         }
         return null
