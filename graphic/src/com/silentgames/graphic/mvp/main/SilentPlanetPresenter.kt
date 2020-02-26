@@ -61,6 +61,7 @@ class SilentPlanetPresenter internal constructor(
                 TeleportSystem(),
                 MovementSystem(),
                 ExploreSystem(),
+                StunSystem(),
                 DeathSystem(),
                 PutCrystalToCapitalShipSystem(),
                 TransportSystem(),

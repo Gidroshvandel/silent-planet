@@ -1,20 +1,18 @@
 package com.silentgames.core.logic.ecs.system.event
 
 import com.silentgames.core.logic.ecs.GameState
-import com.silentgames.core.logic.ecs.component.CanTurn
 import com.silentgames.core.logic.ecs.component.event.SkipTurnEventComponent
 import com.silentgames.core.logic.ecs.entity.event.EventEcs
+import com.silentgames.core.logic.ecs.system.unit.finishTurn
 
 class SkipTurnSystem : EventSystem() {
 
     override fun execute(gameState: GameState, eventEcs: EventEcs): Boolean {
         eventEcs.getComponent<SkipTurnEventComponent>()?.let {
             if (it.unitEcs == null) {
-                gameState.unitMap.forEach { unit ->
-                    unit.removeComponent(CanTurn::class.java)
-                }
+                gameState.finishTurn()
             } else {
-                it.unitEcs.removeComponent(CanTurn::class.java)
+                gameState.finishTurn(it.unitEcs)
             }
             return true
         }

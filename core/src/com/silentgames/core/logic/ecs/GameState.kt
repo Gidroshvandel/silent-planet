@@ -15,6 +15,8 @@ class GameState(
         firstTurnFraction: FractionsType
 ) : Serializable {
 
+    private val onEventAddList = mutableListOf<((EventEcs) -> Unit)>()
+
     val turn: Turn = Turn(firstTurnFraction)
 
     val eventList: List<EventEcs> get() = mutableEventList.toList()
@@ -54,7 +56,14 @@ class GameState(
     }
 
     fun addEvent(event: EventEcs) {
+        onEventAddList.forEach {
+            it.invoke(event)
+        }
         mutableEventList.add(event)
+    }
+
+    fun addNewEventListener(listener: (EventEcs) -> Unit) {
+        onEventAddList.add(listener)
     }
 
     fun removeEvent(event: EventEcs) {

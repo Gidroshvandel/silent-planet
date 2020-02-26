@@ -18,13 +18,8 @@ class TurnSystem(private val onTurnChanged: (FractionsType) -> Unit) : UnitSyste
     }
 
     override fun execute(gameState: GameState, unit: UnitEcs) {
-        val turnMode = unit.getComponent<TurnMode>()
-        if (unit.hasComponent<Moving>() && turnMode != null) {
-            gameState.unitMap.filter {
-                it.getComponent<TurnMode>()?.groupType == turnMode.groupType
-            }.forEach {
-                it.removeComponent(CanTurn::class.java)
-            }
+        if (unit.hasComponent<Moving>()) {
+            gameState.finishTurn(unit)
         }
     }
 
@@ -52,4 +47,21 @@ class TurnSystem(private val onTurnChanged: (FractionsType) -> Unit) : UnitSyste
         }
     }
 
+}
+
+fun GameState.finishTurn(unit: UnitEcs) {
+    val turnMode = unit.getComponent<TurnMode>()
+    if (turnMode != null) {
+        unitMap.filter {
+            it.getComponent<TurnMode>()?.groupType == turnMode.groupType
+        }.forEach {
+            it.removeComponent(CanTurn::class.java)
+        }
+    }
+}
+
+fun GameState.finishTurn() {
+    unitMap.forEach { unit ->
+        unit.removeComponent(CanTurn::class.java)
+    }
 }

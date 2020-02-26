@@ -18,6 +18,7 @@ abstract class UnitEcs(
         addComponent(movingMode)
         addComponent(fractionsType)
         addComponent(description)
+        addComponent(CanMove())
     }
 
 }

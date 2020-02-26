@@ -16,7 +16,13 @@ class ChoosePlayerToMoveSystem(private val aiFractionList: List<FractionsType> =
 
     override fun execute(gameState: GameState) {
         if (gameState.isMovingFinish()) {
-            gameState.unitMap.firstOrNull { it.hasComponent<ArtificialIntelligence>() }?.removeComponent(CanTurn::class.java)
+            gameState.unitMap.firstOrNull { it.hasComponent<ArtificialIntelligence>() }?.let {
+                if (it.getComponent<StunEffect>()?.canMove() == false) {
+                    CoreLogger.logDebug(SYSTEM_TAG, "SkipTurnEvent")
+                    gameState.addEvent(SkipTurnEvent(it))
+                }
+                it.removeComponent(CanTurn::class.java)
+            }
             gameState.unitMap.forEach {
                 it.removeComponent(ArtificialIntelligence::class.java)
             }
