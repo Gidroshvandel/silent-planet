@@ -10,7 +10,7 @@ import com.silentgames.core.logic.ecs.entity.event.MovementEvent
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.logic.ecs.system.getName
 import com.silentgames.core.logic.ecs.system.unit.UnitSystem
-import com.silentgames.core.logic.findPath
+import com.silentgames.core.logic.path.findPathToGoal
 
 class GoalSystem : UnitSystem() {
 
@@ -29,7 +29,7 @@ class GoalSystem : UnitSystem() {
 
     private fun GameState.getNextAxisToGoal(unit: UnitEcs, goalTarget: Axis): Axis? {
         val position = unit.getComponent<Position>()?.currentPosition ?: return null
-        val path = this.findPath(position, goalTarget, unit)
+        val path = this.findPathToGoal(position, goalTarget, unit)
         if (path.isNotEmpty()) {
             if (path.last() == goalTarget) {
                 unit.removeComponent(Goal::class.java)

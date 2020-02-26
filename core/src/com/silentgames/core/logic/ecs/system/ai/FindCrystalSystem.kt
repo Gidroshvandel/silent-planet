@@ -11,7 +11,7 @@ import com.silentgames.core.logic.ecs.entity.event.MovementEvent
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.logic.ecs.system.*
 import com.silentgames.core.logic.ecs.system.unit.UnitSystem
-import com.silentgames.core.logic.findPathToCell
+import com.silentgames.core.logic.path.findPathToCell
 
 class FindCrystalSystem : UnitSystem() {
 
