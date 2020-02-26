@@ -1,8 +1,17 @@
 package com.silentgames.core.logic.path
 
+import com.silentgames.core.logic.CoreLogger
 import com.silentgames.core.logic.ecs.Axis
 
 object PathFinderCore {
+
+    private const val SYSTEM_TAG = "PathFinderCore"
+
+    private var enableLogs = false
+
+    fun enableLogs() {
+        enableLogs = true
+    }
 
     fun findPath(
             position: Axis,
@@ -10,27 +19,27 @@ object PathFinderCore {
             condition: (checkedNode: Node) -> Boolean,
             getAdjacentNodes: (checkedNode: Node) -> List<Node>
     ): List<Axis> {
-//    println("START(${unit.getComponent<Description>()?.name})-----------------------------")
+        log("START($position)-----------------------------")
         val startPosition = Node(position, cost = 0)
         val reachable = mutableListOf(startPosition)
         val explored = mutableListOf<Node>()
         while (reachable.isNotEmpty()) {
-//        println("reachable-------------------------------------------")
-//            reachable.forEach {
-            //            println(it.toString())
-//            }
-//        println("node-------------------------------------------")
+            log("reachable-------------------------------------------")
+            reachable.forEach {
+                log(it.toString())
+            }
+            log("node-------------------------------------------")
             val node = chooseCheckedNode(reachable) ?: return listOf()
-//        println(node.toString())
+            log(node.toString())
             if (condition(node)) {
-                //            println("SUCCESS-------------------------------------------")
+                log("SUCCESS-------------------------------------------")
                 val finalPath = buildPath(node).toMutableList().apply {
                     remove(startPosition.position)
                 }
-                //            println("PATH-------------------------------------------")
-//                finalPath.forEach {
-                //                println(it.toString())
-//                }
+                log("PATH-------------------------------------------")
+                finalPath.forEach {
+                    log(it.toString())
+                }
                 return finalPath
             } else {
                 reachable.remove(node)
@@ -48,7 +57,7 @@ object PathFinderCore {
                 }
             }
         }
-//    println("FAILURE-------------------------------------------")
+        log("FAILURE-------------------------------------------")
         return listOf()
     }
 
@@ -60,6 +69,12 @@ object PathFinderCore {
             goal = goal.previous
         }
         return path
+    }
+
+    private fun log(string: String) {
+        if (enableLogs) {
+            CoreLogger.logDebug(SYSTEM_TAG, string)
+        }
     }
 
 }
