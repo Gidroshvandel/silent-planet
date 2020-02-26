@@ -87,22 +87,34 @@ private fun estimateDistance(node: Node, goalNode: Node): Int =
         sqrt((node.position.x - goalNode.position.x).toFloat().pow(2)
                 + (node.position.y - goalNode.position.y).toFloat().pow(2)).toInt()
 
-// Where can we get from here?
-private fun GameState.getAdjacentNodes(node: Node, unit: UnitEcs): List<Node> {
-    val cell = this.getCell(node.position)
-    val abyss = cell?.getComponent<Abyss>()
-    return if (cell != null && !cell.hasComponent<Hide>() && cell.hasComponent<MovementCoordinatesComponent>()) {
-        val destination = getDestination(cell)
-        if (destination != null) listOf(Node(destination, cost = Int.MAX_VALUE)) else listOf()
-    } else if (cell != null && !cell.hasComponent<Hide>() && abyss != null) {
-        listOf(Node(Axis(Int.MAX_VALUE, Int.MAX_VALUE), cost = Int.MAX_VALUE))
-    } else {
-        this.getAvailableMoveDistancePositionList(node.position, unit).map { Node(it, cost = Int.MAX_VALUE) }
-    }
-}
+/**
+ * Check where can we get from this node
+ */
+private fun GameState.getAdjacentNodes(node: Node, unit: UnitEcs): List<Node> =
+        this.getCell(node.position)?.getVisibleDestinationNodes()
+                ?: getAvailableNodePositionList(node, unit)
 
-fun getDestination(cell: CellEcs): Axis? {
-    return cell.getComponent<MovementCoordinatesComponent>()?.axis ?: return null
+private fun GameState.getAvailableNodePositionList(node: Node, unit: UnitEcs) =
+        this.getAvailableMoveDistancePositionList(node.position, unit).map { Node(it, cost = Int.MAX_VALUE) }
+
+private fun CellEcs.getVisibleDestinationNodes(): List<Node>? =
+        if (!this.hasComponent<Hide>()) {
+            this.getDestinationNodes()
+        } else {
+            null
+        }
+
+/**
+ * Cells moving logic
+ */
+private fun CellEcs.getDestinationNodes(): List<Node>? {
+    val abyss = this.getComponent<Abyss>()
+    val movementCoordinates = this.getComponent<MovementCoordinatesComponent>()
+    return when {
+        movementCoordinates != null -> listOf(Node(movementCoordinates.axis, cost = Int.MAX_VALUE))
+        abyss != null -> listOf(Node(Axis(Int.MAX_VALUE, Int.MAX_VALUE), cost = Int.MAX_VALUE))
+        else -> null
+    }
 }
 
 fun GameState.getAvailableMoveDistancePositionList(position: Axis, unit: UnitEcs) =
