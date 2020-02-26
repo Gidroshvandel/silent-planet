@@ -35,6 +35,8 @@ fun EntityEcs.getCrystalsCount() = getComponent<Crystal>()?.count
 
 fun EntityEcs.getCurrentPosition() = getComponent<Position>()?.currentPosition
 
+fun CellEcs.getCurrentPosition() = getMandatoryComponent<Position>().currentPosition
+
 fun GameState.getCellsAtMoveDistance(position: Axis) =
         getAvailableMoveDistancePositionList(position).mapNotNull { this.getCell(it) }
 

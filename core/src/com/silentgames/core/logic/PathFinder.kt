@@ -2,14 +2,12 @@ package com.silentgames.core.logic
 
 import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.GameState
-import com.silentgames.core.logic.ecs.component.Abyss
-import com.silentgames.core.logic.ecs.component.Hide
-import com.silentgames.core.logic.ecs.component.MovementCoordinatesComponent
-import com.silentgames.core.logic.ecs.component.Position
+import com.silentgames.core.logic.ecs.component.*
 import com.silentgames.core.logic.ecs.entity.cell.CellEcs
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.logic.ecs.system.event.MovementSystem
 import com.silentgames.core.logic.ecs.system.getAvailableMoveDistancePositionList
+import com.silentgames.core.logic.ecs.system.getCurrentPosition
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -33,9 +31,9 @@ fun GameState.findPath(position: Axis, goal: Axis, unit: UnitEcs): List<Axis> {
 
             val newReachable = this.getAdjacentNodes(node, unit) - explored
             newReachable.forEach { adjacent ->
-                if (node.cost + 1 < adjacent.cost) {
+                if (adjacent.cost > node.cost + node.costPerMoving) {
                     adjacent.previous = node
-                    adjacent.cost = node.cost + 1
+                    adjacent.cost = node.cost + node.costPerMoving
                 }
                 if (!reachable.contains(adjacent)) {
                     reachable.add(adjacent)
@@ -110,9 +108,11 @@ private fun CellEcs.getVisibleDestinationNodes(): List<Node>? =
 private fun CellEcs.getDestinationNodes(): List<Node>? {
     val abyss = this.getComponent<Abyss>()
     val movementCoordinates = this.getComponent<MovementCoordinatesComponent>()
+    val stun = this.getComponent<StunComponent>()
     return when {
-        movementCoordinates != null -> listOf(Node(movementCoordinates.axis, cost = Int.MAX_VALUE))
-        abyss != null -> listOf(Node(Axis(Int.MAX_VALUE, Int.MAX_VALUE), cost = Int.MAX_VALUE))
+        movementCoordinates != null -> listOf(Node(movementCoordinates.axis))
+        abyss != null -> listOf(Node(Axis(0, 0), costPerMoving = Int.MAX_VALUE))
+        stun != null -> listOf(Node(this.getCurrentPosition(), costPerMoving = stun.stunTurns))
         else -> null
     }
 }
@@ -140,9 +140,9 @@ fun GameState.findPathToCell(unit: UnitEcs, event: (CellEcs) -> Boolean): List<A
 
             val newReachable = this.getAdjacentNodes(node, unit) - explored
             newReachable.forEach { adjacent ->
-                if (node.cost + 1 < adjacent.cost) {
+                if (adjacent.cost > node.cost + node.costPerMoving) {
                     adjacent.previous = node
-                    adjacent.cost = node.cost + 1
+                    adjacent.cost = node.cost + node.costPerMoving
                 }
                 if (!reachable.contains(adjacent)) {
                     reachable.add(adjacent)
@@ -153,7 +153,12 @@ fun GameState.findPathToCell(unit: UnitEcs, event: (CellEcs) -> Boolean): List<A
     return listOf()
 }
 
-private class Node(val position: Axis = Axis(0, 0), var previous: Node? = null, var cost: Int = 1) {
+private class Node(
+        val position: Axis = Axis(0, 0),
+        var previous: Node? = null,
+        val costPerMoving: Int = 1,
+        var cost: Int = Int.MAX_VALUE
+) {
 
     override fun equals(other: Any?): Boolean {
         return if (other is Node) {
