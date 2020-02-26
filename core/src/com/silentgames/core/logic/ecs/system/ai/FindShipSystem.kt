@@ -1,34 +1,29 @@
 package com.silentgames.core.logic.ecs.system.ai
 
+import com.silentgames.core.logic.CoreLogger
 import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.GameState
-import com.silentgames.core.logic.ecs.component.*
-import com.silentgames.core.logic.ecs.entity.cell.CellEcs
-import com.silentgames.core.logic.ecs.entity.event.AddCrystalEvent
+import com.silentgames.core.logic.ecs.component.ArtificialIntelligence
+import com.silentgames.core.logic.ecs.component.FractionsType
+import com.silentgames.core.logic.ecs.component.Goal
+import com.silentgames.core.logic.ecs.component.MovingMode
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
-import com.silentgames.core.logic.ecs.system.getCrystalsCount
 import com.silentgames.core.logic.ecs.system.getCurrentUnitCell
+import com.silentgames.core.logic.ecs.system.getName
+import com.silentgames.core.logic.ecs.system.isCrystalBagFull
 import com.silentgames.core.logic.ecs.system.unit.UnitSystem
 
 class FindShipSystem : UnitSystem() {
-    override fun execute(gameState: GameState, unit: UnitEcs) {
-        gameState.getCurrentUnitCell(unit) { cell ->
-            if (cell.hasComponent<Crystal>() && unit.hasComponent<ArtificialIntelligence>() && unit.isPlayer()) {
-                this.findShip(gameState, unit, cell)
-            }
-        }
+
+    companion object {
+        private const val SYSTEM_TAG = "FindShipSystem"
     }
 
-    private fun findShip(gameState: GameState, unit: UnitEcs, cell: CellEcs) {
-        when {
-            cell.getCrystalsCount() > 0 -> {
-                gameState.addEvent(AddCrystalEvent(cell.getCrystalsCount(), unit))
+    override fun execute(gameState: GameState, unit: UnitEcs) {
+        gameState.getCurrentUnitCell(unit) { cell ->
+            if (unit.hasComponent<ArtificialIntelligence>() && unit.isCrystalBagFull() && unit.isPlayer()) {
                 gameState.getSpaceShipPosition(unit)?.let {
-                    unit.addComponent(Goal(it))
-                }
-            }
-            unit.getCrystalsCount() > 0 -> {
-                gameState.getSpaceShipPosition(unit)?.let {
+                    CoreLogger.logDebug(SYSTEM_TAG, "unit ${unit.getName()} added goal $it")
                     unit.addComponent(Goal(it))
                 }
             }

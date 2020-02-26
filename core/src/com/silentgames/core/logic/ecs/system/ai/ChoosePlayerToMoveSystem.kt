@@ -1,16 +1,29 @@
 package com.silentgames.core.logic.ecs.system.ai
 
+import com.silentgames.core.logic.CoreLogger
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.*
 import com.silentgames.core.logic.ecs.entity.event.SkipTurnEvent
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.logic.ecs.system.System
+import com.silentgames.core.logic.ecs.system.getName
 
 class ChoosePlayerToMoveSystem(private val aiFractionList: List<FractionsType> = listOf()) : System {
+
+    companion object {
+        private const val SYSTEM_TAG = "ChoosePlayerToMoveSystem"
+    }
+
     override fun execute(gameState: GameState) {
+        gameState.unitMap.forEach {
+            it.removeComponent(ArtificialIntelligence::class.java)
+        }
         if (!gameState.isTurnEnd() && gameState.isPlayersFromCurrentFractionCanTurn() && aiFractionList.contains(gameState.turn.currentTurnFraction)) {
-            gameState.choosePlayerToMove(gameState.turn.currentTurnFraction)?.addComponent(ArtificialIntelligence())
+            val unitToMove = gameState.choosePlayerToMove(gameState.turn.currentTurnFraction)
+            unitToMove?.addComponent(ArtificialIntelligence())
+            CoreLogger.logDebug(SYSTEM_TAG, "selected unit to move: ${unitToMove?.getName()}")
         } else if (aiFractionList.contains(gameState.turn.currentTurnFraction)) {
+            CoreLogger.logDebug(SYSTEM_TAG, "SkipTurnEvent")
             gameState.addEvent(SkipTurnEvent())
         }
     }

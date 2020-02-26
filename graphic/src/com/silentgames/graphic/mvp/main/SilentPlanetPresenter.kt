@@ -46,6 +46,7 @@ class SilentPlanetPresenter internal constructor(
                         listOf(FractionsType.HUMAN, FractionsType.ALIEN, FractionsType.PIRATE, FractionsType.ROBOT)
                 ),
                 FindCrystalSystem(),
+                PutCrystalSystem(),
                 FindShipSystem(),
                 AddCrystalSystem(),
                 SkipTurnSystem(),

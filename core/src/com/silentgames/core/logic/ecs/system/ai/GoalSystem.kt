@@ -3,6 +3,7 @@ package com.silentgames.core.logic.ecs.system.ai
 import com.silentgames.core.logic.CoreLogger
 import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.GameState
+import com.silentgames.core.logic.ecs.component.ArtificialIntelligence
 import com.silentgames.core.logic.ecs.component.Goal
 import com.silentgames.core.logic.ecs.component.Position
 import com.silentgames.core.logic.ecs.entity.event.MovementEvent
@@ -20,8 +21,8 @@ class GoalSystem : UnitSystem() {
     override fun execute(gameState: GameState, unit: UnitEcs) {
         val goal = unit.getComponent<Goal>()
         val nextAxisToGoal = goal?.axis?.let { gameState.getNextAxisToGoal(unit, goal.axis) }
-        if (nextAxisToGoal != null) {
-            CoreLogger.logDebug(SYSTEM_TAG, "unit ${unit.getName()} added goal $nextAxisToGoal")
+        if (nextAxisToGoal != null && unit.hasComponent<ArtificialIntelligence>()) {
+            CoreLogger.logDebug(SYSTEM_TAG, "unit ${unit.getName()} added MovementEvent $nextAxisToGoal")
             gameState.addEvent(MovementEvent(nextAxisToGoal, unit))
         }
     }
@@ -34,6 +35,8 @@ class GoalSystem : UnitSystem() {
                 unit.removeComponent(Goal::class.java)
             }
             return path.last()
+        } else if (path.isEmpty() && position == goalTarget) {
+            unit.removeComponent(Goal::class.java)
         }
         return null
     }

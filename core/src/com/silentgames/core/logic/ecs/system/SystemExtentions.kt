@@ -28,6 +28,8 @@ fun CellEcs.isVisible() = !isHide()
 
 fun CellEcs.isHide() = hasComponent<Hide>()
 
+fun UnitEcs.isCrystalBagFull() = getComponent<CrystalBag>()?.isFull == true
+
 fun EntityEcs.getCrystalsCount() = getComponent<Crystal>()?.count
         ?: getComponent<CrystalBag>()?.amount ?: 0
 
