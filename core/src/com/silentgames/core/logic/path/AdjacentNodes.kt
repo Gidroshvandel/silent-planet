@@ -42,7 +42,7 @@ private fun CellEcs.getDestinationNodes(): List<Node>? {
     val stun = this.getComponent<StunComponent>()
     return when {
         movementCoordinates != null -> listOf(Node(movementCoordinates.axis))
-        abyss != null -> listOf(Node(Axis(0, 0), costPerMoving = Int.MAX_VALUE))
+        abyss != null -> listOf()
         stun != null -> listOf(Node(this.getCurrentPosition(), costPerMoving = stun.stunTurns))
         else -> null
     }
