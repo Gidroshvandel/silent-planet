@@ -1,4 +1,6 @@
-package com.silentgames.core.logic.ecs.component
+package com.silentgames.core.logic.ecs.component.stun
+
+import com.silentgames.core.logic.ecs.component.ComponentEquals
 
 class StunEffect(private var _stunTurnsLeft: Int, val totalStunTurns: Int) : ComponentEquals() {
 

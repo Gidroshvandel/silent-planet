@@ -1,6 +1,8 @@
 package com.silentgames.core.logic.ecs.entity.unit
 
 import com.silentgames.core.logic.ecs.component.*
+import com.silentgames.core.logic.ecs.component.stun.CanStunnedBy
+import com.silentgames.core.logic.ecs.component.stun.StunTypeGroup
 import com.silentgames.core.logic.ecs.entity.EntityEcs
 
 abstract class UnitEcs(
@@ -19,6 +21,7 @@ abstract class UnitEcs(
         addComponent(fractionsType)
         addComponent(description)
         addComponent(CanMove())
+        addComponent(CanStunnedBy(StunTypeGroup.SWELL))
     }
 
 }

@@ -5,7 +5,7 @@ import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.Abyss
 import com.silentgames.core.logic.ecs.component.Hide
 import com.silentgames.core.logic.ecs.component.MovementCoordinatesComponent
-import com.silentgames.core.logic.ecs.component.StunComponent
+import com.silentgames.core.logic.ecs.component.stun.StunComponent
 import com.silentgames.core.logic.ecs.entity.cell.CellEcs
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.logic.ecs.system.event.MovementSystem
