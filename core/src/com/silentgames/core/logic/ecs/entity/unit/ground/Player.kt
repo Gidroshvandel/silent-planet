@@ -3,6 +3,8 @@ package com.silentgames.core.logic.ecs.entity.unit.ground
 
 import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.component.*
+import com.silentgames.core.logic.ecs.component.stun.CanStunnedBy
+import com.silentgames.core.logic.ecs.component.stun.StunTypeGroup
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 
 /**
@@ -22,6 +24,8 @@ abstract class Player(
 ) {
 
     init {
+        addComponent(CanStunnedBy(StunTypeGroup.SWELL))
+        addComponent(CanStunnedBy(StunTypeGroup.CRATER))
         addComponent(TurnMode(GroupType.PLAYER))
         addComponent(CrystalBag(maxCrystals = 1))
     }

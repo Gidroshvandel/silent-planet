@@ -9,11 +9,12 @@ import com.silentgames.core.logic.ecs.entity.cell.GroundCell
 abstract class StunCell(
         position: Position,
         stunTurnsCount: Int,
-        hide: Hide
+        hide: Hide,
+        stunTypeGroup: StunTypeGroup
 ) : GroundCell(position, hide) {
 
     init {
-        addComponent(StunComponent(stunTurnsCount, StunTypeGroup.SWELL))
+        addComponent(StunComponent(stunTurnsCount, stunTypeGroup))
     }
 
 }

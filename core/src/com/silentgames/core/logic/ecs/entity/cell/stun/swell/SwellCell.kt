@@ -5,12 +5,13 @@ import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.component.Description
 import com.silentgames.core.logic.ecs.component.Hide
 import com.silentgames.core.logic.ecs.component.Position
+import com.silentgames.core.logic.ecs.component.stun.StunTypeGroup
 import com.silentgames.core.logic.ecs.entity.cell.stun.StunCell
 
 class SwellCell(
         position: Axis,
         stunTurnsCount: Int,
-        imageName: String = "swell_4"
+        imageName: String
 ) : StunCell(
         Position(position),
         stunTurnsCount,
@@ -20,9 +21,13 @@ class SwellCell(
                         Strings.empty_cell_name.getString(),
                         Strings.empty_cell_description.getString()
                 )
-        )
+        ),
+        StunTypeGroup.SWELL
 ) {
 
-    constructor(position: Axis, swellsEnum: SwellsEnum) : this(position, swellsEnum.turnCount, swellsEnum.getImageName())
+    constructor(
+            position: Axis,
+            swellsEnum: SwellsEnum
+    ) : this(position, swellsEnum.turnCount, swellsEnum.getImageName())
 
 }

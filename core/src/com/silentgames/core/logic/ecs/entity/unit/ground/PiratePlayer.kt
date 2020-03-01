@@ -6,6 +6,8 @@ import com.silentgames.core.logic.ecs.Axis
 import com.silentgames.core.logic.ecs.component.Description
 import com.silentgames.core.logic.ecs.component.FractionsType
 import com.silentgames.core.logic.ecs.component.Texture
+import com.silentgames.core.logic.ecs.component.stun.CanStunnedBy
+import com.silentgames.core.logic.ecs.component.stun.StunTypeGroup
 
 /**
  * Created by gidroshvandel on 24.09.16.
@@ -21,4 +23,9 @@ class PiratePlayer(
         Description(
                 name,
                 Strings.pirate_player_description.getString())
-)
+) {
+    init {
+        addComponent(CanStunnedBy(StunTypeGroup.DISEASE))
+        addComponent(CanStunnedBy(StunTypeGroup.METEORITES))
+    }
+}

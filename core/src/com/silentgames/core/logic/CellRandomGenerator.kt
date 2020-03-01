@@ -8,6 +8,12 @@ import com.silentgames.core.logic.ecs.entity.cell.arrow.ArrowGreenCell
 import com.silentgames.core.logic.ecs.entity.cell.arrow.ArrowRedCell
 import com.silentgames.core.logic.ecs.entity.cell.crystal.CrystalCell
 import com.silentgames.core.logic.ecs.entity.cell.crystal.CrystalsEnum
+import com.silentgames.core.logic.ecs.entity.cell.stun.crater.CraterCell
+import com.silentgames.core.logic.ecs.entity.cell.stun.crater.CraterEnum
+import com.silentgames.core.logic.ecs.entity.cell.stun.disease.DiseaseCell
+import com.silentgames.core.logic.ecs.entity.cell.stun.disease.DiseaseEnum
+import com.silentgames.core.logic.ecs.entity.cell.stun.meteorites.MeteoritesCell
+import com.silentgames.core.logic.ecs.entity.cell.stun.meteorites.MeteoritesEnum
 import com.silentgames.core.logic.ecs.entity.cell.stun.swell.SwellCell
 import com.silentgames.core.logic.ecs.entity.cell.stun.swell.SwellsEnum
 import java.util.*
@@ -72,6 +78,12 @@ class CellRandomGenerator {
             RandomCellType.SWELL_TWO -> SwellCell(axis, SwellsEnum.TWO)
             RandomCellType.SWELL_THREE -> SwellCell(axis, SwellsEnum.THREE)
             RandomCellType.SWELL_FOUR -> SwellCell(axis, SwellsEnum.FOUR)
+            RandomCellType.CRATER_ONE -> CraterCell(axis, CraterEnum.ONE)
+            RandomCellType.CRATER_TWO -> CraterCell(axis, CraterEnum.TWO)
+            RandomCellType.CRATER_THREE -> CraterCell(axis, CraterEnum.THREE)
+            RandomCellType.CRATER_FOUR -> CraterCell(axis, CraterEnum.FOUR)
+            RandomCellType.DISEASE_TWO -> DiseaseCell(axis, DiseaseEnum.TWO)
+            RandomCellType.METEORITES_TWO -> MeteoritesCell(axis, MeteoritesEnum.TWO)
         }
     }
 
@@ -112,8 +124,13 @@ class CellGeneratorParams(
         private val swellOneCellCount: Int = 1,
         private val swellTwoCellCount: Int = 1,
         private val swellThreeCellCount: Int = 1,
-        private val swellFourCellCount: Int = 1
-
+        private val swellFourCellCount: Int = 1,
+        private val craterOneCellCount: Int = 1,
+        private val craterTwoCellCount: Int = 1,
+        private val craterThreeCellCount: Int = 1,
+        private val craterFourCellCount: Int = 1,
+        private val diseaseTwoCellCount: Int = 1,
+        private val meteoritesTwoCellCount: Int = 1
 ) {
     private val emptyCount: Int = Constants.countOfGroundCells - (
             deathCellCount +
@@ -127,7 +144,14 @@ class CellGeneratorParams(
                     swellOneCellCount +
                     swellTwoCellCount +
                     swellThreeCellCount +
-                    swellFourCellCount)
+                    swellFourCellCount +
+                    craterOneCellCount +
+                    craterTwoCellCount +
+                    craterThreeCellCount +
+                    craterFourCellCount +
+                    diseaseTwoCellCount +
+                    meteoritesTwoCellCount
+            )
 
     fun getRandomEntityList() = listOf(
             RandomEntity(RandomCellType.DEATH, deathCellCount),
@@ -142,7 +166,13 @@ class CellGeneratorParams(
             RandomEntity(RandomCellType.SWELL_ONE, swellOneCellCount),
             RandomEntity(RandomCellType.SWELL_TWO, swellTwoCellCount),
             RandomEntity(RandomCellType.SWELL_THREE, swellThreeCellCount),
-            RandomEntity(RandomCellType.SWELL_FOUR, swellFourCellCount)
+            RandomEntity(RandomCellType.SWELL_FOUR, swellFourCellCount),
+            RandomEntity(RandomCellType.CRATER_ONE, craterOneCellCount),
+            RandomEntity(RandomCellType.CRATER_TWO, craterTwoCellCount),
+            RandomEntity(RandomCellType.CRATER_THREE, craterThreeCellCount),
+            RandomEntity(RandomCellType.CRATER_FOUR, craterFourCellCount),
+            RandomEntity(RandomCellType.DISEASE_TWO, diseaseTwoCellCount),
+            RandomEntity(RandomCellType.METEORITES_TWO, meteoritesTwoCellCount)
     )
 }
 
@@ -170,5 +200,11 @@ enum class RandomCellType {
     SWELL_ONE,
     SWELL_TWO,
     SWELL_THREE,
-    SWELL_FOUR
+    SWELL_FOUR,
+    CRATER_ONE,
+    CRATER_TWO,
+    CRATER_THREE,
+    CRATER_FOUR,
+    DISEASE_TWO,
+    METEORITES_TWO
 }
