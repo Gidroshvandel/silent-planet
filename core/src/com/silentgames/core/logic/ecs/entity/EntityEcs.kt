@@ -1,17 +1,15 @@
 package com.silentgames.core.logic.ecs.entity
 
 import com.silentgames.core.logic.ecs.component.Component
-import java.io.Serializable
 
-open class EntityEcs : Serializable {
-
-    val id = EntityIdGenerator.generateId()
+abstract class EntityEcs(
+        val id: Long = EntityIdGenerator.generateId(),
+        private var localComponents: Set<Component> = setOf()
+) {
 
     @PublishedApi
     internal val components: Set<Component>
         get() = localComponents
-
-    private var localComponents: Set<Component> = setOf()
 
     inline fun <reified T : Component> getComponent(): T? {
         return components.filterIsInstance<T>().firstOrNull()

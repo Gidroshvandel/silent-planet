@@ -14,6 +14,7 @@ import com.silentgames.graphic.Logger
 import com.silentgames.graphic.hud.Hud
 import com.silentgames.graphic.hud.Toast
 import com.silentgames.graphic.hud.Toast.ToastFactory
+import com.silentgames.graphic.manager.game.GameManager
 
 
 class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
@@ -38,7 +39,7 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
 
         presenter = SilentPlanetPresenter(
                 this,
-                null,
+                GameManager.loadData(),
                 SilentPlanetViewModel(),
                 SilentPlanetModel(viewPort, assets)
         )
@@ -109,6 +110,12 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
 
         fullViewPort.update(width, height, true)
         currentToast?.update(width.toFloat())
+    }
+
+    override fun pause() {
+        presenter.saveInstanceState {
+            GameManager.saveData(it)
+        }
     }
 
     override fun dispose() {

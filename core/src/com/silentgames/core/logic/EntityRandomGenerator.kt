@@ -44,9 +44,7 @@ class EntityRandomGenerator {
             listOf(
                     RobotShip(axis).apply {
                         addComponent(
-                                Transport(
-                                        this.getMandatoryComponent()
-                                )
+                                Transport()
                         )
                     },
                     RobotPlayer(Strings.robot_player_name_one.getString(), axis),
@@ -57,7 +55,7 @@ class EntityRandomGenerator {
     private fun spawnAliens(axis: Axis) =
             listOf(
                     AlienShip(axis).apply {
-                        addComponent(Transport(this.getMandatoryComponent()))
+                        addComponent(Transport())
                     },
                     AlienPlayer(Strings.alien_player_name_one.getString(), axis),
                     AlienPlayer(Strings.alien_player_name_two.getString(), axis),
@@ -68,9 +66,7 @@ class EntityRandomGenerator {
             listOf(
                     PirateShip(axis).apply {
                         addComponent(
-                                Transport(
-                                        this.getMandatoryComponent()
-                                )
+                                Transport()
                         )
                     },
                     PiratePlayer(Strings.pirate_player_name_one.getString(), axis),
@@ -80,7 +76,7 @@ class EntityRandomGenerator {
 
     private fun spawnHumans(axis: Axis) =
             listOf(
-                    HumanShip(axis).apply { addComponent(Transport(this.getMandatoryComponent())) },
+                    HumanShip(axis).apply { addComponent(Transport()) },
                     HumanPlayer(Strings.human_player_name_one.getString(), axis),
                     HumanPlayer(Strings.human_player_name_two.getString(), axis),
                     HumanPlayer(Strings.human_player_name_three.getString(), axis)

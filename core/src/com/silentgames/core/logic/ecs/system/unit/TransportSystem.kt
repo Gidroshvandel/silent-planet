@@ -1,7 +1,10 @@
 package com.silentgames.core.logic.ecs.system.unit
 
 import com.silentgames.core.logic.CoreLogger
+import com.silentgames.core.logic.ecs.EngineEcs
 import com.silentgames.core.logic.ecs.GameState
+import com.silentgames.core.logic.ecs.component.Moving
+import com.silentgames.core.logic.ecs.component.Position
 import com.silentgames.core.logic.ecs.component.Transport
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.logic.ecs.system.getCurrentPosition
@@ -11,6 +14,23 @@ class TransportSystem : UnitSystem() {
 
     companion object {
         private const val SYSTEM_TAG = "TransportSystem"
+    }
+
+    override fun onEngineAttach(engine: EngineEcs) {
+        engine.gameState.unitMap.forEach { unit ->
+            val transport = unit.getComponent<Transport>()
+            if (transport != null) {
+                unit.getComponent<Position>()?.addPositionChangedListener { axis ->
+                    transport.unitsOnBoard.forEach {
+                        it.getComponent<Position>()?.apply {
+                            currentPosition = axis
+                        }
+                        it.removeComponent(Moving::class.java)
+                    }
+                }
+            }
+        }
+        super.onEngineAttach(engine)
     }
 
     override fun execute(gameState: GameState, unit: UnitEcs) {

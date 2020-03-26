@@ -2,20 +2,22 @@ package com.silentgames.core.logic.ecs
 
 import com.silentgames.core.logic.ecs.component.FractionsType
 
-class Turn(firstTurnFraction: FractionsType) {
+class Turn(
+        private var _currentTurnFraction: FractionsType,
+        private var _turnCount: Int = 0
+) {
 
-    private var turnCount: Int = 0
+    val turnCount: Int get() = _turnCount
 
-    var currentTurnFraction: FractionsType = firstTurnFraction
-        private set
+    val currentTurnFraction: FractionsType get() = _currentTurnFraction
 
     fun nextTurn() {
-        turnCount++
+        _turnCount++
         nextPlayer()
     }
 
     private fun nextPlayer() {
-        currentTurnFraction = currentTurnFraction.next()
+        _currentTurnFraction = currentTurnFraction.next()
     }
 
 }

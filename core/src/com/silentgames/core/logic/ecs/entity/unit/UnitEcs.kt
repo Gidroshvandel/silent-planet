@@ -3,7 +3,7 @@ package com.silentgames.core.logic.ecs.entity.unit
 import com.silentgames.core.logic.ecs.component.*
 import com.silentgames.core.logic.ecs.entity.EntityEcs
 
-abstract class UnitEcs(
+open class UnitEcs(
         position: Position,
         texture: Texture,
         movingMode: MovingMode,

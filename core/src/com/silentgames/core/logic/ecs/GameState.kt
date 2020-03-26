@@ -7,25 +7,26 @@ import com.silentgames.core.logic.ecs.entity.cell.CellEcs
 import com.silentgames.core.logic.ecs.entity.event.EventEcs
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.logic.ecs.system.getName
-import java.io.Serializable
+
 
 class GameState(
-        cellList: List<CellEcs>,
-        unitList: List<UnitEcs>,
-        firstTurnFraction: FractionsType
-) : Serializable {
+        private val mutableEventList: MutableList<EventEcs>,
+        private val mutableCellList: MutableList<CellEcs>,
+        private val mutableUnitList: MutableList<UnitEcs>,
+        val turn: Turn
+) {
+
+    constructor(
+            cellList: List<CellEcs>,
+            unitList: List<UnitEcs>,
+            firstTurnFraction: FractionsType
+    ) : this(mutableListOf(), cellList.toMutableList(), unitList.toMutableList(), Turn(firstTurnFraction))
 
     private val onEventAddList = mutableListOf<((EventEcs) -> Unit)>()
-
-    val turn: Turn = Turn(firstTurnFraction)
 
     val eventList: List<EventEcs> get() = mutableEventList.toList()
     val cellMap: List<CellEcs> get() = mutableCellList.toList()
     val unitMap: List<UnitEcs> get() = mutableUnitList.toList()
-
-    private val mutableEventList: MutableList<EventEcs> = mutableListOf()
-    private val mutableCellList: MutableList<CellEcs> = cellList.toMutableList()
-    private val mutableUnitList: MutableList<UnitEcs> = unitList.toMutableList()
 
     fun getUnit(id: Long) = unitMap.find { it.id == id }
 
