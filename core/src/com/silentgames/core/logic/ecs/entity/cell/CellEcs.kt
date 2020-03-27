@@ -5,7 +5,7 @@ import com.silentgames.core.logic.ecs.component.Position
 import com.silentgames.core.logic.ecs.component.Texture
 import com.silentgames.core.logic.ecs.entity.EntityEcs
 
-open class CellEcs(
+abstract class CellEcs(
         position: Position,
         description: Description,
         texture: Texture

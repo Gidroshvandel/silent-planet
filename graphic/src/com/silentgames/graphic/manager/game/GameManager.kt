@@ -1,11 +1,17 @@
 package com.silentgames.graphic.manager.game
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.utils.SerializationException
 import com.google.gson.*
 import com.silentgames.core.logic.ecs.GameState
+import com.silentgames.core.logic.ecs.Turn
 import com.silentgames.core.logic.ecs.component.Component
+import com.silentgames.core.logic.ecs.component.FractionsType
 import com.silentgames.core.logic.ecs.component.Transport
 import com.silentgames.core.logic.ecs.entity.ComponentChangeHandler
+import com.silentgames.core.logic.ecs.entity.cell.CellEcs
+import com.silentgames.core.logic.ecs.entity.event.EventEcs
+import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import java.lang.reflect.Type
 
 
@@ -14,9 +20,12 @@ object GameManager {
     private val json = GsonBuilder()
             .setPrettyPrinting()
             .registerTypeAdapter(Transport::class.java, TransportDeserializer())
-            .registerTypeAdapter(List::class.java, FunctionListEmptySerializer())
+            .registerTypeAdapter(CellEcs::class.java, AnyClassTypeAdapter())
+            .registerTypeAdapter(UnitEcs::class.java, AnyClassTypeAdapter())
+            .registerTypeAdapter(EventEcs::class.java, AnyClassTypeAdapter())
+            .registerTypeAdapter(GameState::class.java, GameStateDeserializer())
             .registerTypeAdapter(ComponentChangeHandler::class.java, ChangeHandlerDeserializer())
-            .registerTypeAdapter(Component::class.java, InterfaceAdapter())
+            .registerTypeAdapter(Component::class.java, AnyClassTypeAdapter())
             .create()
     private val fileHandle = Gdx.files.local("data/GameState.json")
 
@@ -56,7 +65,7 @@ object GameManager {
 
 }
 
-class InterfaceAdapter : JsonDeserializer<Any>, JsonSerializer<Any> {
+class AnyClassTypeAdapter : JsonDeserializer<Any>, JsonSerializer<Any> {
 
     companion object {
         const val CLASSNAME = "CLASSNAME"
@@ -93,19 +102,6 @@ class InterfaceAdapter : JsonDeserializer<Any>, JsonSerializer<Any> {
     }
 }
 
-class FunctionListEmptySerializer : JsonSerializer<List<*>> {
-    override fun serialize(
-            src: List<*>,
-            typeOfSrc: Type,
-            context: JsonSerializationContext
-    ): JsonElement = if (src.filterIsInstance<Function<*>>().isNotEmpty()) {
-        JsonArray()
-    } else {
-        context.serialize(src)
-    }
-
-}
-
 class ChangeHandlerDeserializer : JsonDeserializer<ComponentChangeHandler> {
     override fun deserialize(
             json: JsonElement?,
@@ -120,4 +116,39 @@ class TransportDeserializer : JsonDeserializer<Transport> {
             typeOfT: Type?,
             context: JsonDeserializationContext?
     ): Transport = Transport()
+}
+
+class GameStateDeserializer : JsonDeserializer<GameState> {
+    override fun deserialize(
+            json: JsonElement,
+            typeOfT: Type,
+            context: JsonDeserializationContext
+    ): GameState {
+        if (json is JsonObject) {
+
+            val mutableEventList = json.getAsJsonArray("mutableEventList").map {
+                context.deserialize<EventEcs>(it, EventEcs::class.java)
+            }
+            val mutableCellList = json.getAsJsonArray("mutableCellList").map {
+                context.deserialize<CellEcs>(it, CellEcs::class.java)
+            }
+            val mutableUnitList = json.getAsJsonArray("mutableUnitList").map {
+                context.deserialize<UnitEcs>(it, UnitEcs::class.java)
+            }
+            val aiFractionList = json.getAsJsonArray("aiFractionList").map {
+                context.deserialize<FractionsType>(it, FractionsType::class.java)
+            }
+            val turn = json.getAsJsonObject("turn")
+
+            return GameState(
+                    mutableEventList.toMutableList(),
+                    mutableCellList.toMutableList(),
+                    mutableUnitList.toMutableList(),
+                    aiFractionList,
+                    context.deserialize<Turn>(turn, Turn::class.java)
+            )
+        } else {
+            throw SerializationException("Wrong data")
+        }
+    }
 }

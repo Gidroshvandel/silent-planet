@@ -30,6 +30,7 @@ class GameState(
             Turn(firstTurnFraction)
     )
 
+    @Transient
     private val onEventAddList = mutableListOf<((EventEcs) -> Unit)>()
 
     val eventList: List<EventEcs> get() = mutableEventList.toList()
