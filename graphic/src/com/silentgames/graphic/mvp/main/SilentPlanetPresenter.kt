@@ -162,7 +162,7 @@ class SilentPlanetPresenter internal constructor(
     }
 
     override fun onTopScorePanelClick(fractionType: FractionsType) {
-        if (fractionType == viewModel.engine.gameState.turn.currentTurnFraction) {
+        if (fractionType == viewModel.engine.gameState.turn.currentFraction) {
             viewModel.engine.addEvent(SkipTurnEvent())
         }
     }
@@ -251,5 +251,5 @@ class SilentPlanetPresenter internal constructor(
     }
 
     private fun UnitEcs.isCurrentTurn() =
-            viewModel.engine.gameState.turn.currentTurnFraction == getComponent<FractionsType>()
+            viewModel.engine.gameState.turn.currentFraction == getComponent<FractionsType>()
 }

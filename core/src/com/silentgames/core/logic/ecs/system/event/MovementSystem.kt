@@ -30,7 +30,7 @@ class MovementSystem : EventSystem() {
     }
 
     private fun process(gameState: GameState, unit: UnitEcs, target: Axis): Boolean {
-        return if (unit.getComponent<FractionsType>() != gameState.turn.currentTurnFraction
+        return if (unit.getComponent<FractionsType>() != gameState.turn.currentFraction
                 || !unit.hasComponent<CanTurn>()
                 || !unit.hasComponent<CanMove>()
         ) {

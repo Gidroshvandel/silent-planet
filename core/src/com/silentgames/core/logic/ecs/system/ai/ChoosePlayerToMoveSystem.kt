@@ -29,17 +29,17 @@ class ChoosePlayerToMoveSystem : System {
             }
             if (!gameState.isTurnEnd()
                     && gameState.isPlayersFromCurrentFractionCanTurn()
-                    && gameState.aiFractionList.contains(gameState.turn.currentTurnFraction)) {
-                val unitToMove = gameState.choosePlayerToMove(gameState.turn.currentTurnFraction)
+                    && gameState.aiFractionList.contains(gameState.turn.currentFraction)) {
+                val unitToMove = gameState.choosePlayerToMove(gameState.turn.currentFraction)
                 unitToMove?.addComponent(ArtificialIntelligence())
                 CoreLogger.logDebug(SYSTEM_TAG, "selected unit to move: ${unitToMove?.getName()}")
             } else if (!gameState.isTurnEnd()
                     && gameState.isShipFromCurrentFractionCanTurn()
-                    && gameState.aiFractionList.contains(gameState.turn.currentTurnFraction)) {
-                val shipToMove = gameState.getCapitalShip(gameState.turn.currentTurnFraction)
+                    && gameState.aiFractionList.contains(gameState.turn.currentFraction)) {
+                val shipToMove = gameState.getCapitalShip(gameState.turn.currentFraction)
                 shipToMove?.addComponent(ArtificialIntelligence())
                 CoreLogger.logDebug(SYSTEM_TAG, "selected ship to move: ${shipToMove?.getName()}")
-            } else if (gameState.aiFractionList.contains(gameState.turn.currentTurnFraction)) {
+            } else if (gameState.aiFractionList.contains(gameState.turn.currentFraction)) {
                 CoreLogger.logDebug(SYSTEM_TAG, "SkipTurnEvent")
                 gameState.addEvent(SkipTurnEvent())
             }
@@ -69,12 +69,12 @@ class ChoosePlayerToMoveSystem : System {
             this.unitsOnBoard.firstOrNull { it.getComponent<FractionsType>() == fractionsType }
 
     private fun GameState.isPlayersFromCurrentFractionCanTurn(): Boolean {
-        return this.getAllFractionUnits(this.turn.currentTurnFraction)
+        return this.getAllFractionUnits(this.turn.currentFraction)
                 .any { it.getComponent<MovingMode>() == MovingMode.WALK && it.hasComponent<CanTurn>() }
     }
 
     private fun GameState.isShipFromCurrentFractionCanTurn(): Boolean {
-        return this.getAllFractionUnits(this.turn.currentTurnFraction)
+        return this.getAllFractionUnits(this.turn.currentFraction)
                 .any { it.getComponent<MovingMode>() == MovingMode.FLY && it.hasComponent<CanTurn>() }
     }
 }

@@ -13,9 +13,13 @@ class TurnSystem(private val onTurnChanged: (FractionsType) -> Unit) : UnitSyste
     }
 
     override fun onEngineAttach(engine: EngineEcs) {
-        engine.gameState.makeCurrentFractionTurnUnitsCanTurn()
-        engine.gameState.turn.currentTurnFraction.let { onTurnChanged.invoke(it) }
+        if (engine.gameState.isFirstGameStarting()) {
+            engine.gameState.makeCurrentFractionTurnUnitsCanTurn()
+        }
+        engine.gameState.turn.currentFraction.let { onTurnChanged.invoke(it) }
     }
+
+    private fun GameState.isFirstGameStarting() = this.turn.count == 0 && this.isTurnEnd()
 
     override fun execute(gameState: GameState, unit: UnitEcs) {
         if (unit.hasComponent<Moving>()) {
@@ -28,13 +32,13 @@ class TurnSystem(private val onTurnChanged: (FractionsType) -> Unit) : UnitSyste
         if (gameState.isTurnEnd() && gameState.isMovingFinish()) {
             gameState.turn.nextTurn()
             gameState.makeCurrentFractionTurnUnitsCanTurn()
-            gameState.turn.currentTurnFraction.let { onTurnChanged.invoke(it) }
-            CoreLogger.logDebug(SYSTEM_TAG, gameState.turn.currentTurnFraction.name)
+            gameState.turn.currentFraction.let { onTurnChanged.invoke(it) }
+            CoreLogger.logDebug(SYSTEM_TAG, gameState.turn.currentFraction.name)
         }
     }
 
     private fun GameState.makeCurrentFractionTurnUnitsCanTurn() {
-        makeUnitsCanTurn(turn.currentTurnFraction)
+        makeUnitsCanTurn(turn.currentFraction)
     }
 
     private fun GameState.makeUnitsCanTurn(fractionsType: FractionsType) {

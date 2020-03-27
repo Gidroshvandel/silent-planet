@@ -84,7 +84,7 @@ class GameState(
         mutableUnitList.remove(unit)
     }
 
-    fun isTurnEnd() = getAllFractionUnits(turn.currentTurnFraction).find {
+    fun isTurnEnd() = getAllFractionUnits(turn.currentFraction).find {
         it.hasComponent<CanTurn>()
     } == null
 
