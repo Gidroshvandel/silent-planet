@@ -9,7 +9,7 @@ import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.logic.ecs.system.System
 import com.silentgames.core.logic.ecs.system.getName
 
-class ChoosePlayerToMoveSystem(private val aiFractionList: List<FractionsType> = listOf()) : System {
+class ChoosePlayerToMoveSystem : System {
 
     companion object {
         private const val SYSTEM_TAG = "ChoosePlayerToMoveSystem"
@@ -27,15 +27,19 @@ class ChoosePlayerToMoveSystem(private val aiFractionList: List<FractionsType> =
             gameState.unitMap.forEach {
                 it.removeComponent(ArtificialIntelligence::class.java)
             }
-            if (!gameState.isTurnEnd() && gameState.isPlayersFromCurrentFractionCanTurn() && aiFractionList.contains(gameState.turn.currentTurnFraction)) {
+            if (!gameState.isTurnEnd()
+                    && gameState.isPlayersFromCurrentFractionCanTurn()
+                    && gameState.aiFractionList.contains(gameState.turn.currentTurnFraction)) {
                 val unitToMove = gameState.choosePlayerToMove(gameState.turn.currentTurnFraction)
                 unitToMove?.addComponent(ArtificialIntelligence())
                 CoreLogger.logDebug(SYSTEM_TAG, "selected unit to move: ${unitToMove?.getName()}")
-            } else if (!gameState.isTurnEnd() && gameState.isShipFromCurrentFractionCanTurn() && aiFractionList.contains(gameState.turn.currentTurnFraction)) {
+            } else if (!gameState.isTurnEnd()
+                    && gameState.isShipFromCurrentFractionCanTurn()
+                    && gameState.aiFractionList.contains(gameState.turn.currentTurnFraction)) {
                 val shipToMove = gameState.getCapitalShip(gameState.turn.currentTurnFraction)
                 shipToMove?.addComponent(ArtificialIntelligence())
                 CoreLogger.logDebug(SYSTEM_TAG, "selected ship to move: ${shipToMove?.getName()}")
-            } else if (aiFractionList.contains(gameState.turn.currentTurnFraction)) {
+            } else if (gameState.aiFractionList.contains(gameState.turn.currentTurnFraction)) {
                 CoreLogger.logDebug(SYSTEM_TAG, "SkipTurnEvent")
                 gameState.addEvent(SkipTurnEvent())
             }

@@ -118,6 +118,10 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
         }
     }
 
+    override fun resume() {
+        presenter.onResume()
+    }
+
     override fun dispose() {
 //        engine.dispose()
     }

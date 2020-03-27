@@ -18,13 +18,17 @@ class TransportSystem : UnitSystem() {
     }
 
     override fun onEngineAttach(engine: EngineEcs) {
-        engine.gameState.unitMap.forEach { unit ->
-            val transport = unit.getComponent<Transport>()
+        engine.gameState.unitMap.forEach { transportUnit ->
+            val transport = transportUnit.getComponent<Transport>()
             if (transport != null) {
-                unit.addComponentChangedListener<Position> { axis ->
-                    transport.unitsOnBoard.forEach {
-                        it.setCurrentPosition(axis)
-                        it.removeComponent(Moving::class.java)
+                transportUnit.addComponentChangedListener<Position> { axis ->
+                    transport.unitsOnBoard.forEach { unitOnBoard ->
+                        CoreLogger.logDebug(
+                                SYSTEM_TAG,
+                                "${unitOnBoard.getName()} move with ship ${unitOnBoard.getCurrentPosition()} moved to target ${axis.currentPosition}"
+                        )
+                        unitOnBoard.setCurrentPosition(axis)
+                        unitOnBoard.removeComponent(Moving::class.java)
                     }
                 }
             }

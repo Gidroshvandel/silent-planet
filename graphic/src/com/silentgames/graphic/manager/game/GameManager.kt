@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.google.gson.*
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.Component
+import com.silentgames.core.logic.ecs.component.Transport
 import com.silentgames.core.logic.ecs.entity.ComponentChangeHandler
 import java.lang.reflect.Type
 
@@ -12,6 +13,7 @@ object GameManager {
 
     private val json = GsonBuilder()
             .setPrettyPrinting()
+            .registerTypeAdapter(Transport::class.java, TransportEmptyDeserializer())
             .registerTypeAdapter(List::class.java, FunctionListEmptySerializer())
             .registerTypeAdapter(ComponentChangeHandler::class.java, FunctionMapEmptySerializer())
             .registerTypeAdapter(Component::class.java, InterfaceAdapter())
@@ -110,4 +112,12 @@ class FunctionMapEmptySerializer : JsonSerializer<ComponentChangeHandler> {
             add("onComponentChangedList", JsonArray())
         }
     }
+}
+
+class TransportEmptyDeserializer : JsonDeserializer<Transport> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?
+    ): Transport = Transport()
 }

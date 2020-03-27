@@ -33,6 +33,17 @@ class SilentPlanetPresenter internal constructor(
                 gameState ?: model.generateNewBattleGround(FractionsType.HUMAN)
         )
 
+        startGame()
+
+        view.changeAlienCristalCount(0)
+        view.changeHumanCristalCount(0)
+        view.changePirateCristalCount(0)
+        view.changeRobotCristalCount(0)
+
+        view.changeBottomActionButtonVisibility(false)
+    }
+
+    private fun startGame() {
         viewModel.engine.addSystem(
                 BuyBackSystem(
                         {
@@ -85,18 +96,9 @@ class SilentPlanetPresenter internal constructor(
                 TurnSystem {
                     view.selectCurrentFraction(it)
                 },
-                ChoosePlayerToMoveSystem(
-                        listOf(FractionsType.HUMAN, FractionsType.ALIEN, FractionsType.PIRATE, FractionsType.ROBOT)
-                ),
+                ChoosePlayerToMoveSystem(),
                 MovingSystem()
         )
-
-        view.changeAlienCristalCount(0)
-        view.changeHumanCristalCount(0)
-        view.changePirateCristalCount(0)
-        view.changeRobotCristalCount(0)
-
-        view.changeBottomActionButtonVisibility(false)
     }
 
     override fun onRender() {
@@ -220,6 +222,10 @@ class SilentPlanetPresenter internal constructor(
     override fun saveInstanceState(onSave: (GameState) -> Unit) {
         viewModel.engine.stop()
         onSave(viewModel.engine.gameState)
+    }
+
+    override fun onResume() {
+        startGame()
     }
 
     private fun updateSelectedEntity() {

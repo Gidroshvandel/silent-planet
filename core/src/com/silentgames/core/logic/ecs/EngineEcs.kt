@@ -7,13 +7,15 @@ import com.silentgames.core.logic.ecs.system.System
 class EngineEcs(val gameState: GameState) {
 
     private val systems = mutableListOf<System>()
-    
+
     var processing = false
 
     fun addSystem(vararg system: System) {
+        processing = true
         system.forEach {
             addSystem(it)
         }
+        processing = false
         processSystems()
     }
 

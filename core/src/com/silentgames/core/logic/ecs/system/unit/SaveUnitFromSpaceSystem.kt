@@ -31,7 +31,7 @@ class SaveUnitFromSpaceSystem : UnitSystem() {
 
     private fun moveUnitToShip(gameState: GameState, currentPosition: Axis, shipPosition: Axis, unit: UnitEcs) {
         if (currentPosition != shipPosition && !currentPosition.inGroundBorders()) {
-            CoreLogger.logDebug(SYSTEM_TAG, "${unit.getName()} target $shipPosition")
+            CoreLogger.logDebug(SYSTEM_TAG, "${unit.getName()} with position ${unit.getCurrentPosition()} moved to target $shipPosition")
             gameState.addEvent(TeleportEvent(shipPosition, unit))
         }
     }

@@ -43,6 +43,8 @@ interface SilentPlanetContract {
 
         fun saveInstanceState(onSave: (GameState) -> Unit)
 
+        fun onResume()
+
         fun onRender()
 
         fun onTurnSkipped()

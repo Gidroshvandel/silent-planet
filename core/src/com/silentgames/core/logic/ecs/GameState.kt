@@ -13,14 +13,22 @@ class GameState(
         private val mutableEventList: MutableList<EventEcs>,
         private val mutableCellList: MutableList<CellEcs>,
         private val mutableUnitList: MutableList<UnitEcs>,
+        val aiFractionList: List<FractionsType> = listOf(),
         val turn: Turn
 ) {
 
     constructor(
             cellList: List<CellEcs>,
             unitList: List<UnitEcs>,
-            firstTurnFraction: FractionsType
-    ) : this(mutableListOf(), cellList.toMutableList(), unitList.toMutableList(), Turn(firstTurnFraction))
+            firstTurnFraction: FractionsType,
+            aiFractionList: List<FractionsType> = listOf()
+    ) : this(
+            mutableListOf(),
+            cellList.toMutableList(),
+            unitList.toMutableList(),
+            aiFractionList,
+            Turn(firstTurnFraction)
+    )
 
     private val onEventAddList = mutableListOf<((EventEcs) -> Unit)>()
 

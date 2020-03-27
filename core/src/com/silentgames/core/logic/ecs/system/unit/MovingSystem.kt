@@ -1,5 +1,6 @@
 package com.silentgames.core.logic.ecs.system.unit
 
+import com.silentgames.core.logic.CoreLogger
 import com.silentgames.core.logic.ecs.EngineEcs
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.Moving
@@ -17,6 +18,10 @@ class MovingSystem : UnitSystem() {
         engine.gameState.unitMap.forEach { unit ->
             unit.addComponentChangedListener<Position>(0) {
                 unit.addComponent(Moving())
+                CoreLogger.logDebug(
+                        "MovingSystem",
+                        "ADD Moving Component AAAAAAAAAAAAAAAAAAAAA"
+                )
             }
         }
     }
