@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.google.gson.*
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.Component
+import com.silentgames.core.logic.ecs.entity.ComponentChangeHandler
 import java.lang.reflect.Type
 
 
@@ -12,6 +13,7 @@ object GameManager {
     private val json = GsonBuilder()
             .setPrettyPrinting()
             .registerTypeAdapter(List::class.java, FunctionListEmptySerializer())
+            .registerTypeAdapter(ComponentChangeHandler::class.java, FunctionMapEmptySerializer())
             .registerTypeAdapter(Component::class.java, InterfaceAdapter())
             .create()
     private val fileHandle = Gdx.files.local("data/GameState.json")
@@ -100,4 +102,12 @@ class FunctionListEmptySerializer : JsonSerializer<List<*>> {
         context.serialize(src)
     }
 
+}
+
+class FunctionMapEmptySerializer : JsonSerializer<ComponentChangeHandler> {
+    override fun serialize(src: ComponentChangeHandler, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+        return JsonObject().apply {
+            add("onComponentChangedList", JsonArray())
+        }
+    }
 }

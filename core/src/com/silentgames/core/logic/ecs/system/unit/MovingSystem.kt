@@ -15,7 +15,7 @@ class MovingSystem : UnitSystem() {
     override fun onEngineAttach(engine: EngineEcs) {
         super.onEngineAttach(engine)
         engine.gameState.unitMap.forEach { unit ->
-            unit.getComponent<Position>()?.addPositionChangedListener {
+            unit.addComponentChangedListener<Position>(0) {
                 unit.addComponent(Moving())
             }
         }

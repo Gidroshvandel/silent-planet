@@ -1,25 +1,19 @@
 package com.silentgames.core.logic.ecs.component
 
 import com.silentgames.core.logic.ecs.Axis
+import com.silentgames.core.logic.ecs.entity.EntityEcs
 
-class Position(axis: Axis) : ComponentEquals() {
+class Position(val currentPosition: Axis, val oldPosition: Axis = currentPosition) : ComponentEquals()
 
-    private val onPositionChangedList = mutableListOf<((Axis) -> Unit)>()
-
-    fun addPositionChangedListener(onChanged: (Axis) -> Unit) {
-        onPositionChangedList.add(onChanged)
+fun EntityEcs.setCurrentPosition(axis: Axis) {
+    val currentPosition = getComponent<Position>()
+    if (currentPosition != null) {
+        this.addComponent(Position(axis, currentPosition.currentPosition))
+    } else {
+        this.addComponent(Position(axis, axis))
     }
+}
 
-    var currentPosition: Axis = axis
-        set(value) {
-            oldPosition = field
-            field = value
-            onPositionChangedList.forEach {
-                it.invoke(value)
-            }
-        }
-
-    var oldPosition: Axis = axis
-        private set
-
+fun EntityEcs.setCurrentPosition(position: Position) {
+    this.setCurrentPosition(position.currentPosition)
 }

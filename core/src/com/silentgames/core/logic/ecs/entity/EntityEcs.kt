@@ -21,7 +21,22 @@ abstract class EntityEcs(
 
     inline fun <reified T : Component> hasComponent(): Boolean = getComponent<T>() != null
 
+    val componentChangeHandler = ComponentChangeHandler()
+
+    @Suppress("UNCHECKED_CAST")
+    inline fun <reified T : Component> addComponentChangedListener(noinline onChanged: (T) -> Unit) {
+        componentChangeHandler.addComponentChangedListener(onChanged)
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    inline fun <reified T : Component> addComponentChangedListener(order: Int, noinline onChanged: (T) -> Unit) {
+        componentChangeHandler.addComponentChangedListener(order, onChanged)
+    }
+
     fun addComponent(component: Component) {
+
+        componentChangeHandler.addComponent(component)
+
         if (components.contains(component)) {
             removeComponent(component)
         }

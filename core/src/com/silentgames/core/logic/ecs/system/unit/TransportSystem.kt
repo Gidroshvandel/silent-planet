@@ -6,6 +6,7 @@ import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.Moving
 import com.silentgames.core.logic.ecs.component.Position
 import com.silentgames.core.logic.ecs.component.Transport
+import com.silentgames.core.logic.ecs.component.setCurrentPosition
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.logic.ecs.system.getCurrentPosition
 import com.silentgames.core.logic.ecs.system.getName
@@ -20,11 +21,9 @@ class TransportSystem : UnitSystem() {
         engine.gameState.unitMap.forEach { unit ->
             val transport = unit.getComponent<Transport>()
             if (transport != null) {
-                unit.getComponent<Position>()?.addPositionChangedListener { axis ->
+                unit.addComponentChangedListener<Position> { axis ->
                     transport.unitsOnBoard.forEach {
-                        it.getComponent<Position>()?.apply {
-                            currentPosition = axis
-                        }
+                        it.setCurrentPosition(axis)
                         it.removeComponent(Moving::class.java)
                     }
                 }

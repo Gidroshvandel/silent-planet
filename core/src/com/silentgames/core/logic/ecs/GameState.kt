@@ -53,7 +53,7 @@ class GameState(
             mutableUnitList.add(unit)
         }
         CoreLogger.logDebug("Moving", "unit ${unit.getName()} start Moving")
-        unit.getComponent<Position>()?.currentPosition = toPosition
+        unit.setCurrentPosition(toPosition)
     }
 
     fun addEvent(event: EventEcs) {

@@ -16,7 +16,7 @@ class StunSystem : UnitSystem() {
     override fun onEngineAttach(engine: EngineEcs) {
         super.onEngineAttach(engine)
         engine.gameState.unitMap.forEach { unit ->
-            unit.getComponent<Position>()?.addPositionChangedListener {
+            unit.addComponentChangedListener<Position> {
                 if (unit.getComponent<StunEffect>()?.stunTurnsLeft == 0) {
                     unit.removeComponent(StunEffect::class.java)
                 }
