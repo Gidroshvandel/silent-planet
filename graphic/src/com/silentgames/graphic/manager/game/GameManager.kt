@@ -13,9 +13,9 @@ object GameManager {
 
     private val json = GsonBuilder()
             .setPrettyPrinting()
-            .registerTypeAdapter(Transport::class.java, TransportEmptyDeserializer())
+            .registerTypeAdapter(Transport::class.java, TransportDeserializer())
             .registerTypeAdapter(List::class.java, FunctionListEmptySerializer())
-            .registerTypeAdapter(ComponentChangeHandler::class.java, FunctionMapEmptySerializer())
+            .registerTypeAdapter(ComponentChangeHandler::class.java, ChangeHandlerDeserializer())
             .registerTypeAdapter(Component::class.java, InterfaceAdapter())
             .create()
     private val fileHandle = Gdx.files.local("data/GameState.json")
@@ -106,15 +106,15 @@ class FunctionListEmptySerializer : JsonSerializer<List<*>> {
 
 }
 
-class FunctionMapEmptySerializer : JsonSerializer<ComponentChangeHandler> {
-    override fun serialize(src: ComponentChangeHandler, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
-        return JsonObject().apply {
-            add("onComponentChangedList", JsonArray())
-        }
-    }
+class ChangeHandlerDeserializer : JsonDeserializer<ComponentChangeHandler> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?
+    ): ComponentChangeHandler = ComponentChangeHandler()
 }
 
-class TransportEmptyDeserializer : JsonDeserializer<Transport> {
+class TransportDeserializer : JsonDeserializer<Transport> {
     override fun deserialize(
             json: JsonElement?,
             typeOfT: Type?,

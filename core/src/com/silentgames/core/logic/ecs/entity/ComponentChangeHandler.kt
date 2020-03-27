@@ -2,7 +2,10 @@ package com.silentgames.core.logic.ecs.entity
 
 import com.silentgames.core.logic.ecs.component.Component
 
-class ComponentChangeHandler(val onComponentChangedList: MutableMap<Class<*>, MutableList<(ChangeHandler)>> = mutableMapOf()) {
+class ComponentChangeHandler {
+
+    @Transient
+    val onComponentChangedList: MutableMap<Class<*>, MutableList<(ChangeHandler)>> = mutableMapOf()
 
     @Suppress("UNCHECKED_CAST")
     inline fun <reified T : Component> addComponentChangedListener(order: Int, noinline onChanged: (T) -> Unit) {
