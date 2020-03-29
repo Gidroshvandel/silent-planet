@@ -6,9 +6,9 @@ filter: Nearest,Nearest
 repeat: none
 alien
   rotate: false
-  xy: 1784, 1552
-  size: 204, 204
-  orig: 204, 204
+  xy: 627, 208
+  size: 117, 224
+  orig: 117, 224
   offset: 0, 0
   index: -1
 aliens_space_ship
@@ -34,7 +34,7 @@ crater_two
   index: -1
 crystal
   rotate: false
-  xy: 829, 332
+  xy: 746, 332
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
@@ -55,7 +55,7 @@ human_spaceman
   index: -1
 pirate_space_ship
   rotate: false
-  xy: 663, 256
+  xy: 461, 256
   size: 164, 176
   orig: 164, 176
   offset: 0, 0
@@ -69,7 +69,7 @@ planet_background
   index: -1
 robot
   rotate: false
-  xy: 931, 332
+  xy: 746, 230
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
@@ -83,42 +83,42 @@ robot_space_ship
   index: -1
 space
   rotate: false
-  xy: 1784, 1350
+  xy: 1784, 1556
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 0
 space
   rotate: false
-  xy: 1784, 1148
+  xy: 1784, 1354
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 1
 space
   rotate: false
-  xy: 1784, 1148
+  xy: 1784, 1354
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 5
 space
   rotate: false
-  xy: 1784, 946
+  xy: 1784, 1152
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 2
 space
   rotate: false
-  xy: 1784, 946
+  xy: 1784, 1152
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 4
 space
   rotate: false
-  xy: 461, 232
+  xy: 1784, 950
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
