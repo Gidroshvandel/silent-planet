@@ -1,4 +1,4 @@
-package com.silentgames.graphic.screens
+package com.silentgames.graphic.screens.base
 
 import com.badlogic.gdx.ScreenAdapter
 

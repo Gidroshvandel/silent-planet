@@ -13,8 +13,8 @@ import com.silentgames.graphic.hud.Hud
 import com.silentgames.graphic.hud.Toast
 import com.silentgames.graphic.hud.Toast.ToastFactory
 import com.silentgames.graphic.manager.game.GameManager
-import com.silentgames.graphic.screens.AppScreenAdapter
-import com.silentgames.graphic.screens.Context
+import com.silentgames.graphic.screens.base.AppScreenAdapter
+import com.silentgames.graphic.screens.base.Context
 
 
 class GameScreen(context: Context) : AppScreenAdapter(context), GameContract.View {

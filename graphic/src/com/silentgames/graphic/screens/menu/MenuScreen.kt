@@ -9,8 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.silentgames.graphic.mvp.InputMultiplexer
 import com.silentgames.graphic.mvp.game.GameScreen
-import com.silentgames.graphic.screens.AppScreenAdapter
-import com.silentgames.graphic.screens.Context
+import com.silentgames.graphic.screens.base.AppScreenAdapter
+import com.silentgames.graphic.screens.base.Context
 
 class MenuScreen(context: Context) : AppScreenAdapter(context) {
 
