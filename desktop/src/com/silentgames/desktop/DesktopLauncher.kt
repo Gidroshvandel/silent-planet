@@ -2,7 +2,7 @@ package com.silentgames.desktop
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
-import com.silentgames.graphic.mvp.main.SilentPlanetGame
+import com.silentgames.graphic.screens.SilentPlanetGame
 
 object DesktopLauncher {
     @JvmStatic
