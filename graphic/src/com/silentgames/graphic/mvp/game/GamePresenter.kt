@@ -1,4 +1,4 @@
-package com.silentgames.graphic.mvp.main
+package com.silentgames.graphic.mvp.game
 
 import com.silentgames.core.logic.Constants
 import com.silentgames.core.logic.ecs.Axis
@@ -21,12 +21,12 @@ import com.silentgames.core.logic.ecs.system.unit.*
 /**
  * Created by gidroshvandel on 21.06.17.
  */
-class SilentPlanetPresenter internal constructor(
-        private val view: SilentPlanetContract.View,
+class GamePresenter internal constructor(
+        private val view: GameContract.View,
         private val gameState: GameState?,
-        private val viewModel: SilentPlanetViewModel,
-        private val model: SilentPlanetModel
-) : SilentPlanetContract.Presenter {
+        private val viewModel: GameViewModel,
+        private val model: GameModel
+) : GameContract.Presenter {
 
     override fun onCreate() {
         viewModel.engine = EngineEcs(

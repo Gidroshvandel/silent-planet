@@ -1,6 +1,5 @@
-package com.silentgames.graphic.mvp.main
+package com.silentgames.graphic.mvp.game
 
-import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
@@ -10,16 +9,17 @@ import com.silentgames.core.Strings
 import com.silentgames.core.logic.ecs.component.FractionsType
 import com.silentgames.graphic.AppViewport
 import com.silentgames.graphic.Assets
-import com.silentgames.graphic.Logger
 import com.silentgames.graphic.hud.Hud
 import com.silentgames.graphic.hud.Toast
 import com.silentgames.graphic.hud.Toast.ToastFactory
 import com.silentgames.graphic.manager.game.GameManager
+import com.silentgames.graphic.screens.AppScreenAdapter
+import com.silentgames.graphic.screens.Context
 
 
-class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
+class GameScreen(context: Context) : AppScreenAdapter(context), GameContract.View {
 
-    private lateinit var presenter: SilentPlanetContract.Presenter
+    private var presenter: GameContract.Presenter
 
     private val fullViewPort = ScreenViewport()
     private val viewPort = AppViewport(Scaling.fillY, HEIGHT, HEIGHT)
@@ -33,15 +33,12 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
 
     private var currentToast: Toast? = null
 
-    override fun create() {
-
-        Logger.create()
-
-        presenter = SilentPlanetPresenter(
+    init {
+        presenter = GamePresenter(
                 this,
                 GameManager.loadData(),
-                SilentPlanetViewModel(),
-                SilentPlanetModel(viewPort, assets)
+                GameViewModel(),
+                GameModel(viewPort, assets)
         )
 
         initUi()
@@ -82,8 +79,8 @@ class SilentPlanetGame : ApplicationAdapter(), SilentPlanetContract.View {
         }
     }
 
-    override fun render() {
-//        Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
+    override fun render(delta: Float) {
+        //        Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
         presenter.onRender()

@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.viewport.Viewport
 import com.silentgames.core.logic.ecs.component.FractionsType
 import com.silentgames.graphic.Assets
 import com.silentgames.graphic.mvp.InputMultiplexer
-import com.silentgames.graphic.mvp.main.EntityData
+import com.silentgames.graphic.mvp.game.EntityData
 import ktx.style.get
 
 class Hud(gameViewport: Viewport, private val assets: Assets) {

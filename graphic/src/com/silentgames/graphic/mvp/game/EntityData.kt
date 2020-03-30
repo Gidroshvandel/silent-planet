@@ -1,4 +1,4 @@
-package com.silentgames.graphic.mvp.main
+package com.silentgames.graphic.mvp.game
 
 class EntityData(
         val id: Long,

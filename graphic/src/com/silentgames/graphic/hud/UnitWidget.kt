@@ -10,8 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable
 import com.badlogic.gdx.utils.Align
 import com.silentgames.core.Strings
 import com.silentgames.graphic.Assets
-import com.silentgames.graphic.mvp.main.EntityData
-import com.silentgames.graphic.mvp.main.SilentPlanetGame
+import com.silentgames.graphic.mvp.game.EntityData
+import com.silentgames.graphic.mvp.game.GameScreen
 import com.silentgames.graphic.scaleImageForBoard
 import com.silentgames.graphic.setColor
 
@@ -107,7 +107,7 @@ class UnitWidget(
 
     private fun Image.setTexture(path: String) {
         val sprite = assets.getSprite(path)
-        val size = scaleImageForBoard(sprite.width, sprite.height, SilentPlanetGame.HEIGHT * 1.2f)
+        val size = scaleImageForBoard(sprite.width, sprite.height, GameScreen.HEIGHT * 1.2f)
         sprite.setSize(size.x, size.y)
         this.drawable = SpriteDrawable(sprite)
     }

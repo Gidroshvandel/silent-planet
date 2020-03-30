@@ -1,4 +1,4 @@
-package com.silentgames.graphic.mvp.main
+package com.silentgames.graphic.mvp.game
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.utils.viewport.Viewport
@@ -14,7 +14,7 @@ import com.silentgames.graphic.RenderSystemImpl
 /**
  * Created by gidroshvandel on 22.06.17.
  */
-class SilentPlanetModel(private val viewport: Viewport, private val assets: Assets) {
+class GameModel(private val viewport: Viewport, private val assets: Assets) {
 
     fun generateNewBattleGround(firstTurnFraction: FractionsType): GameState = GameState(
             CellRandomGenerator().generateBattleGround(),

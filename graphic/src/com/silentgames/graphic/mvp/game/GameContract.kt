@@ -1,10 +1,10 @@
-package com.silentgames.graphic.mvp.main
+package com.silentgames.graphic.mvp.game
 
 import com.silentgames.core.logic.ecs.GameState
 import com.silentgames.core.logic.ecs.component.FractionsType
 import com.silentgames.graphic.mvp.BasePresenter
 
-interface SilentPlanetContract {
+interface GameContract {
     interface View {
 
         fun showToast(text: String)
