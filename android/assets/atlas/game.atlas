@@ -325,6 +325,13 @@ ui/custom_window_dark
   orig: 177, 153
   offset: 0, 0
   index: -1
+ui/ic_diskette
+  rotate: false
+  xy: 181, 202
+  size: 24, 25
+  orig: 24, 25
+  offset: 0, 0
+  index: -1
 ui/rounded_window_blue
   rotate: false
   xy: 744, 719

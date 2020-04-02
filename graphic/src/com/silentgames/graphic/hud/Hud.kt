@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Cell
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.viewport.Viewport
+import com.silentgames.core.Strings
 import com.silentgames.core.logic.ecs.component.FractionsType
 import com.silentgames.graphic.Assets
 import com.silentgames.graphic.mvp.InputMultiplexer
@@ -56,7 +57,13 @@ class Hud(gameViewport: Viewport, private val assets: Assets) {
                     row().grow()
                     add(ScrollPane(table))
                     row().expandX()
-                    bottomActionPanelCell = add(BottomActionPanel(uiSkin)).apply {
+                    bottomActionPanelCell = add(
+                            BottomActionPanel(
+                                    uiSkin,
+                                    Strings.skip_turn_action.getString(),
+                                    Strings.get_crystal_action.getString()
+                            )
+                    ).apply {
                         setVisibleSettings()
                     }
                 })
@@ -80,11 +87,11 @@ class Hud(gameViewport: Viewport, private val assets: Assets) {
     }
 
     fun setCrystalActionButtonEnabled(enabled: Boolean) {
-        bottomActionPanelCell?.actor?.setCrystalActionButtonEnabled(enabled)
+        bottomActionPanelCell?.actor?.setRightTurnButtonEnabled(enabled)
     }
 
     fun setSkipTurnButtonEnabled(enabled: Boolean) {
-        bottomActionPanelCell?.actor?.setSkipTurnButtonEnabled(enabled)
+        bottomActionPanelCell?.actor?.setLeftActionButtonEnabled(enabled)
     }
 
     fun update(entityList: List<EntityData>, onClick: (EntityData) -> Unit) {
@@ -106,11 +113,11 @@ class Hud(gameViewport: Viewport, private val assets: Assets) {
     }
 
     fun onGetCrystalClick(click: () -> Unit) {
-        bottomActionPanelCell?.actor?.onGetCrystalClick = click
+        bottomActionPanelCell?.actor?.onRightActionButtonClick = click
     }
 
     fun onSkipTurnClick(click: () -> Unit) {
-        bottomActionPanelCell?.actor?.onSkipTurnClick = click
+        bottomActionPanelCell?.actor?.onLeftActionButtonClick = click
     }
 
     fun changeFractionCrystalOnBoard(fractionsType: FractionsType, count: Int) {

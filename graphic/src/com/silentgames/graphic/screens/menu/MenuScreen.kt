@@ -7,32 +7,47 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.silentgames.graphic.mvp.InputMultiplexer
-import com.silentgames.graphic.mvp.game.GameScreen
+import com.silentgames.graphic.screens.LoadManageScreen
 import com.silentgames.graphic.screens.base.AppScreenAdapter
 import com.silentgames.graphic.screens.base.Context
 
 class MenuScreen(context: Context) : AppScreenAdapter(context) {
 
-    private val stage = Stage()
+    private val stage = Stage(ScreenViewport())
 
     private val startGameButton = createTextButton("Начать")
+    private val loadButton = createTextButton("Загрузка")
     private val exitButton = createTextButton("Выход")
 
-    init {
+    override fun hide() {
+        InputMultiplexer.removeProcessor(stage)
+        stage.dispose()
+    }
+
+    override fun show() {
         stage.addActor(
                 Table().apply {
                     setFillParent(true)
-                    pad(20f, 20f, 0f, 20f)
-                    this.center()
-                    add(startGameButton).growX()
+                    pad(20f, 20f, 20f, 20f)
+                    center()
+                    add(startGameButton).width(400f)
                     row()
-                    add(exitButton).growX()
+                    add(loadButton).width(400f)
+                    row()
+                    add(exitButton).width(400f)
                 })
 
         startGameButton.addCaptureListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                context.game.screen = GameScreen(context)
+//                context.game.screen = GameScreen(context)
+            }
+        })
+
+        loadButton.addCaptureListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                context.game.screen = LoadManageScreen(context)
             }
         })
 

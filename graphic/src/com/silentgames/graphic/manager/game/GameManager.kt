@@ -13,6 +13,7 @@ import com.silentgames.core.logic.ecs.entity.cell.CellEcs
 import com.silentgames.core.logic.ecs.entity.event.EventEcs
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import java.lang.reflect.Type
+import java.util.*
 
 
 object GameManager {
@@ -27,24 +28,40 @@ object GameManager {
             .registerTypeAdapter(ComponentChangeHandler::class.java, ChangeHandlerDeserializer())
             .registerTypeAdapter(Component::class.java, AnyClassTypeAdapter())
             .create()
-    private val fileHandle = Gdx.files.local("data/GameState.json")
+
+    private val fileHandle = Gdx.files.local("data/GameSave.json")
 
     /**
      * Save data to file
      */
-    fun saveData(gameState: GameState) {
+    fun saveActiveData(gameState: GameState, slotNumber: Int) {
+        saveData(slotNumber, gameState)
+    }
+
+    fun deleteSlot(number: Int) {
+        Gdx.app.log("[GameManager]", "deleteSlot")
+        loadData()?.apply { removeSlot(number) }?.let {
+            fileHandle.writeString(json.toJson(it), false)
+        }
+    }
+
+    private fun saveData(slotNumber: Int, gameState: GameState) {
         Gdx.app.log("[GameManager]", "saveData()")
-        fileHandle.writeString(json.toJson(gameState), false)
+        val dataToSave = loadData()?.apply { saveSlot(slotNumber, gameState) }
+                ?: GameData(mutableListOf(GameSlot(slotNumber, gameState)))
+        fileHandle.writeString(json.toJson(dataToSave), false)
     }
 
     /**
      * Load data from file
      */
-    fun loadData(): GameState? {
+    fun loadData(slotNumber: Int): GameState? = loadData()?.getSlot(slotNumber)?.gameState
+
+    fun loadData(): GameData? {
         Gdx.app.log("[GameManager]", "loadData()")
         return if (fileHandle.exists()) {
             try {
-                val data = json.fromJson<GameState>(fileHandle.readString(), GameState::class.java)
+                val data = json.fromJson<GameData>(fileHandle.readString(), GameData::class.java)
                 if (data != null) {
                     Gdx.app.log("[GameManager]", "loadData success")
                     data
@@ -62,6 +79,29 @@ object GameManager {
             null
         }
     }
+
+}
+
+class GameSlot(
+        val number: Int,
+        val gameState: GameState,
+        val date: String = Date().time.toString()
+)
+
+class GameData(
+        private val gameSlotMutableList: MutableList<GameSlot>
+) {
+
+    val gameSlotList get() = gameSlotMutableList.toList()
+
+    fun saveSlot(number: Int, gameState: GameState) {
+        removeSlot(number)
+        gameSlotMutableList.add(GameSlot(number, gameState))
+    }
+
+    fun getSlot(number: Int) = gameSlotMutableList.find { it.number == number }
+
+    fun removeSlot(number: Int) = gameSlotMutableList.remove(getSlot(number))
 
 }
 

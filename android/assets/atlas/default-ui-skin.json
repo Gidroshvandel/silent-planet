@@ -23,6 +23,11 @@
       "down": "ui/custom_button",
       "up": "ui/custom_button_dark",
       "disabled": "ui/custom_button_disable"
+    },
+    "custom_checked_window": {
+      "checked": "ui/custom_window",
+      "down": "ui/custom_window",
+      "up": "ui/custom_window_dark"
     }
   },
   "TextButtonStyle": {

@@ -17,7 +17,7 @@ import com.silentgames.graphic.screens.base.AppScreenAdapter
 import com.silentgames.graphic.screens.base.Context
 
 
-class GameScreen(context: Context) : AppScreenAdapter(context), GameContract.View {
+class GameScreen(context: Context, private val gameSlotNumber: Int) : AppScreenAdapter(context), GameContract.View {
 
     private var presenter: GameContract.Presenter
 
@@ -36,7 +36,7 @@ class GameScreen(context: Context) : AppScreenAdapter(context), GameContract.Vie
     init {
         presenter = GamePresenter(
                 this,
-                GameManager.loadData(),
+                GameManager.loadData(gameSlotNumber),
                 GameViewModel(),
                 GameModel(viewPort, assets)
         )
@@ -111,7 +111,7 @@ class GameScreen(context: Context) : AppScreenAdapter(context), GameContract.Vie
 
     override fun pause() {
         presenter.saveInstanceState {
-            GameManager.saveData(it)
+            GameManager.saveActiveData(it, gameSlotNumber)
         }
     }
 

@@ -13,6 +13,11 @@ object InputMultiplexer {
         Gdx.input.inputProcessor = inputMultiplexer
     }
 
+    fun removeProcessor(processor: InputProcessor) {
+        inputMultiplexer.removeProcessor(processor)
+        Gdx.input.inputProcessor = inputMultiplexer
+    }
+
     fun clear() {
         inputMultiplexer.clear()
     }
