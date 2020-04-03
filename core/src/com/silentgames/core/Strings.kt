@@ -71,7 +71,14 @@ enum class Strings(private var string: String) {
     player_buyback_success("%s возвращён на корабль"),
     player_buyback_failure("Необходимо ещё кристалов: %1d"),
     captive("Пленный"),
-    buyout("Выкуп");
+    buyout("Выкуп"),
+
+    empty_slot("Пустой слот %1d"),
+    save_slot("Сохранение %1d"),
+    new_game("Новая игра"),
+    load_game("Загрузить"),
+    delete_slot("Удалить"),
+    back("Назад");
 
     fun getString(vararg args: Any?): String = String.format(string, *args)
 

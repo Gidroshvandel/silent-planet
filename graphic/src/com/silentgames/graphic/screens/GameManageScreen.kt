@@ -6,8 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.utils.viewport.ScreenViewport
+import com.silentgames.core.Strings
 import com.silentgames.graphic.hud.BottomActionPanel
 import com.silentgames.graphic.hud.LoadedData
 import com.silentgames.graphic.hud.LoadedDataWidget
@@ -23,7 +23,7 @@ class GameManageScreen(context: Context) : AppScreenAdapter(context) {
 
     private val stage = Stage(ScreenViewport())
 
-    private val bottomActionPanel = BottomActionPanel(context.assets.uiSkin, "Назад", "Новая игра")
+    private val bottomActionPanel = BottomActionPanel(context.assets.uiSkin, Strings.back.getString(), Strings.new_game.getString())
 
     private var selectedSlot: GameSlot? = null
 
@@ -70,7 +70,7 @@ class GameManageScreen(context: Context) : AppScreenAdapter(context) {
                 val widget = LoadedDataWidget(
                         context.assets,
                         LoadedData(data.toSlotName(i))
-                ) { loadedData, checked ->
+                ) { _, checked ->
                     if (!checked) {
                         bottomActionPanel.setRightTurnButtonEnabled(true)
                         selectedSlot = data
@@ -83,7 +83,10 @@ class GameManageScreen(context: Context) : AppScreenAdapter(context) {
     }
 
     private fun GameSlot?.toSlotName(slotNumber: Int) =
-            if (this == null || this.gameState == null) "Пустой слот $slotNumber" else "Сохранение $slotNumber"
+            if (this == null || this.gameState == null)
+                Strings.empty_slot.getString(slotNumber)
+            else
+                Strings.save_slot.getString(slotNumber)
 
     override fun render(delta: Float) {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
@@ -103,9 +106,4 @@ class GameManageScreen(context: Context) : AppScreenAdapter(context) {
         stage.draw()
     }
 
-    private fun createTextButton(text: String) = TextButton(
-            text,
-            context.assets.uiSkin,
-            "custom_button_dark"
-    )
 }

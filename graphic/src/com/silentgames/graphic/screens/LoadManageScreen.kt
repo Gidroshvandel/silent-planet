@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.viewport.ScreenViewport
+import com.silentgames.core.Strings
 import com.silentgames.graphic.hud.BottomActionPanel
 import com.silentgames.graphic.hud.LoadedData
 import com.silentgames.graphic.hud.LoadedDataWidget
@@ -25,8 +26,12 @@ class LoadManageScreen(context: Context) : AppScreenAdapter(context) {
 
     private val stage = Stage(ScreenViewport())
 
-    private val bottomActionPanel = BottomActionPanel(context.assets.uiSkin, "Удалить", "Загрузить")
-    private val backActionButton = createTextButton("Назад")
+    private val bottomActionPanel = BottomActionPanel(
+            context.assets.uiSkin,
+            Strings.delete_slot.getString(),
+            Strings.load_game.getString()
+    )
+    private val backActionButton = createTextButton(Strings.back.getString())
 
     private var selectedSlot: GameSlot? = null
 
@@ -85,7 +90,7 @@ class LoadManageScreen(context: Context) : AppScreenAdapter(context) {
                 val widget = LoadedDataWidget(
                         context.assets,
                         LoadedData(data.toSlotName(i))
-                ) { loadedData, checked ->
+                ) { _, checked ->
                     if (data == null || checked) {
                         bottomActionPanel.setLeftActionButtonEnabled(false)
                         bottomActionPanel.setRightTurnButtonEnabled(false)
@@ -103,7 +108,10 @@ class LoadManageScreen(context: Context) : AppScreenAdapter(context) {
     }
 
     private fun GameSlot?.toSlotName(slotNumber: Int) =
-            if (this == null) "Пустой слот $slotNumber" else "Сохранение $slotNumber"
+            if (this == null || this.gameState == null)
+                Strings.empty_slot.getString(slotNumber)
+            else
+                Strings.save_slot.getString(slotNumber)
 
     override fun render(delta: Float) {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
