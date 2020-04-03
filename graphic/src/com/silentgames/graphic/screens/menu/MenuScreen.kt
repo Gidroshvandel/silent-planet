@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.silentgames.graphic.mvp.InputMultiplexer
+import com.silentgames.graphic.screens.GameManageScreen
 import com.silentgames.graphic.screens.LoadManageScreen
 import com.silentgames.graphic.screens.base.AppScreenAdapter
 import com.silentgames.graphic.screens.base.Context
@@ -41,7 +42,7 @@ class MenuScreen(context: Context) : AppScreenAdapter(context) {
 
         startGameButton.addCaptureListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
-//                context.game.screen = GameScreen(context)
+                context.game.screen = GameManageScreen(context)
             }
         })
 

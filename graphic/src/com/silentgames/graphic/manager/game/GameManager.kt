@@ -84,7 +84,7 @@ object GameManager {
 
 class GameSlot(
         val number: Int,
-        val gameState: GameState,
+        val gameState: GameState? = null,
         val date: String = Date().time.toString()
 )
 
