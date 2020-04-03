@@ -40,6 +40,7 @@ class LoadManageScreen(context: Context) : AppScreenAdapter(context) {
     }
 
     override fun show() {
+        stage.clear()
         stage.addActor(
                 Table().apply {
                     setFillParent(true)
@@ -65,6 +66,7 @@ class LoadManageScreen(context: Context) : AppScreenAdapter(context) {
 
         bottomActionPanel.onLeftActionButtonClick = {
             selectedSlot?.number?.let { GameManager.deleteSlot(it) }
+            show()
         }
 
         bottomActionPanel.onRightActionButtonClick = {
