@@ -28,6 +28,10 @@
       "checked": "ui/custom_window",
       "down": "ui/custom_window",
       "up": "ui/custom_window_dark"
+    },
+    "config": {
+      "down": "ui/config_clicked",
+      "up": "ui/config"
     }
   },
   "TextButtonStyle": {
@@ -46,6 +50,13 @@
       "font": "regular-font",
       "fontColor": "white",
       "disabledFontColor": "light_gray"
+    }
+  },
+  "WindowStyle": {
+    "default": {
+      "titleFont": "regular-font",
+      "background": "ui/rounded_window_blue",
+      "titleFontColor": "white"
     }
   }
 }

@@ -2,10 +2,13 @@ package com.silentgames.graphic.hud
 
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.Sprite
+import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.Cell
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.silentgames.core.Strings
 import com.silentgames.core.logic.ecs.component.FractionsType
@@ -19,6 +22,14 @@ class Hud(gameViewport: Viewport, private val assets: Assets) {
     private val uiSkin by lazy { assets.uiSkin }
 
     private val background by lazy { uiSkin.get<Sprite>("ui/bg_space") }
+
+    private val settingsButton by lazy { Button(uiSkin, "config") }
+
+    private val table = Table()
+
+    private val topScorePanel = TopScorePanel(uiSkin)
+
+    private var bottomActionPanelCell: Cell<BottomActionPanel>? = null
 
     val stage = Stage(
             object : Viewport() {
@@ -37,16 +48,6 @@ class Hud(gameViewport: Viewport, private val assets: Assets) {
             }
     )
 
-    fun dispose() {
-        stage.dispose()
-    }
-
-    private val table = Table()
-
-    private val topScorePanel = TopScorePanel(uiSkin)
-
-    private var bottomActionPanelCell: Cell<BottomActionPanel>? = null
-
     init {
         stage.addActor(
                 Table().apply {
@@ -54,6 +55,7 @@ class Hud(gameViewport: Viewport, private val assets: Assets) {
                     pad(20f, 20f, 0f, 20f)
                     this.top()
                     add(topScorePanel).growX()
+                    add(settingsButton).size(40f, 40f).pad(10f, 10f, 10f, 10f)
                     row().grow()
                     add(ScrollPane(table))
                     row().expandX()
@@ -68,6 +70,10 @@ class Hud(gameViewport: Viewport, private val assets: Assets) {
                     }
                 })
         InputMultiplexer.addProcessor(stage)
+    }
+
+    fun dispose() {
+        stage.dispose()
     }
 
     fun drawBackground() {
@@ -142,6 +148,14 @@ class Hud(gameViewport: Viewport, private val assets: Assets) {
 
     fun onRobotsClick(click: () -> Unit) {
         topScorePanel.onRobotsClick = click
+    }
+
+    fun onSettingsClick(click: () -> Unit) {
+        settingsButton.addCaptureListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                click.invoke()
+            }
+        })
     }
 
 }

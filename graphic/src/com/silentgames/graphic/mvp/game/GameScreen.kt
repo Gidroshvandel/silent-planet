@@ -13,8 +13,12 @@ import com.silentgames.graphic.hud.Hud
 import com.silentgames.graphic.hud.Toast
 import com.silentgames.graphic.hud.Toast.ToastFactory
 import com.silentgames.graphic.manager.game.GameManager
+import com.silentgames.graphic.mvp.InputMultiplexer
+import com.silentgames.graphic.render
+import com.silentgames.graphic.resize
 import com.silentgames.graphic.screens.base.AppScreenAdapter
 import com.silentgames.graphic.screens.base.Context
+import com.silentgames.graphic.screens.menu.MenuScreen
 
 
 class GameScreen(context: Context, private val gameSlotNumber: Int) : AppScreenAdapter(context), GameContract.View {
@@ -25,11 +29,9 @@ class GameScreen(context: Context, private val gameSlotNumber: Int) : AppScreenA
     private val viewPort = AppViewport(Scaling.fillY, HEIGHT, HEIGHT)
     private val camera by lazy(viewPort::getCamera)
 
-    private val assets by lazy { Assets() }
+    private val hud by lazy { Hud(viewPort, context.assets) }
 
-    private val hud by lazy { Hud(viewPort, assets) }
-
-    private val toastFactory by lazy { ToastFactory.Builder().font(assets.uiSkin.getFont(Assets.Font.REGULAR.fontName)).build() }
+    private val toastFactory by lazy { ToastFactory.Builder().font(context.assets.uiSkin.getFont(Assets.Font.REGULAR.fontName)).build() }
 
     private var currentToast: Toast? = null
 
@@ -38,7 +40,7 @@ class GameScreen(context: Context, private val gameSlotNumber: Int) : AppScreenA
                 this,
                 GameManager.loadData(gameSlotNumber),
                 GameViewModel(),
-                GameModel(viewPort, assets)
+                GameModel(viewPort, context.assets)
         )
 
         initUi()
@@ -77,6 +79,13 @@ class GameScreen(context: Context, private val gameSlotNumber: Int) : AppScreenA
         hud.onAliensClick {
             presenter.onTopScorePanelClick(FractionsType.ALIEN)
         }
+
+        hud.onSettingsClick {
+            presenter.saveInstanceState {
+                GameManager.saveActiveData(it, gameSlotNumber)
+            }
+            context.game.screen = MenuScreen(context)
+        }
     }
 
     override fun render(delta: Float) {
@@ -88,8 +97,7 @@ class GameScreen(context: Context, private val gameSlotNumber: Int) : AppScreenA
         hud.stage.viewport.apply(true)
 
         hud.drawBackground()
-        hud.stage.act()
-        hud.stage.draw()
+        hud.stage.render()
 
         fullViewPort.apply(true)
 
@@ -100,10 +108,7 @@ class GameScreen(context: Context, private val gameSlotNumber: Int) : AppScreenA
         super.resize(width, height)
         viewPort.update(width, height)
 
-        hud.stage.viewport.update(width, height, true)
-
-        hud.stage.act()
-        hud.stage.draw()
+        hud.stage.resize(width, height, true)
 
         fullViewPort.update(width, height, true)
         currentToast?.update(width.toFloat())
@@ -121,6 +126,11 @@ class GameScreen(context: Context, private val gameSlotNumber: Int) : AppScreenA
 
     override fun dispose() {
 //        engine.dispose()
+    }
+
+    override fun hide() {
+        InputMultiplexer.removeProcessor(hud.stage)
+        hud.stage.dispose()
     }
 
     companion object {

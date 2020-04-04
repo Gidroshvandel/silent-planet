@@ -5,12 +5,33 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
+import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable
 import com.badlogic.gdx.utils.Scaling
 import com.silentgames.core.logic.Constants
 import com.silentgames.core.logic.CoreLogger
+import com.silentgames.graphic.mvp.game.GameScreen
+
+fun Stage.resize(width: Int, height: Int, centerCamera: Boolean) {
+    viewport.update(width, height, centerCamera)
+    render()
+}
+
+fun Stage.render() {
+    act()
+    draw()
+}
+
+fun Image.setTexture(path: String, assets: Assets) {
+    val sprite = assets.getSprite(path)
+    val size = scaleImageForBoard(sprite.width, sprite.height, GameScreen.HEIGHT * 1.2f)
+    sprite.setSize(size.x, size.y)
+    this.drawable = SpriteDrawable(sprite)
+}
 
 fun TextButton.setTextColor(color: Assets.TextColor, skin: Skin) {
     this.style = TextButton.TextButtonStyle(this.style).also {

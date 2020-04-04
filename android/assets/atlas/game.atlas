@@ -280,6 +280,20 @@ ui/bg_space
   orig: 561, 540
   offset: 0, 0
   index: -1
+ui/config
+  rotate: false
+  xy: 181, 157
+  size: 70, 70
+  orig: 70, 70
+  offset: 0, 0
+  index: -1
+ui/config_clicked
+  rotate: false
+  xy: 565, 544
+  size: 70, 70
+  orig: 70, 70
+  offset: 0, 0
+  index: -1
 ui/custom_button
   rotate: false
   xy: 2, 74
@@ -327,7 +341,7 @@ ui/custom_window_dark
   index: -1
 ui/ic_diskette
   rotate: false
-  xy: 181, 202
+  xy: 357, 247
   size: 24, 25
   orig: 24, 25
   offset: 0, 0

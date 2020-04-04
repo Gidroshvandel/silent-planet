@@ -6,14 +6,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable
 import com.badlogic.gdx.utils.Align
 import com.silentgames.core.Strings
 import com.silentgames.graphic.Assets
 import com.silentgames.graphic.mvp.game.EntityData
-import com.silentgames.graphic.mvp.game.GameScreen
-import com.silentgames.graphic.scaleImageForBoard
 import com.silentgames.graphic.setColor
+import com.silentgames.graphic.setTexture
 
 class UnitWidget(
         val assets: Assets,
@@ -36,7 +34,7 @@ class UnitWidget(
 
             add(Table().also {
                 it.row()
-                it.add(Image().apply { setTexture(entityData.texture) }).pad(5f).center()
+                it.add(Image().apply { setTexture(entityData.texture, assets) }).pad(5f).center()
                 it.row()
                 it.add(
                         Label(entityData.name, skin).also { label ->
@@ -78,7 +76,7 @@ class UnitWidget(
     private fun getEntityCrystalsTable(crystalCount: String) =
             Table().also {
                 it.row()
-                it.add(Image().apply { setTexture("crystal") }).pad(2f).center()
+                it.add(Image().apply { setTexture("crystal", assets) }).pad(2f).center()
                 it.row()
                 it.add(
                         Label(crystalCount, skin).also { label ->
@@ -96,7 +94,7 @@ class UnitWidget(
                         }
                 ).pad(2f).center()
                 it.row()
-                it.add(Image().apply { setTexture("crystal") }).pad(2f).center()
+                it.add(Image().apply { setTexture("crystal", assets) }).pad(2f).center()
                 it.row()
                 it.add(
                         Label(crystalCount, skin).also { label ->
@@ -104,12 +102,5 @@ class UnitWidget(
                         }
                 ).pad(2f).center()
             }
-
-    private fun Image.setTexture(path: String) {
-        val sprite = assets.getSprite(path)
-        val size = scaleImageForBoard(sprite.width, sprite.height, GameScreen.HEIGHT * 1.2f)
-        sprite.setSize(size.x, size.y)
-        this.drawable = SpriteDrawable(sprite)
-    }
 
 }
