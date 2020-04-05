@@ -16,9 +16,9 @@ import com.silentgames.graphic.manager.game.GameManager
 import com.silentgames.graphic.mvp.InputMultiplexer
 import com.silentgames.graphic.render
 import com.silentgames.graphic.resize
+import com.silentgames.graphic.screens.MenuScreen
 import com.silentgames.graphic.screens.base.AppScreenAdapter
 import com.silentgames.graphic.screens.base.Context
-import com.silentgames.graphic.screens.menu.MenuScreen
 
 
 class GameScreen(context: Context, private val gameSlotNumber: Int) : AppScreenAdapter(context), GameContract.View {

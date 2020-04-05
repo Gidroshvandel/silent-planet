@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx
 import com.silentgames.graphic.Assets
 import com.silentgames.graphic.Logger
 import com.silentgames.graphic.screens.base.Context
-import com.silentgames.graphic.screens.menu.MenuScreen
 
 class SilentPlanetGame : Game() {
 

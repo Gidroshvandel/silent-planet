@@ -1,4 +1,4 @@
-package com.silentgames.graphic.screens.menu
+package com.silentgames.graphic.screens
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL20
@@ -11,8 +11,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.silentgames.graphic.mvp.InputMultiplexer
 import com.silentgames.graphic.render
 import com.silentgames.graphic.resize
-import com.silentgames.graphic.screens.GameManageScreen
-import com.silentgames.graphic.screens.LoadManageScreen
 import com.silentgames.graphic.screens.base.AppScreenAdapter
 import com.silentgames.graphic.screens.base.Context
 

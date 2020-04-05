@@ -17,7 +17,6 @@ import com.silentgames.graphic.mvp.InputMultiplexer
 import com.silentgames.graphic.mvp.game.GameScreen
 import com.silentgames.graphic.screens.base.AppScreenAdapter
 import com.silentgames.graphic.screens.base.Context
-import com.silentgames.graphic.screens.menu.MenuScreen
 
 class GameManageScreen(context: Context) : AppScreenAdapter(context) {
 
