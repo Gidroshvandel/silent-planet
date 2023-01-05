@@ -10,15 +10,15 @@ class GameBoardZoomGestureDetector(
         private val listener: GameBoardZoomGestureAdapter
 ) : GestureDetector(listener) {
 
-    override fun scrolled(amount: Int): Boolean {
-        return listener.mouseScrolled(amount)
+    override fun scrolled(amountX: Float, amountY: Float): Boolean {
+        return listener.mouseScrolled(amountY.toInt())
     }
 
     override fun mouseMoved(screenX: Int, screenY: Int): Boolean {
         return listener.mouseMoved(screenX, screenY)
     }
 
-    open class GameBoardZoomGestureAdapter() : GestureDetector.GestureAdapter() {
+    open class GameBoardZoomGestureAdapter() : GestureAdapter() {
 
         open fun mouseScrolled(amount: Int): Boolean = false
 
