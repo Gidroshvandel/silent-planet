@@ -8,5 +8,4 @@ interface System {
     fun execute(gameState: GameState) {}
 
     fun onEngineAttach(engine: EngineEcs) {}
-
 }

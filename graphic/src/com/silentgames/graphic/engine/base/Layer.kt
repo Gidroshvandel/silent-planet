@@ -2,7 +2,6 @@ package com.silentgames.graphic.engine.base
 
 import java.util.*
 
-
 open class Layer {
 
     var data = LinkedList<Basic>()
@@ -101,5 +100,4 @@ open class Layer {
     fun isProcessing(): Boolean {
         return processing
     }
-
 }

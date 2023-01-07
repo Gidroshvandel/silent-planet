@@ -23,10 +23,10 @@ class AbyssSystem : UnitSystem() {
         gameState.getCurrentUnitCell(unit) { cell ->
             cell.getComponent<Abyss>()?.let {
                 notNull(
-                        gameState,
-                        unit.getComponent<Route>()?.paths,
-                        unit,
-                        ::abyss
+                    gameState,
+                    unit.getComponent<Route>()?.paths,
+                    unit,
+                    ::abyss
                 )
             }
         }

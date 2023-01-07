@@ -18,4 +18,4 @@ dependencies {
     implementation project(path: ":core", configuration: "default")
 }
 
-sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets.main.java.srcDirs = ["src/"]

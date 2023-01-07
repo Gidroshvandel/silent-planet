@@ -12,10 +12,9 @@ object BitmapBuffer {
     }
 
     fun get(id: Int): Bitmap? =
-            bitmapBuffer.get(id)
+        bitmapBuffer.get(id)
 
     fun clear() {
         bitmapBuffer.clear()
     }
-
 }

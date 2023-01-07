@@ -4,11 +4,11 @@ import com.silentgames.core.logic.ecs.component.*
 import com.silentgames.core.logic.ecs.entity.EntityEcs
 
 abstract class UnitEcs(
-        position: Position,
-        texture: Texture,
-        movingMode: MovingMode,
-        fractionsType: FractionsType,
-        description: Description
+    position: Position,
+    texture: Texture,
+    movingMode: MovingMode,
+    fractionsType: FractionsType,
+    description: Description
 ) : EntityEcs() {
 
     init {
@@ -20,5 +20,4 @@ abstract class UnitEcs(
         addComponent(description)
         addComponent(CanMove())
     }
-
 }

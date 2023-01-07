@@ -33,33 +33,37 @@ class FindCrystalSystem : UnitSystem() {
         val cellsAtMoveDistance = this.getCellsAtMoveDistance(position).getCanMoveCells()
         if (cellsAtMoveDistance.isEmpty()) return null
         val visibleCells = cellsAtMoveDistance.getVisibleCells()
-        return (if (visibleCells.isNotEmpty()) {
-            val cellsWithCrystals = visibleCells.getCellsWithCrystals()
-            if (cellsWithCrystals.isNotEmpty()) {
-                cellsWithCrystals
-            } else {
-                val path = this.findPathToCell(unit) { it.isHide() && it.getComponent<MovingMode>() == MovingMode.WALK }
-                if (path.isNotEmpty()) {
-                    unit.addComponent(Goal(path.first()))
-                    null
+        return (
+            if (visibleCells.isNotEmpty()) {
+                val cellsWithCrystals = visibleCells.getCellsWithCrystals()
+                if (cellsWithCrystals.isNotEmpty()) {
+                    cellsWithCrystals
                 } else {
-                    cellsAtMoveDistance
+                    val path =
+                        this.findPathToCell(unit) { it.isHide() && it.getComponent<MovingMode>() == MovingMode.WALK }
+                    if (path.isNotEmpty()) {
+                        unit.addComponent(Goal(path.first()))
+                        null
+                    } else {
+                        cellsAtMoveDistance
+                    }
                 }
+            } else {
+                cellsAtMoveDistance
             }
-        } else {
-            cellsAtMoveDistance
-        })?.random()?.getCurrentPosition()
+            )?.random()?.getCurrentPosition()
     }
 
-    private fun List<CellEcs>.getCanMoveCells() = filter { it.getComponent<MovingMode>() == MovingMode.WALK }
+    private fun List<CellEcs>.getCanMoveCells() =
+        filter { it.getComponent<MovingMode>() == MovingMode.WALK }
 
     private fun List<CellEcs>.getVisibleCells() = this.filter { it.isVisible() }
 
     private fun List<CellEcs>.getCellsWithCrystals() = filter { it.getCrystalsCount() > 0 }
 
     private fun UnitEcs.isFindCrystalMode(): Boolean =
-            !this.isCrystalBagFull() && !this.hasComponent<Goal>()
+        !this.isCrystalBagFull() && !this.hasComponent<Goal>()
 
     private fun UnitEcs.isPlayer(): Boolean =
-            this.getComponent<MovingMode>() == MovingMode.WALK
+        this.getComponent<MovingMode>() == MovingMode.WALK
 }

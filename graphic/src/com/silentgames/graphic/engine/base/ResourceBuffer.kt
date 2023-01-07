@@ -12,10 +12,9 @@ class ResourceBuffer {
     }
 
     fun getList(id: Int): Array<TextureRegion>? =
-            bitmapBuffer.get(id)
+        bitmapBuffer.get(id)
 
     fun clear() {
         bitmapBuffer.clear()
     }
-
 }

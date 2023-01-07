@@ -15,5 +15,4 @@ abstract class ComponentEquals : Component {
     override fun hashCode(): Int {
         return this.javaClass.name.hashCode()
     }
-
 }

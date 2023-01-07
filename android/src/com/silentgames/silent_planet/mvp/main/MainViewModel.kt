@@ -11,5 +11,4 @@ class MainViewModel {
     lateinit var engine: EngineEcs
 
     var selectedEntity: UnitEcs? = null
-
 }

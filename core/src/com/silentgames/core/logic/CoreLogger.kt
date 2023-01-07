@@ -7,5 +7,4 @@ object CoreLogger {
     fun logDebug(tag: String, message: String) {
         onMessageLogged?.invoke(tag, message)
     }
-
 }

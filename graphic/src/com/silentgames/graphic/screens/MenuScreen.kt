@@ -29,16 +29,17 @@ class MenuScreen(context: Context) : AppScreenAdapter(context) {
 
     override fun show() {
         stage.addActor(
-                Table().apply {
-                    setFillParent(true)
-                    pad(20f, 20f, 20f, 20f)
-                    center()
-                    add(startGameButton).width(400f)
-                    row()
-                    add(loadButton).width(400f)
-                    row()
-                    add(exitButton).width(400f)
-                })
+            Table().apply {
+                setFillParent(true)
+                pad(20f, 20f, 20f, 20f)
+                center()
+                add(startGameButton).width(400f)
+                row()
+                add(loadButton).width(400f)
+                row()
+                add(exitButton).width(400f)
+            }
+        )
 
         startGameButton.addCaptureListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
@@ -74,9 +75,8 @@ class MenuScreen(context: Context) : AppScreenAdapter(context) {
     }
 
     private fun createTextButton(text: String) = TextButton(
-            text,
-            context.assets.uiSkin,
-            "rounded_window"
+        text,
+        context.assets.uiSkin,
+        "rounded_window"
     )
-
 }

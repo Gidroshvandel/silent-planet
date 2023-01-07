@@ -15,5 +15,4 @@ abstract class EventSystem : System {
     }
 
     abstract fun execute(gameState: GameState, eventEcs: EventEcs): Boolean
-
 }

@@ -20,8 +20,9 @@ import com.silentgames.graphic.screens.MenuScreen
 import com.silentgames.graphic.screens.base.AppScreenAdapter
 import com.silentgames.graphic.screens.base.Context
 
-
-class GameScreen(context: Context, private val gameSlotNumber: Int) : AppScreenAdapter(context), GameContract.View {
+class GameScreen(context: Context, private val gameSlotNumber: Int) :
+    AppScreenAdapter(context),
+    GameContract.View {
 
     private var presenter: GameContract.Presenter
 
@@ -31,16 +32,19 @@ class GameScreen(context: Context, private val gameSlotNumber: Int) : AppScreenA
 
     private val hud by lazy { Hud(viewPort, context.assets) }
 
-    private val toastFactory by lazy { ToastFactory.Builder().font(context.assets.uiSkin.getFont(Assets.Font.REGULAR.fontName)).build() }
+    private val toastFactory by lazy {
+        ToastFactory.Builder().font(context.assets.uiSkin.getFont(Assets.Font.REGULAR.fontName))
+            .build()
+    }
 
     private var currentToast: Toast? = null
 
     init {
         presenter = GamePresenter(
-                this,
-                GameManager.loadData(gameSlotNumber),
-                GameViewModel(),
-                GameModel(viewPort, context.assets)
+            this,
+            GameManager.loadData(gameSlotNumber),
+            GameViewModel(),
+            GameModel(viewPort, context.assets)
         )
 
         initUi()
@@ -181,10 +185,14 @@ class GameScreen(context: Context, private val gameSlotNumber: Int) : AppScreenA
     }
 
     override fun showPlayerBuybackSuccessMessage(name: String) {
-        currentToast = toastFactory.create(Strings.player_buyback_success.getString(name), Toast.Length.LONG)
+        currentToast =
+            toastFactory.create(Strings.player_buyback_success.getString(name), Toast.Length.LONG)
     }
 
     override fun showPlayerBuybackFailureMessage(missingAmount: Int) {
-        currentToast = toastFactory.create(Strings.player_buyback_failure.getString(missingAmount), Toast.Length.LONG)
+        currentToast = toastFactory.create(
+            Strings.player_buyback_failure.getString(missingAmount),
+            Toast.Length.LONG
+        )
     }
 }

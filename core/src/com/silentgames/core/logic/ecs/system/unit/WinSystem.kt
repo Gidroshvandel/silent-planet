@@ -6,9 +6,9 @@ import com.silentgames.core.logic.ecs.component.FractionsType
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 
 class WinSystem(
-        private val crystalsToWin: Int,
-        private val crystals: (FractionsType, crystals: Int) -> Unit,
-        private val onWin: (FractionsType) -> Unit
+    private val crystalsToWin: Int,
+    private val crystals: (FractionsType, crystals: Int) -> Unit,
+    private val onWin: (FractionsType) -> Unit
 ) : UnitSystem() {
 
     companion object {
@@ -34,5 +34,4 @@ class WinSystem(
             }
         }
     }
-
 }

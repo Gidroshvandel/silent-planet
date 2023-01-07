@@ -4,7 +4,10 @@ import com.silentgames.core.logic.ecs.component.ComponentEquals
 
 class StunEffect(private var _stunTurnsLeft: Int, val totalStunTurns: Int) : ComponentEquals() {
 
-    constructor(stunComponent: StunComponent) : this(stunComponent.stunTurns, stunComponent.stunTurns)
+    constructor(stunComponent: StunComponent) : this(
+        stunComponent.stunTurns,
+        stunComponent.stunTurns
+    )
 
     val stunTurnsLeft get() = _stunTurnsLeft
 

@@ -24,8 +24,8 @@ class TransportSystem : UnitSystem() {
                 transportUnit.addComponentChangedListener<Position> { axis ->
                     transport.unitsOnBoard.forEach { unitOnBoard ->
                         CoreLogger.logDebug(
-                                SYSTEM_TAG,
-                                "${unitOnBoard.getName()} move with ship ${unitOnBoard.getCurrentPosition()} moved to target ${axis.currentPosition}"
+                            SYSTEM_TAG,
+                            "${unitOnBoard.getName()} move with ship ${unitOnBoard.getCurrentPosition()} moved to target ${axis.currentPosition}"
                         )
                         unitOnBoard.setCurrentPosition(axis)
                         unitOnBoard.removeComponent(Moving::class.java)
@@ -48,8 +48,8 @@ class TransportSystem : UnitSystem() {
         transport?.unitsOnBoard?.toMutableList()?.forEach { unit ->
             if (unit.getCurrentPosition() != this.getCurrentPosition()) {
                 CoreLogger.logDebug(
-                        SYSTEM_TAG,
-                        "move from transport ${this.getName()} ${unit.getCurrentPosition()} ${unit.getName()}"
+                    SYSTEM_TAG,
+                    "move from transport ${this.getName()} ${unit.getCurrentPosition()} ${unit.getName()}"
                 )
                 transport.removeFromBoard(unit)
             }
@@ -61,18 +61,17 @@ class TransportSystem : UnitSystem() {
         val position = getCurrentPosition()
         if (position != null && transport != null) {
             gameState.getUnits(position).forEach { unit ->
-                if (unit.getCurrentPosition() == position
-                        && !unit.hasComponent<Transport>()
-                        && !transport.unitsOnBoard.contains(unit)
+                if (unit.getCurrentPosition() == position &&
+                    !unit.hasComponent<Transport>() &&
+                    !transport.unitsOnBoard.contains(unit)
                 ) {
                     CoreLogger.logDebug(
-                            SYSTEM_TAG,
-                            "move to transport ${this.getName()} ${unit.getCurrentPosition()} ${unit.getName()}"
+                        SYSTEM_TAG,
+                        "move to transport ${this.getName()} ${unit.getCurrentPosition()} ${unit.getName()}"
                     )
                     transport.addOnBoard(unit)
                 }
             }
         }
     }
-
 }

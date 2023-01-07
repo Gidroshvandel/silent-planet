@@ -6,9 +6,9 @@ import com.silentgames.core.logic.ecs.component.Texture
 import com.silentgames.core.logic.ecs.entity.EntityEcs
 
 abstract class CellEcs(
-        position: Position,
-        description: Description,
-        texture: Texture
+    position: Position,
+    description: Description,
+    texture: Texture
 ) : EntityEcs() {
 
     init {
@@ -16,5 +16,4 @@ abstract class CellEcs(
         addComponent(description)
         addComponent(texture)
     }
-
 }

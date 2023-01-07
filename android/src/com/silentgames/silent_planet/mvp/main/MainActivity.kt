@@ -26,16 +26,15 @@ class MainActivity : Activity(), MainContract.View, Callback {
         setContentView(R.layout.activity_main)
 
         presenter = MainPresenter(
-                this,
-                savedInstanceState?.getSerializable(SAVED_GAME_STATE) as? GameState,
-                MainViewModel(),
-                MainModel(surface_view)
+            this,
+            savedInstanceState?.getSerializable(SAVED_GAME_STATE) as? GameState,
+            MainViewModel(),
+            MainModel(surface_view)
         )
 
         initUi()
 
         presenter.onCreate()
-
     }
 
     private fun initUi() {
@@ -49,7 +48,6 @@ class MainActivity : Activity(), MainContract.View, Callback {
     override fun fillDescription(text: String) {
         tv_description.text = text
     }
-
 
     override fun selectCurrentFraction(fractionType: FractionsType) {
         val white = ContextCompat.getColor(this, R.color.white)
@@ -68,37 +66,37 @@ class MainActivity : Activity(), MainContract.View, Callback {
 
     override fun changeAlienCristalCount(crystals: Int) {
         tv_aliens.text = getString(
-                R.string.crystal_count,
-                getString(R.string.aliens),
-                crystals,
-                Constants.countCrystalsToWin
+            R.string.crystal_count,
+            getString(R.string.aliens),
+            crystals,
+            Constants.countCrystalsToWin
         )
     }
 
     override fun changeHumanCristalCount(crystals: Int) {
         tv_humans.text = getString(
-                R.string.crystal_count,
-                getString(R.string.humans),
-                crystals,
-                Constants.countCrystalsToWin
+            R.string.crystal_count,
+            getString(R.string.humans),
+            crystals,
+            Constants.countCrystalsToWin
         )
     }
 
     override fun changePirateCristalCount(crystals: Int) {
         tv_pirates.text = getString(
-                R.string.crystal_count,
-                getString(R.string.pirates),
-                crystals,
-                Constants.countCrystalsToWin
+            R.string.crystal_count,
+            getString(R.string.pirates),
+            crystals,
+            Constants.countCrystalsToWin
         )
     }
 
     override fun changeRobotCristalCount(crystals: Int) {
         tv_robots.text = getString(
-                R.string.crystal_count,
-                getString(R.string.robots),
-                crystals,
-                Constants.countCrystalsToWin
+            R.string.crystal_count,
+            getString(R.string.robots),
+            crystals,
+            Constants.countCrystalsToWin
         )
     }
 
@@ -123,36 +121,39 @@ class MainActivity : Activity(), MainContract.View, Callback {
     }
 
     override fun showEntityMenuDialog(
-            entityList: MutableList<EntityData>,
-            currentCell: EntityData
+        entityList: MutableList<EntityData>,
+        currentCell: EntityData
     ) {
         BottomSheetMenu(
-                this,
-                entityList,
-                currentCell,
-                { entityType ->
-                    presenter.onEntityDialogElementSelect(entityType)
-                },
-                {
-                    presenter.onCapturedPlayerClick(it)
-                }
+            this,
+            entityList,
+            currentCell,
+            { entityType ->
+                presenter.onEntityDialogElementSelect(entityType)
+            },
+            {
+                presenter.onCapturedPlayerClick(it)
+            }
         ).show()
     }
 
     override fun showPlayerBuybackSuccessMessage(name: String) {
-        Toast.makeText(this, getString(R.string.player_buyback_success, name), Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.player_buyback_success, name), Toast.LENGTH_SHORT)
+            .show()
     }
 
     override fun showPlayerBuybackFailureMessage(missingAmount: Int) {
-        Toast.makeText(this, getString(R.string.player_buyback_failure, missingAmount), Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            this,
+            getString(R.string.player_buyback_failure, missingAmount),
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         presenter.saveInstanceState {
             //            outState?.putSerializable(SAVED_GAME_STATE, it)
         }
         super.onSaveInstanceState(outState)
     }
-
-
 }

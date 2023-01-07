@@ -4,11 +4,10 @@ import android.graphics.Canvas
 import android.view.SurfaceHolder
 import java.util.*
 
-
 class DrawerTask(
-        private val holder: SurfaceHolder,
-        private val scene: Scene,
-        private val onSceneUpdated: ((Boolean) -> Unit)
+    private val holder: SurfaceHolder,
+    private val scene: Scene,
+    private val onSceneUpdated: ((Boolean) -> Unit)
 ) : TimerTask() {
 
     override fun run() {
@@ -18,9 +17,9 @@ class DrawerTask(
 
             canvas.translate(-scene.scrollAxis.x, -scene.scrollAxis.y)
             canvas.scale(
-                    scene.mScaleFactor,
-                    scene.mScaleFactor
-            )//зумируем канвас
+                scene.mScaleFactor,
+                scene.mScaleFactor
+            ) // зумируем канвас
 
             canvas.drawRGB(9, 9, 9)
             scene.getLayers().forEach { layer ->
@@ -34,7 +33,6 @@ class DrawerTask(
             }
             onSceneUpdated.invoke(false)
         } catch (e: Exception) {
-
         } finally {
             if (canvas != null) {
                 holder.unlockCanvasAndPost(canvas)

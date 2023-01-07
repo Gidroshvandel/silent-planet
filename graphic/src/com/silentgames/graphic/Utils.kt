@@ -40,9 +40,11 @@ fun TextButton.setTextColor(color: Assets.TextColor, skin: Skin) {
 }
 
 fun Label.setColor(color: Assets.TextColor, skin: Skin) {
-    this.style = Label.LabelStyle(skin.getFont(Assets.Font.REGULAR.fontName), skin.getColor(color.colorName)).also {
-        it.background = this.style.background
-    }
+    this.style =
+        Label.LabelStyle(skin.getFont(Assets.Font.REGULAR.fontName), skin.getColor(color.colorName))
+            .also {
+                it.background = this.style.background
+            }
 }
 
 fun scaleImageForBoard(width: Float, height: Float, size: Float): Vector2 {
@@ -55,7 +57,13 @@ fun scaleImageForBoard(width: Float, height: Float, size: Float, countOfCells: I
 }
 
 fun Camera.unProject(vector: Vector2): Vector3 =
-        unproject(vector.toVector3(), 0f, 0f, Gdx.graphics.height.toFloat(), Gdx.graphics.height.toFloat())
+    unproject(
+        vector.toVector3(),
+        0f,
+        0f,
+        Gdx.graphics.height.toFloat(),
+        Gdx.graphics.height.toFloat()
+    )
 
 fun Vector2.toVector3() = Vector3(x, y, 0f)
 
@@ -73,5 +81,4 @@ object Logger {
     fun logDebug(tag: String, message: String) {
         Gdx.app.debug(tag, message)
     }
-
 }

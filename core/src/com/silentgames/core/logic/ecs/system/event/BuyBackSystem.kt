@@ -11,8 +11,8 @@ import com.silentgames.core.logic.ecs.system.getName
 import com.silentgames.core.utils.notNull
 
 class BuyBackSystem(
-        private val onSuccess: (name: String) -> Unit,
-        private val onFailure: (missingAmount: Int) -> Unit
+    private val onSuccess: (name: String) -> Unit,
+    private val onFailure: (missingAmount: Int) -> Unit
 ) : EventSystem() {
 
     companion object {
@@ -22,11 +22,11 @@ class BuyBackSystem(
     override fun execute(gameState: GameState, eventEcs: EventEcs): Boolean {
         eventEcs.getComponent<BuyBackEventComponent>()?.let {
             notNull(
-                    it.unitEcs.getComponent(),
-                    it.unitEcs.getComponent(),
-                    it.unitEcs,
-                    gameState,
-                    ::buyBack
+                it.unitEcs.getComponent(),
+                it.unitEcs.getComponent(),
+                it.unitEcs,
+                gameState,
+                ::buyBack
             )
             return true
         }
@@ -34,18 +34,18 @@ class BuyBackSystem(
     }
 
     private fun buyBack(
-            capture: Capture,
-            unitFractionsType: FractionsType,
-            unit: UnitEcs,
-            gameState: GameState
+        capture: Capture,
+        unitFractionsType: FractionsType,
+        unit: UnitEcs,
+        gameState: GameState
     ) {
         val unitCapitalShip = gameState.getCapitalShip(unitFractionsType)
         val unitFractionCrystals = unitCapitalShip?.getComponent<CrystalBag>()
         val invadersCapitalShip = gameState.getCapitalShip(capture.invaderFaction)
         val invadersFractionCrystals = invadersCapitalShip?.getComponent<CrystalBag>()
-        if (invadersFractionCrystals != null
-                && unitFractionCrystals != null
-                && invadersFractionCrystals.addCrystals(unitFractionCrystals, capture.buybackPrice)
+        if (invadersFractionCrystals != null &&
+            unitFractionCrystals != null &&
+            invadersFractionCrystals.addCrystals(unitFractionCrystals, capture.buybackPrice)
         ) {
             unit.removeComponent(capture)
             unit.addComponent(Active())
@@ -59,5 +59,4 @@ class BuyBackSystem(
             CoreLogger.logDebug(SYSTEM_TAG, "unit ${unit.getName()} buyBack failure")
         }
     }
-
 }

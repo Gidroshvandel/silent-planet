@@ -1,6 +1,5 @@
 package com.silentgames.core.logic.ecs.entity.cell.stun.disease
 
-
 import java.util.*
 
 enum class DiseaseEnum(val turnCount: Int) {
@@ -19,6 +18,4 @@ enum class DiseaseEnum(val turnCount: Int) {
             return values[random.nextInt(size)]
         }
     }
-
-
 }

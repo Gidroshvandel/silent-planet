@@ -7,9 +7,11 @@ import com.silentgames.silent_planet.engine.BitmapBuffer
 import com.silentgames.silent_planet.engine.EngineAxis
 import com.silentgames.silent_planet.engine.TextureLoader
 
-abstract class Sprite(val context: Context,
-                      axis: EngineAxis,
-                      private val bmpResourceId: String) : Basic() {
+abstract class Sprite(
+    val context: Context,
+    axis: EngineAxis,
+    private val bmpResourceId: String
+) : Basic() {
 
     var axis: EngineAxis = axis
         set(value) {
@@ -19,7 +21,7 @@ abstract class Sprite(val context: Context,
     private var resized = false
 
     protected open fun initBitmap(bmpResourceId: String): Bitmap =
-            TextureLoader.load(context, bmpResourceId)
+        TextureLoader.load(context, bmpResourceId)
 
     protected open fun getBitmap(): Bitmap {
         val bitmapCache = BitmapBuffer.get(getBitmapId())
@@ -55,5 +57,4 @@ abstract class Sprite(val context: Context,
     }
 
     protected open fun getBitmapId(): Int = bmpResourceId.hashCode()
-
 }

@@ -18,5 +18,4 @@ class SilentPlanetGame : Game() {
     fun exit() {
         Gdx.app.exit()
     }
-
 }

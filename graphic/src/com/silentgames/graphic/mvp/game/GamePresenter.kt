@@ -22,15 +22,15 @@ import com.silentgames.core.logic.ecs.system.unit.*
  * Created by gidroshvandel on 21.06.17.
  */
 class GamePresenter internal constructor(
-        private val view: GameContract.View,
-        private val gameState: GameState?,
-        private val viewModel: GameViewModel,
-        private val model: GameModel
+    private val view: GameContract.View,
+    private val gameState: GameState?,
+    private val viewModel: GameViewModel,
+    private val model: GameModel
 ) : GameContract.Presenter {
 
     override fun onCreate() {
         viewModel.engine = EngineEcs(
-                gameState ?: model.generateNewBattleGround(FractionsType.HUMAN)
+            gameState ?: model.generateNewBattleGround(FractionsType.HUMAN)
         )
 
         startGame()
@@ -45,59 +45,59 @@ class GamePresenter internal constructor(
 
     private fun startGame() {
         viewModel.engine.addSystem(
-                BuyBackSystem(
-                        {
-                            view.showPlayerBuybackSuccessMessage(it)
-                        },
-                        {
-                            view.showPlayerBuybackFailureMessage(it)
-                        }
-                ),
-                FindCrystalSystem(),
-                PutCrystalSystem(),
-                FindShipSystem(),
-                AddCrystalSystem(),
-                SkipTurnSystem(),
-                GoalSystem(),
-                AiShipSystem(),
-                ArrowSystem(),
-                TornadoSystem(),
-                AbyssSystem(),
-                LossCrystalSystem(),
-                MovementCoordinatesSystem(),
-                SaveUnitFromSpaceSystem(),
-                SavePathSystem(),
-                AntiLoopSystem(),
+            BuyBackSystem(
+                {
+                    view.showPlayerBuybackSuccessMessage(it)
+                },
+                {
+                    view.showPlayerBuybackFailureMessage(it)
+                }
+            ),
+            FindCrystalSystem(),
+            PutCrystalSystem(),
+            FindShipSystem(),
+            AddCrystalSystem(),
+            SkipTurnSystem(),
+            GoalSystem(),
+            AiShipSystem(),
+            ArrowSystem(),
+            TornadoSystem(),
+            AbyssSystem(),
+            LossCrystalSystem(),
+            MovementCoordinatesSystem(),
+            SaveUnitFromSpaceSystem(),
+            SavePathSystem(),
+            AntiLoopSystem(),
 //                CaptureSystem(),
-                TeleportSystem(),
-                MovementSystem(),
-                ExploreSystem(),
-                StunSystem(),
-                DeathSystem(),
-                PutCrystalToCapitalShipSystem(),
-                TransportSystem(),
-                WinSystem(
-                        Constants.countCrystalsToWin,
-                        { fractionsType, crystals ->
-                            when (fractionsType) {
-                                FractionsType.ALIEN -> view.changeAlienCristalCount(crystals)
-                                FractionsType.HUMAN -> view.changeHumanCristalCount(crystals)
-                                FractionsType.PIRATE -> view.changePirateCristalCount(crystals)
-                                FractionsType.ROBOT -> view.changeRobotCristalCount(crystals)
-                            }
-                        },
-                        {
-                            view.showToast("WIN " + it.name)
-                        }
-                ),
-                model.getRenderSystem {
-                    select(it)
+            TeleportSystem(),
+            MovementSystem(),
+            ExploreSystem(),
+            StunSystem(),
+            DeathSystem(),
+            PutCrystalToCapitalShipSystem(),
+            TransportSystem(),
+            WinSystem(
+                Constants.countCrystalsToWin,
+                { fractionsType, crystals ->
+                    when (fractionsType) {
+                        FractionsType.ALIEN -> view.changeAlienCristalCount(crystals)
+                        FractionsType.HUMAN -> view.changeHumanCristalCount(crystals)
+                        FractionsType.PIRATE -> view.changePirateCristalCount(crystals)
+                        FractionsType.ROBOT -> view.changeRobotCristalCount(crystals)
+                    }
                 },
-                TurnSystem {
-                    view.selectCurrentFraction(it)
-                },
-                ChoosePlayerToMoveSystem(),
-                MovingSystem()
+                {
+                    view.showToast("WIN " + it.name)
+                }
+            ),
+            model.getRenderSystem {
+                select(it)
+            },
+            TurnSystem {
+                view.selectCurrentFraction(it)
+            },
+            ChoosePlayerToMoveSystem(),
+            MovingSystem()
         )
     }
 
@@ -110,8 +110,8 @@ class GamePresenter internal constructor(
         val cellType = viewModel.engine.gameState.getCell(currentXY)
         val selectedEntity = viewModel.selectedEntity
 
-        if (selectedEntity != null
-                && selectedEntity.getComponent<Position>()?.currentPosition != currentXY
+        if (selectedEntity != null &&
+            selectedEntity.getComponent<Position>()?.currentPosition != currentXY
         ) {
             tryMove(selectedEntity, currentXY)
         } else {
@@ -120,8 +120,9 @@ class GamePresenter internal constructor(
                 cellType?.let { listToShow.add(it) }
                 showEntityInfo(listToShow)
             } else {
-                if (selectedEntity == null
-                        && entities.isNotEmpty()) {
+                if (selectedEntity == null &&
+                    entities.isNotEmpty()
+                ) {
                     selectEntity(entities.first())
                 } else {
                     cellType?.let { selectCell(it) }
@@ -168,7 +169,7 @@ class GamePresenter internal constructor(
     }
 
     private fun List<EntityEcs>.map() =
-            map { it.toEntityData() }.toMutableList()
+        map { it.toEntityData() }.toMutableList()
 
     private fun EntityEcs.toEntityData(): EntityData {
         val texture = this.getComponent<Texture>()?.bitmapName
@@ -180,16 +181,16 @@ class GamePresenter internal constructor(
             this.hasComponent<Hide>() -> 0
             captured -> this.getComponent<Capture>()?.buybackPrice ?: 0
             else -> this.getComponent<Crystal>()?.count ?: this.getComponent<CrystalBag>()?.amount
-            ?: 0
+                ?: 0
         }
 
         return EntityData(
-                id,
-                texture ?: "",
-                description?.name ?: "",
-                description?.description ?: "",
-                crystal.toString(),
-                captured
+            id,
+            texture ?: "",
+            description?.name ?: "",
+            description?.description ?: "",
+            crystal.toString(),
+            captured
         )
     }
 
@@ -205,8 +206,11 @@ class GamePresenter internal constructor(
 
     private fun UnitEcs.canGetCrystals(): Boolean {
         val position = this.getCurrentPosition() ?: return false
-        return (viewModel.engine.gameState.getCell(position)?.getComponent<Crystal>()?.count ?: 0 > 0
-                && this.getComponent<CrystalBag>()?.canGetCrystal() == true)
+        return (
+            viewModel.engine.gameState.getCell(position)
+                ?.getComponent<Crystal>()?.count ?: 0 > 0 &&
+                this.getComponent<CrystalBag>()?.canGetCrystal() == true
+            )
     }
 
     private fun tryMove(unit: UnitEcs, targetPosition: Axis) {
@@ -251,5 +255,5 @@ class GamePresenter internal constructor(
     }
 
     private fun UnitEcs.isCurrentTurn() =
-            viewModel.engine.gameState.turn.currentFraction == getComponent<FractionsType>()
+        viewModel.engine.gameState.turn.currentFraction == getComponent<FractionsType>()
 }

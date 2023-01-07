@@ -21,16 +21,21 @@ class AntiLoopSystem : UnitSystem() {
     override fun execute(gameState: GameState, unit: UnitEcs) {
         unit.getComponent<FractionsType>()?.let {
             notNull(
-                    gameState,
-                    unit.getComponent<Route>()?.paths,
-                    unit,
-                    gameState.getCapitalShipPosition(it)?.currentPosition,
-                    ::breakCycle
+                gameState,
+                unit.getComponent<Route>()?.paths,
+                unit,
+                gameState.getCapitalShipPosition(it)?.currentPosition,
+                ::breakCycle
             )
         }
     }
 
-    private fun breakCycle(gameState: GameState, paths: MutableList<Motion>, unit: UnitEcs, shipPosition: Axis) {
+    private fun breakCycle(
+        gameState: GameState,
+        paths: MutableList<Motion>,
+        unit: UnitEcs,
+        shipPosition: Axis
+    ) {
         val marker = this.markerCycleMotion(2, paths)
         val last = paths.lastOrNull()
         if (this.isTeleport(paths)) {
@@ -48,8 +53,10 @@ class AntiLoopSystem : UnitSystem() {
     }
 
     private fun isTeleport(paths: MutableList<Motion>): Boolean {
-        return (this.markerCycleMotion(1, paths)?.motionType == TELEPORT
-                && this.markerCycleMotion(2, paths)?.motionType == TELEPORT
-                && paths.lastOrNull()?.motionType == TELEPORT)
+        return (
+            this.markerCycleMotion(1, paths)?.motionType == TELEPORT &&
+                this.markerCycleMotion(2, paths)?.motionType == TELEPORT &&
+                paths.lastOrNull()?.motionType == TELEPORT
+            )
     }
 }

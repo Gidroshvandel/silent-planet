@@ -13,13 +13,12 @@ class PutCrystalSystem : UnitSystem() {
 
     override fun execute(gameState: GameState, unit: UnitEcs) {
         gameState.getCurrentUnitCell(unit) { cell ->
-            if (unit.hasComponent<ArtificialIntelligence>()
-                    && !unit.isCrystalBagFull()
-                    && cell.getCrystalsCount() > 0
+            if (unit.hasComponent<ArtificialIntelligence>() &&
+                !unit.isCrystalBagFull() &&
+                cell.getCrystalsCount() > 0
             ) {
                 gameState.addEvent(AddCrystalEvent(cell.getCrystalsCount(), unit))
             }
         }
     }
-
 }

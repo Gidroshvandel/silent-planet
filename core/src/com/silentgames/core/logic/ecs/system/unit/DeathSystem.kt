@@ -1,6 +1,5 @@
 package com.silentgames.core.logic.ecs.system.unit
 
-
 import com.silentgames.core.Strings
 import com.silentgames.core.logic.CoreLogger
 import com.silentgames.core.logic.ecs.GameState
@@ -24,16 +23,19 @@ class DeathSystem : UnitSystem() {
         if (position != null) {
             val cell = gameState.getCell(position)
             notNull(
-                    cell?.getComponent(),
-                    unit,
-                    ::death
+                cell?.getComponent(),
+                unit,
+                ::death
             )
         }
     }
 
     private fun death(death: Death, unit: UnitEcs) {
         if (death.unit == null) {
-            CoreLogger.logDebug(SYSTEM_TAG, "${unit.getName()} ${unit.getCurrentPosition().toString()}")
+            CoreLogger.logDebug(
+                SYSTEM_TAG,
+                "${unit.getName()} ${unit.getCurrentPosition()}"
+            )
             death.unit = unit
             unit.removeComponent(Active::class.java)
             unit.getComponent<Description>()?.let {
@@ -47,5 +49,4 @@ class DeathSystem : UnitSystem() {
         val description = Strings.dead_player_description.getString()
         return Description(name, description)
     }
-
 }

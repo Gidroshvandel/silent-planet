@@ -5,5 +5,4 @@ object EntityIdGenerator {
     private var id: Long = 0
 
     fun generateId() = id++
-
 }

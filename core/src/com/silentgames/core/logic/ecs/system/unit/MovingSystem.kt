@@ -19,8 +19,8 @@ class MovingSystem : UnitSystem() {
             unit.addComponentChangedListener<Position>(0) {
                 unit.addComponent(Moving())
                 CoreLogger.logDebug(
-                        "MovingSystem",
-                        "ADD Moving Component AAAAAAAAAAAAAAAAAAAAA"
+                    "MovingSystem",
+                    "ADD Moving Component AAAAAAAAAAAAAAAAAAAAA"
                 )
             }
         }

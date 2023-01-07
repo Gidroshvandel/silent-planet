@@ -12,36 +12,35 @@ import kotlin.math.sqrt
 fun GameState.findPathToCell(unit: UnitEcs, event: (CellEcs) -> Boolean): List<Axis> {
     val position = unit.getCurrentPosition() ?: return emptyList()
     return PathFinderCore.findPath(
-            position,
-            { reachable ->
-                reachable.minBy { it.cost }
-            },
-            {
-                val cell = this.getCell(it.position)
-                cell != null && event(cell)
-            },
-            {
-                this.getAdjacentNodes(it, unit)
-            }
+        position,
+        { reachable ->
+            reachable.minBy { it.cost }
+        },
+        {
+            val cell = this.getCell(it.position)
+            cell != null && event(cell)
+        },
+        {
+            this.getAdjacentNodes(it, unit)
+        }
     )
 }
 
 fun GameState.findPathToGoal(unit: UnitEcs, goal: Axis): List<Axis> {
     val position = unit.getComponent<Position>()?.currentPosition ?: return listOf()
     return PathFinderCore.findPath(
-            position,
-            {
-                it.chooseNode(Node(goal))
-            },
-            {
-                it.position == goal
-            },
-            {
-                this.getAdjacentNodes(it, unit)
-            }
+        position,
+        {
+            it.chooseNode(Node(goal))
+        },
+        {
+            it.position == goal
+        },
+        {
+            this.getAdjacentNodes(it, unit)
+        }
     )
 }
-
 
 // Choose some node we know how to reach.
 private fun List<Node>.chooseNode(goalNode: Node): Node {
@@ -60,5 +59,7 @@ private fun List<Node>.chooseNode(goalNode: Node): Node {
 }
 
 private fun estimateDistance(node: Node, goalNode: Node): Int =
-        sqrt((node.position.x - goalNode.position.x).toFloat().pow(2)
-                + (node.position.y - goalNode.position.y).toFloat().pow(2)).toInt()
+    sqrt(
+        (node.position.x - goalNode.position.x).toFloat().pow(2) +
+            (node.position.y - goalNode.position.y).toFloat().pow(2)
+    ).toInt()

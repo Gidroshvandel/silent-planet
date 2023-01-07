@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 
 class GameBoardZoomGestureDetector(
-        private val listener: GameBoardZoomGestureAdapter
+    private val listener: GameBoardZoomGestureAdapter
 ) : GestureDetector(listener) {
 
     override fun scrolled(amountX: Float, amountY: Float): Boolean {
@@ -23,11 +23,11 @@ class GameBoardZoomGestureDetector(
         open fun mouseScrolled(amount: Int): Boolean = false
 
         open fun mouseMoved(screenX: Int, screenY: Int): Boolean = false
-
     }
 }
 
-class GameGestureAdapter(private val camera: OrthographicCamera) : GameBoardZoomGestureDetector.GameBoardZoomGestureAdapter() {
+class GameGestureAdapter(private val camera: OrthographicCamera) :
+    GameBoardZoomGestureDetector.GameBoardZoomGestureAdapter() {
     private var scaleFactor: Float = 1f
     private var isNowPinch = false
     private var zoomPoint: Vector2? = null
@@ -90,7 +90,6 @@ class GameGestureAdapter(private val camera: OrthographicCamera) : GameBoardZoom
         return false
     }
 
-
     override fun pan(x: Float, y: Float, deltaX: Float, deltaY: Float): Boolean {
         if (!isNowPinch) {
             camera.translate(-deltaX * 0.5f, -deltaY * 0.5f)
@@ -99,13 +98,20 @@ class GameGestureAdapter(private val camera: OrthographicCamera) : GameBoardZoom
         return false
     }
 
-
-    override fun pinch(initialPointer1: Vector2, initialPointer2: Vector2, pointer1: Vector2, pointer2: Vector2): Boolean {
+    override fun pinch(
+        initialPointer1: Vector2,
+        initialPointer2: Vector2,
+        pointer1: Vector2,
+        pointer2: Vector2
+    ): Boolean {
         isNowPinch = true
         val initialPointerFirst = camera.unProject(initialPointer1)
         val initialPointerSecond = camera.unProject(initialPointer2)
         if (zoomPoint == null) {
-            zoomPoint = Vector2((initialPointerFirst.x + initialPointerSecond.x) / 2, (initialPointerFirst.y + initialPointerSecond.y) / 2)
+            zoomPoint = Vector2(
+                (initialPointerFirst.x + initialPointerSecond.x) / 2,
+                (initialPointerFirst.y + initialPointerSecond.y) / 2
+            )
         }
         zoomPoint?.let { camera.setPosition(it) }
         return false
@@ -127,15 +133,14 @@ class GameGestureAdapter(private val camera: OrthographicCamera) : GameBoardZoom
         val effectiveViewportWidth: Float = camera.viewportWidth * camera.zoom
         val effectiveViewportHeight: Float = camera.viewportHeight * camera.zoom
         camera.position.x = MathUtils.clamp(
-                camera.position.x,
-                effectiveViewportWidth / 2f,
-                camera.viewportWidth - effectiveViewportWidth / 2f
+            camera.position.x,
+            effectiveViewportWidth / 2f,
+            camera.viewportWidth - effectiveViewportWidth / 2f
         )
         camera.position.y = MathUtils.clamp(
-                camera.position.y,
-                effectiveViewportHeight / 2f,
-                camera.viewportHeight - effectiveViewportHeight / 2f
+            camera.position.y,
+            effectiveViewportHeight / 2f,
+            camera.viewportHeight - effectiveViewportHeight / 2f
         )
     }
-
 }

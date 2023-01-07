@@ -3,7 +3,6 @@ package com.silentgames.silent_planet.engine.base
 import android.graphics.Paint
 import java.util.*
 
-
 open class Layer {
 
     var data = LinkedList<Basic>()
@@ -96,5 +95,4 @@ open class Layer {
     fun isProcessing(): Boolean {
         return processing
     }
-
 }

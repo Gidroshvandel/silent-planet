@@ -7,5 +7,4 @@ class GridLayer : Layer() {
     init {
         add(Grid())
     }
-
 }

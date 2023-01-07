@@ -32,43 +32,44 @@ class Hud(gameViewport: Viewport, private val assets: Assets) {
     private var bottomActionPanelCell: Cell<BottomActionPanel>? = null
 
     val stage = Stage(
-            object : Viewport() {
+        object : Viewport() {
 
-                init {
-                    camera = OrthographicCamera()
-                }
-
-                override fun update(screenWidth: Int, screenHeight: Int, centerCamera: Boolean) {
-                    val freeSpaceWidth = screenWidth - gameViewport.screenWidth
-
-                    setScreenBounds(gameViewport.screenWidth, 0, freeSpaceWidth, screenHeight)
-                    setWorldSize(freeSpaceWidth.toFloat(), screenHeight.toFloat())
-                    apply(centerCamera)
-                }
+            init {
+                camera = OrthographicCamera()
             }
+
+            override fun update(screenWidth: Int, screenHeight: Int, centerCamera: Boolean) {
+                val freeSpaceWidth = screenWidth - gameViewport.screenWidth
+
+                setScreenBounds(gameViewport.screenWidth, 0, freeSpaceWidth, screenHeight)
+                setWorldSize(freeSpaceWidth.toFloat(), screenHeight.toFloat())
+                apply(centerCamera)
+            }
+        }
     )
 
     init {
         stage.addActor(
-                Table().apply {
-                    setFillParent(true)
-                    pad(20f, 20f, 0f, 20f)
-                    this.top()
-                    add(topScorePanel).growX()
-                    add(settingsButton).size(40f, 40f).pad(10f, 10f, 10f, 10f)
-                    row().grow()
-                    add(ScrollPane(table))
-                    row().expandX()
-                    bottomActionPanelCell = add(
-                            BottomActionPanel(
-                                    uiSkin,
-                                    Strings.skip_turn_action.getString(),
-                                    Strings.get_crystal_action.getString()
-                            )
-                    ).apply {
-                        setVisibleSettings()
-                    }
-                })
+            Table().apply {
+                setFillParent(true)
+                pad(20f, 20f, 0f, 20f)
+                this.top()
+                add(topScorePanel).growX()
+                add(settingsButton).size(40f, 40f).pad(10f, 10f, 10f, 10f)
+                row().grow()
+                add(ScrollPane(table))
+                row().expandX()
+                bottomActionPanelCell = add(
+                    BottomActionPanel(
+                        uiSkin,
+                        Strings.skip_turn_action.getString(),
+                        Strings.get_crystal_action.getString()
+                    )
+                ).apply {
+                    setVisibleSettings()
+                }
+            }
+        )
         InputMultiplexer.addProcessor(stage)
     }
 
@@ -157,5 +158,4 @@ class Hud(gameViewport: Viewport, private val assets: Assets) {
             }
         })
     }
-
 }

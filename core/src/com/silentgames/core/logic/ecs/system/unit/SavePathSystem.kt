@@ -21,10 +21,10 @@ class SavePathSystem : UnitSystem() {
 
     override fun execute(gameState: GameState, unit: UnitEcs) {
         notNull(
-                gameState,
-                unit,
-                unit.getComponent<Position>()?.currentPosition,
-                ::savePath
+            gameState,
+            unit,
+            unit.getComponent<Position>()?.currentPosition,
+            ::savePath
         )
     }
 
@@ -41,9 +41,9 @@ class SavePathSystem : UnitSystem() {
 
     private fun motionType(gameState: GameState, unit: UnitEcs): MotionType {
         if (gameState.eventList.find {
-                    it.hasComponent<Teleport>()
-                            && it.getComponent<TargetPosition>()?.unit == unit
-                } != null
+            it.hasComponent<Teleport>() &&
+                it.getComponent<TargetPosition>()?.unit == unit
+        } != null
         ) {
             return TELEPORT
         } else {

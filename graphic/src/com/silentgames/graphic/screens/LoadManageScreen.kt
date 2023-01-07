@@ -26,9 +26,9 @@ class LoadManageScreen(context: Context) : AppScreenAdapter(context) {
     private val stage = Stage(ScreenViewport())
 
     private val bottomActionPanel = BottomActionPanel(
-            context.assets.uiSkin,
-            Strings.delete_slot.getString(),
-            Strings.load_game.getString()
+        context.assets.uiSkin,
+        Strings.delete_slot.getString(),
+        Strings.load_game.getString()
     )
     private val backActionButton = createTextButton(Strings.back.getString())
 
@@ -41,21 +41,22 @@ class LoadManageScreen(context: Context) : AppScreenAdapter(context) {
     override fun show() {
         stage.clear()
         stage.addActor(
-                Table().apply {
-                    setFillParent(true)
-                    pad(20f, 20f, 10f, 20f)
-                    top()
-                    add(backActionButton).apply {
-                        left()
-                        pad(10f, 10f, 10f, 10f)
-                    }.expandX()
-                    row()
-                    add(ScrollPane(getLoadedTable())).prefWidth(800f)
-                    row()
-                    add(bottomActionPanel).apply {
-                        bottom()
-                    }
-                })
+            Table().apply {
+                setFillParent(true)
+                pad(20f, 20f, 10f, 20f)
+                top()
+                add(backActionButton).apply {
+                    left()
+                    pad(10f, 10f, 10f, 10f)
+                }.expandX()
+                row()
+                add(ScrollPane(getLoadedTable())).prefWidth(800f)
+                row()
+                add(bottomActionPanel).apply {
+                    bottom()
+                }
+            }
+        )
 
         backActionButton.addCaptureListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
@@ -89,8 +90,8 @@ class LoadManageScreen(context: Context) : AppScreenAdapter(context) {
                 val data = GameManager.loadData()?.getSlot(i)
                 row().growX()
                 val widget = LoadedDataWidget(
-                        context.assets,
-                        LoadedData(data.toSlotName(i))
+                    context.assets,
+                    LoadedData(data.toSlotName(i))
                 ) { _, checked ->
                     if (data == null || checked) {
                         bottomActionPanel.setLeftActionButtonEnabled(false)
@@ -109,10 +110,11 @@ class LoadManageScreen(context: Context) : AppScreenAdapter(context) {
     }
 
     private fun GameSlot?.toSlotName(slotNumber: Int) =
-            if (this == null || this.gameState == null)
-                Strings.empty_slot.getString(slotNumber)
-            else
-                Strings.save_slot.getString(slotNumber)
+        if (this == null || this.gameState == null) {
+            Strings.empty_slot.getString(slotNumber)
+        } else {
+            Strings.save_slot.getString(slotNumber)
+        }
 
     override fun render(delta: Float) {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
@@ -133,8 +135,8 @@ class LoadManageScreen(context: Context) : AppScreenAdapter(context) {
     }
 
     private fun createTextButton(text: String) = TextButton(
-            text,
-            context.assets.uiSkin,
-            "custom_button_dark"
+        text,
+        context.assets.uiSkin,
+        "custom_button_dark"
     )
 }

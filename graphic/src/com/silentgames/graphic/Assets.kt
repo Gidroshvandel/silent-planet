@@ -22,12 +22,16 @@ class Assets {
 
     val manager: AssetManager = AssetManager()
 
-    private val fontChars = "абвгдеёжзийклмнопрстуфхцчшщъыьэюяabcdefghijklmnopqrstuvwxyzАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+±=()*&.;:,{}\"´`'<>"
+    private val fontChars =
+        "абвгдеёжзийклмнопрстуфхцчшщъыьэюяabcdefghijklmnopqrstuvwxyzАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+±=()*&.;:,{}\"´`'<>"
     private val skinResources = ObjectMap<String, Any>()
 
     private val atlasDescriptor = AssetDescriptor("atlas/game.atlas", TextureAtlas::class.java)
-    private val skinDescriptor = AssetDescriptor("atlas/default-ui-skin.json", Skin::class.java,
-            SkinLoader.SkinParameter("atlas/game.atlas", skinResources))
+    private val skinDescriptor = AssetDescriptor(
+        "atlas/default-ui-skin.json",
+        Skin::class.java,
+        SkinLoader.SkinParameter("atlas/game.atlas", skinResources)
+    )
 
 //    private val i18nDescriptor = AssetDescriptor("i18n/medieval-tycoon", I18NBundle::class.java, I18NBundleLoader.I18NBundleParameter(Locale.getDefault()))
 
@@ -36,11 +40,11 @@ class Assets {
     }
 
     fun getSprite(name: String): Sprite =
-            Sprite(getTextureRegions(name).first() ?: uiSkin.getSprite(name.removeExtension()))
+        Sprite(getTextureRegions(name).first() ?: uiSkin.getSprite(name.removeExtension()))
 
     fun getTextureRegions(name: String): Array<TextureRegion> {
         return uiSkin.getRegions(name.removeExtension())
-                ?: Array<TextureRegion>().apply { add(getTextureRegion(name)) }
+            ?: Array<TextureRegion>().apply { add(getTextureRegion(name)) }
     }
 
     private fun getTextureRegion(name: String): TextureRegion {
@@ -53,8 +57,15 @@ class Assets {
         manager.load(atlasDescriptor)
 
         val resolver = InternalFileHandleResolver()
-        manager.setLoader<FreeTypeFontGenerator, FreeTypeFontGeneratorLoader.FreeTypeFontGeneratorParameters>(FreeTypeFontGenerator::class.java, FreeTypeFontGeneratorLoader(resolver))
-        manager.setLoader<BitmapFont, FreetypeFontLoader.FreeTypeFontLoaderParameter>(BitmapFont::class.java, ".ttf", FreetypeFontLoader(resolver))
+        manager.setLoader<FreeTypeFontGenerator, FreeTypeFontGeneratorLoader.FreeTypeFontGeneratorParameters>(
+            FreeTypeFontGenerator::class.java,
+            FreeTypeFontGeneratorLoader(resolver)
+        )
+        manager.setLoader<BitmapFont, FreetypeFontLoader.FreeTypeFontLoaderParameter>(
+            BitmapFont::class.java,
+            ".ttf",
+            FreetypeFontLoader(resolver)
+        )
 
         loadColors()
         loadDefaultFonts()

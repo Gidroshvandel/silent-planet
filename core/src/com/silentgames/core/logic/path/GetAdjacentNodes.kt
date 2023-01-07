@@ -15,23 +15,24 @@ import com.silentgames.core.logic.ecs.system.getCurrentPosition
  * Check where can we get from this node
  */
 fun GameState.getAdjacentNodes(node: Node, unit: UnitEcs): List<Node> =
-        this.getCell(node.position)?.getVisibleDestinationNodes()
-                ?: getAvailableNodePositionList(node, unit)
+    this.getCell(node.position)?.getVisibleDestinationNodes()
+        ?: getAvailableNodePositionList(node, unit)
 
 private fun GameState.getAvailableNodePositionList(node: Node, unit: UnitEcs) =
-        this.getAvailableMoveDistancePositionList(node.position, unit).map { Node(it, cost = Int.MAX_VALUE) }
+    this.getAvailableMoveDistancePositionList(node.position, unit)
+        .map { Node(it, cost = Int.MAX_VALUE) }
 
 private fun CellEcs.getVisibleDestinationNodes(): List<Node>? =
-        if (!this.hasComponent<Hide>()) {
-            this.getDestinationNodes()
-        } else {
-            null
-        }
+    if (!this.hasComponent<Hide>()) {
+        this.getDestinationNodes()
+    } else {
+        null
+    }
 
 private fun GameState.getAvailableMoveDistancePositionList(position: Axis, unit: UnitEcs) =
-        com.silentgames.core.logic.ecs.system.getAvailableMoveDistancePositionList(position).filter {
-            MovementSystem().isCanMove(it, position, unit, this)
-        }
+    com.silentgames.core.logic.ecs.system.getAvailableMoveDistancePositionList(position).filter {
+        MovementSystem().isCanMove(it, position, unit, this)
+    }
 
 /**
  * Cells moving logic

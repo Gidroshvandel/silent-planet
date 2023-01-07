@@ -17,18 +17,17 @@ import com.silentgames.graphic.RenderSystemImpl
 class GameModel(private val viewport: Viewport, private val assets: Assets) {
 
     fun generateNewBattleGround(firstTurnFraction: FractionsType): GameState = GameState(
-            CellRandomGenerator().generateBattleGround(),
-            EntityRandomGenerator().generateUnits(),
-            firstTurnFraction
+        CellRandomGenerator().generateBattleGround(),
+        EntityRandomGenerator().generateUnits(),
+        firstTurnFraction
     )
 
     fun getRenderSystem(
-            onClick: (Axis) -> Unit
+        onClick: (Axis) -> Unit
     ): RenderSystem = RenderSystemImpl(
-            viewport,
-            SpriteBatch(),
-            assets,
-            onClick
+        viewport,
+        SpriteBatch(),
+        assets,
+        onClick
     )
-
 }

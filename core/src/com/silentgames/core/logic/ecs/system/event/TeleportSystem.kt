@@ -17,7 +17,8 @@ class TeleportSystem : EventSystem() {
         if (eventEcs.hasComponent<Teleport>()) {
             eventEcs.getComponent<TargetPosition>()?.let {
                 CoreLogger.logDebug(
-                        SYSTEM_TAG, "${it.unit.getName()} target ${it.axis}"
+                    SYSTEM_TAG,
+                    "${it.unit.getName()} target ${it.axis}"
                 )
                 gameState.moveUnit(it.unit, it.axis)
                 return true
@@ -25,5 +26,4 @@ class TeleportSystem : EventSystem() {
         }
         return false
     }
-
 }

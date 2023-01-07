@@ -37,9 +37,9 @@ class StunSystem : UnitSystem() {
             gameState.getCurrentUnitCell(unit) { cell, position ->
                 val stun = cell.getComponent<StunComponent>()
                 val canStunnedBy = unit.getComponent<CanStunnedBy>()
-                if (stun != null
-                        && canStunnedBy != null
-                        && canStunnedBy.stunTypeGroup == stun.stunTypeGroup
+                if (stun != null &&
+                    canStunnedBy != null &&
+                    canStunnedBy.stunTypeGroup == stun.stunTypeGroup
                 ) {
                     unit.addComponent(StunEffect(stun))
                     unit.removeComponent(CanMove::class.java)
@@ -47,5 +47,4 @@ class StunSystem : UnitSystem() {
             }
         }
     }
-
 }

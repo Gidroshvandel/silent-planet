@@ -3,9 +3,9 @@ package com.silentgames.core.logic.ecs.component
 import java.util.*
 
 class Arrow(
-        val distance: Int,
-        val arrowMode: ArrowMode,
-        val rotateAngle: RotateAngle
+    val distance: Int,
+    val arrowMode: ArrowMode,
+    val rotateAngle: RotateAngle
 ) : ComponentEquals()
 
 enum class ArrowMode {

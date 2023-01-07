@@ -12,11 +12,10 @@ import com.silentgames.silent_planet.view.SurfaceGameView
 class MainModel(private val surfaceView: SurfaceGameView) {
 
     fun generateNewBattleGround(firstTurnFraction: FractionsType): GameState = GameState(
-            CellRandomGenerator().generateBattleGround(),
-            EntityRandomGenerator().generateUnits(),
-            firstTurnFraction
+        CellRandomGenerator().generateBattleGround(),
+        EntityRandomGenerator().generateUnits(),
+        firstTurnFraction
     )
 
 //    fun getRenderSystem(onSceneUpdate: () -> Unit) = RenderSystem(surfaceView, onSceneUpdate)
-
 }

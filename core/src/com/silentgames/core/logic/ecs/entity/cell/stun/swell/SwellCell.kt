@@ -9,25 +9,24 @@ import com.silentgames.core.logic.ecs.component.stun.StunTypeGroup
 import com.silentgames.core.logic.ecs.entity.cell.stun.StunCell
 
 class SwellCell(
-        position: Axis,
-        stunTurnsCount: Int,
-        imageName: String
+    position: Axis,
+    stunTurnsCount: Int,
+    imageName: String
 ) : StunCell(
-        Position(position),
-        stunTurnsCount,
-        Hide(
-                imageName,
-                Description(
-                        Strings.empty_cell_name.getString(),
-                        Strings.empty_cell_description.getString()
-                )
-        ),
-        StunTypeGroup.SWELL
+    Position(position),
+    stunTurnsCount,
+    Hide(
+        imageName,
+        Description(
+            Strings.empty_cell_name.getString(),
+            Strings.empty_cell_description.getString()
+        )
+    ),
+    StunTypeGroup.SWELL
 ) {
 
     constructor(
-            position: Axis,
-            swellsEnum: SwellsEnum
+        position: Axis,
+        swellsEnum: SwellsEnum
     ) : this(position, swellsEnum.turnCount, swellsEnum.getImageName())
-
 }

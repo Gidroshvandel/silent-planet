@@ -36,5 +36,4 @@ class AddCrystalSystem : EventSystem() {
         }
         return false
     }
-
 }

@@ -8,5 +8,4 @@ class AddCrystalEvent(crystals: Int = 1, entityEcs: EntityEcs) : EventEcs() {
     init {
         addComponent(AddCrystalEventComponent(crystals, entityEcs))
     }
-
 }

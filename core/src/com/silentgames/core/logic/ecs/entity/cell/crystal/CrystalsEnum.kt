@@ -1,6 +1,5 @@
 package com.silentgames.core.logic.ecs.entity.cell.crystal
 
-
 import java.util.*
 
 enum class CrystalsEnum(val crystalsCount: Int) {
@@ -25,6 +24,4 @@ enum class CrystalsEnum(val crystalsCount: Int) {
             return values[random.nextInt(size)]
         }
     }
-
-
 }

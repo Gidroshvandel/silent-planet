@@ -36,7 +36,6 @@ interface MainContract {
         fun showPlayerBuybackSuccessMessage(name: String)
 
         fun showPlayerBuybackFailureMessage(missingAmount: Int)
-
     }
 
     interface Presenter : BasePresenter {
@@ -50,6 +49,5 @@ interface MainContract {
         fun onCapturedPlayerClick(entityData: EntityData)
 
         fun saveInstanceState(onSave: (GameState) -> Unit)
-
     }
 }

@@ -3,8 +3,8 @@ package com.silentgames.core.logic.ecs.entity
 import com.silentgames.core.logic.ecs.component.Component
 
 abstract class EntityEcs(
-        val id: Long = EntityIdGenerator.generateId(),
-        private var localComponents: Set<Component> = setOf()
+    val id: Long = EntityIdGenerator.generateId(),
+    private var localComponents: Set<Component> = setOf()
 ) {
 
     @PublishedApi
@@ -29,12 +29,14 @@ abstract class EntityEcs(
     }
 
     @Suppress("UNCHECKED_CAST")
-    inline fun <reified T : Component> addComponentChangedListener(order: Int, noinline onChanged: (T) -> Unit) {
+    inline fun <reified T : Component> addComponentChangedListener(
+        order: Int,
+        noinline onChanged: (T) -> Unit
+    ) {
         componentChangeHandler.addComponentChangedListener(order, onChanged)
     }
 
     fun addComponent(component: Component) {
-
         componentChangeHandler.addComponent(component)
 
         if (components.contains(component)) {

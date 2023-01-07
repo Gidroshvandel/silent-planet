@@ -11,10 +11,10 @@ import com.silentgames.silent_planet.dialog.EntityMenuAdapter.ElementType.*
 import com.silentgames.silent_planet.engine.TextureLoader
 
 class EntityMenuAdapter(
-        entityList: MutableList<EntityData>,
-        currentCellData: EntityData,
-        private val onClick: (EntityData) -> Unit,
-        private val onCapturedPlayerClick: (EntityData) -> Unit
+    entityList: MutableList<EntityData>,
+    currentCellData: EntityData,
+    private val onClick: (EntityData) -> Unit,
+    private val onCapturedPlayerClick: (EntityData) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val convertedList: MutableList<EntityData> = mutableListOf()
@@ -35,16 +35,20 @@ class EntityMenuAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (values()[viewType]) {
-            CAPTURED_PLAYER -> CapturedPlayerViewHolder(inflate(
+            CAPTURED_PLAYER -> CapturedPlayerViewHolder(
+                inflate(
                     parent.context,
                     R.layout.element_captured_player_info,
                     null
-            ))
-            OTHER -> EntityMenu(inflate(
+                )
+            )
+            OTHER -> EntityMenu(
+                inflate(
                     parent.context,
                     R.layout.element_cell_info,
                     null
-            ))
+                )
+            )
         }
     }
 
@@ -95,14 +99,13 @@ class EntityMenuAdapter(
         CAPTURED_PLAYER,
         OTHER
     }
-
 }
 
 class EntityData(
-        val id: Long,
-        val texture: String,
-        val name: String,
-        val description: String,
-        val crystalCount: String,
-        val captured: Boolean = false
+    val id: Long,
+    val texture: String,
+    val name: String,
+    val description: String,
+    val crystalCount: String,
+    val captured: Boolean = false
 )

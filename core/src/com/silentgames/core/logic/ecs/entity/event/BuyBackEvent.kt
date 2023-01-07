@@ -8,5 +8,4 @@ class BuyBackEvent(unitEcs: UnitEcs) : EventEcs() {
     init {
         addComponent(BuyBackEventComponent(unitEcs))
     }
-
 }

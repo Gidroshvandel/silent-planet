@@ -39,17 +39,23 @@ import com.badlogic.gdx.utils.viewport.Viewport
  * @author Daniel Holderbaum
  * @author Nathan Sweet
  */
-class AppViewport @JvmOverloads constructor(var scaling: Scaling, worldWidth: Float, worldHeight: Float, camera: Camera? = OrthographicCamera()) : Viewport() {
+class AppViewport @JvmOverloads constructor(
+    var scaling: Scaling,
+    worldWidth: Float,
+    worldHeight: Float,
+    camera: Camera? = OrthographicCamera()
+) : Viewport() {
     override fun update(screenWidth: Int, screenHeight: Int, centerCamera: Boolean) {
-        val scaled = scaling.apply(worldWidth, worldHeight, screenWidth.toFloat(), screenHeight.toFloat())
+        val scaled =
+            scaling.apply(worldWidth, worldHeight, screenWidth.toFloat(), screenHeight.toFloat())
         val viewportWidth = Math.round(scaled.x)
         val viewportHeight = Math.round(scaled.y)
         // Center.
         setScreenBounds(
-                0,
-                0,
-                viewportWidth,
-                viewportHeight
+            0,
+            0,
+            viewportWidth,
+            viewportHeight
         )
         apply(centerCamera)
     }

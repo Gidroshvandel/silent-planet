@@ -70,10 +70,30 @@ class TopScorePanel(private val uiSkin: Skin) : Table() {
 
     fun changeFractionCrystalOnBoard(fractionsType: FractionsType, count: Int) {
         when (fractionsType) {
-            FractionsType.ALIEN -> aliensButton.setText(getCrystalTitle(Strings.aliens.getString(), count))
-            FractionsType.HUMAN -> humansButton.setText(getCrystalTitle(Strings.humans.getString(), count))
-            FractionsType.PIRATE -> piratesButton.setText(getCrystalTitle(Strings.pirates.getString(), count))
-            FractionsType.ROBOT -> robotsButton.setText(getCrystalTitle(Strings.robots.getString(), count))
+            FractionsType.ALIEN -> aliensButton.setText(
+                getCrystalTitle(
+                    Strings.aliens.getString(),
+                    count
+                )
+            )
+            FractionsType.HUMAN -> humansButton.setText(
+                getCrystalTitle(
+                    Strings.humans.getString(),
+                    count
+                )
+            )
+            FractionsType.PIRATE -> piratesButton.setText(
+                getCrystalTitle(
+                    Strings.pirates.getString(),
+                    count
+                )
+            )
+            FractionsType.ROBOT -> robotsButton.setText(
+                getCrystalTitle(
+                    Strings.robots.getString(),
+                    count
+                )
+            )
         }
     }
 
@@ -95,7 +115,10 @@ class TopScorePanel(private val uiSkin: Skin) : Table() {
     }
 
     private fun getCrystalTitle(fractionName: String, currentCrystals: Int): String {
-        return Strings.crystal_count.getString(fractionName, currentCrystals, Constants.countCrystalsToWin)
+        return Strings.crystal_count.getString(
+            fractionName,
+            currentCrystals,
+            Constants.countCrystalsToWin
+        )
     }
-
 }

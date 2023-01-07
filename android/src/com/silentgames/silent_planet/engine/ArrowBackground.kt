@@ -6,10 +6,10 @@ import android.graphics.Matrix
 import com.silentgames.core.logic.ecs.component.RotateAngle
 
 class ArrowBackground(
-        context: Context,
-        axis: EngineAxis,
-        bmpId: String,
-        private val rotateAngle: RotateAngle
+    context: Context,
+    axis: EngineAxis,
+    bmpId: String,
+    private val rotateAngle: RotateAngle
 ) : Background(context, axis, bmpId) {
 
     override fun initBitmap(bmpResourceId: String): Bitmap {
@@ -28,5 +28,4 @@ class ArrowBackground(
     }
 
     override fun getBitmapId(): Int = (super.getBitmapId().toString() + rotateAngle.name).hashCode()
-
 }

@@ -1,5 +1,6 @@
 package com.silentgames.core
 
+@Suppress("EnumEntryName")
 enum class Strings(private var string: String) {
 
     aliens("Инопланетяне"),
@@ -81,5 +82,4 @@ enum class Strings(private var string: String) {
     back("Назад");
 
     fun getString(vararg args: Any?): String = String.format(string, *args)
-
 }

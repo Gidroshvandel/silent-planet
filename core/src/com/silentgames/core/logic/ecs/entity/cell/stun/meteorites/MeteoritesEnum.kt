@@ -1,6 +1,5 @@
 package com.silentgames.core.logic.ecs.entity.cell.stun.meteorites
 
-
 import java.util.*
 
 enum class MeteoritesEnum(val turnCount: Int) {
@@ -19,6 +18,4 @@ enum class MeteoritesEnum(val turnCount: Int) {
             return values[random.nextInt(size)]
         }
     }
-
-
 }

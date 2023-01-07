@@ -12,26 +12,25 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.viewport.Viewport
 
-
 class Toast internal constructor(
-        private val msg: String?,
-        length: Length,
-        private val font: BitmapFont?,
-        private val backgroundColor: Color?,
-        private val fadingDuration: Float,
-        private val maxRelativeWidth: Float,
-        private val fontColor: Color,
-        // left bottom corner
-        private val positionY: Float,
-        private val customMargin: Int?,
-        private var toastWidth: Int = 0,
-        private var toastHeight: Int = 0,
-        private var timeToLive: Float = Length.SHORT.duration,
-        private var positionX: Float = 0f,
-        private var fontX: Float = 0f,
-        // left top corner
-        private var fontY: Float = 0f,
-        private var fontWidth: Int = 0
+    private val msg: String?,
+    length: Length,
+    private val font: BitmapFont?,
+    private val backgroundColor: Color?,
+    private val fadingDuration: Float,
+    private val maxRelativeWidth: Float,
+    private val fontColor: Color,
+    // left bottom corner
+    private val positionY: Float,
+    private val customMargin: Int?,
+    private var toastWidth: Int = 0,
+    private var toastHeight: Int = 0,
+    private var timeToLive: Float = Length.SHORT.duration,
+    private var positionX: Float = 0f,
+    private var fontX: Float = 0f,
+    // left top corner
+    private var fontY: Float = 0f,
+    private var fontWidth: Int = 0
 ) {
     // in seconds
     enum class Length(val duration: Float) {
@@ -87,7 +86,11 @@ class Toast internal constructor(
         renderer?.begin(ShapeRenderer.ShapeType.Filled)
         renderer?.circle(positionX, positionY + toastHeight / 2, toastHeight / 2.toFloat())
         renderer?.rect(positionX, positionY, toastWidth.toFloat(), toastHeight.toFloat())
-        renderer?.circle(positionX + toastWidth, positionY + toastHeight / 2, toastHeight / 2.toFloat())
+        renderer?.circle(
+            positionX + toastWidth,
+            positionY + toastHeight / 2,
+            toastHeight / 2.toFloat()
+        )
         renderer?.end()
 
         val camera: Camera = viewport.camera
@@ -118,6 +121,7 @@ class Toast internal constructor(
         private var fadingDuration = 0.5f
         private var maxRelativeWidth = 0.65f
         private var customMargin: Int? = null
+
         /**
          * Creates new toast
          * @param text message
@@ -126,15 +130,16 @@ class Toast internal constructor(
          */
         fun create(text: String?, length: Length): Toast {
             return Toast(
-                    text,
-                    length,
-                    font,
-                    backgroundColor,
-                    fadingDuration,
-                    maxRelativeWidth,
-                    fontColor,
-                    positionY,
-                    customMargin)
+                text,
+                length,
+                font,
+                backgroundColor,
+                fadingDuration,
+                maxRelativeWidth,
+                fontColor,
+                positionY,
+                customMargin
+            )
         }
 
         /**
@@ -143,6 +148,7 @@ class Toast internal constructor(
         class Builder {
             private var built = false
             private val factory = ToastFactory()
+
             /**
              * Specify font for toasts
              * @param font font

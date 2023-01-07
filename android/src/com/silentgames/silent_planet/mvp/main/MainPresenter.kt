@@ -11,10 +11,10 @@ import com.silentgames.silent_planet.dialog.EntityData
  * Created by gidroshvandel on 21.06.17.
  */
 class MainPresenter internal constructor(
-        private val view: MainContract.View,
-        private val gameState: GameState?,
-        private val viewModel: MainViewModel,
-        private val model: MainModel
+    private val view: MainContract.View,
+    private val gameState: GameState?,
+    private val viewModel: MainViewModel,
+    private val model: MainModel
 ) : MainContract.Presenter {
 
     override fun onCreate() {
@@ -41,8 +41,8 @@ class MainPresenter internal constructor(
 //        viewModel.engine.addSystem(TornadoSystem())
 //        viewModel.engine.addSystem(MovementSystem())
 //        viewModel.engine.addSystem(TeleportSystem())
-////        viewModel.engine.addSystem(CaptureSystem())
-////        viewModel.engine.addSystem(TeleportSystem())
+// //        viewModel.engine.addSystem(CaptureSystem())
+// //        viewModel.engine.addSystem(TeleportSystem())
 //        viewModel.engine.addSystem(ExploreSystem())
 //        viewModel.engine.addSystem(DeathSystem())
 //        viewModel.engine.addSystem(PutCrystalToCapitalShipSystem())
@@ -69,11 +69,11 @@ class MainPresenter internal constructor(
 //                    view.selectCurrentFraction(it)
 //                }
 //        )
-////        viewModel.engine.addSystem(
-////                model.getRenderSystem {
-////                    viewModel.selectedEntity?.let { updateEntityState(it) }
-////                }
-////        )
+// //        viewModel.engine.addSystem(
+// //                model.getRenderSystem {
+// //                    viewModel.selectedEntity?.let { updateEntityState(it) }
+// //                }
+// //        )
 //
 //        viewModel.engine.processSystems()
 //
@@ -93,13 +93,14 @@ class MainPresenter internal constructor(
         val entities = viewModel.engine.gameState.getUnits(currentXY)
         val cellType = viewModel.engine.gameState.getCell(currentXY)
 
-        if (viewModel.selectedEntity != null
-                && viewModel.selectedEntity?.getComponent<Position>()?.currentPosition != currentXY
+        if (viewModel.selectedEntity != null &&
+            viewModel.selectedEntity?.getComponent<Position>()?.currentPosition != currentXY
         ) {
             tryMove(viewModel.selectedEntity!!, currentXY)
         } else {
-            if (viewModel.selectedEntity == null
-                    && entities.isNotEmpty()) {
+            if (viewModel.selectedEntity == null &&
+                entities.isNotEmpty()
+            ) {
                 if (entities.size > 1) {
                     view.showEntityMenuDialog(entities.map(), cellType?.toEntityData()!!)
                 } else {
@@ -147,7 +148,7 @@ class MainPresenter internal constructor(
     }
 
     private fun List<EntityEcs>.map() =
-            map { it.toEntityData() }.toMutableList()
+        map { it.toEntityData() }.toMutableList()
 
     private fun EntityEcs.toEntityData(): EntityData {
         val texture = this.getComponent<Texture>()?.bitmapName
@@ -162,12 +163,12 @@ class MainPresenter internal constructor(
         }
 
         return EntityData(
-                id,
-                texture!!,
-                description?.name ?: "",
-                description?.description ?: "",
-                crystal.toString(),
-                captured
+            id,
+            texture!!,
+            description?.name ?: "",
+            description?.description ?: "",
+            crystal.toString(),
+            captured
         )
     }
 
@@ -195,7 +196,7 @@ class MainPresenter internal constructor(
     }
 
     private fun crystalsOverZero(position: Axis): Boolean =
-            viewModel.engine.gameState.getCell(position)?.getComponent<Crystal>()?.count ?: 0 > 0
+        viewModel.engine.gameState.getCell(position)?.getComponent<Crystal>()?.count ?: 0 > 0
 
     private fun selectCell(cellType: EntityEcs) {
         val crystals = cellType.getComponent<Crystal>()?.count ?: 0

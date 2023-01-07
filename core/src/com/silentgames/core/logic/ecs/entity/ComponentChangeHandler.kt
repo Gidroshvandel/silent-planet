@@ -8,7 +8,10 @@ class ComponentChangeHandler {
     val onComponentChangedList: MutableMap<Class<*>, MutableList<(ChangeHandler)>> = mutableMapOf()
 
     @Suppress("UNCHECKED_CAST")
-    inline fun <reified T : Component> addComponentChangedListener(order: Int, noinline onChanged: (T) -> Unit) {
+    inline fun <reified T : Component> addComponentChangedListener(
+        order: Int,
+        noinline onChanged: (T) -> Unit
+    ) {
         val changeHandler = ChangeHandler(onChanged as ((Component) -> Unit), order)
         if (onComponentChangedList[T::class.java] == null) {
             onComponentChangedList[T::class.java] = mutableListOf()
@@ -32,5 +35,4 @@ class ComponentChangeHandler {
     }
 
     data class ChangeHandler(val onComponentAdd: (Component) -> Unit, val order: Int)
-
 }

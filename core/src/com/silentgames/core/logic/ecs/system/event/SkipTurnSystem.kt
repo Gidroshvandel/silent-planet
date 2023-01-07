@@ -18,5 +18,4 @@ class SkipTurnSystem : EventSystem() {
         }
         return false
     }
-
 }

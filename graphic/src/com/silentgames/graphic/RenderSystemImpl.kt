@@ -22,12 +22,11 @@ import com.silentgames.graphic.engine.base.Scene
 import com.silentgames.graphic.engine.base.Sprite
 import com.silentgames.graphic.mvp.InputMultiplexer
 
-
 class RenderSystemImpl(
-        private val viewport: Viewport,
-        private val batch: Batch,
-        private val assets: Assets,
-        private val onClick: (Axis) -> Unit
+    private val viewport: Viewport,
+    private val batch: Batch,
+    private val assets: Assets,
+    private val onClick: (Axis) -> Unit
 ) : RenderSystem {
 
     private val camera = (viewport.camera as OrthographicCamera)
@@ -52,8 +51,9 @@ class RenderSystemImpl(
         super.execute(gameState)
 //        CoreLogger.logDebug("Render", "execute")
 
-        if (engine?.processing == false)
+        if (engine?.processing == false) {
             render(gameState)
+        }
 
         engine?.processing = true
 
@@ -74,8 +74,9 @@ class RenderSystemImpl(
         }
 
         scene?.update {
-            if (it)
+            if (it) {
                 engine?.processing = false
+            }
         }
 
         batch.end()
@@ -92,7 +93,9 @@ class RenderSystemImpl(
                     backgroundLayer.add(it)
                 }
 
-                val transport = gameState.getUnits(Axis(x, y)).firstOrNull { it.hasComponent<Transport>() }?.toDrawEntity()
+                val transport =
+                    gameState.getUnits(Axis(x, y)).firstOrNull { it.hasComponent<Transport>() }
+                        ?.toDrawEntity()
                 val entityToDraw = gameState.getUnitToDraw(Axis(x, y))?.toDrawEntity()
 
                 if (transport != null) {
@@ -103,7 +106,6 @@ class RenderSystemImpl(
                 } else {
                     entityToDraw?.first?.addOn(entityLayer)
                 }
-
             }
         }
         scene?.setLayer(0, backgroundLayer)
@@ -111,13 +113,13 @@ class RenderSystemImpl(
     }
 
     private fun GameState.getUnitToDraw(axis: Axis) =
-            this.getUnits(axis).firstOrNull {
-                val position = it.getComponent<Position>()
-                position != null
-                        && it.hasComponent<Moving>()
-                        && position.currentPosition != position.oldPosition
-                        && !it.hasComponent<Transport>()
-            } ?: this.getUnits(axis).firstOrNull { !it.hasComponent<Transport>() }
+        this.getUnits(axis).firstOrNull {
+            val position = it.getComponent<Position>()
+            position != null &&
+                it.hasComponent<Moving>() &&
+                position.currentPosition != position.oldPosition &&
+                !it.hasComponent<Transport>()
+        } ?: this.getUnits(axis).firstOrNull { !it.hasComponent<Transport>() }
 
     private fun Sprite.addOn(layer: Layer) {
         layer.add(this)
@@ -129,16 +131,16 @@ class RenderSystemImpl(
         val position = this.getCurrentPosition() ?: return null
         return if (arrow != null && isVisible()) {
             ArrowBackground(
-                    position.toEngineAxis(),
-                    textureId,
-                    assets,
-                    arrow.rotateAngle
+                position.toEngineAxis(),
+                textureId,
+                assets,
+                arrow.rotateAngle
             )
         } else {
             Background(
-                    position.toEngineAxis(),
-                    textureId,
-                    assets
+                position.toEngineAxis(),
+                textureId,
+                assets
             )
         }
     }
@@ -149,17 +151,17 @@ class RenderSystemImpl(
         val moving = this.getComponent<Moving>()
         var isMoved = false
         val entity = Entity(
-                this.id.toString(),
-                position.currentPosition.toEngineAxis(),
-                textureId,
-                assets
+            this.id.toString(),
+            position.currentPosition.toEngineAxis(),
+            textureId,
+            assets
         ).apply {
             if (moving != null && position.oldPosition != position.currentPosition) {
                 isMoved = true
                 CoreLogger.logDebug("Animation", "unit ${this@toDrawEntity.getName()} Moving")
                 move(
-                        position.oldPosition.toEngineAxis(),
-                        position.currentPosition.toEngineAxis()
+                    position.oldPosition.toEngineAxis(),
+                    position.currentPosition.toEngineAxis()
                 )
             }
         }
@@ -178,5 +180,4 @@ class RenderSystemImpl(
         camera.update()
         InputMultiplexer.addProcessor(GameBoardZoomGestureDetector(GameGestureAdapter(camera)))
     }
-
 }

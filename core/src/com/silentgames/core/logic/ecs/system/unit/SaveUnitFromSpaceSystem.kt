@@ -20,26 +20,34 @@ class SaveUnitFromSpaceSystem : UnitSystem() {
     override fun execute(gameState: GameState, unit: UnitEcs) {
         unit.getComponent<FractionsType>()?.let {
             notNull(
-                    gameState,
-                    unit.getCurrentPosition(),
-                    gameState.getCapitalShipPosition(it)?.currentPosition,
-                    unit,
-                    ::moveUnitToShip
+                gameState,
+                unit.getCurrentPosition(),
+                gameState.getCapitalShipPosition(it)?.currentPosition,
+                unit,
+                ::moveUnitToShip
             )
         }
     }
 
-    private fun moveUnitToShip(gameState: GameState, currentPosition: Axis, shipPosition: Axis, unit: UnitEcs) {
+    private fun moveUnitToShip(
+        gameState: GameState,
+        currentPosition: Axis,
+        shipPosition: Axis,
+        unit: UnitEcs
+    ) {
         if (currentPosition != shipPosition && !currentPosition.inGroundBorders()) {
-            CoreLogger.logDebug(SYSTEM_TAG, "${unit.getName()} with position ${unit.getCurrentPosition()} moved to target $shipPosition")
+            CoreLogger.logDebug(
+                SYSTEM_TAG,
+                "${unit.getName()} with position ${unit.getCurrentPosition()} moved to target $shipPosition"
+            )
             gameState.addEvent(TeleportEvent(shipPosition, unit))
         }
     }
 
     private fun Axis.inGroundBorders(): Boolean {
         return x <= Constants.verticalCountOfGroundCells &&
-                x >= 1 &&
-                y <= Constants.horizontalCountOfGroundCells &&
-                y >= 1
+            x >= 1 &&
+            y <= Constants.horizontalCountOfGroundCells &&
+            y >= 1
     }
 }

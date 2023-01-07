@@ -10,10 +10,10 @@ import kotlin.math.max
 import kotlin.math.min
 
 class Entity(
-        context: Context,
-        val id: String,
-        axis: EngineAxis,
-        bmpResourceId: String
+    context: Context,
+    val id: String,
+    axis: EngineAxis,
+    bmpResourceId: String
 ) : Sprite(context, axis, bmpResourceId) {
 
     private var speed = 0.2
@@ -26,14 +26,14 @@ class Entity(
         val size = ((canvas.width / Constants.verticalCountOfCells) * 0.7).toFloat()
         val bitmap = getResizedBitmap(size, size)
         val x = cellCenterNumeratorSquare(
-                axis.x,
-                canvas.width,
-                bitmap
+            axis.x,
+            canvas.width,
+            bitmap
         )
         val y = cellCenterNumeratorSquare(
-                axis.y,
-                canvas.height,
-                bitmap
+            axis.y,
+            canvas.height,
+            bitmap
         )
         canvas.drawBitmap(bitmap, x, y, paint)
     }

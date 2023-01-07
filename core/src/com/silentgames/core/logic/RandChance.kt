@@ -17,5 +17,5 @@ fun Random.randChance(value: Int, chance: Int, max: Int): Int {
     return if (random < chance) {
         value
     } else nextInt(max)
-    //Даже при нулевом шансе число всё-таки может выпасть ТУТ.
+    // Даже при нулевом шансе число всё-таки может выпасть ТУТ.
 }

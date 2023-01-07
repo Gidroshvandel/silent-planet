@@ -3,8 +3,8 @@ package com.silentgames.core.logic.ecs
 import com.silentgames.core.logic.ecs.component.FractionsType
 
 class Turn(
-        private var currentTurnFraction: FractionsType,
-        private var turnCount: Int = 0
+    private var currentTurnFraction: FractionsType,
+    private var turnCount: Int = 0
 ) {
 
     val count: Int get() = turnCount
@@ -19,5 +19,4 @@ class Turn(
     private fun nextPlayer() {
         currentTurnFraction = currentFraction.next()
     }
-
 }

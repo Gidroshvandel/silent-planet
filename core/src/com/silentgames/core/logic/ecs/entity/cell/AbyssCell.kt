@@ -8,11 +8,11 @@ import com.silentgames.core.logic.ecs.component.Hide
 import com.silentgames.core.logic.ecs.component.Position
 
 class AbyssCell(position: Axis, imageName: String = "abyss_cell") : GroundCell(
-        Position(position),
-        Hide(
-                imageName,
-                Description(Strings.abyss_cell_name.getString(), Strings.abyss_cell_description.getString())
-        )
+    Position(position),
+    Hide(
+        imageName,
+        Description(Strings.abyss_cell_name.getString(), Strings.abyss_cell_description.getString())
+    )
 ) {
     init {
         addComponent(Abyss())

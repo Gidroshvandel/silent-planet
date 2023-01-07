@@ -8,26 +8,25 @@ import com.silentgames.core.logic.ecs.entity.event.EventEcs
 import com.silentgames.core.logic.ecs.entity.unit.UnitEcs
 import com.silentgames.core.logic.ecs.system.getName
 
-
 class GameState(
-        private val mutableEventList: MutableList<EventEcs>,
-        private val mutableCellList: MutableList<CellEcs>,
-        private val mutableUnitList: MutableList<UnitEcs>,
-        val aiFractionList: List<FractionsType> = listOf(),
-        val turn: Turn
+    private val mutableEventList: MutableList<EventEcs>,
+    private val mutableCellList: MutableList<CellEcs>,
+    private val mutableUnitList: MutableList<UnitEcs>,
+    val aiFractionList: List<FractionsType> = listOf(),
+    val turn: Turn
 ) {
 
     constructor(
-            cellList: List<CellEcs>,
-            unitList: List<UnitEcs>,
-            firstTurnFraction: FractionsType,
-            aiFractionList: List<FractionsType> = listOf()
+        cellList: List<CellEcs>,
+        unitList: List<UnitEcs>,
+        firstTurnFraction: FractionsType,
+        aiFractionList: List<FractionsType> = listOf()
     ) : this(
-            mutableListOf(),
-            cellList.toMutableList(),
-            unitList.toMutableList(),
-            aiFractionList,
-            Turn(firstTurnFraction)
+        mutableListOf(),
+        cellList.toMutableList(),
+        unitList.toMutableList(),
+        aiFractionList,
+        Turn(firstTurnFraction)
     )
 
     @Transient
@@ -46,16 +45,16 @@ class GameState(
     fun getUnit(axis: Axis) = unitMap.getByPosition(axis)
 
     fun getUnits(axis: Axis) =
-            unitMap.filter { it.getComponent<Position>()?.currentPosition == axis }
+        unitMap.filter { it.getComponent<Position>()?.currentPosition == axis }
 
     fun getCapitalShip(unitFractionsType: FractionsType) =
-            unitMap.findCapitalShip(unitFractionsType)
+        unitMap.findCapitalShip(unitFractionsType)
 
     fun getCapitalShipPosition(unitFractionsType: FractionsType) =
-            getCapitalShip(unitFractionsType)?.getComponent<Position>()
+        getCapitalShip(unitFractionsType)?.getComponent<Position>()
 
     fun getAllFractionUnits(fractionsType: FractionsType): List<UnitEcs> =
-            unitMap.filter { it.getComponent<FractionsType>() == fractionsType }
+        unitMap.filter { it.getComponent<FractionsType>() == fractionsType }
 
     fun moveUnit(unit: UnitEcs, toPosition: Axis) {
         if (!unitMap.contains(unit)) {
@@ -91,9 +90,8 @@ class GameState(
     fun isMovingFinish() = unitMap.find { it.hasComponent<Moving>() } == null
 
     private fun <T : EntityEcs> List<T>.getByPosition(axis: Axis) =
-            find { it.getComponent<Position>()?.currentPosition == axis }
+        find { it.getComponent<Position>()?.currentPosition == axis }
 
     private fun List<UnitEcs>.findCapitalShip(unitFractionsType: FractionsType) =
-            find { it.hasComponent<CapitalShip>() && it.getComponent<FractionsType>() == unitFractionsType }
-
+        find { it.hasComponent<CapitalShip>() && it.getComponent<FractionsType>() == unitFractionsType }
 }

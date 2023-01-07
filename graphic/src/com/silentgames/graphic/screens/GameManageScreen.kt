@@ -22,7 +22,11 @@ class GameManageScreen(context: Context) : AppScreenAdapter(context) {
 
     private val stage = Stage(ScreenViewport())
 
-    private val bottomActionPanel = BottomActionPanel(context.assets.uiSkin, Strings.back.getString(), Strings.new_game.getString())
+    private val bottomActionPanel = BottomActionPanel(
+        context.assets.uiSkin,
+        Strings.back.getString(),
+        Strings.new_game.getString()
+    )
 
     private var selectedSlot: GameSlot? = null
 
@@ -32,16 +36,17 @@ class GameManageScreen(context: Context) : AppScreenAdapter(context) {
 
     override fun show() {
         stage.addActor(
-                Table().apply {
-                    setFillParent(true)
-                    pad(20f, 20f, 10f, 20f)
-                    top()
-                    add(ScrollPane(getLoadedTable())).prefWidth(800f)
-                    row()
-                    add(bottomActionPanel).apply {
-                        bottom()
-                    }
-                })
+            Table().apply {
+                setFillParent(true)
+                pad(20f, 20f, 10f, 20f)
+                top()
+                add(ScrollPane(getLoadedTable())).prefWidth(800f)
+                row()
+                add(bottomActionPanel).apply {
+                    bottom()
+                }
+            }
+        )
 
         bottomActionPanel.onLeftActionButtonClick = {
             context.game.screen = MenuScreen(context)
@@ -67,8 +72,8 @@ class GameManageScreen(context: Context) : AppScreenAdapter(context) {
                 val data = GameManager.loadData()?.getSlot(i) ?: GameSlot(i)
                 row().growX()
                 val widget = LoadedDataWidget(
-                        context.assets,
-                        LoadedData(data.toSlotName(i))
+                    context.assets,
+                    LoadedData(data.toSlotName(i))
                 ) { _, checked ->
                     if (!checked) {
                         bottomActionPanel.setRightTurnButtonEnabled(true)
@@ -82,10 +87,11 @@ class GameManageScreen(context: Context) : AppScreenAdapter(context) {
     }
 
     private fun GameSlot?.toSlotName(slotNumber: Int) =
-            if (this == null || this.gameState == null)
-                Strings.empty_slot.getString(slotNumber)
-            else
-                Strings.save_slot.getString(slotNumber)
+        if (this == null || this.gameState == null) {
+            Strings.empty_slot.getString(slotNumber)
+        } else {
+            Strings.save_slot.getString(slotNumber)
+        }
 
     override fun render(delta: Float) {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
@@ -104,5 +110,4 @@ class GameManageScreen(context: Context) : AppScreenAdapter(context) {
         stage.act()
         stage.draw()
     }
-
 }

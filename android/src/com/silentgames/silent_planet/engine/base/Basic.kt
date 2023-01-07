@@ -15,5 +15,4 @@ abstract class Basic {
      * @param paint - кисть для отрисовки
      */
     internal abstract fun draw(canvas: Canvas, paint: Paint)
-
 }

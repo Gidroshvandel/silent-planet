@@ -1,6 +1,5 @@
 package com.silentgames.core.logic.ecs.entity.cell.stun.crater
 
-
 import java.util.*
 
 enum class CraterEnum(val turnCount: Int) {
@@ -28,6 +27,4 @@ enum class CraterEnum(val turnCount: Int) {
             return values[random.nextInt(size)]
         }
     }
-
-
 }

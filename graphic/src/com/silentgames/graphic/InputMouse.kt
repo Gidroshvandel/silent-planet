@@ -15,14 +15,12 @@ class InputMouse(private val camera: Camera, private val onClick: (Axis) -> Unit
         val y = ((Constants.verticalCountOfCells) * vector.y / camera.viewportHeight).toInt()
         val axis = Axis(x, y)
         Logger.logDebug(
-                "InputMouse",
-                "$axis gameVector: $vector screenX: $screenX screenY: $screenY"
+            "InputMouse",
+            "$axis gameVector: $vector screenX: $screenX screenY: $screenY"
         )
         if (x < Constants.horizontalCountOfCells && y < Constants.verticalCountOfCells) {
             onClick(axis)
         }
         return false
     }
-
-
 }

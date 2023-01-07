@@ -18,12 +18,12 @@ import kotlin.math.max
 import kotlin.math.min
 
 class SurfaceGameView(
-        context: Context,
-        attrs: AttributeSet?
+    context: Context,
+    attrs: AttributeSet?
 ) : SurfaceView(context, attrs),
-        SurfaceHolder.Callback,
-        CustomGestureListener.Callback,
-        CustomScaleGestureListener.Callback {
+    SurfaceHolder.Callback,
+    CustomGestureListener.Callback,
+    CustomScaleGestureListener.Callback {
 
     private var mScaleFactor = 1f
 
@@ -46,8 +46,8 @@ class SurfaceGameView(
         holder.addCallback(this)
         callback = context as Callback
         scaleGestureDetector = ScaleGestureDetector(
-                context,
-                CustomScaleGestureListener(this)
+            context,
+            CustomScaleGestureListener(this)
         )
         detector = GestureDetector(context, CustomGestureListener(this))
     }
@@ -84,16 +84,20 @@ class SurfaceGameView(
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
+    override fun onTouchEvent(event: MotionEvent): Boolean {
         detector.onTouchEvent(event)
         scaleGestureDetector.onTouchEvent(event)
         return true
     }
 
-    override fun surfaceCreated(p0: SurfaceHolder?) {
+    override fun surfaceCreated(p0: SurfaceHolder) {
         if (scene == null) {
             val canvas = holder.lockCanvas()
-            scene = Scene(mutableListOf(Layer(), GridLayer(), Layer()), canvas.width, canvas.height).apply {
+            scene = Scene(
+                mutableListOf(Layer(), GridLayer(), Layer()),
+                canvas.width,
+                canvas.height
+            ).apply {
                 toDrawLayerList.forEach {
                     setLayer(it.first.id, it.second)
                 }
@@ -110,10 +114,10 @@ class SurfaceGameView(
         }
     }
 
-    override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {}
+    override fun surfaceChanged(p0: SurfaceHolder, p1: Int, p2: Int, p3: Int) {}
 
-    override fun surfaceDestroyed(p0: SurfaceHolder?) {
-        //Прерываем поток при уничтожении surface
+    override fun surfaceDestroyed(p0: SurfaceHolder) {
+        // Прерываем поток при уничтожении surface
         drawer?.cancel()
         drawer = null
         timer?.cancel()
@@ -122,11 +126,11 @@ class SurfaceGameView(
 
     override fun onScroll(distanceX: Float, distanceY: Float) {
         scene?.let {
-            //не даем канвасу показать края по горизонтали
+            // не даем канвасу показать края по горизонтали
             if (it.scrollAxis.x + distanceX < it.width.toScale() && it.scrollAxis.x + distanceX > 0) {
                 scene?.scrollAxis = EngineAxis((it.scrollAxis.x + distanceX), it.scrollAxis.y)
             }
-            //не даем канвасу показать края по вертикали
+            // не даем канвасу показать края по вертикали
             if (it.scrollAxis.y + distanceY < it.height.toScale() && it.scrollAxis.y + distanceY > 0) {
                 scene?.scrollAxis = EngineAxis(it.scrollAxis.x, (it.scrollAxis.y + distanceY))
             }
@@ -136,28 +140,29 @@ class SurfaceGameView(
     private fun Int.toScale(): Float = (this * (mScaleFactor - 1))
 
     override fun onScale() {
-        val scaleFactor = scaleGestureDetector.scaleFactor//получаем значение зума относительно предыдущего состояния
-        //получаем координаты фокальной точки - точки между пальцами
+        val scaleFactor =
+            scaleGestureDetector.scaleFactor // получаем значение зума относительно предыдущего состояния
+        // получаем координаты фокальной точки - точки между пальцами
         val focusX = scaleGestureDetector.focusX
         val focusY = scaleGestureDetector.focusY
         scene?.let {
-            //следим чтобы канвас не уменьшили меньше исходного размера и не допускаем увеличения больше чем в 2 раза
+            // следим чтобы канвас не уменьшили меньше исходного размера и не допускаем увеличения больше чем в 2 раза
             if (mScaleFactor * scaleFactor > 1 && mScaleFactor * scaleFactor < 2) {
                 mScaleFactor *= scaleGestureDetector.scaleFactor
                 it.mScaleFactor = mScaleFactor
-                //используется при расчетах
-                //по умолчанию после зума канвас отскролит в левый верхний угол. Скролим канвас так, чтобы на экране оставалась обасть канваса, над которой был
-                //жест зума
-                //Для получения данной формулы достаточно школьных знаний математики (декартовы координаты).
+                // используется при расчетах
+                // по умолчанию после зума канвас отскролит в левый верхний угол. Скролим канвас так, чтобы на экране оставалась обасть канваса, над которой был
+                // жест зума
+                // Для получения данной формулы достаточно школьных знаний математики (декартовы координаты).
                 var scrollX = ((scrollX + focusX) * scaleFactor - focusX)
                 scrollX = min(
-                        it.scrollAxis.x + max(scrollX, 0f),
-                        it.width.toScale()
+                    it.scrollAxis.x + max(scrollX, 0f),
+                    it.width.toScale()
                 )
                 var scrollY = ((scrollY + focusY) * scaleFactor - focusY)
                 scrollY = min(
-                        it.scrollAxis.y + max(scrollY, 0f),
-                        it.height.toScale()
+                    it.scrollAxis.y + max(scrollY, 0f),
+                    it.height.toScale()
                 )
                 it.scrollAxis = EngineAxis(scrollX, scrollY)
             }
@@ -181,5 +186,4 @@ class SurfaceGameView(
 interface Callback {
 
     fun onSingleTapConfirmed(axis: Axis)
-
 }

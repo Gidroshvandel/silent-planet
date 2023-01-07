@@ -7,9 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 
 class BottomActionPanel(
-        skin: Skin,
-        leftButtonText: String,
-        rightButtonText: String
+    skin: Skin,
+    leftButtonText: String,
+    rightButtonText: String
 ) : Table(skin) {
 
     var onLeftActionButtonClick: (() -> Unit)? = null
@@ -33,17 +33,17 @@ class BottomActionPanel(
         }
 
     private val leftActionButton = TextButton(
-            leftButtonText,
-            skin,
-            "custom_button_dark"
+        leftButtonText,
+        skin,
+        "custom_button_dark"
     ).also {
         it.pad(20f)
     }
 
     private val rightActionButton = TextButton(
-            rightButtonText,
-            skin,
-            "custom_button_dark"
+        rightButtonText,
+        skin,
+        "custom_button_dark"
     ).also {
         it.pad(20f)
     }
@@ -61,5 +61,4 @@ class BottomActionPanel(
     fun setRightTurnButtonEnabled(enabled: Boolean) {
         rightActionButton.isDisabled = !enabled
     }
-
 }

@@ -43,14 +43,13 @@ class TurnSystem(private val onTurnChanged: (FractionsType) -> Unit) : UnitSyste
 
     private fun GameState.makeUnitsCanTurn(fractionsType: FractionsType) {
         unitMap.filter {
-            it.getComponent<FractionsType>() == fractionsType
-                    && it.hasComponent<Active>()
-                    && it.hasComponent<TurnMode>()
+            it.getComponent<FractionsType>() == fractionsType &&
+                it.hasComponent<Active>() &&
+                it.hasComponent<TurnMode>()
         }.forEach {
             it.addComponent(CanTurn())
         }
     }
-
 }
 
 fun GameState.finishTurn(unit: UnitEcs) {

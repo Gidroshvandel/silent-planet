@@ -1,6 +1,5 @@
 package com.silentgames.core.logic.ecs.entity.cell.stun.swell
 
-
 import java.util.*
 
 enum class SwellsEnum(val turnCount: Int) {
@@ -28,6 +27,4 @@ enum class SwellsEnum(val turnCount: Int) {
             return values[random.nextInt(size)]
         }
     }
-
-
 }

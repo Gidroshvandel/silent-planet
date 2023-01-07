@@ -19,16 +19,21 @@ class CaptureSystem : UnitSystem() {
     override fun execute(gameState: GameState, unit: UnitEcs) {
         unit.getComponent<Active>()?.let {
             notNull(
-                    unit.getComponent<Position>()?.currentPosition,
-                    unit.getComponent(),
-                    unit,
-                    gameState,
-                    ::capture
+                unit.getComponent<Position>()?.currentPosition,
+                unit.getComponent(),
+                unit,
+                gameState,
+                ::capture
             )
         }
     }
 
-    private fun capture(position: Axis, unitFractionsType: FractionsType, unit: UnitEcs, gameState: GameState) {
+    private fun capture(
+        position: Axis,
+        unitFractionsType: FractionsType,
+        unit: UnitEcs,
+        gameState: GameState
+    ) {
         if (gameState.getCapitalShipPosition(unitFractionsType)?.currentPosition != position) {
             val enemies = getEnemies(gameState, position, unitFractionsType)
             if (enemies.isNotEmpty()) {
@@ -43,19 +48,28 @@ class CaptureSystem : UnitSystem() {
         }
     }
 
-    private fun getEnemies(gameState: GameState, position: Axis, unitFractionsType: FractionsType): List<UnitEcs> {
+    private fun getEnemies(
+        gameState: GameState,
+        position: Axis,
+        unitFractionsType: FractionsType
+    ): List<UnitEcs> {
         return gameState.getUnits(position).filterNot {
             val fractionsType = it.getComponent<FractionsType>()
-            fractionsType == null
-                    || fractionsType == unitFractionsType
-                    || it.hasComponent<CapitalShip>()
-                    || !it.hasComponent<Active>()
+            fractionsType == null ||
+                fractionsType == unitFractionsType ||
+                it.hasComponent<CapitalShip>() ||
+                !it.hasComponent<Active>()
         }
     }
 
-    private fun GameState.captureUnit(captured: UnitEcs, enemies: List<UnitEcs>, fractionsType: FractionsType) {
+    private fun GameState.captureUnit(
+        captured: UnitEcs,
+        enemies: List<UnitEcs>,
+        fractionsType: FractionsType
+    ) {
         CoreLogger.logDebug(
-                SYSTEM_TAG, "captured ${captured.getName()} ${captured.getCurrentPosition().toString()}"
+            SYSTEM_TAG,
+            "captured ${captured.getName()} ${captured.getCurrentPosition()}"
         )
         captured.addComponent(Capture(fractionsType))
         getCapitalShipPosition(fractionsType)?.currentPosition?.let {

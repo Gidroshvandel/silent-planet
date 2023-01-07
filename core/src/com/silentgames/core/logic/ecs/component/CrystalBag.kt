@@ -3,8 +3,8 @@ package com.silentgames.core.logic.ecs.component
 private const val MAX_CRYSTALS_INFINITY = -1
 
 class CrystalBag(
-        currentCrystals: Int = 0,
-        private val maxCrystals: Int = MAX_CRYSTALS_INFINITY
+    currentCrystals: Int = 0,
+    private val maxCrystals: Int = MAX_CRYSTALS_INFINITY
 ) : ComponentEquals() {
 
     var amount: Int = currentCrystals
@@ -39,21 +39,21 @@ class CrystalBag(
     }
 
     fun addCrystals(crystal: Crystal, count: Int): Boolean =
-            if (crystal.count >= count) {
-                crystal.getCount(addCrystals(count)) > 0
-            } else {
-                false
-            }
+        if (crystal.count >= count) {
+            crystal.getCount(addCrystals(count)) > 0
+        } else {
+            false
+        }
 
     fun addCrystals(crystal: CrystalBag, count: Int): Boolean =
-            if (crystal.amount >= count) {
-                crystal.getCount(addCrystals(count)) > 0
-            } else {
-                false
-            }
+        if (crystal.amount >= count) {
+            crystal.getCount(addCrystals(count)) > 0
+        } else {
+            false
+        }
 
     fun addAllCrystals(crystal: CrystalBag): Boolean =
-            crystal.getCount(addCrystals(crystal.amount)) > 0
+        crystal.getCount(addCrystals(crystal.amount)) > 0
 
     fun getAll(): Int {
         val getCrystals = amount
@@ -80,5 +80,4 @@ class CrystalBag(
     }
 
     fun canGetCrystal() = if (maxCrystals == MAX_CRYSTALS_INFINITY) true else maxCrystals > amount
-
 }

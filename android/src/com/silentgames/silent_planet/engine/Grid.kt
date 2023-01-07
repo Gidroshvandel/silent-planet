@@ -7,7 +7,7 @@ import com.silentgames.silent_planet.engine.base.Basic
 
 class Grid : Basic() {
     private fun paintSettings(paint: Paint) {
-        //определяем параметры кисти
+        // определяем параметры кисти
         paint.isAntiAlias = true
         paint.isDither = true
         paint.color = -0x1
@@ -19,25 +19,25 @@ class Grid : Basic() {
 
     override fun draw(canvas: Canvas, paint: Paint) {
         paintSettings(paint)
-        //рисуем сетку
+        // рисуем сетку
         val horizontalCountOfCells = Constants.horizontalCountOfCells
         val verticalCountOfCells = Constants.verticalCountOfCells
         for (x in 0 until horizontalCountOfCells + 1) {
             canvas.drawLine(
-                    x.toFloat() * canvas.width / horizontalCountOfCells,
-                    0f,
-                    x.toFloat() * canvas.height / horizontalCountOfCells,
-                    canvas.height.toFloat(),
-                    paint
+                x.toFloat() * canvas.width / horizontalCountOfCells,
+                0f,
+                x.toFloat() * canvas.height / horizontalCountOfCells,
+                canvas.height.toFloat(),
+                paint
             )
         }
         for (y in 0 until verticalCountOfCells + 1) {
             canvas.drawLine(
-                    0f,
-                    y.toFloat() * canvas.width / verticalCountOfCells,
-                    canvas.width.toFloat(),
-                    y.toFloat() * canvas.height / verticalCountOfCells,
-                    paint
+                0f,
+                y.toFloat() * canvas.width / verticalCountOfCells,
+                canvas.width.toFloat(),
+                y.toFloat() * canvas.height / verticalCountOfCells,
+                paint
             )
         }
     }

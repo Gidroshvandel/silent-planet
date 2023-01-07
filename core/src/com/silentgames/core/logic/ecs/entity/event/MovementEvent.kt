@@ -9,5 +9,4 @@ class MovementEvent(axis: Axis, unitEcs: UnitEcs) : EventEcs() {
     init {
         addComponent(TargetPosition(axis, unitEcs))
     }
-
 }

@@ -16,5 +16,4 @@ class CustomScaleGestureListener(private val callback: Callback) : SimpleOnScale
         callback.onScale()
         return true
     }
-
 }

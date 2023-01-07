@@ -21,7 +21,10 @@ class GoalSystem : UnitSystem() {
         val goal = unit.getComponent<Goal>()
         val nextAxisToGoal = goal?.axis?.let { gameState.getNextAxisToGoal(unit, goal.axis) }
         if (nextAxisToGoal != null && unit.hasComponent<ArtificialIntelligence>()) {
-            CoreLogger.logDebug(SYSTEM_TAG, "unit ${unit.getName()} added MovementEvent $nextAxisToGoal")
+            CoreLogger.logDebug(
+                SYSTEM_TAG,
+                "unit ${unit.getName()} added MovementEvent $nextAxisToGoal"
+            )
             gameState.addEvent(MovementEvent(nextAxisToGoal, unit))
         }
     }
@@ -38,5 +41,4 @@ class GoalSystem : UnitSystem() {
         }
         return null
     }
-
 }

@@ -14,9 +14,9 @@ import com.silentgames.graphic.setColor
 import com.silentgames.graphic.setTexture
 
 class UnitWidget(
-        val assets: Assets,
-        entityData: EntityData,
-        onClick: (EntityData) -> Unit
+    val assets: Assets,
+    entityData: EntityData,
+    onClick: (EntityData) -> Unit
 ) : Button(assets.uiSkin) {
 
     init {
@@ -31,20 +31,22 @@ class UnitWidget(
 
     private fun Table.addWidget(entityData: EntityData) {
         this.apply {
-
-            add(Table().also {
-                it.row()
-                it.add(Image().apply { setTexture(entityData.texture, assets) }).pad(5f).center()
-                it.row()
-                it.add(
+            add(
+                Table().also {
+                    it.row()
+                    it.add(Image().apply { setTexture(entityData.texture, assets) }).pad(5f).center()
+                    it.row()
+                    it.add(
                         Label(entityData.name, skin).also { label ->
                             label.setAlignment(Align.center)
                         }
-                ).pad(5f).center()
-            }).space(5f).center()
+                    ).pad(5f).center()
+                }
+            ).space(5f).center()
 
             if (entityData.captured) {
-                add(getCapturedDescriptionTable(entityData.description)).prefWidth(150f).growX().space(5f)
+                add(getCapturedDescriptionTable(entityData.description)).prefWidth(150f).growX()
+                    .space(5f)
                 add(getBuyBackCrystalsTable(entityData.crystalCount)).space(5f)
             } else {
                 add(getDescriptionLabel(entityData.description)).prefWidth(150f).growX().space(5f)
@@ -52,21 +54,20 @@ class UnitWidget(
                     add(getEntityCrystalsTable(entityData.crystalCount)).space(5f)
                 }
             }
-
         }
     }
 
     private fun getCapturedDescriptionTable(description: String) =
-            Table().also {
-                it.row()
-                it.add(
-                        getDescriptionLabel(Strings.captive.getString()).also { label ->
-                            label.setColor(Assets.TextColor.RED, skin)
-                        }
-                ).pad(2f).center()
-                it.row()
-                it.add(getDescriptionLabel(description)).prefWidth(150f).growX().space(5f)
-            }
+        Table().also {
+            it.row()
+            it.add(
+                getDescriptionLabel(Strings.captive.getString()).also { label ->
+                    label.setColor(Assets.TextColor.RED, skin)
+                }
+            ).pad(2f).center()
+            it.row()
+            it.add(getDescriptionLabel(description)).prefWidth(150f).growX().space(5f)
+        }
 
     private fun getDescriptionLabel(description: String) = Label(description, skin).also {
         it.setWrap(true)
@@ -74,33 +75,32 @@ class UnitWidget(
     }
 
     private fun getEntityCrystalsTable(crystalCount: String) =
-            Table().also {
-                it.row()
-                it.add(Image().apply { setTexture("crystal", assets) }).pad(2f).center()
-                it.row()
-                it.add(
-                        Label(crystalCount, skin).also { label ->
-                            label.setAlignment(Align.center)
-                        }
-                ).pad(2f).center()
-            }
+        Table().also {
+            it.row()
+            it.add(Image().apply { setTexture("crystal", assets) }).pad(2f).center()
+            it.row()
+            it.add(
+                Label(crystalCount, skin).also { label ->
+                    label.setAlignment(Align.center)
+                }
+            ).pad(2f).center()
+        }
 
     private fun getBuyBackCrystalsTable(crystalCount: String) =
-            Table().also {
-                it.add(
-                        Label(Strings.buyout.getString(), skin).also { label ->
-                            label.setAlignment(Align.center)
-                            label.setColor(Assets.TextColor.RED, skin)
-                        }
-                ).pad(2f).center()
-                it.row()
-                it.add(Image().apply { setTexture("crystal", assets) }).pad(2f).center()
-                it.row()
-                it.add(
-                        Label(crystalCount, skin).also { label ->
-                            label.setAlignment(Align.center)
-                        }
-                ).pad(2f).center()
-            }
-
+        Table().also {
+            it.add(
+                Label(Strings.buyout.getString(), skin).also { label ->
+                    label.setAlignment(Align.center)
+                    label.setColor(Assets.TextColor.RED, skin)
+                }
+            ).pad(2f).center()
+            it.row()
+            it.add(Image().apply { setTexture("crystal", assets) }).pad(2f).center()
+            it.row()
+            it.add(
+                Label(crystalCount, skin).also { label ->
+                    label.setAlignment(Align.center)
+                }
+            ).pad(2f).center()
+        }
 }

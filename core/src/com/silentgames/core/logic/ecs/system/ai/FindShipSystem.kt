@@ -36,5 +36,5 @@ class FindShipSystem : UnitSystem() {
     }
 
     private fun UnitEcs.isPlayer(): Boolean =
-            this.getComponent<MovingMode>() == MovingMode.WALK
+        this.getComponent<MovingMode>() == MovingMode.WALK
 }

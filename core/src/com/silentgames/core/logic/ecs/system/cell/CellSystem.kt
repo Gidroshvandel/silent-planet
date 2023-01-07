@@ -18,5 +18,4 @@ abstract class CellSystem : System {
     override fun onEngineAttach(engine: EngineEcs) {
         super.onEngineAttach(engine)
     }
-
 }

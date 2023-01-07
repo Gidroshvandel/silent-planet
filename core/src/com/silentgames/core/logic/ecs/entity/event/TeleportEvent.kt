@@ -11,5 +11,4 @@ class TeleportEvent(axis: Axis, unitEcs: UnitEcs) : EventEcs() {
         addComponent(Teleport())
         addComponent(TargetPosition(axis, unitEcs))
     }
-
 }

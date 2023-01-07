@@ -3,15 +3,15 @@ package com.silentgames.silent_planet.engine.base
 import com.silentgames.silent_planet.engine.EngineAxis
 
 class Scene(
-        /**
-         * Массив слоев на сцене
-         */
-        private val layers: MutableList<Layer>,
-        /**
-         * высота и ширина сцены
-         */
-        val width: Int,
-        val height: Int
+    /**
+     * Массив слоев на сцене
+     */
+    private val layers: MutableList<Layer>,
+    /**
+     * высота и ширина сцены
+     */
+    val width: Int,
+    val height: Int
 ) {
 
     companion object {
@@ -74,5 +74,4 @@ class Scene(
             }
         }
     }
-
 }

@@ -1,11 +1,10 @@
 package com.silentgames.graphic.engine.base
 
-
-//class DrawerTask(
+// class DrawerTask(
 //        private val holder: SurfaceHolder,
 //        private val scene: Scene,
 //        private val onSceneUpdated: ((Boolean) -> Unit)
-//) : TimerTask() {
+// ) : TimerTask() {
 //
 //    override fun run() {
 //        var canvas: Canvas? = null
@@ -37,4 +36,4 @@ package com.silentgames.graphic.engine.base
 //            }
 //        }
 //    }
-//}
+// }

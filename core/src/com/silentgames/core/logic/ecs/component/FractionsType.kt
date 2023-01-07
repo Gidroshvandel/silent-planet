@@ -18,4 +18,3 @@ enum class FractionsType : Component {
         private val vals = values()
     }
 }
-

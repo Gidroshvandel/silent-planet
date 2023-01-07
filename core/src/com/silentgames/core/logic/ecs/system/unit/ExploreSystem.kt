@@ -22,9 +22,9 @@ class ExploreSystem : UnitSystem() {
         if (position != null) {
             val cell = gameState.getCell(position)
             notNull(
-                    cell?.getComponent(),
-                    cell,
-                    ::makeCellExplored
+                cell?.getComponent(),
+                cell,
+                ::makeCellExplored
             )
         }
     }
@@ -34,9 +34,8 @@ class ExploreSystem : UnitSystem() {
         cell.addComponent(hide.descriptionToShow)
         cell.removeComponent(hide)
         CoreLogger.logDebug(
-                SYSTEM_TAG,
-                "${cell.getName()} ${cell.getCurrentPosition().toString()}"
+            SYSTEM_TAG,
+            "${cell.getName()} ${cell.getCurrentPosition()}"
         )
     }
-
 }

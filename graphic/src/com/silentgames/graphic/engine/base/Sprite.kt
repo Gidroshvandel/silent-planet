@@ -8,9 +8,11 @@ import com.silentgames.graphic.Assets
 import com.silentgames.graphic.engine.EngineAxis
 import com.silentgames.graphic.scaleImageForBoard
 
-abstract class Sprite(axis: EngineAxis,
-                      protected val bmpResourceId: String,
-                      private val assets: Assets) : Basic() {
+abstract class Sprite(
+    axis: EngineAxis,
+    protected val bmpResourceId: String,
+    private val assets: Assets
+) : Basic() {
 
     protected var runningAnimation: Animation<TextureRegion>? = null
         private set
@@ -55,39 +57,47 @@ abstract class Sprite(axis: EngineAxis,
     protected open fun getBitmapId(): Int = bmpResourceId.hashCode()
 
     protected open fun getSize(textureRegion: TextureRegion, batchSize: Int) =
-            scaleImageForBoard(
-                    textureRegion.regionWidth.toFloat(),
-                    textureRegion.regionHeight.toFloat(),
-                    batchSize.toFloat()
-            )
+        scaleImageForBoard(
+            textureRegion.regionWidth.toFloat(),
+            textureRegion.regionHeight.toFloat(),
+            batchSize.toFloat()
+        )
 
-    protected open fun getCoordinates(axis: EngineAxis, width: Int, height: Int, textureRegion: TextureRegion): EngineAxis {
+    protected open fun getCoordinates(
+        axis: EngineAxis,
+        width: Int,
+        height: Int,
+        textureRegion: TextureRegion
+    ): EngineAxis {
         val x = cellCenterNumeratorSquare(
-                axis.x,
-                width,
-                getSize(textureRegion, width).x,
-                Constants.verticalCountOfCells
+            axis.x,
+            width,
+            getSize(textureRegion, width).x,
+            Constants.verticalCountOfCells
         )
         val y = cellCenterNumeratorSquare(
-                axis.y,
-                height,
-                getSize(textureRegion, height).y,
-                Constants.horizontalCountOfCells
+            axis.y,
+            height,
+            getSize(textureRegion, height).y,
+            Constants.horizontalCountOfCells
         )
         return EngineAxis(x, y)
     }
 
     private fun cellCenterNumeratorSquare(
-            cell: Float,
-            batchSize: Int,
-            viewSize: Float,
-            lineCountOfCells: Int
+        cell: Float,
+        batchSize: Int,
+        viewSize: Float,
+        lineCountOfCells: Int
     ): Float {
         return cellCenterNumeratorPoint(cell, batchSize, lineCountOfCells) - viewSize / 2
     }
 
-    private fun cellCenterNumeratorPoint(cell: Float, batchSize: Int, lineCountOfCells: Int): Float {
+    private fun cellCenterNumeratorPoint(
+        cell: Float,
+        batchSize: Int,
+        lineCountOfCells: Int
+    ): Float {
         return 1f / (2 * lineCountOfCells) * batchSize + 1f / lineCountOfCells * cell * batchSize
     }
-
 }

@@ -50,5 +50,4 @@ class EngineEcs(val gameState: GameState) {
             }
         }
     }
-
 }

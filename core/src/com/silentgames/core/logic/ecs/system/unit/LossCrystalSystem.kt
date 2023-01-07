@@ -16,5 +16,4 @@ class LossCrystalSystem : UnitSystem() {
             }
         }
     }
-
 }

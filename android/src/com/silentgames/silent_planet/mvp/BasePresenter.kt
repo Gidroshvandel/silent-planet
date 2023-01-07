@@ -6,5 +6,4 @@ package com.silentgames.silent_planet.mvp
 interface BasePresenter {
 
     fun onCreate()
-
 }

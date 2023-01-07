@@ -14,10 +14,10 @@ object PathFinderCore {
     }
 
     fun findPath(
-            position: Axis,
-            chooseCheckedNode: (reachable: List<Node>) -> Node?,
-            condition: (checkedNode: Node) -> Boolean,
-            getAdjacentNodes: (checkedNode: Node) -> List<Node>
+        position: Axis,
+        chooseCheckedNode: (reachable: List<Node>) -> Node?,
+        condition: (checkedNode: Node) -> Boolean,
+        getAdjacentNodes: (checkedNode: Node) -> List<Node>
     ): List<Axis> {
         log("START($position)-----------------------------")
         val startPosition = Node(position, cost = 0)
@@ -76,5 +76,4 @@ object PathFinderCore {
             CoreLogger.logDebug(SYSTEM_TAG, string)
         }
     }
-
 }

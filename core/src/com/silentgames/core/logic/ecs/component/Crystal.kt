@@ -32,5 +32,4 @@ class Crystal(count: Int = 0) : ComponentEquals() {
             currentBalance
         }
     }
-
 }

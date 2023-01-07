@@ -30,27 +30,27 @@ class MovementSystem : EventSystem() {
     }
 
     private fun process(gameState: GameState, unit: UnitEcs, target: Axis): Boolean {
-        return if (unit.getComponent<FractionsType>() != gameState.turn.currentFraction
-                || !unit.hasComponent<CanTurn>()
-                || !unit.hasComponent<CanMove>()
+        return if (unit.getComponent<FractionsType>() != gameState.turn.currentFraction ||
+            !unit.hasComponent<CanTurn>() ||
+            !unit.hasComponent<CanMove>()
         ) {
             false
         } else {
             notNull(
-                    target,
-                    unit.getComponent<Position>()?.currentPosition,
-                    unit,
-                    gameState,
-                    ::tryToMove
+                target,
+                unit.getComponent<Position>()?.currentPosition,
+                unit,
+                gameState,
+                ::tryToMove
             ) ?: false
         }
     }
 
     private fun tryToMove(
-            targetPosition: Axis,
-            currentPosition: Axis,
-            unit: UnitEcs,
-            gameState: GameState
+        targetPosition: Axis,
+        currentPosition: Axis,
+        unit: UnitEcs,
+        gameState: GameState
     ): Boolean {
         val isCanMove = isCanMove(targetPosition, currentPosition, unit, gameState)
         if (isCanMove) {
@@ -62,31 +62,36 @@ class MovementSystem : EventSystem() {
     }
 
     fun isCanMove(
-            targetPosition: Axis,
-            currentPosition: Axis,
-            unit: UnitEcs,
-            gameState: GameState
-    ): Boolean = isMoveAtDistance(targetPosition, currentPosition)
-            && (isCanMoveToAllyTransport(unit, gameState.getUnit(targetPosition))
-            || isCanMoveToCell(gameState.getCell(targetPosition), unit))
+        targetPosition: Axis,
+        currentPosition: Axis,
+        unit: UnitEcs,
+        gameState: GameState
+    ): Boolean = isMoveAtDistance(targetPosition, currentPosition) &&
+        (
+            isCanMoveToAllyTransport(unit, gameState.getUnit(targetPosition)) ||
+                isCanMoveToCell(gameState.getCell(targetPosition), unit)
+            )
 
-    private fun isCanMoveToCell(targetCell: CellEcs?, unit: UnitEcs) = targetCell != null && canMove(unit.getComponent(), targetCell.getComponent())
+    private fun isCanMoveToCell(targetCell: CellEcs?, unit: UnitEcs) =
+        targetCell != null && canMove(unit.getComponent(), targetCell.getComponent())
 
     private fun isCanMoveToAllyTransport(unit: UnitEcs, targetUnit: UnitEcs?): Boolean {
         val transport = targetUnit?.getComponent<Transport>()
-        return (transport != null
-                && unit.getComponent<Transport>() == null
-                && isTargetUnitFromAllyFraction(targetUnit.getComponent(), unit.getComponent()))
+        return (
+            transport != null &&
+                unit.getComponent<Transport>() == null &&
+                isTargetUnitFromAllyFraction(targetUnit.getComponent(), unit.getComponent())
+            )
     }
 
     private fun isTargetUnitFromAllyFraction(
-            targetUnitMovingMode: FractionsType?,
-            unitMovingMode: FractionsType?
+        targetUnitMovingMode: FractionsType?,
+        unitMovingMode: FractionsType?
     ): Boolean = targetUnitMovingMode == unitMovingMode
 
     private fun canMove(
-            unitMovingMode: MovingMode?,
-            cellMovingMode: MovingMode?
+        unitMovingMode: MovingMode?,
+        cellMovingMode: MovingMode?
     ): Boolean = unitMovingMode == cellMovingMode
 
     private fun isMoveAtDistance(target: Axis, current: Axis): Boolean {
@@ -95,5 +100,4 @@ class MovementSystem : EventSystem() {
         }
         return false
     }
-
 }

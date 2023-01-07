@@ -11,5 +11,4 @@ class GameViewModel {
     lateinit var engine: EngineEcs
 
     var selectedEntity: UnitEcs? = null
-
 }

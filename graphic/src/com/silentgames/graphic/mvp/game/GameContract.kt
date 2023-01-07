@@ -30,7 +30,6 @@ interface GameContract {
         fun showPlayerBuybackSuccessMessage(name: String)
 
         fun showPlayerBuybackFailureMessage(missingAmount: Int)
-
     }
 
     interface Presenter : BasePresenter {
@@ -50,6 +49,5 @@ interface GameContract {
         fun onTurnSkipped()
 
         fun onTopScorePanelClick(fractionType: FractionsType)
-
     }
 }

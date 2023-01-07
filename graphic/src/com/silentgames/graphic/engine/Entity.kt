@@ -11,10 +11,10 @@ import kotlin.math.max
 import kotlin.math.min
 
 class Entity(
-        val id: String,
-        axis: EngineAxis,
-        bmpResourceId: String,
-        assets: Assets
+    val id: String,
+    axis: EngineAxis,
+    bmpResourceId: String,
+    assets: Assets
 ) : Sprite(axis, bmpResourceId, assets) {
 
     private var speed = 0.2
@@ -24,18 +24,18 @@ class Entity(
     var isMove = false
 
     override fun initAnimation(textures: Array<TextureRegion>): Animation<TextureRegion> =
-            Animation(0.033f, textures, Animation.PlayMode.NORMAL)
+        Animation(0.033f, textures, Animation.PlayMode.NORMAL)
 
     override fun draw(batch: Batch, width: Int, height: Int, stateTime: Float) {
         runningAnimation?.getKeyFrame(stateTime, true)?.let {
             val axis = getCoordinates(axis, width, height, it)
             val size = getSize(it, width)
             batch.draw(
-                    it,
-                    axis.x,
-                    axis.y,
-                    size.x,
-                    size.y
+                it,
+                axis.x,
+                axis.y,
+                size.x,
+                size.y
             )
         }
     }

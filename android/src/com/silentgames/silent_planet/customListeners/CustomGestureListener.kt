@@ -13,7 +13,12 @@ class CustomGestureListener(private val callback: Callback) : SimpleOnGestureLis
         fun onSingleTapConfirmed(event: MotionEvent?)
     }
 
-    override fun onScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
+    override fun onScroll(
+        e1: MotionEvent,
+        e2: MotionEvent,
+        distanceX: Float,
+        distanceY: Float
+    ): Boolean {
         callback.onScroll(distanceX, distanceY)
         return true
     }
@@ -22,5 +27,4 @@ class CustomGestureListener(private val callback: Callback) : SimpleOnGestureLis
         callback.onSingleTapConfirmed(event)
         return true
     }
-
 }

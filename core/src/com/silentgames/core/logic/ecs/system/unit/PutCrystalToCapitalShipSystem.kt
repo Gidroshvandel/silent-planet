@@ -18,30 +18,32 @@ class PutCrystalToCapitalShipSystem : UnitSystem() {
 
     override fun execute(gameState: GameState, unit: UnitEcs) {
         notNull(
-                gameState,
-                unit,
-                unit.getComponent(),
-                ::putCrystalsToCapitalShip
+            gameState,
+            unit,
+            unit.getComponent(),
+            ::putCrystalsToCapitalShip
         )
     }
 
     private fun putCrystalsToCapitalShip(
-            gameState: GameState,
-            unit: UnitEcs,
-            fractionsType: FractionsType
+        gameState: GameState,
+        unit: UnitEcs,
+        fractionsType: FractionsType
     ) {
         val capitalShip = gameState.getCapitalShip(fractionsType)
         if (capitalShip != null && capitalShip.getCurrentPosition() == unit.getCurrentPosition()) {
             val crystalBag = unit.getComponent<CrystalBag>()
-            if (!unit.hasComponent<CapitalShip>()
-                    && crystalBag != null
-                    && capitalShip.getComponent<CrystalBag>()?.addAllCrystals(crystalBag) == true) {
+            if (!unit.hasComponent<CapitalShip>() &&
+                crystalBag != null &&
+                capitalShip.getComponent<CrystalBag>()?.addAllCrystals(crystalBag) == true
+            ) {
                 CoreLogger.logDebug(
-                        SYSTEM_TAG,
-                        "unit ${unit.getName()} put crystals to ${capitalShip.getName()} ${capitalShip.getCurrentPosition().toString()}"
+                    SYSTEM_TAG,
+                    "unit ${unit.getName()} put crystals to ${capitalShip.getName()} ${
+                    capitalShip.getCurrentPosition()
+                    }"
                 )
             }
         }
     }
-
 }
