@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Silent_planet</string>
+    <string name="action_settings">Settings</string>
+    <string name="turn_message">Now turn</string>
+    <string name="select_player">Выбран:</string>
+
+    <string name="aliens">Инопланетяне</string>
+    <string name="pirates">Пираты</string>
+    <string name="humans">Земляне</string>
+    <string name="robots">Роботы</string>
+
+    <string name="crystal_count">%1$s\n%2$d/%3$d</string>
+
+    <string name="take_crystal">забрать кристал</string>
+    <string name="player_buyback_success">%1$s возвращён на корабль</string>
+    <string name="player_buyback_failure">Необходимо ещё кристалов: %1$d</string>
+    <string name="captive">Пленный</string>
+    <string name="buyout">Выкуп</string>
+</resources>

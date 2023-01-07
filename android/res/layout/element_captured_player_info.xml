@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:background="@drawable/panel">
+
+    <RelativeLayout
+        android:id="@+id/ll_imageView"
+        android:layout_width="90dp"
+        android:layout_height="80dp"
+        android:background="@drawable/panel"
+        android:padding="@dimen/view_padding_small">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/iv_entity_icon"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_centerHorizontal="true"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="ContentDescription"
+            tools:src="@tools:sample/avatars" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tv_entity_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/iv_entity_icon"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            tools:text="Test Name" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_description"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:layout_toStartOf="@id/ll_information"
+        android:layout_toEndOf="@id/ll_imageView"
+        android:background="@drawable/panel"
+        android:orientation="vertical"
+        android:padding="@dimen/activity_view_padding">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tv_captured_by"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:textColor="@color/red"
+            android:text="@string/captive" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tv_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="@tools:sample/lorem" />
+
+    </LinearLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/ll_information"
+        android:layout_width="100dp"
+        android:layout_height="80dp"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/panel"
+        android:gravity="center"
+        android:padding="@dimen/activity_view_padding">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tv_payback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:textColor="@color/red"
+            android:text="@string/buyout"
+            app:layout_constraintBottom_toTopOf="@id/ic_crystal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/ic_crystal"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginEnd="4dp"
+            android:src="@drawable/crystal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_crystal_count"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_payback"
+            tools:ignore="ContentDescription" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tv_crystal_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/ic_crystal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ic_crystal"
+            app:layout_constraintTop_toTopOf="@id/ic_crystal"
+            tools:text="11" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</RelativeLayout>

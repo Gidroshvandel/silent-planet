@@ -1,0 +1,366 @@
+
+game.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+alien
+  rotate: false
+  xy: 627, 208
+  size: 117, 224
+  orig: 117, 224
+  offset: 0, 0
+  index: -1
+aliens_space_ship
+  rotate: false
+  xy: 215, 240
+  size: 244, 192
+  orig: 244, 192
+  offset: 0, 0
+  index: -1
+arrow_green_cell
+  rotate: false
+  xy: 1204, 1456
+  size: 578, 578
+  orig: 578, 578
+  offset: 0, 0
+  index: -1
+crater_two
+  rotate: false
+  xy: 1204, 297
+  size: 577, 577
+  orig: 577, 577
+  offset: 0, 0
+  index: -1
+crystal
+  rotate: false
+  xy: 746, 332
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+human_space_ship
+  rotate: false
+  xy: 1784, 1758
+  size: 208, 276
+  orig: 208, 276
+  offset: 0, 0
+  index: -1
+human_spaceman
+  rotate: false
+  xy: 2, 434
+  size: 1200, 1600
+  orig: 1200, 1600
+  offset: 0, 0
+  index: -1
+pirate_space_ship
+  rotate: false
+  xy: 461, 256
+  size: 164, 176
+  orig: 164, 176
+  offset: 0, 0
+  index: -1
+planet_background
+  rotate: false
+  xy: 2, 2
+  size: 160, 160
+  orig: 160, 160
+  offset: 0, 0
+  index: -1
+robot
+  rotate: false
+  xy: 746, 230
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+robot_space_ship
+  rotate: false
+  xy: 2, 164
+  size: 211, 268
+  orig: 211, 268
+  offset: 0, 0
+  index: -1
+space
+  rotate: false
+  xy: 1784, 1556
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: 0
+space
+  rotate: false
+  xy: 1784, 1354
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: 1
+space
+  rotate: false
+  xy: 1784, 1354
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: 5
+space
+  rotate: false
+  xy: 1784, 1152
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: 2
+space
+  rotate: false
+  xy: 1784, 1152
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: 4
+space
+  rotate: false
+  xy: 1784, 950
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: 3
+swell_three
+  rotate: false
+  xy: 1204, 876
+  size: 578, 578
+  orig: 578, 578
+  offset: 0, 0
+  index: -1
+
+game2.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+meteorites_two
+  rotate: false
+  xy: 1204, 2
+  size: 574, 574
+  orig: 574, 574
+  offset: 0, 0
+  index: -1
+pirate
+  rotate: false
+  xy: 2, 133
+  size: 1200, 1600
+  orig: 1200, 1600
+  offset: 0, 0
+  index: -1
+three_crystals
+  rotate: false
+  xy: 1204, 1156
+  size: 577, 577
+  orig: 577, 577
+  offset: 0, 0
+  index: -1
+tornado_cell
+  rotate: false
+  xy: 1204, 578
+  size: 576, 576
+  orig: 576, 576
+  offset: 0, 0
+  index: -1
+
+game3.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+abyss_cell
+  rotate: false
+  xy: 2, 574
+  size: 572, 572
+  orig: 572, 572
+  offset: 0, 0
+  index: -1
+arow_red_cell
+  rotate: false
+  xy: 1144, 14
+  size: 565, 565
+  orig: 565, 565
+  offset: 0, 0
+  index: -1
+crater_four
+  rotate: false
+  xy: 577, 581
+  size: 567, 567
+  orig: 567, 567
+  offset: 0, 0
+  index: -1
+crater_one
+  rotate: false
+  xy: 2, 1148
+  size: 573, 573
+  orig: 573, 573
+  offset: 0, 0
+  index: -1
+dead_cell
+  rotate: false
+  xy: 577, 1150
+  size: 571, 571
+  orig: 571, 571
+  offset: 0, 0
+  index: -1
+disease_two
+  rotate: false
+  xy: 576, 13
+  size: 566, 566
+  orig: 566, 566
+  offset: 0, 0
+  index: -1
+one_crystal
+  rotate: false
+  xy: 1150, 1152
+  size: 569, 569
+  orig: 569, 569
+  offset: 0, 0
+  index: -1
+swell_four
+  rotate: false
+  xy: 2, 2
+  size: 570, 570
+  orig: 570, 570
+  offset: 0, 0
+  index: -1
+swell_two
+  rotate: false
+  xy: 1146, 582
+  size: 566, 566
+  orig: 566, 566
+  offset: 0, 0
+  index: -1
+
+game4.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+crater_three
+  rotate: false
+  xy: 2, 565
+  size: 562, 562
+  orig: 562, 562
+  offset: 0, 0
+  index: -1
+empty_cell
+  rotate: false
+  xy: 2, 2
+  size: 561, 561
+  orig: 561, 561
+  offset: 0, 0
+  index: -1
+swell_one
+  rotate: false
+  xy: 2, 1129
+  size: 565, 565
+  orig: 565, 565
+  offset: 0, 0
+  index: -1
+two_crystals
+  rotate: false
+  xy: 569, 1132
+  size: 562, 562
+  orig: 562, 562
+  offset: 0, 0
+  index: -1
+
+game5.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+ui/bg_space
+  rotate: false
+  xy: 2, 274
+  size: 561, 540
+  orig: 561, 540
+  offset: 0, 0
+  index: -1
+ui/config
+  rotate: false
+  xy: 181, 157
+  size: 70, 70
+  orig: 70, 70
+  offset: 0, 0
+  index: -1
+ui/config_clicked
+  rotate: false
+  xy: 565, 544
+  size: 70, 70
+  orig: 70, 70
+  offset: 0, 0
+  index: -1
+ui/custom_button
+  rotate: false
+  xy: 2, 74
+  size: 174, 43
+  split: 113, 17, 15, 9
+  pad: 0, 0, 0, 0
+  orig: 174, 43
+  offset: 0, 0
+  index: -1
+ui/custom_button_dark
+  rotate: false
+  xy: 181, 229
+  size: 174, 43
+  split: 114, 17, 15, 9
+  pad: 0, 0, 0, 0
+  orig: 174, 43
+  offset: 0, 0
+  index: -1
+ui/custom_button_disable
+  rotate: false
+  xy: 565, 616
+  size: 174, 43
+  split: 113, 17, 19, 9
+  pad: 0, 0, 0, 0
+  orig: 174, 43
+  offset: 0, 0
+  index: -1
+ui/custom_window
+  rotate: false
+  xy: 2, 119
+  size: 177, 153
+  split: 76, 76, 74, 75
+  pad: 0, 0, 0, 0
+  orig: 177, 153
+  offset: 0, 0
+  index: -1
+ui/custom_window_dark
+  rotate: false
+  xy: 565, 661
+  size: 177, 153
+  split: 76, 76, 75, 76
+  pad: 0, 0, 0, 0
+  orig: 177, 153
+  offset: 0, 0
+  index: -1
+ui/ic_diskette
+  rotate: false
+  xy: 357, 247
+  size: 24, 25
+  orig: 24, 25
+  offset: 0, 0
+  index: -1
+ui/rounded_window_blue
+  rotate: false
+  xy: 744, 719
+  size: 109, 95
+  split: 19, 19, 19, 19
+  pad: 0, 0, 0, 0
+  orig: 109, 95
+  offset: 0, 0
+  index: -1
+ui/rounded_window_blue_clicked
+  rotate: false
+  xy: 2, 2
+  size: 82, 70
+  split: 15, 15, 14, 14
+  pad: 0, 0, 0, 0
+  orig: 82, 70
+  offset: 0, 0
+  index: -1

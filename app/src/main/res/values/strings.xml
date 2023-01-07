@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name">Silent_planet</string>
-    <string name="action_settings">Settings</string>
-    <string name="turnMessage">Now turn</string>
-    <string name="selectPlayer">Выбран:</string>
-    <string name="deadPlayer">Мёртв</string>
-</resources>

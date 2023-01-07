@@ -1,0 +1,14 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_view_padding">16dp</dimen>
+    <dimen name="view_padding_small">8dp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="text_s">12sp</dimen>
+    <dimen name="text_m">16sp</dimen>
+    <dimen name="speed">12dp</dimen>
+
+    <dimen name="border">4dp</dimen>
+    <dimen name="negborder">-3dp</dimen>
+    <item name="gradient_radius" type="integer">500</item>
+</resources>

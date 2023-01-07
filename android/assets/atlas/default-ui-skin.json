@@ -1,0 +1,62 @@
+{
+  "LabelStyle": {
+    "default": {
+      "font": "regular-font"
+    },
+    "large": {
+      "font": "large-font"
+    },
+    "small": {
+      "font": "small-font"
+    }
+  },
+  "ButtonStyle": {
+    "default": {
+      "down": "ui/custom_window",
+      "up": "ui/custom_window_dark"
+    },
+    "rounded_window": {
+      "down": "ui/rounded_window_blue_clicked",
+      "up": "ui/rounded_window_blue"
+    },
+    "custom_button_dark": {
+      "down": "ui/custom_button",
+      "up": "ui/custom_button_dark",
+      "disabled": "ui/custom_button_disable"
+    },
+    "custom_checked_window": {
+      "checked": "ui/custom_window",
+      "down": "ui/custom_window",
+      "up": "ui/custom_window_dark"
+    },
+    "config": {
+      "down": "ui/config_clicked",
+      "up": "ui/config"
+    }
+  },
+  "TextButtonStyle": {
+    "default": {
+      "parent": "default",
+      "font": "regular-font",
+      "fontColor": "white"
+    },
+    "rounded_window": {
+      "parent": "rounded_window",
+      "font": "regular-font",
+      "fontColor": "white"
+    },
+    "custom_button_dark": {
+      "parent": "custom_button_dark",
+      "font": "regular-font",
+      "fontColor": "white",
+      "disabledFontColor": "light_gray"
+    }
+  },
+  "WindowStyle": {
+    "default": {
+      "titleFont": "regular-font",
+      "background": "ui/rounded_window_blue",
+      "titleFontColor": "white"
+    }
+  }
+}
